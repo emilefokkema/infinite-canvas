@@ -1,0 +1,15 @@
+{
+  "name": "infinite-canvas-2",
+  "version": "1.0.0",
+  "description": "An infinite version of the html canvas",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "canvas",
+    "infinite"
+  ],
+  "author": "Emile Fokkema",
+  "license": "ISC"
+}
