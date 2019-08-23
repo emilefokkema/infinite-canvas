@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "test": "test",
-    "build": "npx webpack"
+    "build": "npx webpack",
+    "build:dev": "npx webpack --mode=development"
   },
   "keywords": [
     "canvas",
