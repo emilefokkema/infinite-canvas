@@ -1,3 +1,3 @@
 import {sayHello} from "./say-hello"
 
-sayHello();
+sayHello("emile");
