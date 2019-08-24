@@ -1,1 +1,1 @@
-export function sayHello(name: string): void{console.log(`hello ${name}`)};
+export function sayHello(name: string): string{return `hello ${name}`;};

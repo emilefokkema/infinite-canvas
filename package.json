@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "test",
+    "test": "jest",
     "build": "npx webpack",
     "build:dev": "node build-dev.js && npx webpack --mode=development"
   },
