@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/infinite-canvas.ts',
   module: {
     rules: [
       {
@@ -15,7 +15,8 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ]
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: 'infinite-canvas.js',
+    path: path.resolve(__dirname, 'dist'),
+    library: 'infinitecanvas'
   }
 };

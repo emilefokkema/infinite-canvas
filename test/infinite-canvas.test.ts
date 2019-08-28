@@ -1,4 +1,4 @@
-import { InfiniteCanvas } from "../src/infinite-canvas"
+import InfiniteCanvas from "../src/infinite-canvas"
 import { InfiniteCanvasRenderingContext2D } from "../src/infinite-context/infinite-canvas-rendering-context-2d"
 
 describe("an infinite canvas", () => {

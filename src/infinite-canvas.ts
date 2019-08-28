@@ -1,7 +1,7 @@
 import { InfiniteCanvasRenderingContext2D } from "./infinite-context/infinite-canvas-rendering-context-2d"
 import { InfiniteContext } from "./infinite-context/infinite-context"
 
-export class InfiniteCanvas{
+export default class InfiniteCanvas{
 	private context: InfiniteCanvasRenderingContext2D;
 	constructor(private readonly canvas: HTMLCanvasElement){}
 	public getContext(): InfiniteCanvasRenderingContext2D{
