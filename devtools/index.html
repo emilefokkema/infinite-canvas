@@ -1,6 +1,65 @@
 <html>
 <head>
 	<script type="text/javascript" src="infinite-canvas.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue?a"></script>
 </head>
-<body></body>
+<body>
+	<template id="exampleTemplate">
+		<div class="example">
+			<div class="regular-canvas">
+				<canvas width="200" height="200" ref="canvas"></canvas>
+			</div>
+			<div class="infinite-canvas">
+				<canvas width="200" height="200" ref="infiniteCanvas"></canvas>
+			</div>
+			<div class="code">
+				{{codeText}}
+			</div>
+		</div>
+		
+	</template>
+	<div id="main">
+		<example v-for="example in examples" v-bind:example="example"></example>
+	</div>
+	<script type="text/javascript">
+		var InfiniteCanvas = infinitecanvas.InfiniteCanvas;
+		new Vue({
+			el:"#main",
+			data:function(){
+				return {
+					examples:[
+						{
+							code:function(context){
+								context.fillStyle = "#f00";
+								context.fillRect(10, 10, 20, 20);
+							}
+						}
+					]
+				};
+			},
+			components:{
+				'example':{
+					template: document.getElementById("exampleTemplate").innerHTML,
+					props:{
+						example: Object
+					},
+					data:function(){
+						return {
+							codeText: undefined
+						};
+					},
+					mounted:function(){
+						var canvas = this.$refs.canvas;
+						var regularContext = canvas.getContext("2d");
+						var infCanvas = this.$refs.infiniteCanvas;
+						var infiniteContext = new InfiniteCanvas(infCanvas).getContext();
+						this.codeText = this.example.code.toString();
+						this.example.code(regularContext);
+						this.example.code(infiniteContext);
+					}
+				}
+			}
+		});
+	</script>
+</body>
 </html>
