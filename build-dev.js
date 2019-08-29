@@ -1,5 +1,7 @@
 const fs = require("fs");
 
-fs.copyFile("./devtools/index.html", "./dist/index.html", (err) => {
-	if (err) throw err;
-});
+for(let fileName of ["index.html","index.css"]){
+	fs.copyFile("./devtools/"+fileName, "./dist/"+fileName, (err) => {
+		if (err) throw err;
+	});
+}

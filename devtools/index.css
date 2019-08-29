@@ -1,0 +1,9 @@
+.example{
+	background-color: #eee;
+}
+.example div{
+	display: inline-block;
+}
+canvas{
+	border: 1pt solid #000;
+}
