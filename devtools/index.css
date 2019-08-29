@@ -1,8 +1,12 @@
-.example{
-	background-color: #eee;
-}
-.example div{
+.example .column{
 	display: inline-block;
+	vertical-align: top;
+}
+.code{
+	font-family: monospace;
+}
+.line{
+	display: block;
 }
 canvas{
 	border: 1pt solid #000;

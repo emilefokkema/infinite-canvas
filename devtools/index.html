@@ -7,14 +7,14 @@
 <body>
 	<template id="exampleTemplate">
 		<div class="example">
-			<div class="regular-canvas">
+			<div class="column regular-canvas">
 				<canvas width="200" height="200" ref="canvas"></canvas>
 			</div>
-			<div class="infinite-canvas">
+			<div class="column infinite-canvas">
 				<canvas width="200" height="200" ref="infiniteCanvas"></canvas>
 			</div>
-			<div class="code">
-				{{codeText}}
+			<div class="column code">
+				<div class="line" v-for="line in lines">{{line}}</div>
 			</div>
 		</div>
 		
@@ -45,7 +45,7 @@
 					},
 					data:function(){
 						return {
-							codeText: undefined
+							lines: []
 						};
 					},
 					mounted:function(){
@@ -53,7 +53,11 @@
 						var regularContext = canvas.getContext("2d");
 						var infCanvas = this.$refs.infiniteCanvas;
 						var infiniteContext = new InfiniteCanvas(infCanvas).getContext();
-						this.codeText = this.example.code.toString();
+						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
+						this.lines = functionMatch[1].match(/[^\s][^\r\n]*/g);
+
+						//this.codeText = lines.join("<br/>");
+						//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 						this.example.code(regularContext);
 						this.example.code(infiniteContext);
 					}
