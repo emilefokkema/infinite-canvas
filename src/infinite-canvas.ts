@@ -11,7 +11,7 @@ export class InfiniteCanvas{
 	}
 	public getContext(): InfiniteCanvasRenderingContext2D{
 		if(!this.context){
-			this.context = new InfiniteContext(this.canvas);
+			this.context = new InfiniteContext(this.canvas, this.viewBox);
 		}
 		return this.context;
 	}

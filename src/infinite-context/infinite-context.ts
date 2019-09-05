@@ -15,6 +15,7 @@ import { InfiniteCanvasImageData } from "./infinite-canvas-image-data"
 import { InfiniteCanvasPathDrawingStyles } from "./infinite-canvas-path-drawing-styles"
 import { InfiniteCanvasTextDrawingStyles } from "./infinite-canvas-text-drawing-styles"
 import { InfiniteCanvasPath } from "./infinite-canvas-path"
+import { ViewBox } from "../viewbox"
 
 export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasState: InfiniteCanvasState;
@@ -33,11 +34,11 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasPathDrawingStyles: InfiniteCanvasPathDrawingStyles;
 	private canvasTextDrawingStyles: InfiniteCanvasTextDrawingStyles;
 	private canvasPath: InfiniteCanvasPath;
-	constructor(public readonly canvas: HTMLCanvasElement){
+	constructor(public readonly canvas: HTMLCanvasElement, viewBox: ViewBox){
 		this.canvasState = new InfiniteCanvasState();
 		this.canvasTransform = new InfiniteCanvasTransform();
 		this.canvasCompositing = new InfiniteCanvasCompositing();
-		this.canvasStrokeStyles = new InfiniteCanvasFillStrokeStyles();
+		this.canvasStrokeStyles = new InfiniteCanvasFillStrokeStyles(viewBox);
 		this.canvasShadowStyles = new InfiniteCanvasShadowStyles();
 		this.canvasFilters = new InfinitCanvasFilters();
 		this.canvasRect = new InfiniteCanvasRect();
