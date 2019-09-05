@@ -44,6 +44,9 @@ export class Transformation{
 	public static scale(scale: number): Transformation{
 		return new Transformation(scale, 0, 0, scale, 0, 0);
 	}
+	public static identity(): Transformation{
+		return new Transformation(1,0,0,1,0,0);
+	}
 	public static zoom(centerX: number, centerY: number, scale: number): Transformation{
 		return Transformation.translation(-centerX, -centerY).before(
 				Transformation.scale(scale)).before(
