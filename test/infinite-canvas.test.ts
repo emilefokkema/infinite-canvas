@@ -3,10 +3,14 @@ import { InfiniteCanvasRenderingContext2D } from "../src/infinite-context/infini
 
 describe("an infinite canvas", () => {
 	let infiniteCanvas: InfiniteCanvas;
-	let canvas: HTMLCanvasElement;
+	let canvas: any;
 
 	beforeEach(() => {
-		canvas = undefined;
+		canvas = {
+			width:100,
+			height: 100,
+			getContext(): any{return undefined;}
+		};
 		infiniteCanvas = new InfiniteCanvas(canvas);
 	});
 
