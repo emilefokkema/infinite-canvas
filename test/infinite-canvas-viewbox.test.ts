@@ -1,5 +1,6 @@
 import { InfiniteCanvasViewBox } from "../src/infinite-canvas-viewbox"
 import { Transformation } from "../src/transformation"
+import { Rectangle } from "../src/rectangle";
 
 describe("an infinite canvas viewbox", () => {
 	let viewbox: InfiniteCanvasViewBox;
@@ -58,6 +59,39 @@ describe("an infinite canvas viewbox", () => {
 			it("should have executed the new instruction", () => {
 				expect(fillRect).toHaveBeenCalledTimes(1);
 				expect(fillRect).toHaveBeenCalledWith(0, 0, 20, 20);
+			});
+		});
+	});
+
+	describe("to which an instruction is added and a rectangle is specified", () => {
+
+		beforeEach(() => {
+			viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+				context.fillRect(1, 1, 2, 2);
+			}, new Rectangle(1, 1, 2, 2));
+		});
+
+		it("should have executed the new instruction", () => {
+			expect(fillRect).toHaveBeenCalledTimes(1);
+		});
+
+		describe("and which then clears a rectangle containing that instruction", () => {
+
+			beforeEach(() => {
+				viewbox.clearRectangle(0, 0, 4, 4);
+			});
+
+			describe("and to which another instruction is then added", () => {
+
+				beforeEach(() => {
+					viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+						context.fillStyle = "#f00";
+					});
+				});
+
+				it("should not have executed the old instruction again", () => {
+					expect(fillRect).toHaveBeenCalledTimes(1);
+				});
 			});
 		});
 	});
