@@ -8,6 +8,16 @@ describe("a rectangle", () => {
         rectangle = new Rectangle(1, 1, 2, 2);
     });
 
+    it("should contain another rectangle", () => {
+        const other: Rectangle = new Rectangle(1.5, 1.5, 1, 1);
+        expect(rectangle.contains(other)).toBe(true);
+    });
+
+    it("should not contain another rectangle", () => {
+        const other: Rectangle = new Rectangle(0, 0, 4, 4);
+        expect(rectangle.contains(other)).toBe(false);
+    });
+
     it.each([
         new Rectangle(-3, 1, 2, 2),
         new Rectangle(4, 1, 2, 2),

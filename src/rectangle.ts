@@ -30,4 +30,10 @@ export class Rectangle{
                this.bottom >= other.top &&
                this.top <= other.bottom;
     }
+    public contains(other: Rectangle): boolean{
+        return this.left <= other.left &&
+               this.right >= other.right &&
+               this.top <= other.top &&
+               this.bottom >= other.bottom;
+    }
 }
