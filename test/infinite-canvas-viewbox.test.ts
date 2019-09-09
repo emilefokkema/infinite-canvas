@@ -9,8 +9,16 @@ describe("an infinite canvas viewbox", () => {
 	let clearRect: jest.Mock;
 	let width: number;
 	let height: number;
+	let setFillStyleInstruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void;
+	let fillRectInstruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void;
 
 	beforeEach(() => {
+		setFillStyleInstruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
+			context.fillStyle = "#f00";
+		};
+		fillRectInstruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
+			context.fillRect(0, 0, 20, 20);
+		};
 		setFillStyle = jest.fn();
 		fillRect = jest.fn();
 		clearRect = jest.fn();
@@ -25,9 +33,7 @@ describe("an infinite canvas viewbox", () => {
 	describe("to which an instruction is added", () => {
 
 		beforeEach(() => {
-			viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-				context.fillStyle = "#f00";
-			});
+			viewbox.addInstruction(setFillStyleInstruction);
 		});
 
 		it("should have executed the instruction", () => {
@@ -43,9 +49,7 @@ describe("an infinite canvas viewbox", () => {
 		describe("and then another one", () => {
 
 			beforeEach(() => {
-				viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-					context.fillRect(0, 0, 20, 20);
-				});
+				viewbox.addInstruction(fillRectInstruction);
 			});
 
 			it("should have cleared a rectangle again", () => {
@@ -66,33 +70,63 @@ describe("an infinite canvas viewbox", () => {
 	describe("to which an instruction is added and a rectangle is specified", () => {
 
 		beforeEach(() => {
-			viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-				context.fillRect(1, 1, 2, 2);
-			}, new Rectangle(1, 1, 2, 2));
+			viewbox.addInstruction(fillRectInstruction, new Rectangle(1, 1, 2, 2));
 		});
 
 		it("should have executed the new instruction", () => {
 			expect(fillRect).toHaveBeenCalledTimes(1);
 		});
 
-		describe("and which then clears a rectangle containing that instruction", () => {
+		describe("and which then clears an area containing that instruction", () => {
 
 			beforeEach(() => {
-				viewbox.clearRectangle(0, 0, 4, 4);
+				viewbox.clearArea(0, 0, 4, 4);
 			});
 
 			describe("and to which another instruction is then added", () => {
 
 				beforeEach(() => {
-					viewbox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-						context.fillStyle = "#f00";
-					});
+					viewbox.addInstruction(setFillStyleInstruction);
 				});
 
 				it("should not have executed the old instruction again", () => {
 					expect(fillRect).toHaveBeenCalledTimes(1);
 				});
 			});
+		});
+	});
+
+	describe("that begins an area", () => {
+
+		beforeEach(() => {
+			viewbox.beginArea();
+		});
+
+		describe("and then adds several instructions that make up an area", () => {
+
+			beforeEach(() => {
+				viewbox.addInstruction(fillRectInstruction, new Rectangle(0, 0, 1, 1));
+				viewbox.addInstruction(fillRectInstruction, new Rectangle(3, 0, 1, 1));
+				viewbox.addInstruction(fillRectInstruction, new Rectangle(0, 3, 1, 1));
+			});
+
+			it("should have executed the new instructions", () => {
+				expect(fillRect).toHaveBeenCalledTimes(6); //=== 1 + 2 + 3
+			});
+
+			describe("and then closes the area, clears a smaller area than the one that was closed and adds another instruction", () => {
+
+				beforeEach(() => {
+					viewbox.closeArea();
+					viewbox.clearArea(0, 0, 2, 2);
+					viewbox.addInstruction(setFillStyleInstruction);
+				});
+
+				it("should still have executed the instructions in the completed area", () => {
+					expect(fillRect).toHaveBeenCalledTimes(9); // three more
+				});
+			});
+			
 		});
 	});
 });

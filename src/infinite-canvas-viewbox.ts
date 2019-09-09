@@ -2,30 +2,43 @@ import { Transformation } from "./transformation"
 import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction"
 import { ViewBox } from "./viewbox";
 import { Rectangle } from "./rectangle";
+import { Point } from "./point";
+import { Area } from "./area";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private transformation: Transformation;
+	private currentArea: Area;
 	private instructions: InfiniteCanvasDrawingInstruction[];
 	constructor(private width: number, private height: number, private context: CanvasRenderingContext2D){
 		this.instructions = [];
 		this.transformation = Transformation.identity();
+		this.currentArea = undefined;
 	}
-	public addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, rectangle?: Rectangle): T{
+	public addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, area?: Point | Rectangle): T{
 		let result: T;
 		const newInstruction: InfiniteCanvasDrawingInstruction = {
 			apply(context: CanvasRenderingContext2D, transformation: Transformation): void{
 				result = instruction(context, transformation);
 			},
-			rectangle: rectangle
+			area: area
 		};
 		this.instructions.push(newInstruction);
+		if(this.currentArea){
+			this.currentArea.addInstruction(newInstruction);
+		}
 		this.draw();
 		return result;
 	}
-	public clearRectangle(x: number, y: number, width: number, height: number): void{
+	public beginArea(): void{
+		this.currentArea = new Area();
+	}
+	public closeArea(): void{
+		this.currentArea = undefined;
+	}
+	public clearArea(x: number, y: number, width: number, height: number): void{
 		const rectangle: Rectangle = new Rectangle(x, y, width, height);
 		let indexContainedInstruction: number;
-		while((indexContainedInstruction = this.instructions.findIndex(i => i.rectangle && rectangle.contains(i.rectangle))) > -1){
+		while((indexContainedInstruction = this.instructions.findIndex(i => i.area && rectangle.contains(i.area))) > -1){
 			this.instructions.splice(indexContainedInstruction, 1);
 		}
 	}

@@ -14,6 +14,31 @@ export class Rectangle{
         this.top = y;
         this.bottom = y + height;
     }
+    private isPoint(pointOrRectangle: Point | Rectangle): pointOrRectangle is Point{
+        return (pointOrRectangle as Point).x !== undefined;
+    }
+    public expandToInclude(pointOrRectangle: Point | Rectangle): Rectangle{
+        let maxLeft: number;
+        let minRight: number;
+        let maxTop: number;
+        let minBottom: number;
+        if(this.isPoint(pointOrRectangle)){
+            maxLeft = pointOrRectangle.x;
+            minRight = pointOrRectangle.x;
+            maxTop = pointOrRectangle.y;
+            minBottom = pointOrRectangle.y;
+        }else{
+            maxLeft = pointOrRectangle.left;
+            minRight = pointOrRectangle.right;
+            maxTop = pointOrRectangle.top;
+            minBottom = pointOrRectangle.bottom;
+        }
+        const left: number = Math.min(maxLeft, this.left);
+        const right: number = Math.max(minRight, this.right);
+        const top: number = Math.min(maxTop, this.top);
+        const bottom: number = Math.max(minBottom, this.bottom);
+        return new Rectangle(left, top, right - left, bottom - top);
+    }
     public transform(transformation: Transformation): Rectangle{
         const transformedVertices: Point[] = this.vertices.map(p => transformation.apply(p));
         const transformedX: number[] = transformedVertices.map(p => p.x);
@@ -30,7 +55,13 @@ export class Rectangle{
                this.bottom >= other.top &&
                this.top <= other.bottom;
     }
-    public contains(other: Rectangle): boolean{
+    public contains(other: Point | Rectangle): boolean{
+        if(this.isPoint(other)){
+            return this.left <= other.x &&
+               this.right >= other.x &&
+               this.top <= other.y &&
+               this.bottom >= other.y;
+        }
         return this.left <= other.left &&
                this.right >= other.right &&
                this.top <= other.top &&
