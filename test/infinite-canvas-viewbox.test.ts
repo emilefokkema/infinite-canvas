@@ -30,12 +30,7 @@ describe("an infinite canvas viewbox", () => {
 			clearRect(...args: any[]){clearRect(...args);},
 			fillRect(...args: any[]){fillRect(...args);}
 		};
-		const transformer: Transformer = {
-			onBeginTransform(): void{},
-			onChangeTransform(handler: (transformation: Transformation) => void): void{},
-			getAnchor(x: number, y: number): Anchor{return undefined;}
-		};
-		viewbox = new InfiniteCanvasViewBox(width, height, context, transformer);
+		viewbox = new InfiniteCanvasViewBox(width, height, context);
 	});
 
 	describe("to which an instruction is added", () => {
