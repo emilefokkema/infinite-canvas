@@ -1,12 +1,13 @@
+.example{
+	margin-bottom: 30px;
+}
 .example .column{
 	display: inline-block;
 	vertical-align: top;
 }
 .code{
-	font-family: monospace;
-}
-.line{
-	display: block;
+	width: 300px;
+	height: 300px;
 }
 canvas{
 	border: 1pt solid #000;

@@ -1,20 +1,25 @@
 <html>
 <head>
+	<meta 
+	name='viewport' 
+	content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
 	<script type="text/javascript" src="infinite-canvas.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue?a"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
 	<template id="exampleTemplate">
 		<div class="example">
 			<div class="column regular-canvas">
-				<canvas width="200" height="200" ref="canvas"></canvas>
+				<canvas width="400" height="400" ref="canvas"></canvas>
 			</div>
 			<div class="column infinite-canvas">
-				<canvas width="200" height="200" ref="infiniteCanvas"></canvas>
+				<canvas width="400" height="400" ref="infiniteCanvas"></canvas>
 			</div>
-			<div class="column code">
-				<div class="line" v-for="line in lines">{{line}}</div>
+			<div class="column">
+				<div ref="code" class="code"></div>
+				
 			</div>
 		</div>
 		
@@ -29,9 +34,15 @@
 				return {
 					examples:[
 						{
-							code:function(context){
-								context.fillStyle = "#f00";
-								context.fillRect(10, 10, 20, 20);
+							code:function(ctx){
+								ctx.fillStyle = 'green';
+								ctx.fillRect(20, 10, 150, 100);
+							}
+						},
+						{
+							code:function(ctx){
+								ctx.strokeStyle = 'green';
+								ctx.strokeRect(20, 10, 160, 100);
 							}
 						}
 					]
@@ -45,7 +56,7 @@
 					},
 					data:function(){
 						return {
-							lines: []
+							//code: undefined
 						};
 					},
 					mounted:function(){
@@ -54,8 +65,12 @@
 						var infCanvas = this.$refs.infiniteCanvas;
 						var infiniteContext = new InfiniteCanvas(infCanvas).getContext();
 						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
-						this.lines = functionMatch[1].match(/[^\s][^\r\n]*/g);
-
+						var code = functionMatch[1].match(/[^\s][^\r\n]*/g).join("\r\n");
+						var editor = ace.edit(this.$refs.code);
+						//editor.setTheme("ace/theme/monokai");
+						editor.session.setMode("ace/mode/javascript");
+						editor.setValue(code);
+						editor.setReadOnly(true);
 						//this.codeText = lines.join("<br/>");
 						//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 						this.example.code(regularContext);
