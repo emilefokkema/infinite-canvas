@@ -6,13 +6,18 @@ import { Point } from "./point";
 import { Area } from "./area";
 
 export class InfiniteCanvasViewBox implements ViewBox{
-	private transformation: Transformation;
+	private _transformation: Transformation;
 	private currentArea: Area;
 	private instructions: InfiniteCanvasDrawingInstruction[];
 	constructor(private width: number, private height: number, private context: CanvasRenderingContext2D){
 		this.instructions = [];
-		this.transformation = Transformation.identity();
+		this._transformation = Transformation.identity();
 		this.currentArea = undefined;
+	}
+	public get transformation(): Transformation{return this._transformation};
+	public set transformation(value: Transformation){
+		this._transformation = value;
+		this.draw();
 	}
 	public addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, area?: Point | Rectangle): T{
 		let result: T;
@@ -45,7 +50,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private draw(): void{
 		this.context.clearRect(0, 0, this.width, this.height);
 		for(const instruction of this.instructions){
-			instruction.apply(this.context, this.transformation);
+			instruction.apply(this.context, this._transformation);
 		}
 	}
 }

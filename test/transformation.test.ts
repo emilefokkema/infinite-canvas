@@ -1,6 +1,12 @@
 import { Transformation } from "../src/transformation"
 import { Point } from "../src/point"
 
+function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
+	const actualTransformedPoint: Point = transformation.apply(point);
+	expect(actualTransformedPoint.x).toBeCloseTo(expectedPoint.x);
+	expect(actualTransformedPoint.y).toBeCloseTo(expectedPoint.y);
+}
+
 describe.each([
 	new Transformation(2, 0, 0, 2, 2, 0),
 	new Transformation(2, 0, 0, 2, 1, 0)
@@ -19,10 +25,56 @@ describe.each([
 		});
 
 		it("its inverse should transform it back", () => {
-			let transformedBack: Point = transformation.inverse().apply(transformedPoint);
-			expect(transformedBack.x).toBeCloseTo(originalPoint.x);
-			expect(transformedBack.y).toBeCloseTo(originalPoint.y);
+			expectPointToBeTransformedTo(transformedPoint, transformation.inverse(), originalPoint);
 		});
+	});
+});
+
+describe("a translate, rotate, zoom transformation", () => {
+	let translateRotateZoom: Transformation;
+	let from1: Point;
+	let from2: Point;
+	let to1: Point;
+	let to2: Point;
+	let from3: Point;
+	let to3: Point;
+
+	beforeEach(() => {
+		from1 = {x:0, y: 1};
+		from2 = {x:0, y: 3};
+		from3 = {x: 2, y: 3};
+		to1 = {x: 0, y: 0};
+		to2 = {x: 1, y: 0};
+		to3 = {x:1, y: -1};
+		translateRotateZoom = Transformation.translateRotateZoom(from1.x, from1.y, from2.x, from2.y, to1.x, to1.y, to2.x, to2.y);
+	});
+
+	it("should transform points correctly", () => {
+		expectPointToBeTransformedTo(from1, translateRotateZoom, to1);
+		expectPointToBeTransformedTo(from2, translateRotateZoom, to2);
+		expectPointToBeTransformedTo(from3, translateRotateZoom, to3);
+	});
+});
+
+describe("a translating and zooming transformation", () => {
+	let translateZoom: Transformation;
+	let from1: Point;
+	let from2: Point;
+	let to1: Point;
+	let to2: Point;
+
+	beforeEach(() => {
+		from1 = {x:0, y: 1};
+		from2 = {x:0, y: 3};
+		to1 = {x: 0, y: 0};
+		to2 = {x: 1, y: 0};
+		translateZoom = Transformation.translateZoom(from1.x, from1.y, from2.x, from2.y, to1.x, to1.y, to2.x, to2.y);
+	});
+
+	it("should transform points correctly", () => {
+		expectPointToBeTransformedTo(from1, translateZoom, {x: 0, y: 0});
+		expectPointToBeTransformedTo(from2, translateZoom, {x: 0, y: 1});
+		expectPointToBeTransformedTo({x: 2, y: 3}, translateZoom, {x: 1, y: 1});
 	});
 });
 
@@ -46,9 +98,7 @@ describe("a zooming transformation", () => {
 			[2, 0, 3, -1]
 	])("that is applied to point (%f,%f)", (fromX: number, fromY: number, toX: number, toY: number) => {
 		it("should transform it correctly", () => {
-			let translatedPoint: Point = zoom.apply({x:fromX, y:fromY});
-			expect(translatedPoint.x).toBeCloseTo(toX);
-			expect(translatedPoint.y).toBeCloseTo(toY);
+			expectPointToBeTransformedTo({x:fromX, y:fromY}, zoom, {x: toX, y: toY});
 		});
 	});
 
@@ -73,9 +123,7 @@ describe("a zooming transformation", () => {
 			});
 
 			it("should then transform the given point to the previous result, but translated", () => {
-				let newlyTransformedPoint: Point = zoom.apply(givenPoint);
-				expect(newlyTransformedPoint.x).toBeCloseTo(transformedPointTranslated.x);
-				expect(newlyTransformedPoint.y).toBeCloseTo(transformedPointTranslated.y);
+				expectPointToBeTransformedTo(givenPoint, zoom, transformedPointTranslated);
 			});
 		});
 	});
@@ -95,8 +143,6 @@ describe("a translation", () => {
 	it("should translate a point", () => {
 		let x: number = 5;
 		let y: number = 6;
-		let translatedPoint: Point = translation.apply({x:x, y:y});
-		expect(translatedPoint.x).toBeCloseTo(x + dx);
-		expect(translatedPoint.y).toBeCloseTo(y + dy);
+		expectPointToBeTransformedTo({x:x, y:y}, translation, {x: x + dx, y: y + dy});
 	});
 });

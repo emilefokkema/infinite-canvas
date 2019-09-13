@@ -47,9 +47,60 @@ export class Transformation{
 	public static identity(): Transformation{
 		return new Transformation(1,0,0,1,0,0);
 	}
-	public static zoom(centerX: number, centerY: number, scale: number): Transformation{
-		return Transformation.translation(-centerX, -centerY).before(
-				Transformation.scale(scale)).before(
-				Transformation.translation(centerX, centerY));
+	public static zoom(centerX: number, centerY: number, scale: number, translateX?: number, translateY?: number): Transformation{
+		const oneMinScale: number = 1 - scale;
+		if(translateX !== undefined){
+			return new Transformation(scale, 0, 0, scale, centerX * oneMinScale + translateX, centerY * oneMinScale + translateY);
+		}
+		return new Transformation(scale, 0, 0, scale, centerX * oneMinScale, centerY * oneMinScale);
+	}
+	public static translateZoom(
+		s1x: number,
+		s1y: number,
+		s2x: number,
+		s2y: number,
+		d1x: number,
+		d1y: number,
+		d2x: number,
+		d2y: number): Transformation{
+			const sdx: number = s2x - s1x;
+			const sdy: number = s2y - s1y;
+			const srsq = sdx * sdx + sdy * sdy;
+			if(srsq === 0){
+				throw new Error("divide by 0");
+			}
+			const ddx: number = d2x - d1x;
+			const ddy: number = d2y - d1y;
+			const drsq: number = ddx * ddx + ddy * ddy;
+			const scale: number = Math.sqrt(drsq / srsq);
+			return Transformation.zoom(s1x, s1y, scale, d1x - s1x, d1y - s1y);
+	}
+	public static translateRotateZoom(
+		s1x: number,
+		s1y: number,
+		s2x: number,
+		s2y: number,
+		d1x: number,
+		d1y: number,
+		d2x: number,
+		d2y: number): Transformation{
+			const sdx: number = s2x - s1x;
+			const sdy: number = s2y - s1y;
+			const det: number = sdx * sdx + sdy * sdy;
+			if(det === 0){
+				throw new Error("divide by 0");
+			}
+			const ddx: number = d2x - d1x;
+			const ddy: number = d2y - d1y;
+			const g: number = s1x * s2y - s1y * s2x;
+			const h: number = s2x * sdx + s2y * sdy;
+			const i: number = s1x * sdx + s1y * sdy;
+			const a: number = (sdx * ddx + sdy * ddy) / det;
+			const b: number = (sdx * ddy - sdy * ddx) / det;
+			const c: number = -b;
+			const d: number = a;
+			const e: number = (d1x * h - d2x * i - g * ddy) / det;
+			const f: number = (d1y * h - d2y * i + g * ddx) / det;
+			return new Transformation(a, b, c, d, e, f);
 	}
 }

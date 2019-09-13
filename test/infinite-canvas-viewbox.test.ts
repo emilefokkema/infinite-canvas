@@ -1,6 +1,9 @@
 import { InfiniteCanvasViewBox } from "../src/infinite-canvas-viewbox"
 import { Transformation } from "../src/transformation"
 import { Rectangle } from "../src/rectangle";
+import { Transformer } from "../src/transformer/transformer";
+import { Point } from "../src/point";
+import { Anchor } from "../src/transformer/anchor";
 
 describe("an infinite canvas viewbox", () => {
 	let viewbox: InfiniteCanvasViewBox;
@@ -27,7 +30,12 @@ describe("an infinite canvas viewbox", () => {
 			clearRect(...args: any[]){clearRect(...args);},
 			fillRect(...args: any[]){fillRect(...args);}
 		};
-		viewbox = new InfiniteCanvasViewBox(width, height, context);
+		const transformer: Transformer = {
+			onBeginTransform(): void{},
+			onChangeTransform(handler: (transformation: Transformation) => void): void{},
+			getAnchor(x: number, y: number): Anchor{return undefined;}
+		};
+		viewbox = new InfiniteCanvasViewBox(width, height, context, transformer);
 	});
 
 	describe("to which an instruction is added", () => {
