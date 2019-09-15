@@ -4,12 +4,13 @@ import { InfiniteCanvasMovable } from "./infinite-canvas-movable";
 import { Gesture } from "./gesture";
 import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-context";
 import { Transformable } from "../transformable";
+import { Transformation } from "../transformation";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
     private gesture: Gesture;
     private context: InfiniteCanvasTransformerContext;
-    constructor(transformable: Transformable){
+    constructor(private readonly transformable: Transformable){
         this.context = new InfiniteCanvasTransformerContext(transformable);
     }
     private createAnchor(movable: InfiniteCanvasMovable): Anchor{
@@ -22,6 +23,9 @@ export class InfiniteCanvasTransformer implements Transformer{
                 self.gesture = self.gesture.withoutMovable(movable);
             }
         };
+    }
+    public zoom(x: number, y: number, scale: number): void{
+        this.transformable.transformation = this.transformable.transformation.before(Transformation.zoom(x, y, scale));
     }
     public get rotationEnabled(): boolean{return this.context.rotationEnabled};
     public set rotationEnabled(value: boolean){this.context.rotationEnabled = value;}

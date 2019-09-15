@@ -19,7 +19,8 @@
 			</div>
 			<div class="column">
 				<div ref="code" class="code"></div>
-				
+				<input type="checkbox" v-model="rotationEnabled"/>
+				<label>rotation enabled</label> 
 			</div>
 		</div>
 		
@@ -56,14 +57,21 @@
 					},
 					data:function(){
 						return {
-							//code: undefined
+							rotationEnabled: false,
+							infiniteCanvas: undefined
 						};
+					},
+					watch:{
+						rotationEnabled:function(v){
+							this.infiniteCanvas.rotationEnabled = v;
+						}
 					},
 					mounted:function(){
 						var canvas = this.$refs.canvas;
 						var regularContext = canvas.getContext("2d");
 						var infCanvas = this.$refs.infiniteCanvas;
-						var infiniteContext = new InfiniteCanvas(infCanvas).getContext();
+						this.infiniteCanvas = new InfiniteCanvas(infCanvas);
+						var infiniteContext = this.infiniteCanvas.getContext();
 						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
 						var code = functionMatch[1].match(/[^\s][^\r\n]*/g).join("\r\n");
 						var editor = ace.edit(this.$refs.code);
