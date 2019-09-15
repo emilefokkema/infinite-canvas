@@ -9,7 +9,8 @@ describe("an infinite canvas", () => {
 		canvas = {
 			width:100,
 			height: 100,
-			getContext(): any{return undefined;}
+			getContext(): any{return undefined;},
+			addEventListener: function(){}
 		};
 		infiniteCanvas = new InfiniteCanvas(canvas);
 	});
