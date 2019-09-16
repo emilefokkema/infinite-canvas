@@ -43,9 +43,9 @@ export class InfiniteCanvasTransformer implements Transformer{
         this.gesture = newGesture;
         return this.createAnchor(movable);
     }
-    public getRotationAnchor(x: number, y:number): Anchor{
+    public getRotationAnchor(x: number, y:number, angularVelocity: number): Anchor{
         const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
-        const rotate: Rotate = new Rotate(movable, this.transformable);
+        const rotate: Rotate = new Rotate(movable, this.transformable, angularVelocity);
         return {
             moveTo(x: number, y: number){
                 movable.moveTo(x,y);

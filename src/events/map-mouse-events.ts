@@ -24,7 +24,8 @@ export function mapMouseEvents(
                 let anchor: Anchor;
                 const {x, y} = getRelativePosition(ev.clientX, ev.clientY);
                 if(ev.button === 1 && transformer.rotationEnabled){
-                    anchor = transformer.getRotationAnchor(x, y);
+                    const angularVelocity: number = 4 * Math.PI / canvasElement.width;
+                    anchor = transformer.getRotationAnchor(x, y, angularVelocity);
                 }else{
                     anchor = transformer.getAnchor(x, y);
                 }

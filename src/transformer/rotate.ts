@@ -6,7 +6,7 @@ import { Transformation } from "../transformation";
 export class Rotate{
     private point: MoveSubscription;
     private initialTransformation: Transformation;
-    constructor(movable: Movable, private readonly transformable: Transformable){
+    constructor(movable: Movable, private readonly transformable: Transformable, private readonly angularVelocity: number){
         this.initialTransformation = transformable.transformation;
         this.point = movable.onMoved(() => {
             this.setTransformation();
@@ -16,7 +16,7 @@ export class Rotate{
         this.transformable.transformation = this.initialTransformation.before(Transformation.rotation(
             this.point.initial.x,
             this.point.initial.y,
-            (this.point.initial.x - this.point.current.x) / 100));
+            (this.point.initial.x - this.point.current.x) * this.angularVelocity));
     }
     public end(): void{
         this.point.cancel();

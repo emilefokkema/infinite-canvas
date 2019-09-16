@@ -46,6 +46,24 @@ describe("an infinite canvas transformer", () => {
         });
     });
 
+    describe("that creates a rotation anchor and moves it", () => {
+        let anchor: Anchor;
+
+        beforeEach(() => {
+            anchor = transformer.getRotationAnchor(1, 1, 1);
+            anchor.moveTo(1 - Math.PI / 4, 1);
+        });
+
+        it.each([
+            [{x: 0, y: 0}, {x: 1, y:  1 - Math.sqrt(2)}],
+            [{x: 0, y: 2}, {x: 1 - Math.sqrt(2), y:  1}],
+            [{x: 2, y: 2}, {x: 1, y:  Math.sqrt(2) + 1}],
+            [{x: 2, y: 0}, {x: 1 + Math.sqrt(2), y:  1}]
+        ])("should result in a rotation", (fromPoint: Point, toPoint: Point) => {
+            expectPointToBeTransformedTo(fromPoint, currentTransformation, toPoint);
+        });
+    });
+
     describe("that creates an anchor", () => {
         let anchor: Anchor;
 
