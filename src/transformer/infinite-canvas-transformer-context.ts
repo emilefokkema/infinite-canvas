@@ -6,11 +6,11 @@ import { TranslateZoom } from "./translate-zoom";
 import { Transformable } from "../transformable";
 import { Movable } from "./movable";
 import { TranslateRotateZoom } from "./translate-rotate-zoom";
+import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 export class InfiniteCanvasTransformerContext implements TransformerContext{
-    public rotationEnabled: boolean;
-    constructor(private readonly transformable: Transformable){
-        this.rotationEnabled = false;
+    constructor(private readonly transformable: Transformable, private readonly config: InfiniteCanvasConfig){
+
     }
     public get transformation(): Transformation{
         return this.transformable.transformation;
@@ -22,7 +22,7 @@ export class InfiniteCanvasTransformerContext implements TransformerContext{
         return new Translate(movable, this);
     }
     public getGestureForTwoMovables(movable1: Movable, movable2: Movable): Gesture{
-        if(this.rotationEnabled){
+        if(this.config.rotationEnabled){
             return new TranslateRotateZoom(movable1, movable2, this);
         }
         return new TranslateZoom(movable1, movable2, this);

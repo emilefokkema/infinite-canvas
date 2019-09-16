@@ -3,6 +3,7 @@ import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
 import { Point } from "../src/point";
 import { ViewBox } from "../src/viewbox";
+import { InfiniteCanvasConfig } from "../src/config/infinite-canvas-config";
 
 jest.useFakeTimers();
 
@@ -16,8 +17,10 @@ describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
     let viewBox: ViewBox;
+    let config: InfiniteCanvasConfig;
 
     beforeEach(() => {
+        config = {};
         currentTransformation = Transformation.identity();
         viewBox = {
             width: 16,
@@ -29,7 +32,7 @@ describe("an infinite canvas transformer", () => {
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };
-        transformer = new InfiniteCanvasTransformer(viewBox);
+        transformer = new InfiniteCanvasTransformer(viewBox, config);
     });
 
     describe("that has rotation enabled and creates two anchors and moves them", () => {
@@ -37,7 +40,7 @@ describe("an infinite canvas transformer", () => {
         let anchor2: Anchor;
 
         beforeEach(() => {
-            transformer.rotationEnabled = true;
+            config.rotationEnabled = true;
             anchor1 = transformer.getAnchor(1, 0);
             anchor2 = transformer.getAnchor(2, 0);
             anchor1.moveTo(0,0);

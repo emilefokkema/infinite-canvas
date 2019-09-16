@@ -3,19 +3,18 @@ import { Anchor } from "./anchor";
 import { InfiniteCanvasMovable } from "./infinite-canvas-movable";
 import { Gesture } from "./gesture";
 import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-context";
-import { Transformable } from "../transformable";
-import { Transformation } from "../transformation";
 import { Rotate } from "./rotate";
 import { ViewBox } from "../viewbox";
 import { Zoom } from "./zoom";
+import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
     private gesture: Gesture;
     private context: InfiniteCanvasTransformerContext;
     private _zoom: Zoom;
-    constructor(private readonly viewBox: ViewBox){
-        this.context = new InfiniteCanvasTransformerContext(viewBox);
+    constructor(private readonly viewBox: ViewBox, config: InfiniteCanvasConfig){
+        this.context = new InfiniteCanvasTransformerContext(viewBox, config);
     }
     private createAnchor(movable: InfiniteCanvasMovable): Anchor{
         const self: InfiniteCanvasTransformer = this;
@@ -34,8 +33,6 @@ export class InfiniteCanvasTransformer implements Transformer{
         }
         this._zoom = new Zoom(this.viewBox, x, y, scale, () => this._zoom = undefined);
     }
-    public get rotationEnabled(): boolean{return this.context.rotationEnabled};
-    public set rotationEnabled(value: boolean){this.context.rotationEnabled = value;}
     public getAnchor(x: number, y: number): Anchor{
         const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
         if(!this.gesture){

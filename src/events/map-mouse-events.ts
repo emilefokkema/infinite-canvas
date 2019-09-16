@@ -2,12 +2,14 @@ import { Transformer } from "../transformer/transformer"
 import { AnchorSet } from "./anchor-set";
 import { Anchor } from "../transformer/anchor";
 import { Point } from "../point";
+import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 export function mapMouseEvents(
         canvasElement: HTMLCanvasElement,
         transformer: Transformer,
         anchorSet: AnchorSet,
-        getRelativePosition: (clientX: number, clientY: number) => Point): void{
+        getRelativePosition: (clientX: number, clientY: number) => Point,
+        config: InfiniteCanvasConfig): void{
             let mouseAnchorIdentifier: number;
             function releaseAnchor(): void{
                 if(mouseAnchorIdentifier !== undefined){
@@ -24,7 +26,7 @@ export function mapMouseEvents(
                 let anchor: Anchor;
                 const {x, y} = getRelativePosition(ev.clientX, ev.clientY);
                 if(ev.button === 1){
-                    if(!transformer.rotationEnabled){
+                    if(!config.rotationEnabled){
                         return true;
                     }
                     anchor = transformer.getRotationAnchor(x, y);

@@ -20,7 +20,9 @@
 			<div class="column">
 				<div ref="code" class="code"></div>
 				<input type="checkbox" v-model="rotationEnabled"/>
-				<label>rotation enabled</label> 
+				<label>rotation enabled</label>
+				<input type="checkbox" v-model="greedyGestureHandling"/>
+				<label>greedy gesture handling</label> 
 			</div>
 		</div>
 		
@@ -78,12 +80,16 @@
 					data:function(){
 						return {
 							rotationEnabled: false,
+							greedyGestureHandling: false,
 							infiniteCanvas: undefined
 						};
 					},
 					watch:{
 						rotationEnabled:function(v){
 							this.infiniteCanvas.rotationEnabled = v;
+						},
+						greedyGestureHandling: function(v){
+							this.infiniteCanvas.greedyGestureHandling = v;
 						}
 					},
 					mounted:function(){
@@ -91,6 +97,8 @@
 						var regularContext = canvas.getContext("2d");
 						var infCanvas = this.$refs.infiniteCanvas;
 						this.infiniteCanvas = new InfiniteCanvas(infCanvas);
+						this.rotationEnabled = this.infiniteCanvas.rotationEnabled;
+						this.greedyGestureHandling = this.infiniteCanvas.greedyGestureHandling;
 						var infiniteContext = this.infiniteCanvas.getContext();
 						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
 						var code = functionMatch[1].match(/[^\s][^\r\n]*/g).join("\r\n");
