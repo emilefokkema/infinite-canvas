@@ -3,6 +3,7 @@ import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
 import { Transformable } from "../src/transformable";
 import { Point } from "../src/point";
+import { ViewBox } from "../src/viewbox";
 
 function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
 	const actualTransformedPoint: Point = transformation.apply(point);
@@ -13,15 +14,21 @@ function expectPointToBeTransformedTo(point: Point, transformation: Transformati
 describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
-    let transformable: Transformable;
+    let viewBox: ViewBox;
 
     beforeEach(() => {
         currentTransformation = Transformation.identity();
-        transformable = {
+        viewBox = {
+            width: 16,
+            height: 8,
+            addInstruction<T>(): T{return undefined;},
+            clearArea(){},
+            beginArea(){},
+            closeArea(){},
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };
-        transformer = new InfiniteCanvasTransformer(transformable);
+        transformer = new InfiniteCanvasTransformer(viewBox);
     });
 
     describe("that has rotation enabled and creates two anchors and moves them", () => {
@@ -50,8 +57,8 @@ describe("an infinite canvas transformer", () => {
         let anchor: Anchor;
 
         beforeEach(() => {
-            anchor = transformer.getRotationAnchor(1, 1, 1);
-            anchor.moveTo(1 - Math.PI / 4, 1);
+            anchor = transformer.getRotationAnchor(1, 1);
+            anchor.moveTo(0, 1);
         });
 
         it.each([

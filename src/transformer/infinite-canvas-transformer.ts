@@ -6,13 +6,14 @@ import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-
 import { Transformable } from "../transformable";
 import { Transformation } from "../transformation";
 import { Rotate } from "./rotate";
+import { ViewBox } from "../viewbox";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
     private gesture: Gesture;
     private context: InfiniteCanvasTransformerContext;
-    constructor(private readonly transformable: Transformable){
-        this.context = new InfiniteCanvasTransformerContext(transformable);
+    constructor(private readonly viewBox: ViewBox){
+        this.context = new InfiniteCanvasTransformerContext(viewBox);
     }
     private createAnchor(movable: InfiniteCanvasMovable): Anchor{
         const self: InfiniteCanvasTransformer = this;
@@ -26,7 +27,7 @@ export class InfiniteCanvasTransformer implements Transformer{
         };
     }
     public zoom(x: number, y: number, scale: number): void{
-        this.transformable.transformation = this.transformable.transformation.before(Transformation.zoom(x, y, scale));
+        this.viewBox.transformation = this.viewBox.transformation.before(Transformation.zoom(x, y, scale));
     }
     public get rotationEnabled(): boolean{return this.context.rotationEnabled};
     public set rotationEnabled(value: boolean){this.context.rotationEnabled = value;}
@@ -43,9 +44,9 @@ export class InfiniteCanvasTransformer implements Transformer{
         this.gesture = newGesture;
         return this.createAnchor(movable);
     }
-    public getRotationAnchor(x: number, y:number, angularVelocity: number): Anchor{
+    public getRotationAnchor(x: number, y:number): Anchor{
         const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
-        const rotate: Rotate = new Rotate(movable, this.transformable, angularVelocity);
+        const rotate: Rotate = new Rotate(movable, this.viewBox);
         return {
             moveTo(x: number, y: number){
                 movable.moveTo(x,y);

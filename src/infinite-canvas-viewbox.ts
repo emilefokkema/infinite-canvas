@@ -9,7 +9,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private _transformation: Transformation;
 	private currentArea: Area;
 	private instructions: InfiniteCanvasDrawingInstruction[];
-	constructor(private width: number, private height: number, private context: CanvasRenderingContext2D){
+	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
 		this.instructions = [];
 		this._transformation = Transformation.identity();
 		this.currentArea = undefined;
