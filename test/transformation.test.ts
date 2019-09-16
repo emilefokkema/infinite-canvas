@@ -30,6 +30,23 @@ describe.each([
 	});
 });
 
+describe("a rotation", () => {
+	let rotation: Transformation;
+
+	beforeEach(() => {
+		rotation = Transformation.rotation(1, 1, Math.PI / 4);
+	});
+
+	it.each([
+		[{x: 0, y: 0}, {x: 1, y:  1 - Math.sqrt(2)}],
+		[{x: 0, y: 2}, {x: 1 - Math.sqrt(2), y:  1}],
+		[{x: 2, y: 2}, {x: 1, y:  Math.sqrt(2) + 1}],
+		[{x: 2, y: 0}, {x: 1 + Math.sqrt(2), y:  1}]
+	])("should rotate points", (fromPoint: Point, toPoint: Point) => {
+		expectPointToBeTransformedTo(fromPoint, rotation, toPoint);
+	});
+});
+
 describe("a translate, rotate, zoom transformation", () => {
 	let translateRotateZoom: Transformation;
 	let from1: Point;

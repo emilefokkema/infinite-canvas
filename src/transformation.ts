@@ -75,6 +75,18 @@ export class Transformation{
 			const scale: number = Math.sqrt(drsq / srsq);
 			return Transformation.zoom(s1x, s1y, scale, d1x - s1x, d1y - s1y);
 	}
+	public static rotation(centerX: number, centerY: number, radians: number): Transformation{
+		const cos: number = Math.cos(radians);
+		const sin: number = Math.sin(radians);
+		const oneMinCos: number = 1 - cos;
+		return new Transformation(
+			cos,
+			sin,
+			-sin,
+			cos,
+			centerX * oneMinCos + centerY * sin,
+			- centerX * sin + centerY * oneMinCos);
+	}
 	public static translateRotateZoom(
 		s1x: number,
 		s1y: number,

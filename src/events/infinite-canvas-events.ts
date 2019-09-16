@@ -18,7 +18,7 @@ export class InfiniteCanvasEvents{
             };
         }
         mapWheelEvents(canvasElement, transformer, this.anchorSet, getRelativePosition);
-        mapMouseEvents(canvasElement, transformer, this.anchorSet);
+        mapMouseEvents(canvasElement, transformer, this.anchorSet, getRelativePosition);
         mapTouchEvents(canvasElement, transformer, this.anchorSet, getRelativePosition);
     }
 }

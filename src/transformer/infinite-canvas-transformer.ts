@@ -5,6 +5,7 @@ import { Gesture } from "./gesture";
 import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-context";
 import { Transformable } from "../transformable";
 import { Transformation } from "../transformation";
+import { Rotate } from "./rotate";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
@@ -41,5 +42,17 @@ export class InfiniteCanvasTransformer implements Transformer{
         }
         this.gesture = newGesture;
         return this.createAnchor(movable);
+    }
+    public getRotationAnchor(x: number, y:number): Anchor{
+        const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
+        const rotate: Rotate = new Rotate(movable, this.transformable);
+        return {
+            moveTo(x: number, y: number){
+                movable.moveTo(x,y);
+            },
+            release(){
+                rotate.end();
+            }
+        };
     }
 }
