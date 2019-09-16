@@ -1,9 +1,10 @@
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
-import { Transformable } from "../src/transformable";
 import { Point } from "../src/point";
 import { ViewBox } from "../src/viewbox";
+
+jest.useFakeTimers();
 
 function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
 	const actualTransformedPoint: Point = transformation.apply(point);
@@ -67,6 +68,23 @@ describe("an infinite canvas transformer", () => {
             [{x: 2, y: 2}, {x: 1, y:  Math.sqrt(2) + 1}],
             [{x: 2, y: 0}, {x: 1 + Math.sqrt(2), y:  1}]
         ])("should result in a rotation", (fromPoint: Point, toPoint: Point) => {
+            expectPointToBeTransformedTo(fromPoint, currentTransformation, toPoint);
+        });
+    });
+
+    describe("that zooms", () => {
+
+        beforeEach(() => {
+            transformer.zoom(1, 1, 2);
+            jest.advanceTimersByTime(1000);
+        });
+
+        it.each([
+            [{x:0, y: 0}, {x: -1, y: -1}],
+            [{x:2, y: 0}, {x: 3, y: -1}],
+            [{x:2, y: 2}, {x: 3, y: 3}],
+            [{x:0, y: 2}, {x: -1, y: 3}]
+        ])("should result in a zoom", (fromPoint: Point, toPoint: Point) => {
             expectPointToBeTransformedTo(fromPoint, currentTransformation, toPoint);
         });
     });

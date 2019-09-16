@@ -2,7 +2,7 @@ import { Transformation } from "../transformation";
 import { Transformable } from "../transformable";
 
 export class Zoom{
-    private static maxScaleLogStep: number = 0.1;
+    private maxScaleLogStep: number;
     private currentScaleLog: number;
     private targetScaleLog: number;
     private initialTransformation: Transformation;
@@ -13,6 +13,7 @@ export class Zoom{
         private readonly centerY: number,
          targetScale: number,
         private readonly onFinish: () => void){
+            this.maxScaleLogStep = 0.1;
             this.initialTransformation = transformable.transformation;
             this.currentScaleLog = 0;
             this.targetScaleLog = Math.log(targetScale);
@@ -20,12 +21,12 @@ export class Zoom{
     }
     private makeStep(): void{
         const distance: number = this.targetScaleLog - this.currentScaleLog;
-        if(Math.abs(distance) <= Zoom.maxScaleLogStep){
+        if(Math.abs(distance) <= this.maxScaleLogStep){
             this.currentScaleLog += distance;
             this.setTransformToCurrentScaleLog();
             this.onFinish();
         }else{
-            this.currentScaleLog += distance < 0 ? -Zoom.maxScaleLogStep : Zoom.maxScaleLogStep;
+            this.currentScaleLog += distance < 0 ? -this.maxScaleLogStep : this.maxScaleLogStep;
             this.setTransformToCurrentScaleLog();
             this.stepTimeout = setTimeout(() => this.makeStep(), 20);
         }
