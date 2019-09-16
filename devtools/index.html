@@ -95,7 +95,7 @@
 						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
 						var code = functionMatch[1].match(/[^\s][^\r\n]*/g).join("\r\n");
 						var editor = ace.edit(this.$refs.code);
-						//editor.setTheme("ace/theme/monokai");
+						editor.setTheme("ace/theme/monokai");
 						editor.session.setMode("ace/mode/javascript");
 						editor.setValue(code);
 						//editor.setReadOnly(true);
