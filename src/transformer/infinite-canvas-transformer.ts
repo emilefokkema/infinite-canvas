@@ -7,11 +7,13 @@ import { Transformable } from "../transformable";
 import { Transformation } from "../transformation";
 import { Rotate } from "./rotate";
 import { ViewBox } from "../viewbox";
+import { Zoom } from "./zoom";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
     private gesture: Gesture;
     private context: InfiniteCanvasTransformerContext;
+    private _zoom: Zoom;
     constructor(private readonly viewBox: ViewBox){
         this.context = new InfiniteCanvasTransformerContext(viewBox);
     }
@@ -27,7 +29,10 @@ export class InfiniteCanvasTransformer implements Transformer{
         };
     }
     public zoom(x: number, y: number, scale: number): void{
-        this.viewBox.transformation = this.viewBox.transformation.before(Transformation.zoom(x, y, scale));
+        if(this._zoom){
+            this._zoom.cancel();
+        }
+        this._zoom = new Zoom(this.viewBox, x, y, scale, () => this._zoom = undefined);
     }
     public get rotationEnabled(): boolean{return this.context.rotationEnabled};
     public set rotationEnabled(value: boolean){this.context.rotationEnabled = value;}

@@ -10,10 +10,7 @@ export function mapWheelEvents(
     canvasElement.addEventListener("wheel", (ev: WheelEvent) => {
         const {x, y} = getRelativePosition(ev.clientX, ev.clientY);
         let delta: number = ev.deltaY;
-        if(Math.abs(delta) > 50){
-            delta = delta / 10;
-        }
-        const scale: number = Math.pow(2, -delta / 100);
+        const scale: number = Math.pow(2, -delta / 300);
         transformer.zoom(x, y, scale);
         ev.preventDefault();
         return false;
