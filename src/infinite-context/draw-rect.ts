@@ -9,7 +9,6 @@ export function drawRect(
     transformation: Transformation
 ): void{
     let x: number, y: number;
-    context.beginPath();
     ({x,y} = transformation.apply({x: _x, y: _y}));
     context.moveTo(x, y);
     ({x, y} = transformation.apply({x: _x + w, y: _y}));
@@ -18,5 +17,6 @@ export function drawRect(
     context.lineTo(x, y);
     ({x, y} = transformation.apply({x: _x, y: _y + h}));
     context.lineTo(x, y);
-    context.closePath();
+    ({x,y} = transformation.apply({x: _x, y: _y}));
+    context.lineTo(x, y);
 }

@@ -23,12 +23,14 @@ export class InfiniteCanvasRect implements CanvasRect{
     }
     public fillRect(x: number, y: number, w: number, h: number): void{
         this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            context.beginPath();
             drawRect(x, y, w, h, context, transformation);
             context.fill();
         }, new Rectangle(x, y, w, h));
     }
     public strokeRect(x: number, y: number, w: number, h: number): void{
         this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            context.beginPath();
             drawRect(x, y, w, h, context, transformation);
             context.stroke();
         }, new Rectangle(x, y, w, h));
