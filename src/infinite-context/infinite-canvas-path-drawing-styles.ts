@@ -4,7 +4,15 @@ import { Transformation } from "../transformation";
 export class InfiniteCanvasPathDrawingStyles implements CanvasPathDrawingStyles{
 	constructor(private viewBox: ViewBox){}
 	public lineCap: CanvasLineCap;
-	public lineDashOffset: number;
+	public get lineDashOffset(): number{
+		return this.viewBox.lineDashOffset;
+	}
+	public set lineDashOffset(value: number){
+		this.viewBox.lineDashOffset = value;
+		this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+			context.lineDashOffset = value * transformation.scale;
+		});
+	}
 	public lineJoin: CanvasLineJoin;
 	public get lineWidth(): number{
 		return this.viewBox.lineWidth;

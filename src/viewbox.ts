@@ -8,6 +8,7 @@ export interface ViewBox extends Transformable{
     height: number;
     lineWidth: number;
     lineDash: number[];
+    lineDashOffset: number;
     addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, area?: Point | Rectangle): T;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginArea(): void;
