@@ -25,6 +25,7 @@ describe("an infinite canvas transformer", () => {
         viewBox = {
             width: 16,
             height: 8,
+            lineWidth: 1,
             addInstruction<T>(): T{return undefined;},
             clearArea(){},
             beginArea(){},

@@ -1,6 +1,7 @@
 import { Point } from "./point"
 
 export class Transformation{
+	public scale: number;
 	constructor(
 		public a: number,
 		public b: number,
@@ -9,6 +10,7 @@ export class Transformation{
 		public e: number,
 		public f: number
 		){
+			this.scale = Math.sqrt(a * d - b * c);
 	}
 	public apply(point: Point): Point{
 		return {

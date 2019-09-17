@@ -6,6 +6,7 @@ import { Transformable } from "./transformable";
 export interface ViewBox extends Transformable{
     width: number;
     height: number;
+    lineWidth: number;
     addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, area?: Point | Rectangle): T;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginArea(): void;
