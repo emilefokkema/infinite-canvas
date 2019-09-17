@@ -26,6 +26,7 @@ describe("an infinite canvas transformer", () => {
             width: 16,
             height: 8,
             lineWidth: 1,
+            lineDash: [],
             addInstruction<T>(): T{return undefined;},
             clearArea(){},
             beginArea(){},

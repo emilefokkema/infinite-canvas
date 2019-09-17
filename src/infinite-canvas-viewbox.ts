@@ -7,11 +7,13 @@ import { Area } from "./area";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	public lineWidth: number;
+	public lineDash: number[];
 	private _transformation: Transformation;
 	private currentArea: Area;
 	private instructions: InfiniteCanvasDrawingInstruction[];
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
 		this.lineWidth = 1;
+		this.lineDash = [];
 		this.instructions = [];
 		this._transformation = Transformation.identity();
 		this.currentArea = undefined;

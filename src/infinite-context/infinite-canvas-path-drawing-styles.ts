@@ -16,6 +16,11 @@ export class InfiniteCanvasPathDrawingStyles implements CanvasPathDrawingStyles{
 		});
 	}
 	public miterLimit: number;
-	public getLineDash(): number[]{return [];}
-	public setLineDash(segments: number[]): void{}
+	public getLineDash(): number[]{return this.viewBox.lineDash;}
+	public setLineDash(segments: number[]): void{
+		this.viewBox.lineDash = segments;
+		this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+			context.setLineDash(segments.map(s => s * transformation.scale));
+		});
+	}
 }
