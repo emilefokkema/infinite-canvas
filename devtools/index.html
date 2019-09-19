@@ -145,6 +145,37 @@
 
 								march();
 							},
+						},
+						{
+							code: function(ctx){
+								// First path
+								ctx.beginPath();
+								ctx.strokeStyle = 'blue';
+								ctx.moveTo(20, 20);
+								ctx.lineTo(200, 20);
+								ctx.stroke();
+
+								// Second path
+								ctx.beginPath();
+								ctx.strokeStyle = 'green';
+								ctx.moveTo(20, 20);
+								ctx.lineTo(120, 120);
+								ctx.stroke();
+							}
+						},
+						{
+							code: function(ctx){
+								// Save the default state
+								ctx.save();
+
+								ctx.fillStyle = 'green';
+								ctx.fillRect(10, 10, 100, 100);
+
+								// Restore the default state
+								ctx.restore();
+
+								ctx.fillRect(150, 40, 100, 100);
+							}
 						}
 					];
 					if(examples.find(function(e){return e.focussed;})){
