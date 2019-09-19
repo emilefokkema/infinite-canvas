@@ -1,63 +1,74 @@
 import { Transformation } from "./transformation"
-import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction"
+import { DrawingInstruction } from "./drawing-instruction"
 import { ViewBox } from "./viewbox";
 import { Rectangle } from "./rectangle";
-import { Point } from "./point";
-import { Area } from "./area";
+import { InfiniteCanvasState } from "./infinite-canvas-state";
+import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction";
+import { ClearRect } from "./clear-rect";
+import { InfiniteCanvasPathInstructionSet } from "./infinite-canvas-path-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
-	public lineWidth: number;
-	public lineDash: number[];
-	public lineDashOffset: number;
+	private defaultState: InfiniteCanvasState;
+	public state: InfiniteCanvasState;
+	private pathInstructions: InfiniteCanvasPathInstructionSet;
 	private _transformation: Transformation;
-	private currentArea: Area;
-	private instructions: InfiniteCanvasDrawingInstruction[];
+	private instructions: DrawingInstruction[];
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
-		this.lineWidth = 1;
-		this.lineDash = [];
-		this.lineDashOffset = 0;
+		this.defaultState = InfiniteCanvasState.default();
+		this.state = this.defaultState;
 		this.instructions = [];
 		this._transformation = Transformation.identity();
-		this.currentArea = undefined;
 	}
 	public get transformation(): Transformation{return this._transformation};
 	public set transformation(value: Transformation){
 		this._transformation = value;
 		this.draw();
 	}
-	public addInstruction<T>(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => T, area?: Point | Rectangle): T{
-		let result: T;
-		const newInstruction: InfiniteCanvasDrawingInstruction = {
-			apply(context: CanvasRenderingContext2D, transformation: Transformation): void{
-				result = instruction(context, transformation);
-			},
-			area: area
-		};
-		this.instructions.push(newInstruction);
-		if(this.currentArea){
-			this.currentArea.addInstruction(newInstruction);
-		}
-		this.draw();
-		return result;
+	public addInstruction(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void): void{
+		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction(instruction, this.state);
+		this.addDrawingInstruction(newInstruction);
 	}
-	public beginArea(): void{
-		this.currentArea = new Area();
+	public changeState(instruction: (state: InfiniteCanvasState) => InfiniteCanvasState): void{
+		this.state = instruction(this.state);
 	}
-	public closeArea(): void{
-		this.currentArea = undefined;
+	public beginPath(): void{
+		this.pathInstructions = new InfiniteCanvasPathInstructionSet();
+	}
+	public addToPath(instruction: (instructionSet: InfiniteCanvasPathInstructionSet) => void): void{
+		instruction(this.pathInstructions);
+	}
+	public drawPath(instruction: (context: CanvasRenderingContext2D) => void): void{
+		const pathdrawingInstruction: DrawingInstruction = this.pathInstructions;
+		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+			pathdrawingInstruction.apply(context, transformation);
+			instruction(context);
+		}, this.state, pathdrawingInstruction.area);
+		this.addDrawingInstruction(newInstruction);
 	}
 	public clearArea(x: number, y: number, width: number, height: number): void{
 		const rectangle: Rectangle = new Rectangle(x, y, width, height);
 		let indexContainedInstruction: number;
+		let somethingWasDone: boolean = false;
 		while((indexContainedInstruction = this.instructions.findIndex(i => i.area && rectangle.contains(i.area))) > -1){
+			somethingWasDone = true;
 			this.instructions.splice(indexContainedInstruction, 1);
 		}
+		if(this.instructions.find(i => i.area && rectangle.intersects(i.area))){
+			somethingWasDone = true;
+			this.addDrawingInstruction(new ClearRect(x, y, width, height));
+		}
+		if(somethingWasDone){
+			this.draw();
+		}
+	}
+
+	private addDrawingInstruction(instruction: DrawingInstruction){
+		this.instructions.push(instruction);
+		this.draw();
 	}
 	private draw(): void{
 		this.context.clearRect(0, 0, this.width, this.height);
-		this.context.lineWidth = this.transformation.scale;
-		this.context.lineDashOffset = 0;
-		this.context.strokeStyle = "#000";
+		this.defaultState.apply(this.context, this._transformation);
 		for(const instruction of this.instructions){
 			instruction.apply(this.context, this._transformation);
 		}

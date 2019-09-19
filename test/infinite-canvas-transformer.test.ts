@@ -25,13 +25,13 @@ describe("an infinite canvas transformer", () => {
         viewBox = {
             width: 16,
             height: 8,
-            lineWidth: 1,
-            lineDash: [],
-            lineDashOffset: 0,
-            addInstruction<T>(): T{return undefined;},
+            state: undefined,
+            addInstruction(){},
+            changeState(){},
             clearArea(){},
-            beginArea(){},
-            closeArea(){},
+            beginPath(){},
+            addToPath(){},
+            drawPath(){},
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };

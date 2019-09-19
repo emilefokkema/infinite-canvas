@@ -1,17 +1,12 @@
 import { ViewBox } from "../viewbox";
-import { Transformation } from "../transformation";
 
 export class InfiniteCanvasFillStrokeStyles implements CanvasFillStrokeStyles{
     constructor(private viewBox: ViewBox){}
 	public set fillStyle(value: string | CanvasGradient | CanvasPattern){
-        this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-            context.fillStyle = value;
-        });
+        this.viewBox.changeState(state => state.setFillStyle(value));
 	}
     public set strokeStyle(value: string | CanvasGradient | CanvasPattern){
-        this.viewBox.addInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-            context.strokeStyle = value;
-        });
+        this.viewBox.changeState(state => state.setStrokeStyle(value));
     }
     public createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient{
     	return undefined

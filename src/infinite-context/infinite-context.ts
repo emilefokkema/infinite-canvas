@@ -135,7 +135,7 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public clip(pathOrFillRule: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
 		this.canvasDrawPath.clip(pathOrFillRule, fillRule);
 	}
-	public fill(pathOrFillRule: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
+	public fill(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
 		this.canvasDrawPath.fill(pathOrFillRule, fillRule);
 	}
 	public isPointInPath(xOrPath: number | Path2D, xOry: number, yOrFillRule: number | CanvasFillRule, fillRule?: CanvasFillRule): boolean{

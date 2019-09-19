@@ -14,7 +14,7 @@ export class Rectangle{
         this.top = y;
         this.bottom = y + height;
     }
-    private isPoint(pointOrRectangle: Point | Rectangle): pointOrRectangle is Point{
+    private static isPoint(pointOrRectangle: Point | Rectangle): pointOrRectangle is Point{
         return (pointOrRectangle as Point).x !== undefined;
     }
     public expandToInclude(pointOrRectangle: Point | Rectangle): Rectangle{
@@ -22,7 +22,7 @@ export class Rectangle{
         let minRight: number;
         let maxTop: number;
         let minBottom: number;
-        if(this.isPoint(pointOrRectangle)){
+        if(Rectangle.isPoint(pointOrRectangle)){
             maxLeft = pointOrRectangle.x;
             minRight = pointOrRectangle.x;
             maxTop = pointOrRectangle.y;
@@ -49,14 +49,17 @@ export class Rectangle{
         const height: number = Math.max(...transformedY) - y;
         return new Rectangle(x, y, width, height);
     }
-    public intersects(other: Rectangle): boolean{
+    public intersects(other: Point | Rectangle): boolean{
+        if(Rectangle.isPoint(other)){
+            return this.contains(other);
+        }
         return this.left <= other.right && 
                this.right >= other.left &&
                this.bottom >= other.top &&
                this.top <= other.bottom;
     }
     public contains(other: Point | Rectangle): boolean{
-        if(this.isPoint(other)){
+        if(Rectangle.isPoint(other)){
             return this.left <= other.x &&
                this.right >= other.x &&
                this.top <= other.y &&
@@ -66,5 +69,11 @@ export class Rectangle{
                this.right >= other.right &&
                this.top <= other.top &&
                this.bottom >= other.bottom;
+    }
+    public static create(area: Point | Rectangle): Rectangle{
+        if(Rectangle.isPoint(area)){
+            return new Rectangle(area.x, area.y, 0, 0);
+        }
+        return area;
     }
 }
