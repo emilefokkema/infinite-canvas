@@ -138,6 +138,18 @@ describe("an infinite canvas context", () => {
 				});
 			});
 		});
+
+		describe("and which then draws something else", () => {
+
+			beforeEach(() => {
+				setFillStyleSpy.mockClear();
+				infiniteContext.fillRect(4, 1, 2, 2);
+			});
+
+			it("should not have altered the state", () => {
+				expect(setFillStyleSpy).toHaveBeenCalledTimes(2); //for the default as well
+			});
+		});
 	});
 
 	describe("that begins path", () => {
