@@ -235,4 +235,29 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe("that draws a path, fills it and then adds to the path", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle = "#f00";
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(30,30);
+			infiniteContext.lineTo(30,100);
+			infiniteContext.lineTo(100,100);
+			infiniteContext.fill();
+			infiniteContext.lineTo(100,30);
+		});
+
+		describe("and then strokes the path", () => {
+
+			beforeEach(() => {
+				lineToSpy.mockClear();
+				infiniteContext.stroke();
+			});
+
+			fit("should have executed the last path modification only once", () => {
+				expect(lineToSpy).toHaveBeenCalledTimes(5); // two for the fill and three for the stroke
+			});
+		});
+	});
 });
