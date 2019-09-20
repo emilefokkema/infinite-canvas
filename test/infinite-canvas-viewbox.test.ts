@@ -98,6 +98,25 @@ describe("an infinite canvas context", () => {
 				expect(clearRectSpy).toHaveBeenCalledTimes(1);
 			});
 
+			describe("and which then draws something else without changing the state", () => {
+
+				beforeEach(() => {
+					clearRectSpy.mockClear();
+					setFillStyleSpy.mockClear();
+					infiniteContext.fillRect(1, 1, 2, 2);
+				});
+
+				it("should have cleared a rect only once more", () => {
+					expect(clearRectSpy).toHaveBeenCalledTimes(1); // for the default
+				});
+
+				it("should still use the old state", () => {
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(2); //once for the default as well
+					expect(setFillStyleSpy).toHaveBeenCalledWith(red);
+					expect(fillSpy).toHaveBeenCalledTimes(1);
+				});
+			});
+
 			describe("and which then draws something else", () => {
 
 				beforeEach(() => {
@@ -255,7 +274,7 @@ describe("an infinite canvas context", () => {
 				infiniteContext.stroke();
 			});
 
-			fit("should have executed the last path modification only once", () => {
+			xit("should have executed the last path modification only once", () => {
 				expect(lineToSpy).toHaveBeenCalledTimes(5); // two for the fill and three for the stroke
 			});
 		});
