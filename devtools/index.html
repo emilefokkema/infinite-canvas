@@ -176,6 +176,19 @@
 
 								ctx.fillRect(150, 40, 100, 100);
 							}
+						},
+						{
+							code: function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.beginPath();
+								ctx.moveTo(30,30);
+								ctx.lineTo(30,100);
+								ctx.lineTo(100,100);
+								ctx.fill();
+								ctx.strokeStyle = "#00f";
+								ctx.lineTo(100,30);
+								ctx.stroke();
+							}
 						}
 					];
 					if(examples.find(function(e){return e.focussed;})){
