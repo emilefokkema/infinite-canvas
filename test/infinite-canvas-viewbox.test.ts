@@ -255,13 +255,18 @@ describe("an infinite canvas context", () => {
 			beforeEach(() => {
 				setStrokeStyleSpy.mockClear();
 				setFillStyleSpy.mockClear();
+				clearRectSpy.mockClear();
 				fillSpy.mockClear();
 				infiniteContext.clearRect(0, 0, 3, 3);
 			});
 
+			it("should have cleared a rectangle", () => {
+				expect(clearRectSpy).toHaveBeenCalledTimes(1);
+			});
+
 			it("should not have executed the previous instructions again", () => {
-				expect(setStrokeStyleSpy).toHaveBeenCalledTimes(1); // for the default
-				expect(setFillStyleSpy).toHaveBeenCalledTimes(1); // for the default
+				expect(setStrokeStyleSpy).not.toHaveBeenCalled();
+				expect(setFillStyleSpy).not.toHaveBeenCalled();
 				expect(fillSpy).not.toHaveBeenCalled();
 			});
 		});
