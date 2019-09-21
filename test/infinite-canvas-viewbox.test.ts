@@ -59,7 +59,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have changed the state", () => {
-				expect(setFillStyleSpy).toHaveBeenCalledTimes(2); // once for the default as well
+				expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 				expect(setFillStyleSpy).toHaveBeenCalledWith("#f00");
 			});
 
@@ -111,7 +111,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should still use the old state", () => {
-					expect(setFillStyleSpy).toHaveBeenCalledTimes(2); //once for the default as well
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 					expect(setFillStyleSpy).toHaveBeenCalledWith(red);
 					expect(fillSpy).toHaveBeenCalledTimes(1);
 				});
@@ -131,7 +131,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should not have executed the old instruction again", () => {
-					expect(setFillStyleSpy).toHaveBeenCalledTimes(2); //once for the default as well
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 					expect(setFillStyleSpy).toHaveBeenCalledWith(blue);
 					expect(setFillStyleSpy).not.toHaveBeenCalledWith(red);
 					expect(fillSpy).toHaveBeenCalledTimes(1);
@@ -147,7 +147,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should not have altered the state", () => {
-				expect(setFillStyleSpy).toHaveBeenCalledTimes(2); //for the default as well
+				expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -245,8 +245,8 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should have called the context methods", () => {
-			expect(setStrokeStyleSpy).toHaveBeenCalledTimes(2); // also once for the default
-			expect(setFillStyleSpy).toHaveBeenCalledTimes(2); // also once for the default
+			expect(setStrokeStyleSpy).toHaveBeenCalledTimes(1);
+			expect(setFillStyleSpy).toHaveBeenCalledTimes(1); 
 			expect(fillSpy).toHaveBeenCalledTimes(1);
 		});
 
