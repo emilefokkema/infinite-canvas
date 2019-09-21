@@ -292,7 +292,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			xit("should have executed the last path modification only once", () => {
-				expect(lineToSpy).toHaveBeenCalledTimes(5); // two for the fill and three for the stroke
+				expect(lineToSpy).toHaveBeenCalledTimes(3);
 			});
 		});
 	});
