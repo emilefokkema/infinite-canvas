@@ -85,6 +85,33 @@ describe("an infinite canvas context", () => {
 			expect(fillSpy).toHaveBeenCalledTimes(1);
 		});
 
+		describe("and who changes state, draws something, changes state back and draws something again", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = blue;
+				infiniteContext.fillRect(5, 1, 2, 2);
+				infiniteContext.fillStyle = red;
+				setFillStyleSpy.mockClear();
+				infiniteContext.fillRect(9, 1, 2, 2);
+			});
+
+			it("should have set a new state three times", () => {
+				expect(setFillStyleSpy).toHaveBeenCalledTimes(3);
+			});
+
+			describe("and who then clears a rect containing the second drawing", () => {
+
+				beforeEach(() => {
+					setFillStyleSpy.mockClear();
+					infiniteContext.clearRect(5, 1, 2, 2);
+				});
+
+				it("should only have set the remaining state", () => {
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
+				});
+			});
+		});
+
 		describe("and which then changes the state and clears part of the drawing and draws something else", () => {
 
 			beforeEach(() => {
