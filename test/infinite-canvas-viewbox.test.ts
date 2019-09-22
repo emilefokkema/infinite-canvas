@@ -94,7 +94,7 @@ describe("an infinite canvas context", () => {
 				infiniteContext.fillRect(3, 1, 1, 1);
 			});
 
-			fit("should have drawn using the state from before the clearing", () => {
+			it("should have drawn using the state from before the clearing", () => {
 				expect(setFillStyleSpy).toHaveBeenCalledWith(blue);
 			});
 		});
@@ -162,6 +162,18 @@ describe("an infinite canvas context", () => {
 
 			it("should not have altered the state", () => {
 				expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
+			});
+
+			describe("and which then clears the first part", () => {
+
+				beforeEach(() => {
+					setFillStyleSpy.mockClear();
+					infiniteContext.clearRect(0, 0, 4, 4);
+				});
+
+				xit("should have remembered the state for the second part", () => {
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
+				});
 			});
 		});
 	});
