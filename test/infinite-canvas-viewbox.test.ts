@@ -175,6 +175,18 @@ describe("an infinite canvas context", () => {
 					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 				});
 			});
+
+			describe("and which then clears the first part and part of the second", () => {
+
+				beforeEach(() => {
+					setFillStyleSpy.mockClear();
+					infiniteContext.clearRect(0, 0, 4.5, 4);
+				});
+
+				fit("should have remembered the state for the second part", () => {
+					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
+				});
+			});
 		});
 	});
 
