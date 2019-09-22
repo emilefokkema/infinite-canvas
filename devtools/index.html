@@ -189,6 +189,15 @@
 								ctx.lineTo(100,30);
 								ctx.stroke();
 							}
+						},
+						{
+							code: function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.fillRect(10, 10, 20, 20);
+								ctx.fillStyle = "#00f";
+								ctx.clearRect(20, 0, 40, 40);
+								ctx.fillRect(30, 10, 10, 10);
+							}
 						}
 					];
 					if(examples.find(function(e){return e.focussed;})){

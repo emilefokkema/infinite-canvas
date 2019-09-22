@@ -85,6 +85,20 @@ describe("an infinite canvas context", () => {
 			expect(fillSpy).toHaveBeenCalledTimes(1);
 		});
 
+		describe("and which then changes the state and clears part of the drawing and draws something else", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = blue;
+				infiniteContext.clearRect(2, 0, 4, 4);
+				setFillStyleSpy.mockClear();
+				infiniteContext.fillRect(3, 1, 1, 1);
+			});
+
+			fit("should have drawn using the state from before the clearing", () => {
+				expect(setFillStyleSpy).toHaveBeenCalledWith(blue);
+			});
+		});
+
 		describe("and which then clears an area containing that instruction", () => {
 
 			beforeEach(() => {
