@@ -7,6 +7,8 @@ export interface ViewBox extends Transformable{
     width: number;
     height: number;
     readonly state: InfiniteCanvasState;
+    saveState(): void;
+    restoreState(): void;
     changeState(instruction: (state: InfiniteCanvasState) => InfiniteCanvasState): void;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;

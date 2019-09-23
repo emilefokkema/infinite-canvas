@@ -1,4 +1,11 @@
+import { ViewBox } from "../viewbox";
+
 export class InfiniteCanvasState implements CanvasState{
-	public restore():void{}
-	public save(): void{}
+	constructor(private viewBox: ViewBox){}
+	public restore():void{
+		this.viewBox.restoreState();
+	}
+	public save(): void{
+		this.viewBox.saveState();
+	}
 }

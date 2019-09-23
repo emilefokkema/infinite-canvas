@@ -27,6 +27,8 @@ describe("an infinite canvas transformer", () => {
             height: 8,
             state: undefined,
             changeState(){},
+            saveState(){},
+            restoreState(){},
             clearArea(){},
             beginPath(){},
             addToPath(){},

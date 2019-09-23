@@ -35,7 +35,7 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasTextDrawingStyles: InfiniteCanvasTextDrawingStyles;
 	private canvasPath: InfiniteCanvasPath;
 	constructor(public readonly canvas: HTMLCanvasElement, viewBox: ViewBox){
-		this.canvasState = new InfiniteCanvasState();
+		this.canvasState = new InfiniteCanvasState(viewBox);
 		this.canvasTransform = new InfiniteCanvasTransform();
 		this.canvasCompositing = new InfiniteCanvasCompositing();
 		this.canvasStrokeStyles = new InfiniteCanvasFillStrokeStyles(viewBox);

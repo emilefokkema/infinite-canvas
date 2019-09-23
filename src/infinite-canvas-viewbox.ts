@@ -10,6 +10,7 @@ import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	public state: InfiniteCanvasState;
+	private stateStack: InfiniteCanvasState[];
 	private pathInstructions: ImmutablePathInstructionSet;
 	private _transformation: Transformation;
 	private instructions: DrawingInstruction[];
@@ -18,6 +19,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this.state = InfiniteCanvasState.default();
 		this.instructions = [];
 		this._transformation = Transformation.identity();
+		this.stateStack = [];
 	}
 	public get transformation(): Transformation{return this._transformation};
 	public set transformation(value: Transformation){
@@ -26,6 +28,14 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public changeState(instruction: (state: InfiniteCanvasState) => InfiniteCanvasState): void{
 		this.state = instruction(this.state);
+	}
+	public saveState(): void{
+		this.stateStack.push(this.state);
+	}
+	public restoreState(): void{
+		if(this.stateStack.length){
+			this.state = this.stateStack.pop();
+		}
 	}
 	public beginPath(): void{
 		this.pathInstructions = ImmutablePathInstructionSet.default();
