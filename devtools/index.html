@@ -31,10 +31,17 @@
 		<example v-for="example in examples" v-bind:example="example"></example>
 	</div>
 	<script type="text/javascript">
-		new Vue({
-			el:"#main",
-			data:function(){
-				var examples = [
+		(function(){
+			var functionLinePattern = "([^\\r\\n]*?)([^\\s][^\\r\\n]*)";
+			function getLinesFromFunction(f){
+				var functionMatch = f.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
+				var lines = functionMatch[1].match(new RegExp(functionLinePattern, "g"));
+				var lineRegExp = new RegExp("^" + functionLinePattern + "$");
+				var matchedLines = lines.map(function(l){return l.match(lineRegExp);});
+				var minIndentLength = Math.min.apply(null, matchedLines.map(function(l){return l[1].length;}));
+				return lines.map(function(l){return l.substring(minIndentLength);})
+			}
+			var examples = [
 						{
 							code:function(ctx){
 								ctx.fillStyle = 'green';
@@ -200,59 +207,64 @@
 							}
 						}
 					];
-					if(examples.find(function(e){return e.focussed;})){
-						examples = examples.filter(function(e){return e.focussed;});
+			new Vue({
+				el:"#main",
+				data:function(){
+					var exaplesToShow = examples;
+					if(exaplesToShow.find(function(e){return e.focussed;})){
+						exaplesToShow = exaplesToShow.filter(function(e){return e.focussed;});
 					}
-					examples = examples.filter(function(e){return !e.excluded;});
-				return {
-					examples:examples
-				};
-			},
-			components:{
-				'example':{
-					template: document.getElementById("exampleTemplate").innerHTML,
-					props:{
-						example: Object
-					},
-					data:function(){
-						return {
-							rotationEnabled: false,
-							greedyGestureHandling: false,
-							infiniteCanvas: undefined
-						};
-					},
-					watch:{
-						rotationEnabled:function(v){
-							this.infiniteCanvas.rotationEnabled = v;
+					exaplesToShow = exaplesToShow.filter(function(e){return !e.excluded;});
+					return {
+						examples:exaplesToShow
+					};
+				},
+				components:{
+					'example':{
+						template: document.getElementById("exampleTemplate").innerHTML,
+						props:{
+							example: Object
 						},
-						greedyGestureHandling: function(v){
-							this.infiniteCanvas.greedyGestureHandling = v;
+						data:function(){
+							return {
+								rotationEnabled: false,
+								greedyGestureHandling: false,
+								infiniteCanvas: undefined
+							};
+						},
+						watch:{
+							rotationEnabled:function(v){
+								this.infiniteCanvas.rotationEnabled = v;
+							},
+							greedyGestureHandling: function(v){
+								this.infiniteCanvas.greedyGestureHandling = v;
+							}
+						},
+						mounted:function(){
+							var canvas = this.$refs.canvas;
+							var regularContext = canvas.getContext("2d");
+							var infCanvas = this.$refs.infiniteCanvas;
+							this.infiniteCanvas = new InfiniteCanvas(infCanvas);
+							this.rotationEnabled = this.infiniteCanvas.rotationEnabled;
+							this.greedyGestureHandling = this.infiniteCanvas.greedyGestureHandling;
+							var infiniteContext = this.infiniteCanvas.getContext();
+							var code = getLinesFromFunction(this.example.code).join("\r\n");
+							var editor = ace.edit(this.$refs.code);
+							editor.setTheme("ace/theme/monokai");
+							editor.session.setMode("ace/mode/javascript");
+							editor.setValue(code);
+							editor.clearSelection();
+							//editor.setReadOnly(true);
+							//this.codeText = lines.join("<br/>");
+							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
+							this.example.code(regularContext);
+							this.example.code(infiniteContext);
 						}
-					},
-					mounted:function(){
-						var canvas = this.$refs.canvas;
-						var regularContext = canvas.getContext("2d");
-						var infCanvas = this.$refs.infiniteCanvas;
-						this.infiniteCanvas = new InfiniteCanvas(infCanvas);
-						this.rotationEnabled = this.infiniteCanvas.rotationEnabled;
-						this.greedyGestureHandling = this.infiniteCanvas.greedyGestureHandling;
-						var infiniteContext = this.infiniteCanvas.getContext();
-						var functionMatch = this.example.code.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
-						var code = functionMatch[1].match(/[^\s][^\r\n]*/g).join("\r\n");
-						var editor = ace.edit(this.$refs.code);
-						editor.setTheme("ace/theme/monokai");
-						editor.session.setMode("ace/mode/javascript");
-						editor.setValue(code);
-						editor.clearSelection();
-						//editor.setReadOnly(true);
-						//this.codeText = lines.join("<br/>");
-						//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
-						this.example.code(regularContext);
-						this.example.code(infiniteContext);
 					}
 				}
-			}
-		});
+			});
+		})();
+		
 	</script>
 </body>
 </html>
