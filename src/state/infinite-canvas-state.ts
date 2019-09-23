@@ -1,7 +1,14 @@
-import { Transformation } from "./transformation";
-import { DrawingInstruction } from "./drawing-instruction";
+import { Instruction } from "../instruction";
+import { CanvasState } from "../canvas-state";
+import { Dimension } from "./dimension";
+import { LineWidth } from "./line-width";
+import { LineDashOffset } from "./line-dash-offset";
+import { LineDash } from "./line-dash";
+import { FillStyle } from "./fill-style";
+import { StrokeStyle } from "./stroke-style";
 
-export class InfiniteCanvasState implements DrawingInstruction{
+export class InfiniteCanvasState implements CanvasState{
+    private dimensions: Dimension[];
     constructor(
         public readonly lineWidth: number,
         public readonly lineDashOffset: number,
@@ -9,14 +16,13 @@ export class InfiniteCanvasState implements DrawingInstruction{
         public readonly fillStyle: string | CanvasGradient | CanvasPattern,
         public readonly strokeStyle: string | CanvasGradient | CanvasPattern
     ){
-
-    }
-    public apply(context: CanvasRenderingContext2D, transformation: Transformation): void{
-        context.lineWidth = this.lineWidth * transformation.scale;
-        context.lineDashOffset = this.lineDashOffset * transformation.scale;
-        context.setLineDash(this.lineDash.map(s => s * transformation.scale));
-        context.fillStyle = this.fillStyle;
-        context.strokeStyle = this.strokeStyle;
+        this.dimensions = [
+            new LineWidth(lineWidth),
+            new LineDashOffset(lineDashOffset),
+            new LineDash(lineDash),
+            new FillStyle(fillStyle),
+            new StrokeStyle(strokeStyle)
+        ];
     }
     public setLineWidth(lineWidth: number): InfiniteCanvasState{
         return new InfiniteCanvasState(
@@ -62,6 +68,18 @@ export class InfiniteCanvasState implements DrawingInstruction{
             this.fillStyle,
             strokeStyle
         );
+    }
+    public getInstructionsComparedTo(predecessor: CanvasState): Instruction[]{
+        const instructions: Instruction[] = [];
+        for(const dimension of this.dimensions){
+            if(!dimension.hasSameValueAs(predecessor)){
+                instructions.push(dimension.getInstruction());
+            }
+        }
+        return instructions;
+    }
+    public getAllInstructions(): Instruction[]{
+        return this.dimensions.map(d => d.getInstruction());
     }
     public static default(): InfiniteCanvasState{
         return new InfiniteCanvasState(

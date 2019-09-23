@@ -50,14 +50,6 @@ describe("a rectangle", () => {
         expect(rectangle.contains(other)).toBe(true);
     });
 
-    it("should contain a point", () => {
-        expect(rectangle.contains({x:2,y:2})).toBe(true);
-    });
-
-    it("should not contain a point", () => {
-        expect(rectangle.contains({x:0,y:0})).toBe(false);
-    });
-
     it("should not contain another rectangle", () => {
         const other: Rectangle = new Rectangle(0, 0, 4, 4);
         expect(rectangle.contains(other)).toBe(false);

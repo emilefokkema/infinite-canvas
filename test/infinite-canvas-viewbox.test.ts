@@ -195,10 +195,10 @@ describe("an infinite canvas context", () => {
 
 				beforeEach(() => {
 					setFillStyleSpy.mockClear();
-					infiniteContext.clearRect(0, 0, 4, 4);
+					infiniteContext.clearRect(0, 0, 3.5, 4);
 				});
 
-				xit("should have remembered the state for the second part", () => {
+				it("should have remembered the state for the second part", () => {
 					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 				});
 			});
@@ -210,7 +210,7 @@ describe("an infinite canvas context", () => {
 					infiniteContext.clearRect(0, 0, 4.5, 4);
 				});
 
-				fit("should have remembered the state for the second part", () => {
+				it("should have remembered the state for the second part", () => {
 					expect(setFillStyleSpy).toHaveBeenCalledTimes(1);
 				});
 			});
@@ -356,7 +356,7 @@ describe("an infinite canvas context", () => {
 				infiniteContext.stroke();
 			});
 
-			xit("should have executed the last path modification only once", () => {
+			it("should have executed the last path modification only once", () => {
 				expect(lineToSpy).toHaveBeenCalledTimes(3);
 			});
 		});

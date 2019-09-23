@@ -2,20 +2,20 @@ import { Transformation } from "./transformation"
 import { DrawingInstruction } from "./drawing-instruction"
 import { ViewBox } from "./viewbox";
 import { Rectangle } from "./rectangle";
-import { InfiniteCanvasState } from "./infinite-canvas-state";
+import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction";
 import { ClearRect } from "./clear-rect";
-import { InfiniteCanvasPathInstructionSet } from "./infinite-canvas-path-instruction-set";
+import { Instruction } from "./instruction";
+import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
-	private defaultState: InfiniteCanvasState;
 	public state: InfiniteCanvasState;
-	private pathInstructions: InfiniteCanvasPathInstructionSet;
+	private pathInstructions: ImmutablePathInstructionSet;
 	private _transformation: Transformation;
 	private instructions: DrawingInstruction[];
+	private lastInstruction: DrawingInstruction;
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
-		this.defaultState = InfiniteCanvasState.default();
-		this.state = this.defaultState;
+		this.state = InfiniteCanvasState.default();
 		this.instructions = [];
 		this._transformation = Transformation.identity();
 	}
@@ -24,26 +24,23 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this._transformation = value;
 		this.draw();
 	}
-	public addInstruction(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void): void{
-		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction(instruction, this.state);
-		this.addDrawingInstruction(newInstruction);
-	}
 	public changeState(instruction: (state: InfiniteCanvasState) => InfiniteCanvasState): void{
 		this.state = instruction(this.state);
 	}
 	public beginPath(): void{
-		this.pathInstructions = new InfiniteCanvasPathInstructionSet();
+		this.pathInstructions = ImmutablePathInstructionSet.default();
 	}
-	public addToPath(instruction: (instructionSet: InfiniteCanvasPathInstructionSet) => void): void{
-		instruction(this.pathInstructions);
+	public addToPath(instruction: (instructionSet: ImmutablePathInstructionSet) => ImmutablePathInstructionSet): void{
+		this.pathInstructions = instruction(this.pathInstructions);
 	}
 	public drawPath(instruction: (context: CanvasRenderingContext2D) => void): void{
-		const pathdrawingInstruction: DrawingInstruction = this.pathInstructions;
-		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-			pathdrawingInstruction.apply(context, transformation);
-			instruction(context);
-		}, this.state, pathdrawingInstruction.area);
+		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction(
+			this.state,
+			this.pathInstructions,
+			instruction
+		);
 		this.addDrawingInstruction(newInstruction);
+		this.draw();
 	}
 	public clearArea(x: number, y: number, width: number, height: number): void{
 		const rectangle: Rectangle = new Rectangle(x, y, width, height);
@@ -51,24 +48,40 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		let somethingWasDone: boolean = false;
 		while((indexContainedInstruction = this.instructions.findIndex(i => i.area && rectangle.contains(i.area))) > -1){
 			somethingWasDone = true;
-			this.instructions.splice(indexContainedInstruction, 1);
+			this.removeInstructionAtIndex(indexContainedInstruction);
 		}
 		if(this.instructions.find(i => i.area && rectangle.intersects(i.area))){
 			somethingWasDone = true;
-			this.addDrawingInstruction(new ClearRect(x, y, width, height));
+			this.addDrawingInstruction(new ClearRect(this.state, this.pathInstructions, x, y, width, height));
 		}
 		if(somethingWasDone){
 			this.draw();
 		}
 	}
-
+	private removeInstructionAtIndex(index: number): void{
+		const nextInstruction: DrawingInstruction = index < this.instructions.length - 1 ? this.instructions[index + 1] : undefined;
+		if(nextInstruction){
+			const previousInstruction: DrawingInstruction = index > 0 ? this.instructions[index - 1] : undefined;
+			if(previousInstruction){
+				nextInstruction.useLeadingInstructionsFrom(previousInstruction);
+			}else{
+				nextInstruction.useAllLeadingInstructions();
+			}
+		}
+		this.instructions.splice(index, 1);
+		this.lastInstruction = this.instructions.length > 0 ? this.instructions[this.instructions.length - 1] : undefined;
+	}
 	private addDrawingInstruction(instruction: DrawingInstruction){
+		if(this.lastInstruction){
+			instruction.useLeadingInstructionsFrom(this.lastInstruction);
+		}else{
+			instruction.useAllLeadingInstructions();
+		}
+		this.lastInstruction = instruction;
 		this.instructions.push(instruction);
-		this.draw();
 	}
 	private draw(): void{
 		this.context.clearRect(0, 0, this.width, this.height);
-		this.defaultState.apply(this.context, this._transformation);
 		for(const instruction of this.instructions){
 			instruction.apply(this.context, this._transformation);
 		}

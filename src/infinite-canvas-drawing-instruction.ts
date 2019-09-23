@@ -1,17 +1,29 @@
 import { Transformation } from "./transformation";
-import { Point } from "./point";
 import { Rectangle } from "./rectangle";
 import { DrawingInstruction } from "./drawing-instruction";
+import { Instruction } from "./instruction";
+import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
+import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 
 export class InfiniteCanvasDrawingInstruction implements DrawingInstruction{
+    public area?: Rectangle;
+    private leadingInstructions: Instruction[];
     constructor(
-        private readonly instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void,
-        private readonly predecessor?: DrawingInstruction,
-        public area?: Point | Rectangle){
+        public state: InfiniteCanvasState,
+        public pathInstructions: ImmutablePathInstructionSet,
+        private instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void){
+            this.area = pathInstructions.area;
+            this.leadingInstructions = [];
+    }
+    public useLeadingInstructionsFrom(previousInstruction: DrawingInstruction): void{
+        this.leadingInstructions = this.state.getInstructionsComparedTo(previousInstruction.state).concat(this.pathInstructions.getInstructionsComparedTo(previousInstruction.pathInstructions));
+    }
+    public useAllLeadingInstructions(): void{
+        this.leadingInstructions = this.state.getAllInstructions().concat(this.pathInstructions.getAllInstructions());
     }
     public apply(context: CanvasRenderingContext2D, transformation: Transformation): void{
-        if(this.predecessor){
-            this.predecessor.apply(context, transformation);
+        for(const leadingInstruction of this.leadingInstructions){
+            leadingInstruction.apply(context, transformation);
         }
         this.instruction(context, transformation);
     }

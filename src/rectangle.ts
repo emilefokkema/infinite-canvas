@@ -49,22 +49,13 @@ export class Rectangle{
         const height: number = Math.max(...transformedY) - y;
         return new Rectangle(x, y, width, height);
     }
-    public intersects(other: Point | Rectangle): boolean{
-        if(Rectangle.isPoint(other)){
-            return this.contains(other);
-        }
+    public intersects(other: Rectangle): boolean{
         return this.left <= other.right && 
                this.right >= other.left &&
                this.bottom >= other.top &&
                this.top <= other.bottom;
     }
-    public contains(other: Point | Rectangle): boolean{
-        if(Rectangle.isPoint(other)){
-            return this.left <= other.x &&
-               this.right >= other.x &&
-               this.top <= other.y &&
-               this.bottom >= other.y;
-        }
+    public contains(other: Rectangle): boolean{
         return this.left <= other.left &&
                this.right >= other.right &&
                this.top <= other.top &&

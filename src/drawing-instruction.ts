@@ -1,8 +1,12 @@
-import { Transformation } from "./transformation"
 import { Rectangle } from "./rectangle";
-import { Point } from "./point";
+import { Instruction } from "./instruction";
+import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
+import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 
-export interface DrawingInstruction{
-	apply(context: CanvasRenderingContext2D, transformation: Transformation): void;
-	area?: Point | Rectangle;
+export interface DrawingInstruction extends Instruction{
+	state: InfiniteCanvasState;
+    pathInstructions: ImmutablePathInstructionSet;
+	area?: Rectangle;
+	useLeadingInstructionsFrom(previousInstruction: DrawingInstruction): void;
+	useAllLeadingInstructions(): void;
 }
