@@ -12,6 +12,33 @@ export class Transformation{
 		){
 			this.scale = Math.sqrt(a * d - b * c);
 	}
+	public getRotationAngle(): number{
+		const cos: number = this.a / this.scale;
+		const sin: number = this.b / this.scale;
+		if(cos === 0){
+			if(sin > 0){
+				return Math.PI / 2;
+			}
+			return 3 * Math.PI / 2;
+		}
+		const atan: number = Math.atan(sin / cos);
+		if(cos > 0){
+			if(sin > 0){
+				return atan;
+			}
+			if(sin === 0){
+				return 0;
+			}
+			return 2 * Math.PI + atan;
+		}
+		if(sin > 0){
+			return Math.PI + atan;
+		}
+		if(sin === 0){
+			return Math.PI;
+		}
+		return Math.PI + atan;
+	}
 	public apply(point: Point): Point{
 		return {
 			x: this.a * point.x + this.c * point.y + this.e,

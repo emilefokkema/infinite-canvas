@@ -21,7 +21,14 @@ export class ImmutablePathInstructionSet {
         return new ImmutablePathInstructionSet(newInstruction, newArea, this);
     }
 
-    public arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{}
+    public arc(_x: number, _y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): ImmutablePathInstructionSet{
+        const area: Rectangle = new Rectangle(_x - radius, _y - radius, 2 * radius, 2 * radius);
+        return this.withInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            const transformationAngle: number = transformation.getRotationAngle();
+            const {x, y} = transformation.apply({x:_x,y:_y});
+            context.arc(x, y, radius * transformation.scale, startAngle + transformationAngle, endAngle + transformationAngle, anticlockwise);
+        }, area);
+    }
     public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void{}
     public bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void{}
     public closePath(): ImmutablePathInstructionSet{
