@@ -222,16 +222,33 @@
 						dark:false
 					};
 				},
+				methods:{
+					setDark:function(){
+						document.body.setAttribute("class","dark");
+						this.dark = true;
+						var params = new URLSearchParams(window.location.search);
+						if(!params.has("d")){
+							window.history.replaceState(null, "", "?d=1");
+						}
+					},
+					setLight:function(){
+						document.body.setAttribute("class","");
+						this.dark = false;
+						window.location.search = "";
+					}
+				},
 				mounted:function(){
 					var self = this;
 					document.getElementById("light").addEventListener("click", function(){
-						document.body.setAttribute("class","");
-						self.dark = false;
+						self.setLight();
 					});
 					document.getElementById("dark").addEventListener("click", function(){
-						document.body.setAttribute("class","dark");
-						self.dark = true;
+						self.setDark();
 					});
+					var searchParams = new URLSearchParams(window.location.search);
+					if(searchParams.get("d") === "1"){
+						this.setDark();
+					}
 				},
 				components:{
 					'example':{
