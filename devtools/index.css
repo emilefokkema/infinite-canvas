@@ -1,6 +1,18 @@
-body{
+.darklight{
+	cursor: pointer;
+}
+body.dark{
 	background-color: #333;
 	color: #ddd;
+}
+#light{
+	display: none;
+}
+body.dark #light{
+	display: initial;
+}
+body.dark #dark{
+	display: none;
 }
 .example{
 	margin-bottom: 30px;

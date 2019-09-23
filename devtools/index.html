@@ -28,7 +28,9 @@
 		
 	</template>
 	<div id="main">
-		<example v-for="example in examples" v-bind:example="example"></example>
+		<span id="dark" class="darklight">dark</span>
+		<span id="light" class="darklight">light</span>
+		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark"></example>
 	</div>
 	<script type="text/javascript">
 		(function(){
@@ -216,20 +218,34 @@
 					}
 					exaplesToShow = exaplesToShow.filter(function(e){return !e.excluded;});
 					return {
-						examples:exaplesToShow
+						examples:exaplesToShow,
+						dark:false
 					};
+				},
+				mounted:function(){
+					var self = this;
+					document.getElementById("light").addEventListener("click", function(){
+						document.body.setAttribute("class","");
+						self.dark = false;
+					});
+					document.getElementById("dark").addEventListener("click", function(){
+						document.body.setAttribute("class","dark");
+						self.dark = true;
+					});
 				},
 				components:{
 					'example':{
 						template: document.getElementById("exampleTemplate").innerHTML,
 						props:{
-							example: Object
+							example: Object,
+							dark: Boolean
 						},
 						data:function(){
 							return {
 								rotationEnabled: false,
 								greedyGestureHandling: false,
-								infiniteCanvas: undefined
+								infiniteCanvas: undefined,
+								editor: undefined
 							};
 						},
 						watch:{
@@ -238,6 +254,13 @@
 							},
 							greedyGestureHandling: function(v){
 								this.infiniteCanvas.greedyGestureHandling = v;
+							},
+							dark:function(v){
+								if(v){
+									this.editor.setTheme("ace/theme/monokai");
+								}else{
+									this.editor.setTheme("");
+								}
 							}
 						},
 						mounted:function(){
@@ -249,11 +272,10 @@
 							this.greedyGestureHandling = this.infiniteCanvas.greedyGestureHandling;
 							var infiniteContext = this.infiniteCanvas.getContext();
 							var code = getLinesFromFunction(this.example.code).join("\r\n");
-							var editor = ace.edit(this.$refs.code);
-							editor.setTheme("ace/theme/monokai");
-							editor.session.setMode("ace/mode/javascript");
-							editor.setValue(code);
-							editor.clearSelection();
+							this.editor = ace.edit(this.$refs.code);
+							this.editor.session.setMode("ace/mode/javascript");
+							this.editor.setValue(code);
+							this.editor.clearSelection();
 							//editor.setReadOnly(true);
 							//this.codeText = lines.join("<br/>");
 							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
