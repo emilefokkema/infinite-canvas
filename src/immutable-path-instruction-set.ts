@@ -45,7 +45,14 @@ export class ImmutablePathInstructionSet {
             context.closePath();
         });
     }
-    public ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{}
+    public ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): ImmutablePathInstructionSet{
+        const newRectangle: Rectangle = new Rectangle(x - radiusX, y - radiusY, 2 * radiusX, 2 * radiusY).transform(Transformation.rotation(x, y, rotation));
+        return this.withInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            const tCenter: Point = transformation.apply({x:x,y:y});
+            const transformationAngle: number = transformation.getRotationAngle();
+            context.ellipse(tCenter.x, tCenter.y, radiusX * transformation.scale, radiusY * transformation.scale, rotation + transformationAngle, startAngle, endAngle, anticlockwise);
+        }, newRectangle);
+    }
     public lineTo(_x: number, _y: number): ImmutablePathInstructionSet{
         const point: Point = {x: _x, y: _y};
         return this.withInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {

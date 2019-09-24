@@ -12,7 +12,9 @@ export class InfiniteCanvasPath implements CanvasPath{
 	public closePath(): void{
 		this.viewBox.addToPath(path => path.closePath());
 	}
-	public ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{}
+	public ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{
+		this.viewBox.addToPath(path => path.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise));
+	}
 	public lineTo(_x: number, _y: number): void{
 		this.viewBox.addToPath(path => path.lineTo(_x, _y));
 	}
