@@ -29,7 +29,16 @@ export class ImmutablePathInstructionSet {
             context.arc(x, y, radius * transformation.scale, startAngle + transformationAngle, endAngle + transformationAngle, anticlockwise);
         }, area);
     }
-    public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void{}
+    public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): ImmutablePathInstructionSet{
+        const p1: Point = {x:x1,y:y1};
+        const p2: Point = {x:x2,y:y2};
+        const newRectangle: Rectangle = Rectangle.create(p1).expandToInclude(p2);
+        return this.withInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            const tp1: Point = transformation.apply(p1);
+            const tp2: Point = transformation.apply(p2);
+            context.arcTo(tp1.x, tp1.y, tp2.x, tp2.y, radius * transformation.scale);
+        }, newRectangle);
+    }
     public bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void{}
     public closePath(): ImmutablePathInstructionSet{
         return this.withInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
