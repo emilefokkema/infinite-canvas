@@ -15,6 +15,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private _transformation: Transformation;
 	private instructions: DrawingInstruction[];
 	private lastInstruction: DrawingInstruction;
+	private lastDrawnPath: ImmutablePathInstructionSet;
+	private lastDrawnState: InfiniteCanvasState;
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
 		this.state = InfiniteCanvasState.default();
 		this.instructions = [];
@@ -51,6 +53,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		);
 		this.addDrawingInstruction(newInstruction);
 		this.draw();
+		this.lastDrawnPath = this.pathInstructions;
+		this.lastDrawnState = this.state;
 	}
 	public clearArea(x: number, y: number, width: number, height: number): void{
 		const rectangle: Rectangle = new Rectangle(x, y, width, height);
@@ -62,7 +66,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		}
 		if(this.instructions.find(i => i.area && rectangle.intersects(i.area))){
 			somethingWasDone = true;
-			this.addDrawingInstruction(new ClearRect(this.state, this.pathInstructions, x, y, width, height));
+			this.addDrawingInstruction(new ClearRect(this.lastDrawnState, this.lastDrawnPath, x, y, width, height));
 		}
 		if(somethingWasDone){
 			this.draw();
