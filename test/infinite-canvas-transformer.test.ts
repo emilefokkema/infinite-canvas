@@ -21,7 +21,7 @@ describe("an infinite canvas transformer", () => {
 
     beforeEach(() => {
         config = {};
-        currentTransformation = Transformation.identity();
+        currentTransformation = Transformation.identity;
         viewBox = {
             width: 16,
             height: 8,

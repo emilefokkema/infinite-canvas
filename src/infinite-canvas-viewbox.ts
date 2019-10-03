@@ -5,7 +5,6 @@ import { Rectangle } from "./rectangle";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction";
 import { ClearRect } from "./clear-rect";
-import { Instruction } from "./instruction";
 import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
@@ -18,9 +17,9 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private lastDrawnPath: ImmutablePathInstructionSet;
 	private lastDrawnState: InfiniteCanvasState;
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
-		this.state = InfiniteCanvasState.default();
+		this.state = InfiniteCanvasState.default;
 		this.instructions = [];
-		this._transformation = Transformation.identity();
+		this._transformation = Transformation.identity;
 		this.stateStack = [];
 	}
 	public get transformation(): Transformation{return this._transformation};
@@ -96,6 +95,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	private draw(): void{
 		this.context.clearRect(0, 0, this.width, this.height);
+		this.context.restore();
+		this.context.save();
 		for(const instruction of this.instructions){
 			instruction.apply(this.context, this._transformation);
 		}

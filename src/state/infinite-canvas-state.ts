@@ -6,6 +6,7 @@ import { LineDashOffset } from "./line-dash-offset";
 import { LineDash } from "./line-dash";
 import { FillStyle } from "./fill-style";
 import { StrokeStyle } from "./stroke-style";
+import { Transformation } from "../transformation";
 
 export class InfiniteCanvasState implements CanvasState{
     private dimensions: Dimension[];
@@ -14,7 +15,8 @@ export class InfiniteCanvasState implements CanvasState{
         public readonly lineDashOffset: number,
         public readonly lineDash: number[],
         public readonly fillStyle: string | CanvasGradient | CanvasPattern,
-        public readonly strokeStyle: string | CanvasGradient | CanvasPattern
+        public readonly strokeStyle: string | CanvasGradient | CanvasPattern,
+        public readonly transformation: Transformation
     ){
         this.dimensions = [
             new LineWidth(lineWidth),
@@ -30,7 +32,8 @@ export class InfiniteCanvasState implements CanvasState{
             this.lineDashOffset,
             this.lineDash,
             this.fillStyle,
-            this.strokeStyle
+            this.strokeStyle,
+            this.transformation
         );
     }
     public setLineDashOffset(lineDashOffset: number): InfiniteCanvasState{
@@ -39,7 +42,8 @@ export class InfiniteCanvasState implements CanvasState{
             lineDashOffset,
             this.lineDash,
             this.fillStyle,
-            this.strokeStyle
+            this.strokeStyle,
+            this.transformation
         );
     }
     public setLineDash(lineDash: number[]): InfiniteCanvasState{
@@ -48,7 +52,8 @@ export class InfiniteCanvasState implements CanvasState{
             this.lineDashOffset,
             lineDash,
             this.fillStyle,
-            this.strokeStyle
+            this.strokeStyle,
+            this.transformation
         );
     }
     public setFillStyle(fillStyle: string | CanvasGradient | CanvasPattern): InfiniteCanvasState{
@@ -57,7 +62,8 @@ export class InfiniteCanvasState implements CanvasState{
             this.lineDashOffset,
             this.lineDash,
             fillStyle,
-            this.strokeStyle
+            this.strokeStyle,
+            this.transformation
         );
     }
     public setStrokeStyle(strokeStyle: string | CanvasGradient | CanvasPattern): InfiniteCanvasState{
@@ -66,7 +72,28 @@ export class InfiniteCanvasState implements CanvasState{
             this.lineDashOffset,
             this.lineDash,
             this.fillStyle,
-            strokeStyle
+            strokeStyle,
+            this.transformation
+        );
+    }
+    public addTransformation(transformation: Transformation): InfiniteCanvasState{
+        return new InfiniteCanvasState(
+            this.lineWidth,
+            this.lineDashOffset,
+            this.lineDash,
+            this.fillStyle,
+            this.strokeStyle,
+            transformation.before(this.transformation)
+        );
+    }
+    public setTransformation(transformation: Transformation): InfiniteCanvasState{
+        return new InfiniteCanvasState(
+            this.lineWidth,
+            this.lineDashOffset,
+            this.lineDash,
+            this.fillStyle,
+            this.strokeStyle,
+            transformation
         );
     }
     public getInstructionsComparedTo(predecessor: CanvasState): Instruction[]{
@@ -79,15 +106,20 @@ export class InfiniteCanvasState implements CanvasState{
         return instructions;
     }
     public getAllInstructions(): Instruction[]{
-        return this.dimensions.map(d => d.getInstruction());
+        const instructions: Instruction[] = [];
+        for(const dimension of this.dimensions){
+            if(!dimension.hasSameValueAs(InfiniteCanvasState.default) || dimension.hasScale){
+                instructions.push(dimension.getInstruction());
+            }
+        }
+        return instructions;
     }
-    public static default(): InfiniteCanvasState{
-        return new InfiniteCanvasState(
-            1,
-            0,
-            [],
-            "#000",
-            "#000"
-        );
-    }
+    public static default: InfiniteCanvasState = new InfiniteCanvasState(
+        1,
+        0,
+        [],
+        "#000",
+        "#000",
+        Transformation.identity
+    );
 }

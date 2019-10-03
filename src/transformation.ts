@@ -54,6 +54,14 @@ export class Transformation{
 		const f: number = other.b * this.e + other.d * this.f + other.f;
 		return new Transformation(a, b, c, d, e, f);
 	}
+	public equals(other: Transformation): boolean{
+		return this.a === other.a &&
+			   this.b === other.b &&
+			   this.c === other.c &&
+			   this.d === other.d &&
+			   this.e === other.e &&
+			   this.f === other.f;
+	}
 	public inverse(): Transformation{
 		var det = this.a * this.d - this.b * this.c;
 		if(det == 0){
@@ -73,9 +81,7 @@ export class Transformation{
 	public static scale(scale: number): Transformation{
 		return new Transformation(scale, 0, 0, scale, 0, 0);
 	}
-	public static identity(): Transformation{
-		return new Transformation(1,0,0,1,0,0);
-	}
+	public static identity: Transformation = new Transformation(1,0,0,1,0,0);
 	public static zoom(centerX: number, centerY: number, scale: number, translateX?: number, translateY?: number): Transformation{
 		const oneMinScale: number = 1 - scale;
 		if(translateX !== undefined){

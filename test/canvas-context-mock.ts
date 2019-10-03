@@ -20,7 +20,9 @@ export class CanvasContextMock{
         ];
         const setters: string[] = [
             "fillStyle",
-            "strokeStyle"
+            "strokeStyle",
+            "lineWidth",
+            "lineDashOffset"
         ];
         this.mock = {};
         for(const methodName of methods){

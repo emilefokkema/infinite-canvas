@@ -5,6 +5,7 @@ import { Transformation } from "../transformation";
 import { CanvasState } from "../canvas-state";
 
 export class FillStyle extends StriclyEquatableDimension<string | CanvasGradient | CanvasPattern>{
+    public readonly hasScale: boolean = false;
     constructor(value: string | CanvasGradient | CanvasPattern){
         super(value);
     }

@@ -5,6 +5,7 @@ import { Transformation } from "../transformation";
 import { CanvasState } from "../canvas-state";
 
 export class LineWidth extends StriclyEquatableDimension<number>{
+    public readonly hasScale: boolean = true;
     constructor(value: number){
         super(value);
     }

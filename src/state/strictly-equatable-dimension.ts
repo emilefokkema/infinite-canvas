@@ -11,4 +11,5 @@ export abstract class StriclyEquatableDimension<T> implements Dimension{
         return this.value === this.getValueFromState(other);
     }
     public abstract getInstruction(): Instruction;
+    public abstract get hasScale(): boolean;
 }

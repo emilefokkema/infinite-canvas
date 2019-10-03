@@ -5,8 +5,10 @@ import { Transformation } from "../transformation";
 import { CanvasState } from "../canvas-state";
 
 export class LineDashOffset extends StriclyEquatableDimension<number>{
+    public readonly hasScale: boolean;
     constructor(value: number){
         super(value);
+        this.hasScale = value !== 0;
     }
     protected getValueFromState(state: CanvasState): number{return state.lineDashOffset;}
     public getInstruction(): Instruction{

@@ -2,19 +2,21 @@ import { InfiniteCanvasViewBox } from "../src/infinite-canvas-viewbox"
 import { InfiniteContext } from "../src/infinite-context/infinite-context";
 import { ViewBox } from "../src/viewbox";
 import { CanvasContextMock } from "./canvas-context-mock";
+import { Transformation } from "../src/transformation";
 
 describe("an infinite canvas context", () => {
 	let width: number;
 	let height: number;
 	let infiniteContext: InfiniteContext;
 	let contextMock: CanvasContextMock;
+	let viewbox: ViewBox;
 
 	beforeEach(() => {
 		width = 200;
 		height = 200;
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
-		let viewbox: ViewBox = new InfiniteCanvasViewBox(width, height, context);
+		viewbox = new InfiniteCanvasViewBox(width, height, context);
 		infiniteContext = new InfiniteContext(undefined, viewbox);
 	});
 
@@ -31,18 +33,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have modified the context correctly", () => {
-				expect(contextMock.getLog()).toEqual( [
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#f00"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(0,0)',
-				'context.lineTo(20,0)',
-				'context.lineTo(20,20)',
-				'context.lineTo(0,20)',
-				'context.lineTo(0,0)',
-				'context.fill()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
 	});
@@ -59,18 +50,7 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should have modified the context correctly", () => {
-			expect(contextMock.getLog()).toEqual([
-			'context.clearRect(0,0,200,200)',
-			'context.setLineDash([])',
-			'context.fillStyle = "#f00"',
-			'context.strokeStyle = "#000"',
-			'context.beginPath()',
-			'context.moveTo(1,1)',
-			'context.lineTo(3,1)',
-			'context.lineTo(3,3)',
-			'context.lineTo(1,3)',
-			'context.lineTo(1,1)',
-			'context.fill()' ])
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 
 		describe("and who changes state, draws something, changes state back and draws something again", () => {
@@ -84,34 +64,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have set a new state three times", () => {
-				expect(contextMock.getLog()).toEqual( [
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#f00"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(1,1)',
-				'context.lineTo(3,1)',
-				'context.lineTo(3,3)',
-				'context.lineTo(1,3)',
-				'context.lineTo(1,1)',
-				'context.fill()',
-				'context.fillStyle = "#00f"',
-				'context.beginPath()',
-				'context.moveTo(5,1)',
-				'context.lineTo(7,1)',
-				'context.lineTo(7,3)',
-				'context.lineTo(5,3)',
-				'context.lineTo(5,1)',
-				'context.fill()',
-				'context.fillStyle = "#f00"',
-				'context.beginPath()',
-				'context.moveTo(9,1)',
-				'context.lineTo(11,1)',
-				'context.lineTo(11,3)',
-				'context.lineTo(9,3)',
-				'context.lineTo(9,1)',
-				'context.fill()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 
 			describe("and who then clears a rect containing the second drawing", () => {
@@ -122,25 +75,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should only have set the remaining state", () => {
-					expect(contextMock.getLog()).toEqual([
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#f00"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(1,1)',
-					'context.lineTo(3,1)',
-					'context.lineTo(3,3)',
-					'context.lineTo(1,3)',
-					'context.lineTo(1,1)',
-					'context.fill()',
-					'context.beginPath()',
-					'context.moveTo(9,1)',
-					'context.lineTo(11,1)',
-					'context.lineTo(11,3)',
-					'context.lineTo(9,3)',
-					'context.lineTo(9,1)',
-					'context.fill()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 		});
@@ -155,30 +90,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have drawn using the state from before the clearing", () => {
-				expect(contextMock.getLog()).toEqual([
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#f00"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(1,1)',
-				'context.lineTo(3,1)',
-				'context.lineTo(3,3)',
-				'context.lineTo(1,3)',
-				'context.lineTo(1,1)',
-				'context.fill()',
-				'context.save()',
-				'context.setTransform(1,0,0,1,0,0)',
-				'context.clearRect(2,0,4,4)',
-				'context.restore()',
-				'context.fillStyle = "#00f"',
-				'context.beginPath()',
-				'context.moveTo(3,1)',
-				'context.lineTo(4,1)',
-				'context.lineTo(4,2)',
-				'context.lineTo(3,2)',
-				'context.lineTo(3,1)',
-				'context.fill()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
 
@@ -190,9 +102,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have cleared a rectangle", () => {
-				expect(contextMock.getLog()).toEqual([ 
-				'context.clearRect(0,0,200,200)'
-				])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 
 			describe("and which then draws something else without changing the state", () => {
@@ -203,18 +113,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should have cleared a rect only once more and should still use the old state", () => {
-					expect(contextMock.getLog()).toEqual( [ 
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#f00"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(1,1)',
-					'context.lineTo(3,1)',
-					'context.lineTo(3,3)',
-					'context.lineTo(1,3)',
-					'context.lineTo(1,1)',
-					'context.fill()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 
@@ -227,18 +126,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should have cleared a rect only once more and should not have executed the old instruction again", () => {
-					expect(contextMock.getLog()).toEqual([
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#00f"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(1,1)',
-					'context.lineTo(3,1)',
-					'context.lineTo(3,3)',
-					'context.lineTo(1,3)',
-					'context.lineTo(1,1)',
-					'context.fill()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 		});
@@ -251,25 +139,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should not have altered the state", () => {
-				expect(contextMock.getLog()).toEqual( [ 
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#f00"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(1,1)',
-				'context.lineTo(3,1)',
-				'context.lineTo(3,3)',
-				'context.lineTo(1,3)',
-				'context.lineTo(1,1)',
-				'context.fill()',
-				'context.beginPath()',
-				'context.moveTo(4,1)',
-				'context.lineTo(6,1)',
-				'context.lineTo(6,3)',
-				'context.lineTo(4,3)',
-				'context.lineTo(4,1)',
-				'context.fill()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 
 			describe("and which then clears the first part", () => {
@@ -280,18 +150,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should have remembered the state for the second part", () => {
-					expect(contextMock.getLog()).toEqual([
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#f00"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(4,1)',
-					'context.lineTo(6,1)',
-					'context.lineTo(6,3)',
-					'context.lineTo(4,3)',
-					'context.lineTo(4,1)',
-					'context.fill()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 
@@ -303,22 +162,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should have remembered the state for the second part", () => {
-					expect(contextMock.getLog()).toEqual([
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#f00"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(4,1)',
-					'context.lineTo(6,1)',
-					'context.lineTo(6,3)',
-					'context.lineTo(4,3)',
-					'context.lineTo(4,1)',
-					'context.fill()',
-					'context.save()',
-					'context.setTransform(1,0,0,1,0,0)',
-					'context.clearRect(0,0,4.5,4)',
-					'context.restore()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 		});
@@ -342,17 +186,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have executed the new instructions", () => {
-				expect(contextMock.getLog()).toEqual( [ 
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#000"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(0,0)',
-				'context.lineTo(3,0)',
-				'context.lineTo(0,3)',
-				'context.closePath()',
-				'context.fill()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 
 			describe("and then clears an area that is outside the drawn area", () => {
@@ -363,7 +197,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should not have done anything", () => {
-					expect(contextMock.getLog()).toEqual([])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});
 
@@ -380,26 +214,7 @@ describe("an infinite canvas context", () => {
 				});
 
 				it("should still have executed the instructions in the completed area and should have added a clear rect instruction", () => {
-					expect(contextMock.getLog()).toEqual([
-					'context.clearRect(0,0,200,200)',
-					'context.setLineDash([])',
-					'context.fillStyle = "#000"',
-					'context.strokeStyle = "#000"',
-					'context.beginPath()',
-					'context.moveTo(0,0)',
-					'context.lineTo(3,0)',
-					'context.lineTo(0,3)',
-					'context.closePath()',
-					'context.fill()',
-					'context.save()',
-					'context.setTransform(1,0,0,1,0,0)',
-					'context.clearRect(0,0,2,2)',
-					'context.restore()',
-					'context.strokeStyle = "#f00"',
-					'context.beginPath()',
-					'context.moveTo(0,0)',
-					'context.lineTo(2,0)',
-					'context.stroke()' ])
+					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 
 				describe("and then clears an area containing all previous instructions", () => {
@@ -410,8 +225,7 @@ describe("an infinite canvas context", () => {
 					});
 
 					it("should have cleared a rectangle once", () => {
-						expect(contextMock.getLog()).toEqual([
-							'context.clearRect(0,0,200,200)' ])
+						expect(contextMock.getLog()).toMatchSnapshot();
 					});
 
 					describe("and then draws something else", () => {
@@ -422,18 +236,7 @@ describe("an infinite canvas context", () => {
 						});
 
 						it("should have cleared a rectangle once more", () => {
-							expect(contextMock.getLog()).toEqual( [
-							'context.clearRect(0,0,200,200)',
-							'context.setLineDash([])',
-							'context.fillStyle = "#000"',
-							'context.strokeStyle = "#f00"',
-							'context.beginPath()',
-							'context.moveTo(0,0)',
-							'context.lineTo(1,0)',
-							'context.lineTo(1,1)',
-							'context.lineTo(0,1)',
-							'context.lineTo(0,0)',
-							'context.fill()' ])
+							expect(contextMock.getLog()).toMatchSnapshot();
 						});
 					});
 				});
@@ -452,18 +255,7 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should have called the context methods", () => {
-			expect(contextMock.getLog()).toEqual( [
-			'context.clearRect(0,0,200,200)',
-			'context.setLineDash([])',
-			'context.fillStyle = "#00f"',
-			'context.strokeStyle = "#f00"',
-			'context.beginPath()',
-			'context.moveTo(1,1)',
-			'context.lineTo(2,1)',
-			'context.lineTo(2,2)',
-			'context.lineTo(1,2)',
-			'context.lineTo(1,1)',
-			'context.fill()' ])
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 
 		describe("and then clears a rectangle containing the drawing", () => {
@@ -474,7 +266,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have cleared a rectangle and nothing else", () => {
-				expect(contextMock.getLog()).toEqual([ 'context.clearRect(0,0,200,200)' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
 	});
@@ -499,18 +291,7 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should have executed the last path modification only once", () => {
-				expect(contextMock.getLog()).toEqual([
-				'context.clearRect(0,0,200,200)',
-				'context.setLineDash([])',
-				'context.fillStyle = "#f00"',
-				'context.strokeStyle = "#000"',
-				'context.beginPath()',
-				'context.moveTo(30,30)',
-				'context.lineTo(30,100)',
-				'context.lineTo(100,100)',
-				'context.fill()',
-				'context.lineTo(100,30)',
-				'context.stroke()' ])
+				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
 	});
@@ -533,30 +314,7 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should have executed everything", () => {
-			expect(contextMock.getLog()).toEqual([
-			'context.clearRect(0,0,200,200)',
-			'context.setLineDash([])',
-			'context.fillStyle = "#f00"',
-			'context.strokeStyle = "#000"',
-			'context.beginPath()',
-			'context.moveTo(0,0)',
-			'context.lineTo(100,0)',
-			'context.lineTo(100,100)',
-			'context.lineTo(0,100)',
-			'context.lineTo(0,0)',
-			'context.fill()',
-			'context.save()',
-			'context.setTransform(1,0,0,1,0,0)',
-			'context.clearRect(0,0,75,75)',
-			'context.restore()',
-			'context.fillStyle = "#00f"',
-			'context.beginPath()',
-			'context.moveTo(50,0)',
-			'context.lineTo(50,50)',
-			'context.lineTo(0,50)',
-			'context.lineTo(0,0)',
-			'context.closePath()',
-			'context.fill()' ])
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
 
@@ -570,22 +328,7 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should forget all about the second rectangle", () => {
-			expect(contextMock.getLog()).toEqual([
-			'context.clearRect(0,0,200,200)',
-			'context.setLineDash([])',
-			'context.fillStyle = "#000"',
-			'context.strokeStyle = "#000"',
-			'context.beginPath()',
-			'context.moveTo(0,0)',
-			'context.lineTo(5,0)',
-			'context.lineTo(5,5)',
-			'context.lineTo(0,5)',
-			'context.lineTo(0,0)',
-			'context.fill()',
-			'context.save()',
-			'context.setTransform(1,0,0,1,0,0)',
-			'context.clearRect(1,1,3,3)',
-			'context.restore()' ])
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
 
@@ -599,22 +342,92 @@ describe("an infinite canvas context", () => {
 		});
 
 		it("should end up with only one clear rect instruction", () => {
-			expect(contextMock.getLog()).toEqual( [
-			'context.clearRect(0,0,200,200)',
-			'context.setLineDash([])',
-			'context.fillStyle = "#000"',
-			'context.strokeStyle = "#000"',
-			'context.beginPath()',
-			'context.moveTo(0,0)',
-			'context.lineTo(5,0)',
-			'context.lineTo(5,5)',
-			'context.lineTo(0,5)',
-			'context.lineTo(0,0)',
-			'context.fill()',
-			'context.save()',
-			'context.setTransform(1,0,0,1,0,0)',
-			'context.clearRect(1,1,3,3)',
-			'context.restore()' ])
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
-});
+
+	describe("that adds a drawing that depends on the transformation", () => {
+
+		beforeEach(() => {
+			infiniteContext.setLineDash([1, 1]);
+			infiniteContext.lineDashOffset = 1;
+		});
+
+		describe("and then draws using a non-identity transformation", () => {
+
+			beforeEach(() => {
+				viewbox.transformation = new Transformation(2,0,0,2,0,0);
+				contextMock.clear();
+				infiniteContext.strokeRect(0,0,10,10);
+			});
+
+			it("should have set the transformed version of the state", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
+	describe("that is translated", () => {
+
+		beforeEach(() => {
+			infiniteContext.translate(2, 0);
+		});
+
+		describe("and then draws a rectangle", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fillRect(0, 0, 1, 1);
+			});
+
+			it("should have called setTransform on the context", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then clears a rectangle covering the place where the rectangle was drawn", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(0.5, 0, 3, 3);
+				});
+
+				it("should not have added an instruction to clear a rect", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and then the viewbox is transformed and it draws a rectangle", () => {
+
+			beforeEach(() => {
+				viewbox.transformation = Transformation.scale(2);
+				contextMock.clear();
+				infiniteContext.fillRect(0, 0, 1, 1);
+			});
+
+			it("should have called setTransform on the context with the right transformation", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
+	describe("that does this", () => {
+
+		beforeEach(() => {
+			infiniteContext.save();
+			infiniteContext.fillStyle = '#f00';
+			infiniteContext.translate(10, 10);
+			infiniteContext.fillRect(0, 0, 25, 25);
+			infiniteContext.restore();
+			infiniteContext.save();
+			infiniteContext.fillStyle = '#f00';
+			infiniteContext.translate(60, 10);
+			contextMock.clear();
+			infiniteContext.fillRect(0, 0, 25, 25);
+		});
+
+		it("should have done this", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+})
