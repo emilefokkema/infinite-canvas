@@ -7,14 +7,14 @@ import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { SimpleInstruction } from "./simple-instruction";
 
 export class InfiniteCanvasDrawingInstruction implements DrawingInstruction{
-    public area?: Rectangle;
+    
     private leadingInstructions: Instruction[];
     private instruction: SimpleInstruction;
     constructor(
         public state: InfiniteCanvasState,
         public pathInstructions: ImmutablePathInstructionSet,
+        public area: Rectangle,
         instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void){
-            this.area = pathInstructions.area.transform(state.transformation);
             this.leadingInstructions = [];
             this.instruction = new SimpleInstruction(instruction)
                 .after(new SimpleInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
@@ -41,10 +41,18 @@ export class InfiniteCanvasDrawingInstruction implements DrawingInstruction{
             }
     }
     public useLeadingInstructionsFrom(previousInstruction: DrawingInstruction): void{
-        this.leadingInstructions = this.state.getInstructionsComparedTo(previousInstruction.state).concat(this.pathInstructions.getInstructionsComparedTo(previousInstruction.pathInstructions));
+        let result: Instruction[] = this.state.getInstructionsComparedTo(previousInstruction.state);
+        if(this.pathInstructions){
+            result = result.concat(this.pathInstructions.getInstructionsComparedTo(previousInstruction.pathInstructions));
+        }
+        this.leadingInstructions = result;
     }
     public useAllLeadingInstructions(): void{
-        this.leadingInstructions = this.state.getAllInstructions().concat(this.pathInstructions.getAllInstructions());
+        let result: Instruction[] = this.state.getAllInstructions();
+        if(this.pathInstructions){
+            result = result.concat(this.pathInstructions.getAllInstructions());
+        }
+        this.leadingInstructions = result;
     }
     public apply(context: CanvasRenderingContext2D, transformation: Transformation): void{
         this.instruction.apply(context, transformation);

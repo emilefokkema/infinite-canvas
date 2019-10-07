@@ -1,6 +1,9 @@
 .darklight{
 	cursor: pointer;
 }
+.warning{
+	background-color: rgba(255, 200, 0, 0.5)
+}
 body.dark{
 	background-color: #333;
 	color: #ddd;

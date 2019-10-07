@@ -13,5 +13,5 @@ export interface ViewBox extends Transformable{
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;
     addToPath(instruction: (instructionSet: ImmutablePathInstructionSet) => ImmutablePathInstructionSet): void;
-    drawPath(instruction: (context: CanvasRenderingContext2D) => void): void;
+    drawPath(instruction: (context: CanvasRenderingContext2D) => void, path?: ImmutablePathInstructionSet): void;
 }

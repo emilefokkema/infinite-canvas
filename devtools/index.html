@@ -10,7 +10,7 @@
 </head>
 <body>
 	<template id="exampleTemplate">
-		<div class="example">
+		<div class="example" v-bind:class="{warning: !imagesAreEqual}">
 			<div class="column regular-canvas">
 				<canvas width="400" height="400" ref="canvas"></canvas>
 			</div>
@@ -28,9 +28,10 @@
 		
 	</template>
 	<div id="main">
+		<div v-if="!allImagesEqual" class="warning">Not all images are equal</div>
 		<span id="dark" class="darklight">dark</span>
 		<span id="light" class="darklight">light</span>
-		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark"></example>
+		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal"></example>
 	</div>
 	<script type="text/javascript">
 		(function(){
@@ -209,6 +210,44 @@
 							}
 						},
 						{
+							code:function(ctx){
+								ctx.fillStyle = '#ff6';
+								ctx.fillRect(0, 0, 100, 100);
+								ctx.fillStyle = "#f00";
+								ctx.beginPath();
+								ctx.rect(25, 25, 50, 50);
+								ctx.fill();
+								ctx.clearRect(10, 10, 80, 80);
+								ctx.fill();
+							}
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = '#ff6';
+								ctx.fillRect(0, 0, 200, 200);
+								ctx.translate(50, 50);
+								ctx.clearRect(0, 0, 100, 100);
+							}
+						},
+						{
+							code: function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.beginPath();
+								ctx.rect(0,0,50,50);
+								ctx.fillRect(50,50,50,50);
+								ctx.fill();
+							}
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.fillRect(0, 0, 100, 100);
+								ctx.fillStyle = "#00f";
+								ctx.clearRect(0, 0, 50, 50);
+								ctx.fillRect(25, 25, 50, 50);
+							}
+						},
+						{
 							code: function(ctx){
 								// Draw shapes
 								for (let i = 0; i <= 3; i++) {
@@ -372,10 +411,14 @@
 					exaplesToShow = exaplesToShow.filter(function(e){return !e.excluded;});
 					return {
 						examples:exaplesToShow,
-						dark:false
+						dark:false,
+						allImagesEqual: true
 					};
 				},
 				methods:{
+					onImagesUnequal: function(){
+						this.allImagesEqual = false;
+					},
 					setDark:function(){
 						document.body.setAttribute("class","dark");
 						this.dark = true;
@@ -415,7 +458,8 @@
 								rotationEnabled: false,
 								greedyGestureHandling: false,
 								infiniteCanvas: undefined,
-								editor: undefined
+								editor: undefined,
+								imagesAreEqual: false
 							};
 						},
 						watch:{
@@ -451,6 +495,12 @@
 							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 							this.example.code(regularContext);
 							this.example.code(infiniteContext);
+							var dataUrlRegular = canvas.toDataURL();
+							var dataUrlInfinite = infCanvas.toDataURL();
+							this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+							if(!this.imagesAreEqual){
+								this.$emit("imagesunequal");
+							}
 						}
 					}
 				}

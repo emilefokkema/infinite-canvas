@@ -430,4 +430,36 @@ describe("an infinite canvas context", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
+
+	describe("that creates a rectangular path, fills another rectangle and then fills the created path", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle = "#f00";
+			infiniteContext.beginPath();
+			infiniteContext.rect(0,0,50,50);
+			infiniteContext.fillRect(50,50,50,50);
+			contextMock.clear();
+			infiniteContext.fill();
+		});
+
+		it("should have filled both rectangles", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe("that creates a rectangular path, strokes another rectangle and then strokes the created path", () => {
+
+		beforeEach(() => {
+			infiniteContext.strokeStyle = "#f00";
+			infiniteContext.beginPath();
+			infiniteContext.rect(0,0,50,50);
+			infiniteContext.strokeRect(50,50,50,50);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should have stroked both rectangles", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
 })

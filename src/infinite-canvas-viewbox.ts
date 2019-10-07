@@ -4,7 +4,6 @@ import { ViewBox } from "./viewbox";
 import { Rectangle } from "./rectangle";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { InfiniteCanvasDrawingInstruction } from "./infinite-canvas-drawing-instruction";
-import { ClearRect } from "./clear-rect";
 import { ImmutablePathInstructionSet } from "./immutable-path-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
@@ -14,8 +13,6 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private _transformation: Transformation;
 	private instructions: DrawingInstruction[];
 	private lastInstruction: DrawingInstruction;
-	private lastDrawnPath: ImmutablePathInstructionSet;
-	private lastDrawnState: InfiniteCanvasState;
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
 		this.state = InfiniteCanvasState.default;
 		this.instructions = [];
@@ -44,16 +41,32 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public addToPath(instruction: (instructionSet: ImmutablePathInstructionSet) => ImmutablePathInstructionSet): void{
 		this.pathInstructions = instruction(this.pathInstructions);
 	}
-	public drawPath(instruction: (context: CanvasRenderingContext2D) => void): void{
+	public drawPath(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void, path?: ImmutablePathInstructionSet, area?: Rectangle): void{
+		const pathToUse: ImmutablePathInstructionSet = path || this.pathInstructions;
+		const areaToUse: Rectangle = area || pathToUse.area;
 		const newInstruction: DrawingInstruction = new InfiniteCanvasDrawingInstruction(
 			this.state,
-			this.pathInstructions,
+			pathToUse,
+			areaToUse.transform(this.state.transformation),
 			instruction
 		);
 		this.addDrawingInstruction(newInstruction);
 		this.draw();
-		this.lastDrawnPath = this.pathInstructions;
-		this.lastDrawnState = this.state;
+	}
+	private drawClearRect(x: number, y: number, width: number, height: number): void{
+		this.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
+				context.save();
+				context.transform(
+					transformation.a,
+					transformation.b,
+					transformation.c,
+					transformation.d,
+					transformation.e,
+					transformation.f
+				);
+				context.clearRect(x, y, width, height);
+				context.restore();
+		}, this.pathInstructions, new Rectangle(x, y, width, height));
 	}
 	public clearArea(x: number, y: number, width: number, height: number): void{
 		const rectangle: Rectangle = new Rectangle(x, y, width, height);
@@ -65,9 +78,9 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		}
 		if(this.instructions.find(i => i.area && rectangle.intersects(i.area))){
 			somethingWasDone = true;
-			this.addDrawingInstruction(new ClearRect(this.lastDrawnState, this.lastDrawnPath, x, y, width, height));
+			this.drawClearRect(x, y, width, height);
 		}
-		if(somethingWasDone){
+		else if(somethingWasDone){
 			this.draw();
 		}
 	}

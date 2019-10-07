@@ -9,6 +9,7 @@ export class CanvasContextMock{
             "clearRect",
             "fillRect",
             "setTransform",
+            "transform",
             "beginPath",
             "moveTo",
             "lineTo",
