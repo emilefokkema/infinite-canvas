@@ -69,7 +69,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		}, this.pathInstructions, new Rectangle(x, y, width, height));
 	}
 	public clearArea(x: number, y: number, width: number, height: number): void{
-		const rectangle: Rectangle = new Rectangle(x, y, width, height);
+		const rectangle: Rectangle = new Rectangle(x, y, width, height).transform(this.state.transformation);
 		let indexContainedInstruction: number;
 		let somethingWasDone: boolean = false;
 		while((indexContainedInstruction = this.instructions.findIndex(i => i.area && rectangle.contains(i.area))) > -1){

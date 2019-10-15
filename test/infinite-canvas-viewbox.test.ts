@@ -384,14 +384,14 @@ describe("an infinite canvas context", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 
-			describe("and then clears a rectangle covering the place where the rectangle was drawn", () => {
+			describe("and then clears a rectangle partly covering the place where the rectangle was drawn", () => {
 
 				beforeEach(() => {
 					contextMock.clear();
 					infiniteContext.clearRect(0.5, 0, 3, 3);
 				});
 
-				it("should not have added an instruction to clear a rect", () => {
+				it("should have added an instruction to clear a rect", () => {
 					expect(contextMock.getLog()).toMatchSnapshot();
 				});
 			});

@@ -272,11 +272,27 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that is translated and then draws a rectangle and then clears a rectangle covering the place where the rectangle was drawn should not have added an instruction to clear a rect 1`] = `
+exports[`an infinite canvas context that is translated and then draws a rectangle and then clears a rectangle partly covering the place where the rectangle was drawn should have added an instruction to clear a rect 1`] = `
 Array [
   "context.clearRect(0,0,200,200)",
   "context.restore()",
   "context.save()",
+  "context.setTransform(1,0,0,1,2,0)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.setTransform(1,0,0,1,2,0)",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0.5,0,3,3)",
+  "context.restore()",
+  "context.setTransform(1,0,0,1,0,0)",
 ]
 `;
 
