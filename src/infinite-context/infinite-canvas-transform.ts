@@ -5,7 +5,7 @@ export class InfiniteCanvasTransform implements CanvasTransform{
 	constructor(private viewBox: ViewBox){}
 	public getTransform(): DOMMatrix{
 		if(DOMMatrix){
-			const transformation: Transformation = this.viewBox.state.transformation;
+			const transformation: Transformation = this.viewBox.state.current.transformation;
 			return new DOMMatrix([
 				transformation.a,
 				transformation.b,

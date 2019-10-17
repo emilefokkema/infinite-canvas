@@ -462,4 +462,65 @@ describe("an infinite canvas context", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
+
+	describe("that draws a path, transforms and then strokes", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(10, 10, 100, 100);
+			infiniteContext.lineWidth = 6;
+			infiniteContext.transform(.2, 0, 0, 1, 0, 0);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should have kept that order", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe("that draws a square by translating", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.translate(1, 0);
+			infiniteContext.moveTo(0,0);
+			infiniteContext.translate(0, 1);
+			infiniteContext.lineTo(0,0);
+			infiniteContext.translate(-1,0);
+			infiniteContext.lineTo(0,0);
+			infiniteContext.translate(0, -1);
+			infiniteContext.lineTo(0,0);
+			contextMock.clear();
+			infiniteContext.fill();
+		});
+
+		it("should have called transform before each move", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe("and then partly clears the drawn square", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(0.5, 0, 2, 2);
+			});
+
+			it("should have added a clearRect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		describe("and then fully clears the drawn square", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(-1, -1, 3, 3);
+			});
+
+			it("should not have added a clearRect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
 })

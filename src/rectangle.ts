@@ -1,5 +1,6 @@
 import { Point } from "./point";
 import { Transformation } from "./transformation";
+import { isPoint } from "./is-point";
 
 export class Rectangle{
     private vertices: Point[];
@@ -14,15 +15,12 @@ export class Rectangle{
         this.top = y;
         this.bottom = y + height;
     }
-    private static isPoint(pointOrRectangle: Point | Rectangle): pointOrRectangle is Point{
-        return (pointOrRectangle as Point).x !== undefined;
-    }
     public expandToInclude(pointOrRectangle: Point | Rectangle): Rectangle{
         let maxLeft: number;
         let minRight: number;
         let maxTop: number;
         let minBottom: number;
-        if(Rectangle.isPoint(pointOrRectangle)){
+        if(isPoint(pointOrRectangle)){
             maxLeft = pointOrRectangle.x;
             minRight = pointOrRectangle.x;
             maxTop = pointOrRectangle.y;
@@ -62,7 +60,7 @@ export class Rectangle{
                this.bottom >= other.bottom;
     }
     public static create(area: Point | Rectangle): Rectangle{
-        if(Rectangle.isPoint(area)){
+        if(isPoint(area)){
             return new Rectangle(area.x, area.y, 0, 0);
         }
         return area;

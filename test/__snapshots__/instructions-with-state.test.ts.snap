@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`a set of intructions that is only about state that receives a change and then receives a change on a different property should now contain two instructions 1`] = `
+Array [
+  "context.fillStyle = \\"#f00\\"",
+  "context.strokeStyle = \\"#ff0\\"",
+]
+`;
+
+exports[`a set of intructions that is only about state that receives a change and then receives a change on the same property should still contain only one instruction 1`] = `
+Array [
+  "context.fillStyle = \\"#00f\\"",
+]
+`;
+
+exports[`a set of intructions that is only about state that receives a change and then receives a change that reverts that one should contain no instructions anymore 1`] = `Array []`;
+
+exports[`a set of intructions that is only about state that receives a change should have recorded the change 1`] = `
+Array [
+  "context.fillStyle = \\"#f00\\"",
+]
+`;
