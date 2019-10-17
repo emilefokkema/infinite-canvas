@@ -1,5 +1,12 @@
+body{
+	font-family: monospace;
+	color: #333;
+}
 .darklight{
 	cursor: pointer;
+}
+.example-title{
+	font-size: 16px;
 }
 .warning{
 	background-color: rgba(255, 200, 0, 0.5)

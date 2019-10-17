@@ -11,18 +11,21 @@
 <body>
 	<template id="exampleTemplate">
 		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
-			<div class="column regular-canvas">
-				<canvas width="400" height="400" ref="canvas"></canvas>
-			</div>
-			<div class="column infinite-canvas">
-				<canvas width="400" height="400" ref="infiniteCanvas"></canvas>
-			</div>
-			<div class="column">
-				<div ref="code" class="code"></div>
-				<input type="checkbox" v-model="rotationEnabled"/>
-				<label>rotation enabled</label>
-				<input type="checkbox" v-model="greedyGestureHandling"/>
-				<label>greedy gesture handling</label> 
+			<div class="example-title">{{example.title}}</div>
+			<div>
+				<div class="column">
+					<canvas width="400" height="400" ref="canvas"></canvas>
+				</div>
+				<div class="column">
+					<canvas width="400" height="400" ref="infiniteCanvas"></canvas>
+				</div>
+				<div class="column">
+					<div ref="code" class="code"></div>
+					<input type="checkbox" v-model="rotationEnabled"/>
+					<label>rotation enabled</label>
+					<input type="checkbox" v-model="greedyGestureHandling"/>
+					<label>greedy gesture handling</label> 
+				</div>
 			</div>
 		</div>
 		
@@ -50,13 +53,15 @@
 							code:function(ctx){
 								ctx.fillStyle = 'green';
 								ctx.fillRect(20, 10, 150, 100);
-							}
+							},
+							title: "set style and fill a rectangle"
 						},
 						{
 							code:function(ctx){
 								ctx.strokeStyle = 'green';
 								ctx.strokeRect(20, 10, 160, 100);
-							}
+							},
+							title: "set style and stroke a rectangle"
 						},
 						{
 							code:function(ctx){
@@ -76,7 +81,8 @@
 
 								// Clear part of the canvas
 								ctx.clearRect(10, 10, 120, 100);
-							}
+							},
+							title: "clear a rectangle that overlaps the drawing"
 						},
 						{
 							code:function(ctx){
@@ -86,7 +92,8 @@
 								ctx.strokeRect(20, 10, 160, 100);
 								ctx.lineWidth = 4;
 								ctx.strokeRect(30, 20, 100, 160);
-							}
+							},
+							title: "stroke rectangles with different lineWidth"
 						},
 						{
 							code: function(ctx){
@@ -97,7 +104,8 @@
 								ctx.lineTo(130, 130);
 								ctx.rect(40, 40, 70, 70);
 								ctx.stroke();
-							}
+							},
+							title: "build a path with line and a rect and stroke it"
 						},
 						{
 							code:function(ctx){
@@ -113,7 +121,8 @@
 								ctx.moveTo(0, 100);
 								ctx.lineTo(300, 100);
 								ctx.stroke();
-							}
+							},
+							title: "set different lineDash"
 						},
 						{
 							code:function(ctx){
@@ -132,7 +141,8 @@
 								ctx.moveTo(0, 100);
 								ctx.lineTo(300, 100);
 								ctx.stroke();
-							}
+							},
+							title: "set different lineDashOffset"
 						},
 						{
 							code: function(ctx){
@@ -155,7 +165,8 @@
 								}
 
 								march();
-							}
+							},
+							title: "drawing and clearing a rectangle many times per second"
 						},
 						{
 							code: function(ctx){
@@ -172,7 +183,8 @@
 								ctx.moveTo(20, 20);
 								ctx.lineTo(120, 120);
 								ctx.stroke();
-							}
+							},
+							title: "stroke two different paths with two different strokeStyle"
 						},
 						{
 							code: function(ctx){
@@ -186,7 +198,8 @@
 								ctx.restore();
 
 								ctx.fillRect(150, 40, 100, 100);
-							}
+							},
+							title: "saving and restoring"
 						},
 						{
 							code: function(ctx){
@@ -199,7 +212,8 @@
 								ctx.strokeStyle = "#00f";
 								ctx.lineTo(100,30);
 								ctx.stroke();
-							}
+							},
+							title: "build a path, fill it, add to it and stroke it"
 						},
 						{
 							code: function(ctx){
@@ -208,7 +222,8 @@
 								ctx.fillStyle = "#00f";
 								ctx.clearRect(20, 0, 40, 40);
 								ctx.fillRect(30, 10, 10, 10);
-							}
+							},
+							title: "fillRect using a fillStyle that was set right before clearing a rect"
 						},
 						{
 							code:function(ctx){
@@ -220,7 +235,8 @@
 								ctx.fill();
 								ctx.clearRect(10, 10, 80, 80);
 								ctx.fill();
-							}
+							},
+							title: "build path, fill it, clear a rect and then fill the path again"
 						},
 						{
 							code:function(ctx){
@@ -228,7 +244,8 @@
 								ctx.fillRect(0, 0, 200, 200);
 								ctx.translate(50, 50);
 								ctx.clearRect(0, 0, 100, 100);
-							}
+							},
+							title: "translate before clearing a rect"
 						},
 						{
 							code: function(ctx){
@@ -237,7 +254,8 @@
 								ctx.lineWidth = 6;
 								ctx.transform(.2, 0, 0, 1, 0, 0);
 								ctx.stroke();
-							}
+							},
+							title: "build a path, set a transform and stroke"
 						},
 						{
 							code: function(ctx){
@@ -252,7 +270,8 @@
 								ctx.lineTo(0,0);
 								ctx.fill();
 								ctx.clearRect(50, 0, 200, 200);
-							}
+							},
+							title: "build a path by translating instead of lineTo a different point. then clearRect part of it"
 						},
 						{
 							code: function(ctx){
@@ -268,7 +287,8 @@
 								ctx.transform(0, 1, -1, 0, 0, 0);
 								ctx.lineTo(100, 0);
 								ctx.stroke();
-							}
+							},
+							title: "build path by transforming and lineTo the 'same' point"
 						},
 						{
 							code: function(ctx){
@@ -277,7 +297,8 @@
 								ctx.rect(0,0,50,50);
 								ctx.fillRect(50,50,50,50);
 								ctx.fill();
-							}
+							},
+							title: "build a path, fill a rect and then fill the path"
 						},
 						{
 							code:function(ctx){
@@ -286,7 +307,8 @@
 								ctx.fillStyle = "#00f";
 								ctx.clearRect(0, 0, 50, 50);
 								ctx.fillRect(25, 25, 50, 50);
-							}
+							},
+							title: "fillRect using a fillStyle that was set right before clearing a rect"
 						},
 						{
 							code: function(ctx){
@@ -310,7 +332,8 @@
 										}
 									}
 								}
-							}
+							},
+							title: "examples of arc"
 						},
 						{
 							code:function(ctx){
@@ -342,7 +365,8 @@
 								ctx.arc(200, 130, 5, 0, 2 * Math.PI); // Control point one
 								ctx.arc(50, 20, 5, 0, 2 * Math.PI);   // Control point two
 								ctx.fill();
-							}
+							},
+							title: "example of arcTo"
 						},
 						{
 							code:function(ctx){
@@ -357,7 +381,8 @@
 								ctx.moveTo(0, 200);
 								ctx.lineTo(200, 0);
 								ctx.stroke();
-							}
+							},
+							title: "an ellipse and a line with a lineDash"
 						},
 						{
 							code:function(ctx){
@@ -372,21 +397,24 @@
 								ctx.closePath();
 								ctx.clearRect(0, 0, 75, 75);
 								ctx.fill();
-							}
+							},
+							title: "set a fillStyle, build a path, clear a rect and fill the path"
 						},
 						{
 							code: function(ctx){
 								ctx.translate(200, 0);
 								ctx.fillRect(0, 0, 100, 100);
 								ctx.clearRect(50, 0, 300, 300);
-							}
+							},
+							title: "translate, fill a rect and clear part of it"
 						},
 						{
 							code:function(ctx){
 								ctx.lineWidth = 5;
 								ctx.transform(1, .2, .8, 1, 0, 0);
 								ctx.strokeRect(0, 0, 100, 100);
-							}
+							},
+							title: "set a transform and stroke a rect"
 						},
 						{
 							code:function(ctx){
@@ -399,7 +427,8 @@
 										ctx.restore();
 									}
 								}
-							}
+							},
+							title: "save, set style and translate, fillRect, restore... repeat"
 						},
 						{
 							code:function(ctx){
@@ -428,7 +457,8 @@
 								// draw grey rect
 								ctx.fillStyle = '#4D4E53';
 								ctx.fillRect(150, 30, 100, 100);
-							}
+							},
+							title: "examples of rotate"
 						},
 						{
 							code:function(ctx){
@@ -446,7 +476,34 @@
 								ctx.setTransform(-1, 0, 0, 1, 100, 100);
 								ctx.fillStyle = 'rgba(255, 128, 255, 0.5)';
 								ctx.fillRect(0, 50, 100, 100);
-							}
+							},
+							title: "example of transform and setTransform"
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.save();
+								ctx.fillStyle = "#00f";
+								ctx.beginPath();
+								ctx.rect(0, 0, 10, 10);
+								ctx.restore();
+								ctx.fillRect(10, 10, 20, 20);
+								ctx.fill();
+							},
+							title: "restore, fillRect and fill"
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.save();
+								ctx.fillStyle = "#00f";
+								ctx.beginPath();
+								ctx.rect(0, 0, 10, 10);
+								ctx.fillRect(10, 10, 20, 20);
+								ctx.restore();
+								ctx.fill();
+							},
+							title: "fillRect, restore and fill"
 						}
 					];
 			new Vue({
