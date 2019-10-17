@@ -10,7 +10,7 @@
 </head>
 <body>
 	<template id="exampleTemplate">
-		<div class="example" v-bind:class="{warning: !imagesAreEqual}">
+		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
 			<div class="column regular-canvas">
 				<canvas width="400" height="400" ref="canvas"></canvas>
 			</div>
@@ -28,7 +28,8 @@
 		
 	</template>
 	<div id="main">
-		<div v-if="!allImagesEqual" class="warning">Not all images are equal</div>
+		<div v-if="numberSkipped > 0" class="warning">{{numberSkipped}} examples were skipped</div>
+		<div v-if="!allImagesEqual" class="danger">Not all images are equal</div>
 		<span id="dark" class="darklight">dark</span>
 		<span id="light" class="darklight">light</span>
 		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal"></example>
@@ -412,14 +413,20 @@
 				el:"#main",
 				data:function(){
 					var exaplesToShow = examples;
+					var numberSkipped = 0;
 					if(exaplesToShow.find(function(e){return e.focussed;})){
-						exaplesToShow = exaplesToShow.filter(function(e){return e.focussed;});
+						var filteredExamples = exaplesToShow.filter(function(e){return e.focussed;});
+						numberSkipped = exaplesToShow.length - filteredExamples.length;
+						exaplesToShow = filteredExamples;
 					}
-					exaplesToShow = exaplesToShow.filter(function(e){return !e.excluded;});
+					var notExcludedExamples = exaplesToShow.filter(function(e){return !e.excluded;});
+					numberSkipped += exaplesToShow.length - notExcludedExamples.length;
+					exaplesToShow = notExcludedExamples;
 					return {
 						examples:exaplesToShow,
 						dark:false,
-						allImagesEqual: true
+						allImagesEqual: true,
+						numberSkipped: numberSkipped
 					};
 				},
 				methods:{
