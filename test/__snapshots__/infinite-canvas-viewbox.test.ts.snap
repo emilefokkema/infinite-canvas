@@ -1,5 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`an infinite canvas context saves, changes state, begins drawing a path and then fills a rect, restores to the previous state and then fills the path should end up with an equal number of saves and restores 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.save()",
+  "context.fillStyle = \\"#00f\\"",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.lineTo(10,10)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(10,0)",
+  "context.lineTo(10,10)",
+  "context.lineTo(0,10)",
+  "context.lineTo(0,0)",
+  "context.restore()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context saves, changes state, begins drawing a path and then restores to the previous state, fills a rect and then fills the path should end up with an equal number of saves and restores 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.lineTo(10,10)",
+  "context.fill()",
+  "context.save()",
+  "context.fillStyle = \\"#00f\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(10,0)",
+  "context.lineTo(10,10)",
+  "context.lineTo(0,10)",
+  "context.lineTo(0,0)",
+  "context.restore()",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context that adds a drawing that depends on the transformation and then draws using a non-identity transformation should have set the transformed version of the state 1`] = `
 Array [
   "context.restore()",

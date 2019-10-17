@@ -51,6 +51,9 @@ export class InfiniteCanvasInstructionSet implements InstructionSet{
         this.currentlyWithState.restoreState();
     }
     private interjectWithStateAndArea(withStateAndArea: WithStateAndArea): void{
+        if(this.currentInstructionsWithPath){
+            withStateAndArea.changeToState(this.currentInstructionsWithPath.initialState);
+        }
         const beforeLatestBegunPath: WithStateAndInstruction = this.getBeforeLatestBegunPath();
         beforeLatestBegunPath.changeToState(withStateAndArea.initialState);
         this.previousInstructionsWithPath.push(withStateAndArea);

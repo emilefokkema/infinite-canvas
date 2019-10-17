@@ -523,4 +523,44 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe("saves, changes state, begins drawing a path", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle = "#f00";
+			infiniteContext.save();
+			infiniteContext.fillStyle = "#00f";
+			infiniteContext.beginPath();
+			infiniteContext.rect(0, 0, 10, 10);
+			
+		});
+
+		describe("and then restores to the previous state, fills a rect and then fills the path", () => {
+
+			beforeEach(() => {
+				infiniteContext.restore();
+				infiniteContext.fillRect(10, 10, 20, 20);
+				contextMock.clear();
+				infiniteContext.fill();
+			});
+
+			it("should end up with an equal number of saves and restores", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		describe("and then fills a rect, restores to the previous state and then fills the path", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillRect(10, 10, 20, 20);
+				infiniteContext.restore();
+				contextMock.clear();
+				infiniteContext.fill();
+			});
+
+			it("should end up with an equal number of saves and restores", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
 })
