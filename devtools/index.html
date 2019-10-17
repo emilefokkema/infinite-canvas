@@ -155,7 +155,7 @@
 								}
 
 								march();
-							},
+							}
 						},
 						{
 							code: function(ctx){
@@ -228,6 +228,46 @@
 								ctx.fillRect(0, 0, 200, 200);
 								ctx.translate(50, 50);
 								ctx.clearRect(0, 0, 100, 100);
+							}
+						},
+						{
+							code: function(ctx){
+								ctx.beginPath();
+								ctx.rect(10, 10, 100, 100);
+								ctx.lineWidth = 6;
+								ctx.transform(.2, 0, 0, 1, 0, 0);
+								ctx.stroke();
+							}
+						},
+						{
+							code: function(ctx){
+								ctx.beginPath();
+								ctx.translate(100, 0);
+								ctx.moveTo(0,0);
+								ctx.translate(0, 100);
+								ctx.lineTo(0,0);
+								ctx.translate(-100,0);
+								ctx.lineTo(0,0);
+								ctx.translate(0, -100);
+								ctx.lineTo(0,0);
+								ctx.fill();
+								ctx.clearRect(50, 0, 200, 200);
+							}
+						},
+						{
+							code: function(ctx){
+								ctx.translate(100, 100);
+								ctx.beginPath();
+								ctx.moveTo(100, 0);
+								ctx.transform(0, 1, -1, 0, 0, 0);
+								ctx.lineTo(100, 0);
+								ctx.transform(0, 1, -1, 0, 0, 0);
+								ctx.lineTo(100, 0);
+								ctx.transform(0, 1, -1, 0, 0, 0);
+								ctx.lineTo(100, 0);
+								ctx.transform(0, 1, -1, 0, 0, 0);
+								ctx.lineTo(100, 0);
+								ctx.stroke();
 							}
 						},
 						{
