@@ -3,43 +3,42 @@ import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { StateChange } from "./state/state-change";
 import { Instruction } from "./instructions/instruction";
-import { InstructionSet } from "./instructions/instruction-set";
 import { Transformation } from "./transformation";
 import { DefaultInstructionsWithState } from "./instructions/default-instructions-with-state";
-import { CurrentPathWithStateAndArea } from "./current-path-with-state-and-area";
 import { Rectangle } from "./rectangle";
-import { PathInstruction } from "./instructions/path-instruction";
+import { PathInstruction } from "./interfaces/path-instruction";
 import { InstructionsWithStateAndArea } from "./instructions/instructions-with-state-and-area";
 import { PathInstructions } from "./instructions/path-instructions";
-import { WithStateAndArea } from "./with-state-and-area";
-import { WithStateAndInstruction } from "./instructions/with-state-and-instruction";
+import { StateChangingInstructionSet } from "./interfaces/state-changing-instruction-set";
+import { StateChangingInstructionSetWithArea } from "./interfaces/state-changing-instruction-set-with-area";
+import { CurrentState } from "./interfaces/current-state";
+import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "./interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSetWithCurrentStateAndArea } from "./interfaces/state-changing-instruction-set-with-current-state-and-area";
 
-export class InfiniteCanvasInstructionSet implements InstructionSet{
-    private initialInstructionsWithState: WithStateAndInstruction;
-    private currentInstructionsWithPath: CurrentPathWithStateAndArea;
+export class InfiniteCanvasInstructionSet {
+    private initialInstructionsWithState: StateChangingInstructionSet;
+    private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
     private currentInstructionsWithPathAreVisible: boolean = false;
-    private previousInstructionsWithPath: WithStateAndArea[] = [];
+    private previousInstructionsWithPath: StateChangingInstructionSetWithArea[] = [];
+    private currentlyWithState: CurrentState;
+    private lastBeforeCurrentPath: StateChangingInstructionSet;
     constructor(private readonly onChange: () => void){
-        this.initialInstructionsWithState = new DefaultInstructionsWithState();
+        const defaultInstructions: DefaultInstructionsWithState = new DefaultInstructionsWithState();
+        this.initialInstructionsWithState = defaultInstructions;
+        this.currentlyWithState = defaultInstructions;
+        this.lastBeforeCurrentPath = this.initialInstructionsWithState;
     }
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
     private get drawCurrentInstructionsWithPath(): boolean{
         return this.currentInstructionsWithPath && this.currentInstructionsWithPathAreVisible;
     }
-    private get currentlyWithState(): WithStateAndInstruction{
-        if(this.currentInstructionsWithPath){
-            return this.currentInstructionsWithPath;
-        }
-        if(this.previousInstructionsWithPath.length){
-            return this.previousInstructionsWithPath[this.previousInstructionsWithPath.length - 1];
-        }
-        return this.initialInstructionsWithState;
-    }
     public beginPath(): void{
         if(this.currentInstructionsWithPath){
+            this.lastBeforeCurrentPath = this.currentInstructionsWithPath;
             this.previousInstructionsWithPath.push(this.currentInstructionsWithPath);
         }
         this.currentInstructionsWithPath = InstructionsWithPath.create(this.currentlyWithState.state);
+        this.currentlyWithState = this.currentInstructionsWithPath;
     }
     public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
         this.currentlyWithState.changeState(change);
@@ -50,15 +49,17 @@ export class InfiniteCanvasInstructionSet implements InstructionSet{
     public restoreState(): void{
         this.currentlyWithState.restoreState();
     }
-    private interjectWithStateAndArea(withStateAndArea: WithStateAndArea): void{
+    private interjectWithStateAndArea(withStateAndArea: StateChangingInstructionSetWithCurrentStateAndArea): void{
         if(this.currentInstructionsWithPath){
             withStateAndArea.changeToState(this.currentInstructionsWithPath.initialState);
+        }else{
+            this.currentlyWithState = withStateAndArea;
         }
-        const beforeLatestBegunPath: WithStateAndInstruction = this.getBeforeLatestBegunPath();
-        beforeLatestBegunPath.changeToState(withStateAndArea.initialState);
+        this.lastBeforeCurrentPath.changeToState(withStateAndArea.initialState);
+        this.lastBeforeCurrentPath = withStateAndArea;
         this.previousInstructionsWithPath.push(withStateAndArea);
     }
-    private createDrawnPath(instruction: Instruction, pathInstructions: PathInstruction[]): WithStateAndArea{
+    private createDrawnPath(instruction: Instruction, pathInstructions: PathInstruction[]): StateChangingInstructionSetWithCurrentStateAndArea{
         const currentState: InfiniteCanvasState = this.currentlyWithState.state;
         const instructionsWithPath: InstructionsWithPath = InstructionsWithPath.create(currentState, pathInstructions);
         instructionsWithPath.drawPath(instruction);
@@ -74,20 +75,19 @@ export class InfiniteCanvasInstructionSet implements InstructionSet{
         }
         this.onChange();
     }
-    private getBeforeLatestBegunPath(): WithStateAndInstruction{
-        if(this.previousInstructionsWithPath.length > 0){
-            return this.previousInstructionsWithPath[this.previousInstructionsWithPath.length - 1];
-        }
-        return this.initialInstructionsWithState;
-    }
+
     public addPathInstruction(pathInstruction: PathInstruction): void{
         if(this.currentInstructionsWithPath){
             this.currentInstructionsWithPath.addPathInstruction(pathInstruction);
         }
     }
     private removePreviousInstructionsWithPathAtIndex(index: number): void{
-        const theOneBefore: WithStateAndInstruction = index === 0 ? this.initialInstructionsWithState : this.previousInstructionsWithPath[index - 1];
-        const theOneAfter: WithStateAndInstruction = index === this.previousInstructionsWithPath.length - 1 ? this.currentInstructionsWithPath : this.previousInstructionsWithPath[index + 1];
+        const thisOne: StateChangingInstructionSet = this.previousInstructionsWithPath[index];
+        const theOneBefore: StateChangingInstructionSet = index === 0 ? this.initialInstructionsWithState : this.previousInstructionsWithPath[index - 1];
+        if(thisOne === this.lastBeforeCurrentPath){
+            this.lastBeforeCurrentPath = theOneBefore;
+        }
+        const theOneAfter: StateChangingInstructionSet = index === this.previousInstructionsWithPath.length - 1 ? this.currentInstructionsWithPath : this.previousInstructionsWithPath[index + 1];
         const stateToChangeTo: InfiniteCanvasState = theOneAfter ? theOneAfter.initialState : this.currentlyWithState.state;
         theOneBefore.changeToState(stateToChangeTo);
         this.previousInstructionsWithPath.splice(index, 1);

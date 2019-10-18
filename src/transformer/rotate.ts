@@ -1,7 +1,7 @@
 import { Movable } from "./movable";
 import { MoveSubscription } from "./move-subscription";
 import { Transformation } from "../transformation";
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 
 export class Rotate{
     private point: MoveSubscription;

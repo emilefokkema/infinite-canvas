@@ -1,4 +1,4 @@
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 
 export class InfiniteCanvasState implements CanvasState{
 	constructor(private viewBox: ViewBox){}

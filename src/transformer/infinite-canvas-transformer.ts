@@ -4,7 +4,7 @@ import { InfiniteCanvasMovable } from "./infinite-canvas-movable";
 import { Gesture } from "./gesture";
 import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-context";
 import { Rotate } from "./rotate";
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 import { Zoom } from "./zoom";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 

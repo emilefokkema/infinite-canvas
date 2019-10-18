@@ -1,10 +1,11 @@
 import { InfiniteCanvasStateAndInstruction } from "./infinite-canvas-state-and-instruction";
 import { Rectangle } from "../rectangle";
-import { PathInstruction } from "./path-instruction";
+import { PathInstruction } from "../interfaces/path-instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { WithStateAndArea } from "../with-state-and-area";
+import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state-changing-instruction-set-with-current-state";
+import { WithArea } from "../interfaces/with-area";
 
-export class InstructionsWithStateAndArea extends InfiniteCanvasStateAndInstruction implements WithStateAndArea{
+export class InstructionsWithStateAndArea extends InfiniteCanvasStateAndInstruction implements StateChangingInstructionSetWithCurrentState, WithArea{
     public area: Rectangle;
     constructor(initialState: InfiniteCanvasState, pathInstruction: PathInstruction){
         super(initialState, pathInstruction.instruction);

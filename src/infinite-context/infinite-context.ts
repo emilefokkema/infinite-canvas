@@ -15,7 +15,7 @@ import { InfiniteCanvasImageData } from "./infinite-canvas-image-data"
 import { InfiniteCanvasPathDrawingStyles } from "./infinite-canvas-path-drawing-styles"
 import { InfiniteCanvasTextDrawingStyles } from "./infinite-canvas-text-drawing-styles"
 import { InfiniteCanvasPath } from "./infinite-canvas-path"
-import { ViewBox } from "../viewbox"
+import { ViewBox } from "../interfaces/viewbox"
 
 export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasState: InfiniteCanvasState;

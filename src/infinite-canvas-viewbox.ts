@@ -1,15 +1,14 @@
 import { Transformation } from "./transformation"
-import { ViewBox } from "./viewbox";
+import { ViewBox } from "./interfaces/viewbox";
 import { Instruction } from "./instructions/instruction";
 import { StateChange } from "./state/state-change";
-import { PathInstruction } from "./instructions/path-instruction";
-import { InstructionSet } from "./instructions/instruction-set";
+import { PathInstruction } from "./interfaces/path-instruction";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 
 export class InfiniteCanvasViewBox implements ViewBox{
-	private instructionSet: InstructionSet;
+	private instructionSet: InfiniteCanvasInstructionSet;
 	private _transformation: Transformation;
 	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
 		this.instructionSet = new InfiniteCanvasInstructionSet(() => this.draw());

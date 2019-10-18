@@ -1,4 +1,4 @@
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 import { mapMouseEvents } from "./map-mouse-events";
 import { Transformer } from "../transformer/transformer";
 import { AnchorSet } from "./anchor-set";

@@ -1,4 +1,4 @@
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 import { PathInstructions } from "../instructions/path-instructions";
 
 export class InfiniteCanvasRect implements CanvasRect{

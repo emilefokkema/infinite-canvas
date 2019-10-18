@@ -1,6 +1,6 @@
 import { InfiniteCanvasRenderingContext2D } from "./infinite-context/infinite-canvas-rendering-context-2d"
 import { InfiniteContext } from "./infinite-context/infinite-context"
-import { ViewBox } from "./viewbox";
+import { ViewBox } from "./interfaces/viewbox";
 import { InfiniteCanvasViewBox } from "./infinite-canvas-viewbox";
 import { Transformer } from "./transformer/transformer"
 import { InfiniteCanvasTransformer } from "./transformer/infinite-canvas-transformer";

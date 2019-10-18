@@ -1,17 +1,19 @@
 import { Rectangle } from "../rectangle";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
-import { CurrentPathWithStateAndArea } from "../current-path-with-state-and-area";
 import { InfiniteCanvasStateInstance } from "../state/infinite-canvas-state-instance";
 import { StateChange } from "../state/state-change";
 import { Transformation } from "../transformation";
 import { InfiniteCanvasStateAndInstruction } from "./infinite-canvas-state-and-instruction";
-import { PathInstruction } from "./path-instruction";
+import { PathInstruction } from "../interfaces/path-instruction";
+import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
+import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state-changing-instruction-set-with-current-state";
 
-export class InstructionsWithPath implements CurrentPathWithStateAndArea{
+export class InstructionsWithPath implements StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
     public area: Rectangle;
-    private currentlyWithState: InfiniteCanvasStateAndInstruction;
-    private previouslyWithState: InfiniteCanvasStateAndInstruction[] = [];
+    private currentlyWithState: StateChangingInstructionSetWithCurrentState;
+    private previouslyWithState: StateChangingInstructionSet[] = [];
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
     constructor(public initialState: InfiniteCanvasState){
         this.currentlyWithState = new InfiniteCanvasStateAndInstruction(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();});

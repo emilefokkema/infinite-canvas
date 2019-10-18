@@ -1,4 +1,4 @@
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 import { Transformation } from "../transformation";
 
 export class InfiniteCanvasDrawPath implements CanvasDrawPath{

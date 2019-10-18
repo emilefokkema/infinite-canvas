@@ -3,9 +3,9 @@ import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { InfiniteCanvasStateInstance } from "../state/infinite-canvas-state-instance";
 import { StateChange } from "../state/state-change";
 import { Transformation } from "../transformation";
-import { WithStateAndInstruction } from "./with-state-and-instruction";
+import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state-changing-instruction-set-with-current-state";
 
-export class InfiniteCanvasStateAndInstruction implements WithStateAndInstruction{
+export class InfiniteCanvasStateAndInstruction implements StateChangingInstructionSetWithCurrentState{
     private stateChangeInstruction: Instruction;
     public state: InfiniteCanvasState;
     constructor(public initialState: InfiniteCanvasState, private readonly initialInstruction?: Instruction){

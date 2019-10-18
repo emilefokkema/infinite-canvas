@@ -1,4 +1,4 @@
-import { ViewBox } from "../viewbox";
+import { ViewBox } from "../interfaces/viewbox";
 
 export class InfiniteCanvasFillStrokeStyles implements CanvasFillStrokeStyles{
     constructor(private viewBox: ViewBox){}

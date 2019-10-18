@@ -1,6 +1,6 @@
 import { InfiniteCanvasViewBox } from "../src/infinite-canvas-viewbox"
 import { InfiniteContext } from "../src/infinite-context/infinite-context";
-import { ViewBox } from "../src/viewbox";
+import { ViewBox } from "../src/interfaces/viewbox";
 import { CanvasContextMock } from "./canvas-context-mock";
 import { Transformation } from "../src/transformation";
 

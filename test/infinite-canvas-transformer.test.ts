@@ -2,7 +2,7 @@ import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-tr
 import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
 import { Point } from "../src/point";
-import { ViewBox } from "../src/viewbox";
+import { ViewBox } from "../src/interfaces/viewbox";
 import { InfiniteCanvasConfig } from "../src/config/infinite-canvas-config";
 
 jest.useFakeTimers();

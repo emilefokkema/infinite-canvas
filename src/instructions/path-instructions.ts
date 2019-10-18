@@ -4,7 +4,7 @@ import { Rectangle } from "../rectangle";
 import { AreaChange } from "../area-change";
 import { Point } from "../point";
 import { drawRect } from "../infinite-context/draw-rect";
-import { PathInstruction } from "./path-instruction";
+import { PathInstruction } from "../interfaces/path-instruction";
 
 export class PathInstructions{
 
