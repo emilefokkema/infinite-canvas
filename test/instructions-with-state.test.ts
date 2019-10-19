@@ -6,7 +6,7 @@ describe("a set of intructions that is only about state", () => {
     let instructionsWithState: InfiniteCanvasStateAndInstruction;
 
     beforeEach(() => {
-        instructionsWithState = new InfiniteCanvasStateAndInstruction(InfiniteCanvasState.default);
+        instructionsWithState = new InfiniteCanvasStateAndInstruction(InfiniteCanvasState.default, () => {});
     });
 
     describe("that receives a change", () => {

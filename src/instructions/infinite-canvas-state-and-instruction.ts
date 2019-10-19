@@ -8,7 +8,7 @@ import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state
 export class InfiniteCanvasStateAndInstruction implements StateChangingInstructionSetWithCurrentState{
     private stateChangeInstruction: Instruction;
     public state: InfiniteCanvasState;
-    constructor(public initialState: InfiniteCanvasState, private readonly initialInstruction?: Instruction){
+    constructor(public initialState: InfiniteCanvasState, private readonly initialInstruction: Instruction){
         this.state = initialState;
     }
     private change(change: (state: InfiniteCanvasState) => StateChange<InfiniteCanvasState>): void{
