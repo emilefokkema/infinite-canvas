@@ -14,6 +14,7 @@ export class InfiniteCanvasInstructionSet {
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
     private previousInstructionsWithPath: PreviousInstructions;
     private currentlyWithState: CurrentState;
+    private instructionToRestoreState: Instruction;
     constructor(private readonly onChange: () => void){
         this.previousInstructionsWithPath = new PreviousInstructions();
         this.currentlyWithState = this.previousInstructionsWithPath;
@@ -28,12 +29,15 @@ export class InfiniteCanvasInstructionSet {
     }
     public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
         this.currentlyWithState.changeState(change);
+        this.setInstructionToRestoreState();
     }
     public saveState(): void{
         this.currentlyWithState.saveState();
+        this.setInstructionToRestoreState();
     }
     public restoreState(): void{
         this.currentlyWithState.restoreState();
+        this.setInstructionToRestoreState();
     }
 
     public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
@@ -50,6 +54,10 @@ export class InfiniteCanvasInstructionSet {
             return;
         }
         this.currentInstructionsWithPath.drawPath(instruction);
+    }
+
+    private setInstructionToRestoreState(): void{
+        this.instructionToRestoreState = this.state.convertTo(this.state.lastBeforeFirstSaved()).instruction;
     }
 
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
@@ -100,8 +108,8 @@ export class InfiniteCanvasInstructionSet {
         if(this.currentInstructionsWithPath){
             this.currentInstructionsWithPath.execute(context, transformation);
         }
-        for(let i = 0; i < this.currentlyWithState.state.stack.length; i++){
-            context.restore();
+        if(this.instructionToRestoreState){
+            this.instructionToRestoreState(context, transformation);
         }
     }
 }

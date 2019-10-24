@@ -18,6 +18,13 @@ export class InfiniteCanvasState{
             instruction: (context: CanvasRenderingContext2D) => {context.save();}
         };
     }
+    public lastBeforeFirstSaved(): InfiniteCanvasState{
+        if(this.stack.length === 0){
+            return this;
+        }
+        const firstInstance: InfiniteCanvasStateInstance = this.stack[0];
+        return new InfiniteCanvasState(firstInstance);
+    }
     public restore(): StateChange<InfiniteCanvasState>{
         if(!this.stack || this.stack.length === 0){
             return {
@@ -31,19 +38,27 @@ export class InfiniteCanvasState{
             instruction: (context: CanvasRenderingContext2D) => {context.restore();}
         };
     }
+    private addChangesToRestoreToLastSavedInstance(currentChange: ChainableStateChange<InfiniteCanvasState>, lastSavedInstance: InfiniteCanvasStateInstance): ChainableStateChange<InfiniteCanvasState>{
+        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
+        for(let i: number = this.stack.length - 1; i > indexOfLastSavedInstance; i--){
+            currentChange = currentChange.change(s => s.restore());
+        }
+        return currentChange;
+    }
+    public addInstructionsToCreateFromLastSavedInstance(currentChange: ChainableStateChange<InfiniteCanvasState>, lastSavedInstance: InfiniteCanvasStateInstance): ChainableStateChange<InfiniteCanvasState>{
+        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
+        for(let i: number = indexOfLastSavedInstance + 1; i < this.stack.length; i++){
+            currentChange = currentChange.change(s => s.withChangedState(ss => ss.convertToState(this.stack[i])));
+            currentChange = currentChange.change(s => s.save());
+        }
+        currentChange = currentChange.change(s => s.withChangedState(ss => ss.convertToState(this.current)));
+        return currentChange;
+    }
     public convertTo(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
         let change: ChainableStateChange<InfiniteCanvasState> = new ChainableStateChange(this, []);
         const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
-        let currentIndex: number = indexOfHighestCommon + 1;
-        for(let i: number = this.stack.length - 1; i > indexOfHighestCommon; i--){
-            change = change.change(s => s.restore());
-        }
-        while(currentIndex < other.stack.length){
-            change = change.change(s => s.withChangedState(ss => ss.convertToState(other.stack[currentIndex])));
-            change = change.change(s => s.save());
-            currentIndex++;
-        }
-        change = change.change(s => s.withChangedState(ss => ss.convertToState(other.current)));
+        change = this.addChangesToRestoreToLastSavedInstance(change, this.stack[indexOfHighestCommon]);
+        change = other.addInstructionsToCreateFromLastSavedInstance(change, other.stack[indexOfHighestCommon]);
         return change;
     }
 
