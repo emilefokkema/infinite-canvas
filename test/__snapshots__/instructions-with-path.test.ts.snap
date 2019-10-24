@@ -10,6 +10,7 @@ Array [
   "context.lineTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#f00\\"",
+  "context.fill()",
 ]
 `;
 
@@ -17,6 +18,7 @@ exports[`a set of instructions that is also about a path that receives a change 
 Array [
   "context.beginPath()",
   "context.fillStyle = \\"#00f\\"",
+  "context.fill()",
 ]
 `;
 
@@ -28,6 +30,7 @@ Array [
   "context.fillStyle = \\"#00f\\"",
   "context.fill()",
   "context.fillStyle = \\"#ff0\\"",
+  "context.fill()",
 ]
 `;
 
@@ -37,6 +40,7 @@ Array [
   "context.fillStyle = \\"#f00\\"",
   "context.moveTo(0,0)",
   "context.fillStyle = \\"#00f\\"",
+  "context.fill()",
 ]
 `;
 
@@ -45,6 +49,7 @@ Array [
   "context.beginPath()",
   "context.fillStyle = \\"#f00\\"",
   "context.moveTo(0,0)",
+  "context.fill()",
 ]
 `;
 
@@ -52,5 +57,6 @@ exports[`a set of instructions that is also about a path that receives a change 
 Array [
   "context.beginPath()",
   "context.fillStyle = \\"#f00\\"",
+  "context.fill()",
 ]
 `;

@@ -6,26 +6,19 @@ import { Instruction } from "./instructions/instruction";
 import { Transformation } from "./transformation";
 import { Rectangle } from "./rectangle";
 import { PathInstruction } from "./interfaces/path-instruction";
-import { InstructionsWithStateAndArea } from "./instructions/instructions-with-state-and-area";
-import { PathInstructions } from "./instructions/path-instructions";
 import { CurrentState } from "./interfaces/current-state";
 import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "./interfaces/state-changing-instruction-set-with-area-and-current-path";
-import { StateChangingInstructionSetWithCurrentStateAndArea } from "./interfaces/state-changing-instruction-set-with-current-state-and-area";
-import { StateChangingInstructionSequence } from "./instructions/state-changing-instruction-sequence";
+import { PreviousInstructions } from "./instructions/previous-instructions";
 
 export class InfiniteCanvasInstructionSet {
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
-    private currentInstructionsWithPathAreVisible: boolean = false;
-    private previousInstructionsWithPath: StateChangingInstructionSequence<StateChangingInstructionSetWithCurrentStateAndArea>;
+    private previousInstructionsWithPath: PreviousInstructions;
     private currentlyWithState: CurrentState;
     constructor(private readonly onChange: () => void){
-        this.previousInstructionsWithPath = new StateChangingInstructionSequence(InfiniteCanvasState.default, InfiniteCanvasStateInstance.setDefault);
+        this.previousInstructionsWithPath = new PreviousInstructions();
         this.currentlyWithState = this.previousInstructionsWithPath;
     }
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
-    private get drawCurrentInstructionsWithPath(): boolean{
-        return this.currentInstructionsWithPath && this.currentInstructionsWithPathAreVisible;
-    }
     public beginPath(): void{
         if(this.currentInstructionsWithPath){
             this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
@@ -42,12 +35,6 @@ export class InfiniteCanvasInstructionSet {
     public restoreState(): void{
         this.currentlyWithState.restoreState();
     }
-    private interjectWithStateAndArea(withStateAndArea: StateChangingInstructionSetWithCurrentStateAndArea): void{
-        this.previousInstructionsWithPath.add(withStateAndArea);
-        if(this.currentInstructionsWithPath){
-            this.previousInstructionsWithPath.changeToState(this.currentInstructionsWithPath.initialState);
-        }
-    }
 
     public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
         if(pathInstructions){
@@ -63,13 +50,12 @@ export class InfiniteCanvasInstructionSet {
             return;
         }
         this.currentInstructionsWithPath.drawPath(instruction);
-        this.currentInstructionsWithPathAreVisible = true;
     }
 
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
         const pathToDraw: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = InstructionsWithPath.create(this.state, pathInstructions);
         pathToDraw.drawPath(instruction);
-        this.interjectWithStateAndArea(pathToDraw);
+        this.previousInstructionsWithPath.addAndMaintainState(pathToDraw);
     }
 
     public addPathInstruction(pathInstruction: PathInstruction): void{
@@ -78,38 +64,40 @@ export class InfiniteCanvasInstructionSet {
         }
     }
 
-    public clearArea(x: number, y: number, width: number, height: number): void{
-        const rectangle: Rectangle = new Rectangle(x, y, width, height).transform(this.currentlyWithState.state.current.transformation);
-        let somethingWasDone: boolean = false;
-        let clearRectWasAdded: boolean = false;
-        if(this.previousInstructionsWithPath.contains(i => i.area && rectangle.contains(i.area))){
-            this.previousInstructionsWithPath.removeAll(i => i.area && rectangle.contains(i.area));
-            somethingWasDone = true;
-        }
-        const clearRectPathInstruction: PathInstruction = PathInstructions.clearRect(x, y, width, height);
-        if(this.drawCurrentInstructionsWithPath && this.currentInstructionsWithPath.area){
-            if(rectangle.contains(this.currentInstructionsWithPath.area)){
-                this.currentInstructionsWithPathAreVisible = false;
-                somethingWasDone = true;
-            }else if(rectangle.intersects(this.currentInstructionsWithPath.area)){
-                this.currentInstructionsWithPath.addPathInstruction(clearRectPathInstruction);
-                somethingWasDone = true;
-                clearRectWasAdded = true;
-            }
-        }
-		if(!clearRectWasAdded && this.previousInstructionsWithPath.contains(i => i.area && rectangle.intersects(i.area))){
-            somethingWasDone = true;
-            this.interjectWithStateAndArea(new InstructionsWithStateAndArea(this.currentlyWithState.state, clearRectPathInstruction));
-		}
-		if(somethingWasDone){
-			this.onChange();
-		}
+    public intersects(area: Rectangle): boolean{
+        return this.previousInstructionsWithPath.intersects(area) || this.currentInstructionsWithPath && this.currentInstructionsWithPath.intersects(area);
     }
+
+    public hasDrawingAcrossBorderOf(area: Rectangle): boolean{
+        return this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(area) || this.currentInstructionsWithPath && this.currentInstructionsWithPath.hasDrawingAcrossBorderOf(area);
+    }
+
+    public clearContentsInsideArea(area: Rectangle): void{
+        this.previousInstructionsWithPath.clearContentsInsideArea(area);
+        if(this.currentInstructionsWithPath){
+            this.currentInstructionsWithPath.clearContentsInsideArea(area);
+        }
+    }
+
+    public clearArea(x: number, y: number, width: number, height: number): void{
+        const rectangle: Rectangle = new Rectangle(x, y, width, height).transform(this.state.current.transformation);
+        if(!this.intersects(rectangle)){
+            return;
+        }
+        this.clearContentsInsideArea(rectangle);
+        if(this.currentInstructionsWithPath && this.currentInstructionsWithPath.hasDrawingAcrossBorderOf(rectangle)){
+            this.currentInstructionsWithPath.addClearRect(rectangle);
+        }else if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(rectangle)){
+            this.previousInstructionsWithPath.addClearRect(rectangle);
+        }
+		this.onChange();
+    }
+    
     public execute(context: CanvasRenderingContext2D, transformation: Transformation){
-        if(this.previousInstructionsWithPath.length || this.drawCurrentInstructionsWithPath){
+        if(this.previousInstructionsWithPath.length || this.currentInstructionsWithPath && this.currentInstructionsWithPath.visible){
             this.previousInstructionsWithPath.execute(context, transformation);
         }
-        if(this.drawCurrentInstructionsWithPath){
+        if(this.currentInstructionsWithPath){
             this.currentInstructionsWithPath.execute(context, transformation);
         }
         for(let i = 0; i < this.currentlyWithState.state.stack.length; i++){

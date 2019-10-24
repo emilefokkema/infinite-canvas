@@ -1,6 +1,8 @@
 import { Point } from "./point";
 import { Transformation } from "./transformation";
 import { isPoint } from "./is-point";
+import { PathInstructions } from "./instructions/path-instructions";
+import { PathInstruction } from "./interfaces/path-instruction";
 
 export class Rectangle{
     private vertices: Point[];
@@ -36,6 +38,13 @@ export class Rectangle{
         const top: number = Math.min(maxTop, this.top);
         const bottom: number = Math.max(minBottom, this.bottom);
         return new Rectangle(left, top, right - left, bottom - top);
+    }
+    public getInstructionToClear(): PathInstruction{
+        const x: number = this.left;
+        const y: number = this.top;
+        const width: number = this.right - this.left;
+        const height: number = this.bottom - this.top;
+        return PathInstructions.clearRect(x, y, width, height);
     }
     public transform(transformation: Transformation): Rectangle{
         const transformedVertices: Point[] = this.vertices.map(p => transformation.apply(p));

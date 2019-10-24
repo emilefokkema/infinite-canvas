@@ -367,6 +367,21 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that fills a rect, begins a new path, translates and then clears a rect", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillRect(0, 0, 5, 5);
+			infiniteContext.beginPath();
+			infiniteContext.translate(1, 1);
+			contextMock.clear();
+			infiniteContext.clearRect(1, 1, 1, 1);
+		});
+
+		it("should add a clearRect with the right arguments", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("that is translated", () => {
 
 		beforeEach(() => {
@@ -382,6 +397,27 @@ describe("an infinite canvas context", () => {
 
 			it("should have called setTransform on the context", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then clears a rectangle partly covering the place where the rectangle was drawn", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(0.5, 0, 3, 3);
+				});
+
+				it("should have added an instruction to clear a rect", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and then adds a rectangular path and fills it", () => {
+
+			beforeEach(() => {
+				infiniteContext.beginPath();
+				infiniteContext.rect(0, 0, 1, 1);
+				infiniteContext.fill();
 			});
 
 			describe("and then clears a rectangle partly covering the place where the rectangle was drawn", () => {

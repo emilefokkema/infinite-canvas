@@ -3,6 +3,11 @@ import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
 import { PathInstructions } from "../src/instructions/path-instructions";
 
+function drawAndLog(instructionsWithPath: InstructionsWithPath): string[]{
+    instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
+    return logWithState(instructionsWithPath);
+}
+
 describe("a set of instructions that is also about a path", () => {
     let instructionsWithPath: InstructionsWithPath;
 
@@ -17,7 +22,7 @@ describe("a set of instructions that is also about a path", () => {
         });
 
         it("should contain an instruction to begin a path and one to change the state", () => {
-            expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+            expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
         });
 
         describe("and then receives an instruction that modifies the path", () => {
@@ -27,7 +32,7 @@ describe("a set of instructions that is also about a path", () => {
             });
 
             it("should contain an instruction to begin a path, change the state and modify the path", () => {
-                expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+                expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
             });
 
             describe("and then receives a change of state on the same property as the previous change of state", () => {
@@ -37,7 +42,7 @@ describe("a set of instructions that is also about a path", () => {
                 });
     
                 it("should not have replaced the previous change of state", () => {
-                    expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+                    expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
                 });
 
                 describe("and then draws the path and receives another change of state on the same property", () => {
@@ -50,7 +55,7 @@ describe("a set of instructions that is also about a path", () => {
                     });
 
                     it("should have recorded three changes of state", () => {
-                        expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+                        expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
                     });
                 });
             });
@@ -63,7 +68,7 @@ describe("a set of instructions that is also about a path", () => {
             });
 
             it("should still contain only two instructions", () => {
-                expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+                expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
             });
         });
     });
@@ -87,7 +92,7 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
         });
 
         it("should have recorded everything in the right order", () => {
-            expect(logWithState(instructionsWithPath)).toMatchSnapshot();
+            expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
         });
     });
 });

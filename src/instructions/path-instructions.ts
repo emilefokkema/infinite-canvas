@@ -13,7 +13,7 @@ export class PathInstructions{
             instruction:(context: CanvasRenderingContext2D, transformation: Transformation) => {
                 const {a, b, c, d, e, f} = transformation;
                 context.save();
-                context.transform(a, b, c, d, e, f);
+                context.setTransform(a, b, c, d, e, f);
                 context.clearRect(x, y, width, height);
                 context.restore();
             },
