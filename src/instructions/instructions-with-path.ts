@@ -1,14 +1,13 @@
 import { Rectangle } from "../rectangle";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
-import { InfiniteCanvasStateAndInstruction } from "./infinite-canvas-state-and-instruction";
 import { PathInstruction } from "../interfaces/path-instruction";
 import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { StateChangingInstructionSequence } from "./state-changing-instruction-sequence";
 import { Transformation } from "../transformation";
-import { PathInstructions } from "./path-instructions";
+import { PathInstructionWithState } from "./path-instruction-with-state";
 
-export class InstructionsWithPath extends StateChangingInstructionSequence<InfiniteCanvasStateAndInstruction> implements StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
+export class InstructionsWithPath extends StateChangingInstructionSequence<PathInstructionWithState> implements StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
     public area: Rectangle;
     public visible: boolean;
     constructor(initialState: InfiniteCanvasState){
@@ -16,12 +15,12 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Infin
     }
 
     public drawPath(instruction: Instruction): void{
-        this.add(new InfiniteCanvasStateAndInstruction(this.state, instruction));
+        this.add(new PathInstructionWithState(this.state, instruction, true));
         this.visible = true;
     }
     public addPathInstruction(pathInstruction: PathInstruction): void{
         this.area = pathInstruction.changeArea.execute(this.state.current.transformation, this.area);
-        this.add(new InfiniteCanvasStateAndInstruction(this.state, pathInstruction.instruction));
+        this.add(new PathInstructionWithState(this.state, pathInstruction.instruction, false));
     }
     public execute(context: CanvasRenderingContext2D, transformation: Transformation){
         if(!this.visible){
@@ -54,6 +53,17 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Infin
     }
     public addClearRect(area: Rectangle): void{
         this.addPathInstruction(area.getInstructionToClear());
+    }
+    public recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
+        const result: InstructionsWithPath = new InstructionsWithPath(this.initialState);
+        for(const added of this.added){
+            if(added.drawsPath){
+                continue;
+            }
+            result.add(added.copy());
+        }
+        result.changeToState(this.state);
+        return result;
     }
     public static create(initialState: InfiniteCanvasState, pathInstructions?: PathInstruction[]): InstructionsWithPath{
         const result: InstructionsWithPath = new InstructionsWithPath(initialState);

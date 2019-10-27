@@ -2,6 +2,13 @@ body{
 	font-family: monospace;
 	color: #333;
 }
+a{
+	color:inherit;
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: underline;
+}
 .darklight{
 	cursor: pointer;
 }

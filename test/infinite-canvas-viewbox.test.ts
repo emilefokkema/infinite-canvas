@@ -38,6 +38,39 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that makes a path, fills it and then fills an overlapping rect", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle = "#f00";
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(0, 0);
+			infiniteContext.lineTo(2, 0);
+			infiniteContext.lineTo(2, 2);
+			infiniteContext.lineTo(0, 2);
+			infiniteContext.lineTo(0, 0);
+			infiniteContext.fill();
+			infiniteContext.fillStyle = "#00f";
+			contextMock.clear();
+			infiniteContext.fillRect(1, 1, 2, 2);
+		});
+
+		it("should draw the two rectangles in the right order", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe("and then fills the path again", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fill();
+			});
+
+			it("should not have forgotten the previous path", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
 	describe("whose state is changed and who draws something", () => {
 		let red: string;
 		let blue: string;

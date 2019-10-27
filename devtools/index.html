@@ -9,9 +9,12 @@
 	<link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
+	<template id="imageLinkTemplate">
+		<li><a v-bind:href="'#' + titleandindex.index">{{titleandindex.title}}</a></li>
+	</template>
 	<template id="exampleTemplate">
 		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
-			<div class="example-title">{{example.title}}</div>
+			<div class="example-title" v-bind:id="example.index">{{example.title}}</div>
 			<div>
 				<div class="column">
 					<canvas width="400" height="400" ref="canvas"></canvas>
@@ -32,7 +35,13 @@
 	</template>
 	<div id="main">
 		<div v-if="numberSkipped > 0" class="warning">{{numberSkipped}} examples were skipped</div>
-		<div v-if="!allImagesEqual" class="danger">Not all images are equal</div>
+		<div v-if="unequalImages.length > 0" class="danger">
+			<div>Not all images appear to be equal. Please inspect:</div>
+			<ul>
+				<image-link v-for="titleAndIndex in unequalImages" v-bind:titleandindex="titleAndIndex"></image-link>
+			</ul>
+			
+		</div>
 		<span id="dark" class="darklight">dark</span>
 		<span id="light" class="darklight">light</span>
 		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal"></example>
@@ -62,6 +71,37 @@
 								ctx.strokeRect(20, 10, 160, 100);
 							},
 							title: "set style and stroke a rectangle"
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.beginPath();
+								ctx.moveTo(0, 0);
+								ctx.lineTo(100, 0);
+								ctx.lineTo(100, 100);
+								ctx.lineTo(0, 100);
+								ctx.lineTo(0, 0);
+								ctx.fill();
+								ctx.fillStyle = "#00f";
+								ctx.fillRect(50, 50, 100, 100);
+							},
+							title: "draw a path, fill it and then fill an overlapping rect",
+						},
+						{
+							code:function(ctx){
+								ctx.fillStyle = "#f00";
+								ctx.beginPath();
+								ctx.moveTo(0, 0);
+								ctx.lineTo(100, 0);
+								ctx.lineTo(100, 100);
+								ctx.lineTo(0, 100);
+								ctx.lineTo(0, 0);
+								ctx.fill();
+								ctx.fillStyle = "#00f";
+								ctx.fillRect(50, 50, 100, 100);
+								ctx.fill();
+							},
+							title: "draw a path, fill it, change state, fill an overlapping rect and fill the path again",
 						},
 						{
 							code:function(ctx){
@@ -538,16 +578,17 @@
 					var notExcludedExamples = exaplesToShow.filter(function(e){return !e.excluded;});
 					numberSkipped += exaplesToShow.length - notExcludedExamples.length;
 					exaplesToShow = notExcludedExamples;
+					exaplesToShow.forEach(function(e, i){e.index = i;})
 					return {
 						examples:exaplesToShow,
 						dark:false,
-						allImagesEqual: true,
-						numberSkipped: numberSkipped
+						numberSkipped: numberSkipped,
+						unequalImages: []
 					};
 				},
 				methods:{
-					onImagesUnequal: function(){
-						this.allImagesEqual = false;
+					onImagesUnequal: function(titleAndIndex){
+						this.unequalImages.push(titleAndIndex);
 					},
 					setDark:function(){
 						document.body.setAttribute("class","dark");
@@ -629,9 +670,16 @@
 							var dataUrlInfinite = infCanvas.toDataURL();
 							this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
 							if(!this.imagesAreEqual){
-								this.$emit("imagesunequal");
+								this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
 							}
 						}
+					},
+					'image-link':{
+						template: document.getElementById("imageLinkTemplate").innerHTML,
+						props:{
+							titleandindex: Object
+						},
+						mounted:function(){console.log(this.titleandindex);}
 					}
 				}
 			});

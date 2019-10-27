@@ -4,4 +4,5 @@ import { Drawing } from "./drawing";
 
 export interface StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState extends StateChangingInstructionSetWithCurrentStateAndArea, CurrentPath, Drawing{
     visible: boolean;
+    recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
 }

@@ -2,8 +2,10 @@ import { InstructionsWithPath } from "../src/instructions/instructions-with-path
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
 import { PathInstructions } from "../src/instructions/path-instructions";
+import { Transformation } from "../src/transformation";
+import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
 
-function drawAndLog(instructionsWithPath: InstructionsWithPath): string[]{
+function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): string[]{
     instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
     return logWithState(instructionsWithPath);
 }
@@ -68,6 +70,36 @@ describe("a set of instructions that is also about a path", () => {
             });
 
             it("should still contain only two instructions", () => {
+                expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
+            });
+        });
+    });
+
+    describe("that describes a path that is drawn, altered and then recreated", () => {
+        let recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
+
+        beforeEach(() => {
+            instructionsWithPath.addPathInstruction(PathInstructions.moveTo(0, 0));
+            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(10,0));
+            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(10,10));
+            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(0,10));
+            instructionsWithPath.changeState(s => s.setFillStyle("#00f"));
+            instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
+            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(5, 5));
+            recreatedPath = instructionsWithPath.recreatePath();
+        });
+
+        it("should not contain the intermediate drawing instruction", () => {
+            expect(drawAndLog(recreatedPath)).toMatchSnapshot();
+        });
+
+        describe("and then the recreated path changes state", () => {
+
+            beforeEach(() => {
+                recreatedPath.changeState(s => s.setFillStyle("#f00"));
+            });
+
+            it("should not affect the state of the original", () => {
                 expect(drawAndLog(instructionsWithPath)).toMatchSnapshot();
             });
         });

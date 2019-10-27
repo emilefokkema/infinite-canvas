@@ -8,7 +8,7 @@ import { InfiniteCanvasStateAndInstruction } from "./infinite-canvas-state-and-i
 
 export class StateChangingInstructionSequence<TInstructionSet extends StateChangingInstructionSetWithCurrentState> implements StateChangingInstructionSetWithCurrentState{
     private initiallyWithState: StateChangingInstructionSetWithCurrentState;
-    private added: TInstructionSet[] = [];
+    protected added: TInstructionSet[] = [];
     private addedLast: TInstructionSet;
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
     public get length(): number{return this.added.length;}

@@ -10,7 +10,7 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
     constructor(){
         super(InfiniteCanvasState.default, InfiniteCanvasStateInstance.setDefault);
     }
-    public addAndMaintainState(instructionSet: StateChangingInstructionSetWithCurrentStateAndArea){
+    private addAndMaintainState(instructionSet: StateChangingInstructionSetWithCurrentStateAndArea){
         const currentState: InfiniteCanvasState = this.state;
         this.add(instructionSet);
         this.changeToState(currentState);

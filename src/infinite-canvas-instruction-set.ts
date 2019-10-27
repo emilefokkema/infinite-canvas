@@ -21,11 +21,7 @@ export class InfiniteCanvasInstructionSet {
     }
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
     public beginPath(): void{
-        if(this.currentInstructionsWithPath){
-            this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
-        }
-        this.currentInstructionsWithPath = InstructionsWithPath.create(this.state);
-        this.currentlyWithState = this.currentInstructionsWithPath;
+        this.replaceCurrentInstructionsWithPath(InstructionsWithPath.create(this.state));
     }
     public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
         this.currentlyWithState.changeState(change);
@@ -49,6 +45,15 @@ export class InfiniteCanvasInstructionSet {
         this.onChange();
     }
 
+    private replaceCurrentInstructionsWithPath(newInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
+        if(this.currentInstructionsWithPath && this.currentInstructionsWithPath.visible){
+            this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
+        }
+        this.currentInstructionsWithPath = newInstructionsWithPath;
+        this.previousInstructionsWithPath.changeToState(this.currentInstructionsWithPath.initialState);
+        this.currentlyWithState = this.currentInstructionsWithPath;
+    }
+
     private drawCurrentPath(instruction: Instruction){
         if(!this.currentInstructionsWithPath){
             return;
@@ -63,7 +68,13 @@ export class InfiniteCanvasInstructionSet {
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
         const pathToDraw: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = InstructionsWithPath.create(this.state, pathInstructions);
         pathToDraw.drawPath(instruction);
-        this.previousInstructionsWithPath.addAndMaintainState(pathToDraw);
+        if(this.currentInstructionsWithPath){
+            const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.currentInstructionsWithPath.recreatePath();
+            this.replaceCurrentInstructionsWithPath(pathToDraw);
+            this.replaceCurrentInstructionsWithPath(recreatedPath);
+        }else{
+            this.previousInstructionsWithPath.add(pathToDraw);
+        }
     }
 
     public addPathInstruction(pathInstruction: PathInstruction): void{
