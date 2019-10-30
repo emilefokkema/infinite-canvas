@@ -63,6 +63,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
             result.add(added.copy());
         }
         result.changeToState(this.state);
+        result.area = this.area;
         return result;
     }
     public static create(initialState: InfiniteCanvasState, pathInstructions?: PathInstruction[]): InstructionsWithPath{

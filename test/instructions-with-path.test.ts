@@ -93,6 +93,10 @@ describe("a set of instructions that is also about a path", () => {
             expect(drawAndLog(recreatedPath)).toMatchSnapshot();
         });
 
+        it("should have the same area", () => {
+            expect(recreatedPath.area).toEqual(instructionsWithPath.area);
+        });
+
         describe("and then the recreated path changes state", () => {
 
             beforeEach(() => {

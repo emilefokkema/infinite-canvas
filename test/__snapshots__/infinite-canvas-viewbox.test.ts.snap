@@ -490,6 +490,22 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that makes a path, fills a rect, fills the path, begins a new path and then clears a rect containing the first drawn path should forget the first drawn path 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(3,3)",
+  "context.lineTo(4,3)",
+  "context.lineTo(4,4)",
+  "context.lineTo(3,4)",
+  "context.lineTo(3,3)",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context that makes a path, fills it and then fills an overlapping rect and then fills the path again should not have forgotten the previous path 1`] = `
 Array [
   "context.restore()",

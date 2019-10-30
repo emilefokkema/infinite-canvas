@@ -71,6 +71,27 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that makes a path, fills a rect, fills the path, begins a new path and then clears a rect containing the first drawn path", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(0, 0);
+			infiniteContext.lineTo(1, 0);
+			infiniteContext.lineTo(1, 1);
+			infiniteContext.lineTo(0, 1);
+			infiniteContext.lineTo(0, 0);
+			infiniteContext.fillRect(3, 3, 1, 1);
+			infiniteContext.fill();
+			infiniteContext.beginPath();
+			contextMock.clear();
+			infiniteContext.clearRect(-1, -1, 3, 3);
+		});
+
+		it("should forget the first drawn path", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("whose state is changed and who draws something", () => {
 		let red: string;
 		let blue: string;
