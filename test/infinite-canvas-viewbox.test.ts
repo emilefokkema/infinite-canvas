@@ -228,6 +228,47 @@ describe("an infinite canvas context", () => {
 			infiniteContext.beginPath();
 		});
 
+		describe("and then changes state and fills a rect", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = "#f00";
+				contextMock.clear();
+				infiniteContext.fillRect(0, 0, 2, 2);
+			});
+
+			it("should have remembered the state change", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then adds a rect to the path and fills it", () => {
+
+				beforeEach(() => {
+					infiniteContext.rect(0, 2, 2, 2);
+					contextMock.clear();
+					infiniteContext.fill();
+				});
+
+				it("should do that using the same changed state", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and then changes state, begins a new path and fills it", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = "#f00";
+				infiniteContext.beginPath();
+				infiniteContext.rect(0, 0, 2, 2);
+				contextMock.clear();
+				infiniteContext.fill();
+			});
+
+			it("should have remembered the state change", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
 		describe("and then builds it and fills it", () => {
 
 			beforeEach(() => {

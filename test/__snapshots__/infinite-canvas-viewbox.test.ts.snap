@@ -164,6 +164,67 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that begins path and then changes state and fills a rect and then adds a rect to the path and fills it should do that using the same changed state 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.fillStyle = \\"#000\\"",
+  "context.beginPath()",
+  "context.fillStyle = \\"#f00\\"",
+  "context.moveTo(0,2)",
+  "context.lineTo(2,2)",
+  "context.lineTo(2,4)",
+  "context.lineTo(0,4)",
+  "context.lineTo(0,2)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that begins path and then changes state and fills a rect should have remembered the state change 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.fillStyle = \\"#000\\"",
+]
+`;
+
+exports[`an infinite canvas context that begins path and then changes state, begins a new path and fills it should have remembered the state change 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context that creates a rectangular path, fills another rectangle and then fills the created path should have filled both rectangles 1`] = `
 Array [
   "context.restore()",
