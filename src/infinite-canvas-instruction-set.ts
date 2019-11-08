@@ -52,6 +52,7 @@ export class InfiniteCanvasInstructionSet {
         this.currentInstructionsWithPath = newInstructionsWithPath;
         this.previousInstructionsWithPath.changeToState(this.currentInstructionsWithPath.initialState);
         this.currentlyWithState = this.currentInstructionsWithPath;
+        this.setInstructionToRestoreState();
     }
 
     private drawCurrentPath(instruction: Instruction){

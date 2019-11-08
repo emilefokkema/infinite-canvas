@@ -382,6 +382,25 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that saves, begins a path, begins another path, fills it, restores and then fills a rect", () => {
+
+		beforeEach(() => {
+			infiniteContext.save();
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(0, 0);
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(0, 0);
+			infiniteContext.fill();
+			infiniteContext.restore();
+			contextMock.clear();
+			infiniteContext.fillRect(0, 0, 1, 1);
+		});
+
+		it("should end up with an equal number of saves and restores", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("that draws a path, fills it and then adds to the path", () => {
 
 		beforeEach(() => {

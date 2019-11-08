@@ -645,6 +645,29 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that saves, begins a path, begins another path, fills it, restores and then fills a rect should end up with an equal number of saves and restores 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.save()",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context whose state is changed and then draws something should have modified the context correctly 1`] = `
 Array [
   "context.restore()",
