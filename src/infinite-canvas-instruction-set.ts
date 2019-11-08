@@ -59,10 +59,12 @@ export class InfiniteCanvasInstructionSet {
             return;
         }
         this.currentInstructionsWithPath.drawPath(instruction);
+        this.setInstructionToRestoreState();
     }
 
     private setInstructionToRestoreState(): void{
-        this.instructionToRestoreState = this.state.convertTo(this.state.lastBeforeFirstSaved()).instruction;
+        const latestVisibleState: InfiniteCanvasState = this.currentInstructionsWithPath && this.currentInstructionsWithPath.visible ? this.currentInstructionsWithPath.state : this.previousInstructionsWithPath.state;
+        this.instructionToRestoreState = latestVisibleState.convertTo(latestVisibleState.lastBeforeFirstSaved()).instruction;
     }
 
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
