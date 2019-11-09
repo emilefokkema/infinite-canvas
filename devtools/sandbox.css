@@ -1,0 +1,21 @@
+body{
+    font-family: monospace;
+    color: #333;
+}
+.block{
+    display: inline-block;
+    vertical-align: top;
+}
+#code{
+    width: 600px;
+    height: 400px;
+}
+#run{
+    font-family: monospace;
+    color: #333;
+    margin: 20px;
+    padding: 10px;
+}
+canvas{
+    border: 1pt solid #000;
+}
