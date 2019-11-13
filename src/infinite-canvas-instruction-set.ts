@@ -1,6 +1,5 @@
 import { InstructionsWithPath } from "./instructions/instructions-with-path";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
-import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { StateChange } from "./state/state-change";
 import { Instruction } from "./instructions/instruction";
 import { Transformation } from "./transformation";
@@ -9,6 +8,8 @@ import { PathInstruction } from "./interfaces/path-instruction";
 import { CurrentState } from "./interfaces/current-state";
 import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "./interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { PreviousInstructions } from "./instructions/previous-instructions";
+import {StateChangingInstructionSetWithCurrentStateAndArea} from "./interfaces/state-changing-instruction-set-with-current-state-and-area";
+import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
 
 export class InfiniteCanvasInstructionSet {
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
@@ -16,7 +17,7 @@ export class InfiniteCanvasInstructionSet {
     private currentlyWithState: CurrentState;
     private instructionToRestoreState: Instruction;
     constructor(private readonly onChange: () => void){
-        this.previousInstructionsWithPath = new PreviousInstructions();
+        this.previousInstructionsWithPath = PreviousInstructions.create();
         this.currentlyWithState = this.previousInstructionsWithPath;
     }
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
@@ -45,17 +46,27 @@ export class InfiniteCanvasInstructionSet {
         this.onChange();
     }
 
-    private replaceCurrentInstructionsWithPath(newInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
-        if(this.currentInstructionsWithPath && this.currentInstructionsWithPath.visible){
-            this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
+    public clipPath(instruction: Instruction): void{
+        this.clipCurrentPath(instruction);
+    }
+
+    private replaceCurrentInstructionsWithPath(newInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState, ...instructionsToInterject: StateChangingInstructionSetWithCurrentStateAndArea[]): void{
+        if(this.currentInstructionsWithPath){
+            if(this.currentInstructionsWithPath.visible){
+                this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
+            }else{
+                this.previousInstructionsWithPath.changeToStateWithClippedPaths(this.currentInstructionsWithPath.state);
+            }
+        }
+        for(const instructionToInterject of instructionsToInterject){
+            this.previousInstructionsWithPath.add(instructionToInterject);
         }
         this.currentInstructionsWithPath = newInstructionsWithPath;
-        this.previousInstructionsWithPath.changeToState(this.currentInstructionsWithPath.initialState);
         this.currentlyWithState = this.currentInstructionsWithPath;
         this.setInstructionToRestoreState();
     }
 
-    private drawCurrentPath(instruction: Instruction){
+    private drawCurrentPath(instruction: Instruction): void{
         if(!this.currentInstructionsWithPath){
             return;
         }
@@ -63,9 +74,16 @@ export class InfiniteCanvasInstructionSet {
         this.setInstructionToRestoreState();
     }
 
+    private clipCurrentPath(instruction: Instruction): void{
+        if(!this.currentInstructionsWithPath){
+            return;
+        }
+        this.currentInstructionsWithPath.clipPath(instruction);
+    }
+
     private setInstructionToRestoreState(): void{
         const latestVisibleState: InfiniteCanvasState = this.currentInstructionsWithPath && this.currentInstructionsWithPath.visible ? this.currentInstructionsWithPath.state : this.previousInstructionsWithPath.state;
-        this.instructionToRestoreState = latestVisibleState.convertTo(latestVisibleState.lastBeforeFirstSaved()).instruction;
+        this.instructionToRestoreState = latestVisibleState.convertToState(latestVisibleState.lastBeforeFirstSaved()).instruction;
     }
 
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
@@ -73,8 +91,8 @@ export class InfiniteCanvasInstructionSet {
         pathToDraw.drawPath(instruction);
         if(this.currentInstructionsWithPath){
             const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.currentInstructionsWithPath.recreatePath();
-            this.replaceCurrentInstructionsWithPath(pathToDraw);
-            this.replaceCurrentInstructionsWithPath(recreatedPath);
+            recreatedPath.setInitialState(this.state);
+            this.replaceCurrentInstructionsWithPath(recreatedPath, pathToDraw);
         }else{
             this.previousInstructionsWithPath.add(pathToDraw);
         }

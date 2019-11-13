@@ -1,16 +1,18 @@
 import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state-changing-instruction-set-with-current-state";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { InfiniteCanvasStateInstance } from "../state/infinite-canvas-state-instance";
 import { StateChange } from "../state/state-change";
 import { Transformation } from "../transformation";
-import { Instruction } from "./instruction";
 import { InfiniteCanvasStateAndInstruction } from "./infinite-canvas-state-and-instruction";
+import { InstructionSequence } from "../interfaces/instruction-sequence";
+import { InstructionAndState } from "../interfaces/instruction-and-state";
+import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
 
-export class StateChangingInstructionSequence<TInstructionSet extends StateChangingInstructionSetWithCurrentState> implements StateChangingInstructionSetWithCurrentState{
-    private initiallyWithState: StateChangingInstructionSetWithCurrentState;
+export class StateChangingInstructionSequence<TInstructionSet extends StateChangingInstructionSetWithCurrentState> implements StateChangingInstructionSetWithCurrentState, InstructionSequence<TInstructionSet>{
     protected added: TInstructionSet[] = [];
     private addedLast: TInstructionSet;
     public get state(): InfiniteCanvasState{return this.currentlyWithState.state;}
+    public get initialState(): InfiniteCanvasState{return this.initiallyWithState.initialState;}
     public get length(): number{return this.added.length;}
     private get currentlyWithState(): StateChangingInstructionSetWithCurrentState{
         if(this.addedLast){
@@ -18,11 +20,22 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         return this.initiallyWithState;
     }
-    constructor(public initialState: InfiniteCanvasState, initialInstruction: Instruction){
-        this.initiallyWithState = new InfiniteCanvasStateAndInstruction(initialState, initialInstruction);
+    protected constructor(protected readonly initiallyWithState: InfiniteCanvasStateAndInstruction){
+    }
+    protected reconstructState(instructionSetToChange: StateChangingInstructionSetWithCurrentState, stateToChangeTo: InfiniteCanvasState): void{
+        instructionSetToChange.changeToState(stateToChangeTo);
+    }
+    public getAllInstructionsAndStates(): InstructionAndState[]{
+        let result: InstructionAndState[] = this.initiallyWithState.getAllInstructionsAndStates();
+        for(const added of this.added){
+            result = result.concat(added.getAllInstructionsAndStates());
+        }
+        return result;
+    }
+    public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
+        this.currentlyWithState.addClippedPath(clippedPath);
     }
     public add(instructionSet: TInstructionSet): void{
-        this.changeToState(instructionSet.initialState);
         this.added.push(instructionSet);
         this.addedLast = instructionSet;
     }
@@ -47,6 +60,13 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
     public changeToState(state: InfiniteCanvasState): void{
         this.currentlyWithState.changeToState(state);
     }
+    public changeToStateWithClippedPaths(state: InfiniteCanvasState): void {
+        this.currentlyWithState.changeToStateWithClippedPaths(state);
+    }
+    public setInitialState(newInitialState: InfiniteCanvasState): void {
+        this.initiallyWithState.setInitialState(newInitialState);
+    }
+
     public execute(context: CanvasRenderingContext2D, transformation: Transformation){
         this.initiallyWithState.execute(context, transformation);
         for(const added of this.added){
@@ -70,7 +90,7 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
                 this.addedLast = this.added[index - 1];
             }
         }
-        this.beforeIndex(index).changeToState(this.stateAfterIndex(index));
+        this.reconstructState(this.beforeIndex(index), this.stateAfterIndex(index));
         this.added.splice(index, 1);
     }
 }

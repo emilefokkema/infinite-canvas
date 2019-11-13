@@ -1,5 +1,112 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it and then reduces the path's area, clips again and fills a rect and then reduces the path's area again and fills it should have recreated the path and filled it 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,90)",
+  "context.lineTo(90,90)",
+  "context.lineTo(90,10)",
+  "context.clip()",
+  "context.fillStyle = \\"#0f0\\"",
+  "context.fill()",
+  "context.lineTo(70,30)",
+  "context.clip()",
+  "context.fillStyle = \\"#00f\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,90)",
+  "context.lineTo(90,90)",
+  "context.lineTo(90,10)",
+  "context.fillStyle = \\"#0f0\\"",
+  "context.lineTo(70,30)",
+  "context.fillStyle = \\"#00f\\"",
+  "context.lineTo(50,90)",
+  "context.fillStyle = \\"#ff0\\"",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it and then reduces the path's area, clips again and fills a rect should have added a filled rectangle after the clip 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,90)",
+  "context.lineTo(90,90)",
+  "context.lineTo(90,10)",
+  "context.clip()",
+  "context.fillStyle = \\"#0f0\\"",
+  "context.fill()",
+  "context.lineTo(70,30)",
+  "context.clip()",
+  "context.fillStyle = \\"#00f\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it should have added an instruction to clip 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"#f00\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,90)",
+  "context.lineTo(90,90)",
+  "context.lineTo(90,10)",
+  "context.clip()",
+  "context.fillStyle = \\"#0f0\\"",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context saves, changes state, begins drawing a path and then fills a rect, restores to the previous state and then fills the path should end up with an equal number of saves and restores 1`] = `
 Array [
   "context.restore()",
@@ -204,7 +311,6 @@ Array [
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#000\\"",
 ]
 `;
 
@@ -221,6 +327,117 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects and then removes the second filled rectangle by clearing a rect and then removes the first filled rectangle by clearing a rect should still contain two clipping instructions 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(9,1)",
+  "context.lineTo(9,9)",
+  "context.lineTo(1,9)",
+  "context.lineTo(1,1)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(8,2)",
+  "context.lineTo(8,8)",
+  "context.lineTo(2,8)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(5,5)",
+  "context.lineTo(6,5)",
+  "context.lineTo(6,7)",
+  "context.lineTo(5,7)",
+  "context.lineTo(5,5)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects and then removes the second filled rectangle by clearing a rect should still contain two clipping instructions 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(9,1)",
+  "context.lineTo(9,9)",
+  "context.lineTo(1,9)",
+  "context.lineTo(1,1)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,7)",
+  "context.lineTo(0,7)",
+  "context.lineTo(0,5)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(8,2)",
+  "context.lineTo(8,8)",
+  "context.lineTo(2,8)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(5,5)",
+  "context.lineTo(6,5)",
+  "context.lineTo(6,7)",
+  "context.lineTo(5,7)",
+  "context.lineTo(5,5)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects should contain two clipping instructions 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(9,1)",
+  "context.lineTo(9,9)",
+  "context.lineTo(1,9)",
+  "context.lineTo(1,1)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,7)",
+  "context.lineTo(0,7)",
+  "context.lineTo(0,5)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(8,2)",
+  "context.lineTo(8,8)",
+  "context.lineTo(2,8)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(7,5)",
+  "context.lineTo(9,5)",
+  "context.lineTo(9,7)",
+  "context.lineTo(7,7)",
+  "context.lineTo(7,5)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(5,5)",
+  "context.lineTo(6,5)",
+  "context.lineTo(6,7)",
+  "context.lineTo(5,7)",
+  "context.lineTo(5,5)",
   "context.fill()",
 ]
 `;
@@ -623,7 +840,6 @@ Array [
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
 ]
 `;
 
@@ -640,7 +856,448 @@ Array [
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
   "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap and then makes a new rectangular path partly overlapping the clipped area and fills it should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
   "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap and then once more fills a rect partly overlapping the clipped area should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area and then clears a rect containing the first overlap should still contain one clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,4)",
+  "context.lineTo(6,4)",
+  "context.lineTo(6,6)",
+  "context.lineTo(0,6)",
+  "context.lineTo(0,4)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area and then clears a rect containing the second overlap should still contain one clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area should still contain only one clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(0,4)",
+  "context.lineTo(6,4)",
+  "context.lineTo(6,6)",
+  "context.lineTo(0,6)",
+  "context.lineTo(0,4)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and begins a path outside the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and begins a path outside the clipped area and fills it should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and fills a rect outside the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and fills a rect outside the clipped area should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area should contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap and then fills a rect partly overlapping the clipped area should contain the clipping instruction again 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap and then once again fills the path should contain the clipping instruction again 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and begins a path outside the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and begins a path outside the clipped area and fills it should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and fills a rect outside the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and fills a rect outside the clipped area should still contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(7,0)",
+  "context.lineTo(8,0)",
+  "context.lineTo(8,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it should contain the clipping instruction 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(2,2)",
+  "context.lineTo(5,2)",
+  "context.lineTo(5,5)",
+  "context.lineTo(2,5)",
+  "context.lineTo(2,2)",
+  "context.clip()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(6,0)",
+  "context.lineTo(6,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.fill()",
   "context.restore()",
 ]
 `;
@@ -663,8 +1320,6 @@ Array [
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
   "context.fill()",
-  "context.save()",
-  "context.restore()",
 ]
 `;
 

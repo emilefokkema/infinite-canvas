@@ -1,16 +1,23 @@
-import { InfiniteCanvasStateInstance } from "./infinite-canvas-state-instance";
 import { StateChange } from "./state-change";
-import { ChainableStateChange } from "./chainable-state-change";
+import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
+import {StateConversion} from "./state-conversion";
+import {StateConversionWithClippedPaths} from "./state-conversion-with-clipped-paths";
 
 export class InfiniteCanvasState{
     constructor(public current: InfiniteCanvasStateInstance, public stack: InfiniteCanvasStateInstance[] = []){}
-    public static default: InfiniteCanvasState = new InfiniteCanvasState(InfiniteCanvasStateInstance.default, []);
+    public replaceCurrent(newCurrent: InfiniteCanvasStateInstance): InfiniteCanvasState{
+        return new InfiniteCanvasState(newCurrent, this.stack);
+    }
     public withChangedState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): StateChange<InfiniteCanvasState>{
         const stateChange: StateChange<InfiniteCanvasStateInstance> = change(this.current);
         return {
             newState: new InfiniteCanvasState(stateChange.newState, this.stack),
             instruction: stateChange.instruction
         };
+    }
+    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): InfiniteCanvasState{
+        return new InfiniteCanvasState(this.current.withClippedPath(clippedPath), this.stack);
     }
     public save(): StateChange<InfiniteCanvasState>{
         return {
@@ -38,30 +45,35 @@ export class InfiniteCanvasState{
             instruction: (context: CanvasRenderingContext2D) => {context.restore();}
         };
     }
-    private addChangesToRestoreToLastSavedInstance(currentChange: ChainableStateChange<InfiniteCanvasState>, lastSavedInstance: InfiniteCanvasStateInstance): ChainableStateChange<InfiniteCanvasState>{
+
+    private convertToLastSavedInstance(conversion: StateConversion, lastSavedInstance: InfiniteCanvasStateInstance): void{
         const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
         for(let i: number = this.stack.length - 1; i > indexOfLastSavedInstance; i--){
-            currentChange = currentChange.change(s => s.restore());
+            conversion.restore();
         }
-        return currentChange;
-    }
-    public addInstructionsToCreateFromLastSavedInstance(currentChange: ChainableStateChange<InfiniteCanvasState>, lastSavedInstance: InfiniteCanvasStateInstance): ChainableStateChange<InfiniteCanvasState>{
-        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
-        for(let i: number = indexOfLastSavedInstance + 1; i < this.stack.length; i++){
-            currentChange = currentChange.change(s => s.withChangedState(ss => ss.convertToState(this.stack[i])));
-            currentChange = currentChange.change(s => s.save());
-        }
-        currentChange = currentChange.change(s => s.withChangedState(ss => ss.convertToState(this.current)));
-        return currentChange;
-    }
-    public convertTo(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
-        let change: ChainableStateChange<InfiniteCanvasState> = new ChainableStateChange(this, []);
-        const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
-        change = this.addChangesToRestoreToLastSavedInstance(change, this.stack[indexOfHighestCommon]);
-        change = other.addInstructionsToCreateFromLastSavedInstance(change, other.stack[indexOfHighestCommon]);
-        return change;
     }
 
+    private convertFromLastSavedInstance(conversion: StateConversion, lastSavedInstance: InfiniteCanvasStateInstance): void{
+        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
+        for(let i: number = indexOfLastSavedInstance + 1; i < this.stack.length; i++){
+            conversion.changeCurrentInstanceTo(this.stack[i]);
+            conversion.save();
+        }
+        conversion.changeCurrentInstanceTo(this.current);
+    }
+
+    private convertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
+        const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
+        this.convertToLastSavedInstance(conversion, this.stack[indexOfHighestCommon]);
+        other.convertFromLastSavedInstance(conversion, other.stack[indexOfHighestCommon]);
+        return conversion;
+    }
+    public convertToState(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
+        return this.convertToStateUsingConversion(new StateConversion(this), other);
+    }
+    public convertToStateWithClippedPath(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
+        return this.convertToStateUsingConversion(new StateConversionWithClippedPaths(this), other);
+    }
     private static findIndexOfHighestCommon(one: InfiniteCanvasStateInstance[], other: InfiniteCanvasStateInstance[]): number{
         let result: number = 0;
         let lowestIndex: number = Math.min(one.length - 1, other.length - 1);

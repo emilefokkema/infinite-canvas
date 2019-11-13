@@ -10,10 +10,10 @@ export class ChainableStateChange<TSTate> implements StateChange<TSTate>{
         }
     }
     public change(change: (state: TSTate) => StateChange<TSTate>): ChainableStateChange<TSTate>{
-        const newStateChange: StateChange<TSTate> = change(this.newState);
-        if(newStateChange.instruction){
-            return new ChainableStateChange(newStateChange.newState, this.instructions.concat([newStateChange.instruction]));
+        const stateChange: StateChange<TSTate> = change(this.newState);
+        if(stateChange.instruction){
+            return new ChainableStateChange(stateChange.newState, this.instructions.concat([stateChange.instruction]));
         }
-        return new ChainableStateChange(newStateChange.newState, this.instructions);
+        return new ChainableStateChange(stateChange.newState, this.instructions);
     }
 }

@@ -46,6 +46,22 @@ export class Rectangle{
         const height: number = this.bottom - this.top;
         return PathInstructions.clearRect(x, y, width, height);
     }
+    public intersectWith(other: Rectangle): Rectangle{
+        if(this.contains(other)){
+            return other;
+        }
+        if(other.contains(this)){
+            return this;
+        }
+        if(!this.intersects(other)){
+            return undefined;
+        }
+        const newTop: number = Math.max(this.top, other.top);
+        const newBottom: number = Math.min(this.bottom, other.bottom);
+        const newLeft: number = Math.max(this.left, other.left);
+        const newRight: number = Math.min(this.right, other.right);
+        return new Rectangle(newLeft, newTop, newRight - newLeft, newBottom - newTop);
+    }
     public transform(transformation: Transformation): Rectangle{
         const transformedVertices: Point[] = this.vertices.map(p => transformation.apply(p));
         const transformedX: number[] = transformedVertices.map(p => p.x);

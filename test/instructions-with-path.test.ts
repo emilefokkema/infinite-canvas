@@ -4,6 +4,7 @@ import { logWithState } from "./log-with-state";
 import { PathInstructions } from "../src/instructions/path-instructions";
 import { Transformation } from "../src/transformation";
 import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { defaultState } from "../src/state/default-state";
 
 function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): string[]{
     instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
@@ -14,7 +15,7 @@ describe("a set of instructions that is also about a path", () => {
     let instructionsWithPath: InstructionsWithPath;
 
     beforeEach(() => {
-        instructionsWithPath = new InstructionsWithPath(InfiniteCanvasState.default);
+        instructionsWithPath = InstructionsWithPath.create(defaultState);
     });
 
     describe("that receives a change of state", () => {
@@ -94,7 +95,7 @@ describe("a set of instructions that is also about a path", () => {
         });
 
         it("should have the same area", () => {
-            expect(recreatedPath.area).toEqual(instructionsWithPath.area);
+            expect(recreatedPath.getClippedArea()).toEqual(instructionsWithPath.getClippedArea());
         });
 
         describe("and then the recreated path changes state", () => {
@@ -114,7 +115,7 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
     let instructionsWithPath: InstructionsWithPath;
 
     beforeEach(() => {
-        const initialState: InfiniteCanvasState = InfiniteCanvasState.default;
+        const initialState: InfiniteCanvasState = defaultState;
         instructionsWithPath = InstructionsWithPath.create(initialState, [PathInstructions.rect(0, 0, 1, 1)]);
         instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
             context.fill();

@@ -33,6 +33,7 @@ describe("an infinite canvas transformer", () => {
             beginPath(){},
             addPathInstruction(){},
             drawPath(){},
+            clipPath(){},
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };

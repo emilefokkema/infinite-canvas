@@ -1,12 +1,13 @@
 import { InfiniteCanvasStateAndInstruction } from "../src/instructions/infinite-canvas-state-and-instruction";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
+import { defaultState } from "../src/state/default-state";
 
 describe("a set of intructions that is only about state", () => {
     let instructionsWithState: InfiniteCanvasStateAndInstruction;
 
     beforeEach(() => {
-        instructionsWithState = new InfiniteCanvasStateAndInstruction(InfiniteCanvasState.default, () => {});
+        instructionsWithState = new InfiniteCanvasStateAndInstruction(defaultState, () => {});
     });
 
     describe("that receives a change", () => {

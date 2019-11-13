@@ -6,7 +6,11 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 	public beginPath(): void{
 		this.viewBox.beginPath();
 	}
-	public clip(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{}
+	public clip(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
+		this.viewBox.clipPath((context: CanvasRenderingContext2D) => {
+			context.clip();
+		});
+	}
 	public fill(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
 		this.viewBox.drawPath((context: CanvasRenderingContext2D) => {
 			context.fill();
