@@ -7,6 +7,7 @@
     <script type="application/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.9.1/dist/showdown.min.js"></script>
     <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js" data-manual></script>
     <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.css" rel="stylesheet" />
 </head>
@@ -15,12 +16,33 @@
 <div class="markdown language-js">
 # InfiniteCanvas
 ## About
-`InfiniteCanvas` makes any HTML `&lt;canvas&gt;` infinite in size, meaning that you can pan it in any direction and zoom out as far as you like, just like you would any Google Map. All it takes is one line of code:
+`InfiniteCanvas` makes any `&lt;canvas&gt;` element virtually infinite in size. Meaning that you can pan it in any direction and zoom out as far as you like, just like you would any Google Map. All it takes is a few lines of code:
 
-    // assuming canvas is an HTMLCanvasElement
-    var infCanvas = new InfiniteCanvas(canvas);
+    var infCanvas = new InfiniteCanvas(canvas); // assuming canvas is an HTMLCanvasElement
+    var ctx = infCanvas.getContext("2d");
 
-That's all! Now you can get a `CanvasRenderingContext2D` to draw on, using `infCanvas.getContext("2d")`. Here's a live example:
+That's all! This `ctx` is now a `CanvasRenderingContext2D`, which you can use to draw as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Here's a live example:
+</div>
+<div class="infinite-canvas-example">
+var infCanvas = new InfiniteCanvas(canvas);
+var ctx = infCanvas.getContext("2d");
+
+// Set line width
+ctx.lineWidth = 10;
+
+// Wall
+ctx.strokeRect(75, 140, 150, 110);
+
+// Door
+ctx.fillRect(130, 190, 40, 60);
+
+// Roof
+ctx.beginPath();
+ctx.moveTo(50, 140);
+ctx.lineTo(150, 60);
+ctx.lineTo(250, 140);
+ctx.closePath();
+ctx.stroke();
 </div>
 </div>
 
@@ -33,7 +55,44 @@ That's all! Now you can get a `CanvasRenderingContext2D` to draw on, using `infC
             var html = converter.makeHtml(md);
             markdownDivs[i].innerHTML = html;
         }
-        Prism.highlightAll();
+        var examplesCreated = false;
+        var createExample = function(exampleEl){
+            var code = exampleEl.textContent;
+            exampleEl.innerHTML = "";
+            var canvas;
+            var editorDiv = document.createElement("div");
+            editorDiv.setAttribute("class","example-editor");
+            exampleEl.appendChild(editorDiv);
+            var runButton = document.createElement("button");
+            runButton.innerHTML = "Run";
+            exampleEl.appendChild(runButton);
+            var editor = ace.edit(editorDiv);
+            editor.session.setMode("ace/mode/javascript");
+            editor.setValue(code);
+            editor.clearSelection();
+            var run = function(){
+                if(canvas){
+                    exampleEl.removeChild(canvas);
+                }
+                canvas = document.createElement("canvas");
+                canvas.setAttribute("width", 400);
+                canvas.setAttribute("height", 400);
+                exampleEl.insertBefore(canvas, editorDiv);
+                var f = new Function("canvas", editor.getValue());
+                f.apply(window, [canvas]);
+            };
+            run();
+        };
+        Prism.highlightAll(true, function(){
+            if(examplesCreated){
+                return;
+            }
+            var examples = document.querySelectorAll(".infinite-canvas-example");
+            for(var i=0; i<examples.length;i++){
+                createExample(examples[i]);
+            }
+            examplesCreated = true;
+        });
     })();
 </script>
 </body>

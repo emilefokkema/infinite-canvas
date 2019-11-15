@@ -13,6 +13,18 @@ body{
 p{
     line-height: 22px;
 }
+.infinite-canvas-example canvas{
+    display: inline-block;
+    width:400px;
+    height: 400px;
+    border: 1pt solid #eee;
+}
+.example-editor{
+    vertical-align: top;
+    width:400px;
+    height: 370px;
+    display: inline-block;
+}
 .inner{
     position: relative;
     width: 940px;
