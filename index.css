@@ -13,6 +13,7 @@ body{
 #githubLink{
     position:absolute;
     right: 0;
+    top: 0;
 }
 p{
     line-height: 22px;
