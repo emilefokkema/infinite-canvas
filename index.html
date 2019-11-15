@@ -83,6 +83,7 @@ ctx.stroke();
                 f.apply(window, [canvas]);
             };
             run();
+            runButton.addEventListener("click", run);
         };
         Prism.highlightAll(true, function(){
             if(examplesCreated){
