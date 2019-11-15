@@ -5,14 +5,25 @@
     <title>InfiniteCanvas</title>
     <script type="application/javascript" src="scripts/infinite-canvas.js"></script>
     <script type="application/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.9.1/dist/showdown.min.js"></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js" data-manual></script>
+    <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.css" rel="stylesheet" />
 </head>
 <body>
-<div class="markdown">
-# This
-is cool
- - a
- - b
+<div class="inner">
+<div class="markdown language-js">
+# InfiniteCanvas
+## About
+`InfiniteCanvas` makes any HTML `&lt;canvas&gt;` infinite in size, meaning that you can pan it in any direction and zoom out as far as you like, just like you would any Google Map. All it takes is one line of code:
+
+    // assuming canvas is an HTMLCanvasElement
+    var infCanvas = new InfiniteCanvas(canvas);
+
+That's all! Now you can get a `CanvasRenderingContext2D` to draw on, using `infCanvas.getContext("2d")`. Here's a live example:
 </div>
+</div>
+
 <script>
     (function(){
         var converter = new showdown.Converter();
@@ -22,6 +33,7 @@ is cool
             var html = converter.makeHtml(md);
             markdownDivs[i].innerHTML = html;
         }
+        Prism.highlightAll();
     })();
 </script>
 </body>

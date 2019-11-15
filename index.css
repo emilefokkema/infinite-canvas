@@ -1,0 +1,23 @@
+body{
+    background-color: #eee;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: block;
+    font-family: Georgia;
+}
+.inner::before{
+    display: table;
+    content: "";
+}
+p{
+    line-height: 22px;
+}
+.inner{
+    position: relative;
+    width: 940px;
+    margin: 0 auto;
+    overflow: visible;
+    background-color: #fff;
+    padding: 20px;
+}
