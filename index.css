@@ -18,17 +18,28 @@ body{
 p{
     line-height: 22px;
 }
+.infinite-canvas-example{
+    background-color: #ffffff;
+}
 .infinite-canvas-example canvas{
     display: inline-block;
     width:400px;
     height: 400px;
-    border: 1pt solid #eee;
+    border: 1pt solid #888;
+}
+.infinite-canvas-example button{
+    vertical-align: top;
+    margin-left: 5px;
+    cursor: pointer;
 }
 .example-editor{
     vertical-align: top;
     width:400px;
-    height: 370px;
+    height: 400px;
     display: inline-block;
+    border-color: #888;
+    border-width: 1pt 1pt 1pt 0;
+    border-style: solid;
 }
 .inner{
     position: relative;
