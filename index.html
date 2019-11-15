@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InfiniteCanvas</title>
+    <script type="application/javascript" src="scripts/infinite-canvas.js"></script>
+    <script type="application/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.9.1/dist/showdown.min.js"></script>
+</head>
+<body>
+<div class="markdown">
+# This
+is cool
+ - a
+ - b
+</div>
+<script>
+    (function(){
+        var converter = new showdown.Converter();
+        var markdownDivs = document.querySelectorAll(".markdown");
+        for(var i=0;i<markdownDivs.length;i++){
+            var md = markdownDivs[i].textContent;
+            var html = converter.makeHtml(md);
+            markdownDivs[i].innerHTML = html;
+        }
+    })();
+</script>
+</body>
+</html>
