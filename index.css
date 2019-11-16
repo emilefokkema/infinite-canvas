@@ -41,9 +41,13 @@ p{
     border-width: 1pt 1pt 1pt 0;
     border-style: solid;
 }
+@media screen and (min-width: 600px) {
+    .inner{
+        width: 940px;
+    }
+}
 .inner{
     position: relative;
-    width: 940px;
     margin: 0 auto;
     overflow: visible;
     background-color: #fff;
