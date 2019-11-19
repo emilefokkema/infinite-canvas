@@ -24,7 +24,7 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
         return this.contains(i => i.intersects(area));
     }
     public addClearRect(area: Rectangle): void{
-        this.add(new ClearRectWithState(this.state, area));
+        this.add(ClearRectWithState.create(this.state, area));
     }
     public clearContentsInsideArea(area: Rectangle): void{
         this.removeAll(i => i.isContainedBy(area));
@@ -34,6 +34,6 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
     }
 
     public static create(): PreviousInstructions{
-        return new PreviousInstructions(new InfiniteCanvasStateAndInstruction(defaultState, InfiniteCanvasStateInstance.setDefault));
+        return new PreviousInstructions(InfiniteCanvasStateAndInstruction.create(defaultState, InfiniteCanvasStateInstance.setDefault));
     }
 }

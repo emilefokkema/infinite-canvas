@@ -34,17 +34,17 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
     public drawPath(instruction: Instruction): void{
         const newlyDrawnArea: Rectangle = this.getCurrentlyDrawableArea();
         this.drawnArea = this.drawnArea ? this.drawnArea.expandToInclude(newlyDrawnArea) : newlyDrawnArea;
-        this.add(new PathInstructionWithState(this.state, instruction, true, false));
+        this.add(PathInstructionWithState.create(this.state, instruction, true, false));
         this.visible = true;
     }
     public clipPath(instruction: Instruction): void{
-        this.add(new PathInstructionWithState(this.state, instruction, true, true));
+        this.add(PathInstructionWithState.create(this.state, instruction, true, true));
         const clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.recreateClippedPath();
         this.addClippedPath(clippedPath);
     }
     public addPathInstruction(pathInstruction: PathInstruction): void{
         this.area = pathInstruction.changeArea.execute(this.state.current.transformation, this.area);
-        this.add(new PathInstructionWithState(this.state, pathInstruction.instruction, false, false));
+        this.add(PathInstructionWithState.create(this.state, pathInstruction.instruction, false, false));
     }
     public execute(context: CanvasRenderingContext2D, transformation: Transformation){
         if(!this.visible){
@@ -100,7 +100,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
     }
     public static create(initialState: InfiniteCanvasState, pathInstructions?: PathInstruction[]): InstructionsWithPath{
         const result: InstructionsWithPath = new InstructionsWithPath(
-            new InfiniteCanvasStateAndInstruction(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}));
+            InfiniteCanvasStateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}));
         if(!pathInstructions){
             return result;
         }

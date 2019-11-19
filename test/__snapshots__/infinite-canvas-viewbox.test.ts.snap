@@ -1323,6 +1323,48 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that saves, creates a path, fills two rects, restores and strokes should have the same number of saves and restores 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.setTransform(1,0,0,1,1,1)",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.stroke()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context whose state is changed and then draws something should have modified the context correctly 1`] = `
 Array [
   "context.restore()",

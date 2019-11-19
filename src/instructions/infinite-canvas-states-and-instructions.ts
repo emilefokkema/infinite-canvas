@@ -8,6 +8,6 @@ export class InfiniteCanvasStatesAndInstructions extends StateChangingInstructio
         super(initiallyWithState);
     }
     public static create(initialState: InfiniteCanvasState, initialInstruction: Instruction): InfiniteCanvasStatesAndInstructions{
-        return new InfiniteCanvasStatesAndInstructions(new InfiniteCanvasStateAndInstruction(initialState, initialInstruction));
+        return new InfiniteCanvasStatesAndInstructions(InfiniteCanvasStateAndInstruction.create(initialState, initialInstruction));
     }
 }
