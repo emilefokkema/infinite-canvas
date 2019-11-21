@@ -843,6 +843,21 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that makes a path, fills it, clears it completely with a clearRect, expands it and strokes it should no longer fill the path 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(1,2)",
+  "context.lineTo(2,2)",
+  "context.lineTo(2,1)",
+  "context.stroke()",
+]
+`;
+
 exports[`an infinite canvas context that saves state, begins a path, restores state and fills a rect should end up with an equal number of saves and restores 1`] = `
 Array [
   "context.restore()",

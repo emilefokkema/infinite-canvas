@@ -519,6 +519,25 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that makes a path, fills it, clears it completely with a clearRect, expands it and strokes it", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(1, 1);
+			infiniteContext.lineTo(1, 2);
+			infiniteContext.lineTo(2, 2);
+			infiniteContext.fill();
+			infiniteContext.clearRect(0, 0, 3, 3);
+			infiniteContext.lineTo(2, 1);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should no longer fill the path", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("that fills a rect, begins a new path, translates and then clears a rect", () => {
 
 		beforeEach(() => {
