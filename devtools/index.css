@@ -45,6 +45,36 @@ body.dark #dark{
 	width: 300px;
 	height: 300px;
 }
-canvas{
+.example canvas{
 	border: 1pt solid #000;
+}
+.diff-viewer{
+	position: fixed;
+	right:20px;
+	top: 20px;
+	background-color: #fff;
+	border: 1pt solid #000;
+	display: none;
+}
+.diff-viewer.visible{
+	display: block;
+}
+.diff-viewer .header .close{
+	float: right;
+	margin: 5px;
+	cursor: pointer;
+}
+.diff-viewer .header{
+	min-height: 30px;
+}
+.diff-viewer canvas{
+	margin-left: 30px;
+	margin-right: 30px;
+	margin-bottom: 30px;
+}
+.diff-viewer .header{
+	text-align: center;
+}
+.view-diff-link{
+	cursor: pointer;
 }

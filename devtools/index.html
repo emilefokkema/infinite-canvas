@@ -12,6 +12,16 @@
 	<template id="imageLinkTemplate">
 		<li><a v-bind:href="'#' + titleandindex.index">{{titleandindex.title}}</a></li>
 	</template>
+	<template id="diffViewerTemplate">
+		<div class="diff-viewer" v-bind:class="{visible:visible}">
+			<div class="header">
+				<span class="close" v-on:click="$emit('close')">x</span>
+			</div>
+			<div>
+				<canvas width="400" height="400" ref="canvas"></canvas>
+			</div>
+		</div>
+	</template>
 	<template id="exampleTemplate">
 		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
 			<div class="example-title" v-bind:id="example.index">{{example.title}}</div>
@@ -29,11 +39,13 @@
 					<input type="checkbox" v-model="greedyGestureHandling"/>
 					<label>greedy gesture handling</label> 
 				</div>
+				<span v-on:click="onViewDiff" class="view-diff-link" v-if="!imagesAreEqual">view diff</span>
 			</div>
 		</div>
 		
 	</template>
 	<div id="main">
+		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
 		<div v-if="numberSkipped > 0" class="warning">{{numberSkipped}} examples were skipped</div>
 		<div v-if="unequalImages.length > 0" class="danger">
 			<div>Not all images appear to be equal. Please inspect:</div>
@@ -44,10 +56,36 @@
 		</div>
 		<span id="dark" class="darklight">dark</span>
 		<span id="light" class="darklight">light</span>
-		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal"></example>
+		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal" v-on:viewdiff="onViewDiff"></example>
 	</div>
 	<script type="text/javascript">
 		(function(){
+			var canvasWidth = 400;
+			var canvasHeight = 400;
+			var compareImages = function(imageData1, imageData2){
+				var newData = new Uint8ClampedArray(4 * canvasWidth * canvasHeight);
+				var currentIndex = 0;
+				var data1 = imageData1.data;
+				var data2 = imageData2.data;
+				for(var r = 0; r < canvasHeight; r++){
+					for(var c = 0; c < canvasWidth; c++){
+						var rDif = data2[currentIndex] - data1[currentIndex];
+						var gDif = data2[currentIndex + 1] - data1[currentIndex + 1];
+						var bDif = data2[currentIndex + 2] - data1[currentIndex + 2];
+						var aDif = data2[currentIndex + 3] - data1[currentIndex + 3];
+						var redValue = 0;
+						if(rDif !== 0 || gDif !== 0 || bDif !== 0 || aDif !== 0){
+							redValue = rDif * rDif + gDif * gDif + bDif * bDif + aDif * aDif;
+						}
+						newData[currentIndex] = redValue;
+						newData[currentIndex + 1] = 0;
+						newData[currentIndex + 2] = 0;
+						newData[currentIndex + 3] = 255;
+						currentIndex += 4;
+					}
+				}
+				return new ImageData(newData, canvasWidth);
+			};
 			var functionLinePattern = "([^\\r\\n]*?)([^\\s][^\\r\\n]*)";
 			function getLinesFromFunction(f){
 				var functionMatch = f.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
@@ -686,10 +724,19 @@
 						examples:exaplesToShow,
 						dark:false,
 						numberSkipped: numberSkipped,
-						unequalImages: []
+						unequalImages: [],
+						viewDiff: false,
+						diffImageData: undefined
 					};
 				},
 				methods:{
+					onViewDiff:function(newImageData){
+						this.viewDiff = true;
+						this.diffImageData = newImageData;
+					},
+					onDiffViewerClose: function(){
+						this.viewDiff = false;
+					},
 					onImagesUnequal: function(titleAndIndex){
 						this.unequalImages.push(titleAndIndex);
 					},
@@ -736,6 +783,11 @@
 								imagesAreEqual: false
 							};
 						},
+						methods: {
+							onViewDiff: function(){
+								this.$emit("viewdiff", this.diffImageData);
+							}
+						},
 						watch:{
 							rotationEnabled:function(v){
 								this.infiniteCanvas.rotationEnabled = v;
@@ -773,6 +825,9 @@
 							var dataUrlInfinite = infCanvas.toDataURL();
 							this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
 							if(!this.imagesAreEqual){
+								var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+								var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+								this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
 								this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
 							}
 						}
@@ -781,8 +836,22 @@
 						template: document.getElementById("imageLinkTemplate").innerHTML,
 						props:{
 							titleandindex: Object
+						}
+					},
+					'diff-viewer': {
+						template: document.getElementById("diffViewerTemplate").innerHTML,
+						props:{
+							visible: Boolean,
+							imagedata: Object
 						},
-						mounted:function(){console.log(this.titleandindex);}
+						watch:{
+							imagedata:function(value){
+								if(!value){
+									return;
+								}
+								this.$refs.canvas.getContext("2d").putImageData(value, 0, 0);
+							}
+						}
 					}
 				}
 			});
