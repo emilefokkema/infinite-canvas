@@ -1182,7 +1182,6 @@ Array [
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
   "context.fill()",
-  "context.fill()",
   "context.restore()",
 ]
 `;
