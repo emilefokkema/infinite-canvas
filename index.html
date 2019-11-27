@@ -28,6 +28,14 @@ That's all! The variable `ctx` now holds a `CanvasRenderingContext2D`, which you
 var infCanvas = new InfiniteCanvas(canvas);
 var ctx = infCanvas.getContext("2d");
 
+//Earth
+ctx.beginPath();
+ctx.arc(150, 100250, 100000, 0, 2 * Math.PI);
+ctx.save();
+ctx.fillStyle = "#888";
+ctx.fill();
+ctx.restore();
+
 // Set line width
 ctx.lineWidth = 10;
 
