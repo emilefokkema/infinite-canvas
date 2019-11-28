@@ -16,7 +16,6 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
     protected reconstructState(instructionSetToChange: StateChangingInstructionSetWithCurrentState, stateToChangeTo: InfiniteCanvasState): void {
         instructionSetToChange.changeToStateWithClippedPaths(stateToChangeTo);
     }
-
     public hasDrawingAcrossBorderOf(area: Rectangle): boolean{
         return this.contains(i => i.hasDrawingAcrossBorderOf(area));
     }
@@ -27,12 +26,11 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
         this.add(ClearRectWithState.create(this.state, area));
     }
     public clearContentsInsideArea(area: Rectangle): void{
-        this.removeAll(i => i.isContainedBy(area));
+        this.removeAll(i => i.isContainedBy(area), instructionSet => instructionSet.destroy());
     }
     public isContainedBy(area: Rectangle): boolean {
         return !this.contains(i => !i.isContainedBy(area));
     }
-
     public static create(): PreviousInstructions{
         return new PreviousInstructions(InfiniteCanvasStateAndInstruction.create(defaultState, InfiniteCanvasStateInstance.setDefault));
     }

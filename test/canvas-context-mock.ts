@@ -4,6 +4,8 @@ export class CanvasContextMock{
     constructor(){
         const self: CanvasContextMock = this;
         this.logs = [];
+        let linearGradientId: number = 0;
+        let radialGradientId: number = 0;
         const methods: string[] = [
             "setLineDash",
             "clearRect",
@@ -32,6 +34,18 @@ export class CanvasContextMock{
                 self.logMethod(methodName, ...args);
             };
         }
+        this.mock.createLinearGradient = function(...args: any){
+            self.logMethod("createLinearGradient", ...args);
+            const returnValue: string  = `[linear-gradient-${linearGradientId++}]`;
+            self.logs.push(`=> ${returnValue}`);
+            return returnValue;
+        };
+        this.mock.createRadialGradient = function(...args: any){
+            self.logMethod("createRadialGradient", ...args);
+            const returnValue: string  = `[radial-gradient-${radialGradientId++}]`;
+            self.logs.push(`=> ${returnValue}`);
+            return returnValue;
+        };
         for(const setter of setters){
             Object.defineProperty(this.mock, setter, {
                 set:function(value: any){

@@ -33,10 +33,10 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
         }
         return result;
     }
-    public drawPath(instruction: Instruction): void{
+    public drawPath(instruction: Instruction, onDestroy?: () => void): void{
         const newlyDrawnArea: Rectangle = this.getCurrentlyDrawableArea();
         this.drawnArea = this.drawnArea ? this.drawnArea.expandToInclude(newlyDrawnArea) : newlyDrawnArea;
-        this.add(DrawingPathInstructionWithState.createDrawing(this.state, instruction, this.drawnArea));
+        this.add(DrawingPathInstructionWithState.createDrawing(this.state, instruction, this.drawnArea, onDestroy));
         this.visible = true;
     }
     public clipPath(instruction: Instruction): void{
@@ -81,7 +81,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
         if(!this.drawnArea || !this.visible){
             return;
         }
-        this.removeAll(i => i instanceof DrawingPathInstructionWithState && area.contains(i.drawnArea));
+        this.removeAll(i => i instanceof DrawingPathInstructionWithState && area.contains(i.drawnArea), instructionSet => instructionSet.destroy());
         if(area.contains(this.drawnArea)){
             this.visible = false;
         }

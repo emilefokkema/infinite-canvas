@@ -6,6 +6,7 @@ import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "
 import {lineDashesAreEqual} from "./line-dashes-are-equal";
 import {Rectangle} from "../rectangle";
 import {ChainableStateChange} from "./chainable-state-change";
+import {InfiniteCanvasFillStrokeStyle} from "../infinite-canvas-fill-stroke-style";
 
 export class InfiniteCanvasStateInstance{
     constructor(
@@ -53,15 +54,35 @@ export class InfiniteCanvasStateInstance{
         return new InfiniteCanvasStateInstance(this.fillStyle, this.lineWidth, this.lineDash, this.strokeStyle, this.lineDashOffset, this.transformation, newClippedPaths);
     }
 
+    private getFillStrokeStyleSettingInstruction(fillStrokeStyle: string | CanvasGradient | CanvasPattern, setFillStrokeStyle: (context: CanvasRenderingContext2D, fillStrokeStyle: string | CanvasGradient | CanvasPattern) => void): Instruction{
+        if(fillStrokeStyle instanceof InfiniteCanvasFillStrokeStyle){
+            return (context: CanvasRenderingContext2D) => {
+                setFillStrokeStyle(context, fillStrokeStyle.fillStrokeStyle)
+            }
+        }else{
+            return (context: CanvasRenderingContext2D) => {
+                setFillStrokeStyle(context, fillStrokeStyle);
+            }
+        }
+    }
+
     public setFillStyle(value: string | CanvasGradient | CanvasPattern): StateChange<InfiniteCanvasStateInstance>{
         if(value === this.fillStyle){
             return this.noStateChange();
         }
         return {
             newState: new InfiniteCanvasStateInstance(value, this.lineWidth, this.lineDash, this.strokeStyle, this.lineDashOffset, this.transformation, this.clippedPaths),
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                context.fillStyle = value;
-            }
+            instruction: this.getFillStrokeStyleSettingInstruction(value, (context, style) => context.fillStyle = style)
+        };
+    }
+
+    public setStrokeStyle(strokeStyle: string | CanvasGradient | CanvasPattern): StateChange<InfiniteCanvasStateInstance>{
+        if(this.strokeStyle === strokeStyle){
+            return this.noStateChange();
+        }
+        return {
+            newState: new InfiniteCanvasStateInstance(this.fillStyle, this.lineWidth, this.lineDash, strokeStyle, this.lineDashOffset, this.transformation, this.clippedPaths),
+            instruction: this.getFillStrokeStyleSettingInstruction(strokeStyle, (context, style) => context.strokeStyle = style)
         };
     }
 
@@ -85,18 +106,6 @@ export class InfiniteCanvasStateInstance{
             newState: new InfiniteCanvasStateInstance(this.fillStyle, this.lineWidth, lineDash, this.strokeStyle, this.lineDashOffset, this.transformation, this.clippedPaths),
             instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
                 context.setLineDash(lineDash.map(d => d * transformation.scale));
-            }
-        };
-    }
-
-    public setStrokeStyle(strokeStyle: string | CanvasGradient | CanvasPattern): StateChange<InfiniteCanvasStateInstance>{
-        if(this.strokeStyle === strokeStyle){
-            return this.noStateChange();
-        }
-        return {
-            newState: new InfiniteCanvasStateInstance(this.fillStyle, this.lineWidth, this.lineDash, strokeStyle, this.lineDashOffset, this.transformation, this.clippedPaths),
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                context.strokeStyle = strokeStyle;
             }
         };
     }

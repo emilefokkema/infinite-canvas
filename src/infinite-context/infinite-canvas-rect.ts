@@ -7,9 +7,9 @@ export class InfiniteCanvasRect implements CanvasRect{
         this.viewBox.clearArea(x, y, w, h);
     }
     public fillRect(x: number, y: number, w: number, h: number): void{
-        this.viewBox.drawPath((context: CanvasRenderingContext2D) => context.fill(), [PathInstructions.rect(x, y, w, h)])
+        this.viewBox.drawPath((context: CanvasRenderingContext2D) => context.fill(), state => state.fillStyle, [PathInstructions.rect(x, y, w, h)])
     }
     public strokeRect(x: number, y: number, w: number, h: number): void{
-        this.viewBox.drawPath((context: CanvasRenderingContext2D) => context.stroke(), [PathInstructions.rect(x, y, w, h)]);
+        this.viewBox.drawPath((context: CanvasRenderingContext2D) => context.stroke(), state => state.strokeStyle, [PathInstructions.rect(x, y, w, h)]);
     }
 }

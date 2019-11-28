@@ -32,6 +32,8 @@ describe("an infinite canvas transformer", () => {
             clearArea(){},
             beginPath(){},
             addPathInstruction(){},
+            createLinearGradient(){return undefined},
+            createRadialGradient(){return undefined},
             drawPath(){},
             clipPath(){},
             get transformation(): Transformation{return currentTransformation;},
