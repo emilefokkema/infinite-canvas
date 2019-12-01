@@ -723,7 +723,7 @@
 								ctx.strokeStyle = gradient;
 								ctx.strokeRect(0, 0, 200, 200);
 							},
-							title: "stroke using gradient"
+							title: "stroke using linear gradient"
 						},
 						{
 							code: function(ctx){
@@ -740,7 +740,29 @@
 								// Set the fill style and draw a rectangle
 								ctx.fillStyle = gradient;
 								ctx.fillRect(20, 20, 160, 160);
-							}
+							},
+							title: "fill using radial gradient"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.rect(10, 10, 100, 100);
+								ctx.rect(30, 30, 30, 30);
+								ctx.fill("evenodd");
+							},
+							title: "fill using a fill rule"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.rect(10, 10, 100, 100);
+								ctx.rect(30, 30, 30, 30);
+								ctx.clip("evenodd");
+								ctx.beginPath();
+								ctx.arc(60, 60, 50 * (2 + Math.sqrt(2)) / 3, 0, 2 * Math.PI);
+								ctx.fill();
+							},
+							title: "clip using a fill rule"
 						}
 					];
 			new Vue({

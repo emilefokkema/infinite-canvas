@@ -71,6 +71,27 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that makes a path consisting of two subpaths", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(10, 10, 100, 100);
+			infiniteContext.rect(30, 30, 30, 30);
+		});
+
+		describe("and the fills it using a fill rule", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fill("evenodd");
+			});
+
+			it("should take the fill rule into account", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
 	describe("that makes a path, fills a rect, fills the path, begins a new path and then clears a rect containing the first drawn path", () => {
 
 		beforeEach(() => {

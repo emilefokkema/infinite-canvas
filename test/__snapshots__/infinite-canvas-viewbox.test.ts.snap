@@ -1588,6 +1588,27 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that makes a path consisting of two subpaths and the fills it using a fill rule should take the fill rule into account 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(110,10)",
+  "context.lineTo(110,110)",
+  "context.lineTo(10,110)",
+  "context.lineTo(10,10)",
+  "context.moveTo(30,30)",
+  "context.lineTo(60,30)",
+  "context.lineTo(60,60)",
+  "context.lineTo(30,60)",
+  "context.lineTo(30,30)",
+  "context.fill(\\"evenodd\\")",
+]
+`;
+
 exports[`an infinite canvas context that makes a path, fills a rect, fills the path, begins a new path and then clears a rect containing the first drawn path should forget the first drawn path 1`] = `
 Array [
   "context.restore()",
