@@ -15,6 +15,10 @@ export function mapTouchEvents(
             if(touches.length === 1 && !config.greedyGestureHandling){
                 return true;
             }
+            if(!ev.cancelable){
+                console.log("touchstart event was not cancelable");
+                return true;
+            }
             for(let i = 0; i <  touches.length; i++){
                 const touch: Touch = touches[i];
                 const identifier: number = touch.identifier;

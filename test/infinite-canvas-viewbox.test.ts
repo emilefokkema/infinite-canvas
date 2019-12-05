@@ -16,7 +16,7 @@ describe("an infinite canvas context", () => {
 		height = 200;
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
-		viewbox = new InfiniteCanvasViewBox(width, height, context);
+		viewbox = new InfiniteCanvasViewBox(width, height, context, {provideDrawingIteration(draw: () => void): void {draw();}});
 		infiniteContext = new InfiniteContext(undefined, viewbox);
 	});
 

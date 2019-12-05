@@ -880,15 +880,18 @@
 							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 							this.example.code(regularContext);
 							this.example.code(infiniteContext);
-							var dataUrlRegular = canvas.toDataURL();
-							var dataUrlInfinite = infCanvas.toDataURL();
-							this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
-							if(!this.imagesAreEqual){
-								var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-								var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-								this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
-								this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
-							}
+							this.infiniteCanvas.addEventListener("draw", () => {
+								var dataUrlRegular = canvas.toDataURL();
+								var dataUrlInfinite = infCanvas.toDataURL();
+								this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								if(!this.imagesAreEqual){
+									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
+									this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
+								}
+							}, {once: true});
+
 						}
 					},
 					'image-link':{

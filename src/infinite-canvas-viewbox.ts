@@ -6,6 +6,7 @@ import { PathInstruction } from "./interfaces/path-instruction";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
+import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider";
 import {InfiniteCanvasLinearGradient} from "./infinite-canvas-linear-gradient";
 import {InfiniteCanvasAuxiliaryObject} from "./infinite-canvas-auxiliary-object";
 import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
@@ -14,15 +15,15 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
 	private _transformation: Transformation;
 	private _auxiliaryObjects: InfiniteCanvasAuxiliaryObject[] = [];
-	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D){
-		this.instructionSet = new InfiniteCanvasInstructionSet(() => this.draw());
+	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D, private readonly drawingIterationProvider: DrawingIterationProvider){
+		this.instructionSet = new InfiniteCanvasInstructionSet(() => drawingIterationProvider.provideDrawingIteration(() => this.draw()));
 		this._transformation = Transformation.identity;
 	}
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
 	public get transformation(): Transformation{return this._transformation};
 	public set transformation(value: Transformation){
 		this._transformation = value;
-		this.draw();
+		this.drawingIterationProvider.provideDrawingIteration(() => this.draw());
 	}
 	public changeState(instruction: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
 		this.instructionSet.changeState(instruction);
