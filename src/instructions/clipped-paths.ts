@@ -52,7 +52,7 @@ export class ClippedPaths {
             if(!result){
                 result = InfiniteCanvasStatesAndInstructions.create(instructionAndStateFromThis.state, instructionAndStateFromThis.instruction);
             }else{
-                const toAdd: InfiniteCanvasStateAndInstruction = new InfiniteCanvasStateAndInstruction(instructionAndStateFromThis.state, instructionAndStateFromThis.instruction);
+                const toAdd: InfiniteCanvasStateAndInstruction = InfiniteCanvasStateAndInstruction.create(instructionAndStateFromThis.state, instructionAndStateFromThis.instruction);
                 result.changeToState(toAdd.initialState);
                 result.add(toAdd);
             }

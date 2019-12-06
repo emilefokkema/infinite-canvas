@@ -8,12 +8,13 @@ import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "
 import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
 
 export abstract class StateAndInstruction implements StateChangingInstructionSetWithCurrentState{
-    public state: InfiniteCanvasState;
-    private initialStateChangeInstruction: Instruction;
-    private stateForInstruction: InfiniteCanvasState;
-    protected constructor(private _initialState: InfiniteCanvasState, protected readonly initialInstruction: Instruction, protected stateChangeInstruction?: Instruction, currentState?: InfiniteCanvasState){
-        this.state = currentState || _initialState;
-        this.stateForInstruction = _initialState;
+    protected constructor(
+        private _initialState: InfiniteCanvasState,
+        protected readonly initialInstruction: Instruction,
+        protected stateChangeInstruction: Instruction,
+        public state: InfiniteCanvasState,
+        protected initialStateChangeInstruction: Instruction,
+        protected readonly stateForInstruction: InfiniteCanvasState){
     }
     private change(change: (state: InfiniteCanvasState) => StateChange<InfiniteCanvasState>): void{
         this.changeToState(change(this.state).newState)
@@ -24,6 +25,8 @@ export abstract class StateAndInstruction implements StateChangingInstructionSet
     }
     public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
         this.change(s => s.withChangedState(change));
+    }
+    public destroy(): void {
     }
     public getAllInstructionsAndStates(): InstructionAndState[]{
         return [{instruction: this.initialInstruction, state: this.stateForInstruction}];

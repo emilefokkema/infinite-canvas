@@ -16,7 +16,7 @@ describe("an infinite canvas context", () => {
 		height = 200;
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
-		viewbox = new InfiniteCanvasViewBox(width, height, context);
+		viewbox = new InfiniteCanvasViewBox(width, height, context, {provideDrawingIteration(draw: () => void): void {draw();}});
 		infiniteContext = new InfiniteContext(undefined, viewbox);
 	});
 
@@ -66,6 +66,27 @@ describe("an infinite canvas context", () => {
 			});
 
 			it("should not have forgotten the previous path", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
+	describe("that makes a path consisting of two subpaths", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(10, 10, 100, 100);
+			infiniteContext.rect(30, 30, 30, 30);
+		});
+
+		describe("and the fills it using a fill rule", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fill("evenodd");
+			});
+
+			it("should take the fill rule into account", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
@@ -382,6 +403,28 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that saves, creates a path, fills two rects, restores and strokes", () => {
+
+		beforeEach(() => {
+			infiniteContext.save();
+			infiniteContext.translate(1, 1);
+			infiniteContext.beginPath();
+			infiniteContext.rect(0, 0, 1, 1);
+			infiniteContext.save();
+			infiniteContext.fillRect(0, 0, 1, 1);
+			infiniteContext.fillRect(0, 0, 1, 1);
+			infiniteContext.restore();
+			infiniteContext.stroke();
+			infiniteContext.restore();
+			contextMock.clear();
+			infiniteContext.fillRect(0, 0, 1, 1)
+		});
+
+		it("should have the same number of saves and restores", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("that saves, begins a path, begins another path, fills it, restores and then fills a rect", () => {
 
 		beforeEach(() => {
@@ -494,6 +537,25 @@ describe("an infinite canvas context", () => {
 			it("should have set the transformed version of the state", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
+		});
+	});
+
+	describe("that makes a path, fills it, clears it completely with a clearRect, expands it and strokes it", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(1, 1);
+			infiniteContext.lineTo(1, 2);
+			infiniteContext.lineTo(2, 2);
+			infiniteContext.fill();
+			infiniteContext.clearRect(0, 0, 3, 3);
+			infiniteContext.lineTo(2, 1);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should no longer fill the path", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
 
@@ -1076,6 +1138,186 @@ describe("an infinite canvas context", () => {
 
 					it("should still contain the clipping instruction", () => {
 						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+				});
+			});
+		});
+	});
+
+	describe.each([
+		[
+			"linear gradient",
+			"fills",
+			(context: InfiniteContext) => context.createLinearGradient(10, 0, 10, 30),
+			(context: InfiniteContext) => context.fill(),
+			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
+			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
+		],
+		[
+			"linear gradient",
+			"strokes",
+			(context: InfiniteContext) => context.createLinearGradient(10, 0, 10, 30),
+			(context: InfiniteContext) => context.stroke(),
+			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
+			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
+		],
+		[
+			"radial gradient",
+			"fills",
+			(context: InfiniteContext) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
+			(context: InfiniteContext) => context.fill(),
+			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
+			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
+		],
+		[
+			"radial gradient",
+			"strokes",
+			(context: InfiniteContext) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
+			(context: InfiniteContext) => context.stroke(),
+			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
+			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
+		]
+	])(`that creates a %s`, (
+		fillStrokeStyleName: string,
+		drawingVerb: string,
+		createFillStrokeStyle: (context: InfiniteContext) => CanvasGradient | CanvasPattern,
+		drawPath: (context: InfiniteContext) => void,
+		drawRect: (context: InfiniteContext, x: number, y: number, w:number, h:number) => void,
+		setFillStrokeStyle:(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => void) => {
+		let fillStrokeStyle: CanvasGradient | CanvasPattern;
+
+		beforeEach(() => {
+			fillStrokeStyle = createFillStrokeStyle(infiniteContext);
+		});
+
+		describe("and then creates a path", () => {
+
+			beforeEach(() => {
+				infiniteContext.beginPath();
+				infiniteContext.moveTo(1, 1);
+				infiniteContext.lineTo(1, 2);
+				infiniteContext.lineTo(2, 2);
+				infiniteContext.lineTo(2, 1);
+			});
+
+			describe(`and then ${drawingVerb} using the ${fillStrokeStyleName}`, () => {
+
+				beforeEach(() => {
+					setFillStrokeStyle(infiniteContext, fillStrokeStyle);
+					contextMock.clear();
+					drawPath(infiniteContext);
+				});
+
+				it(`should have created a ${fillStrokeStyleName}`, () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+
+				describe("and then clears the drawing", () => {
+
+					beforeEach(() => {
+						contextMock.clear();
+						infiniteContext.clearRect(0, 0, 3, 3);
+					});
+
+					it(`should no longer create a ${fillStrokeStyleName}`, () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+
+					describe(`and then ${drawingVerb} the path again`, () => {
+
+						beforeEach(() => {
+							contextMock.clear();
+							drawPath(infiniteContext);
+						});
+
+						it(`should create a ${fillStrokeStyleName} again`, () => {
+							expect(contextMock.getLog()).toMatchSnapshot();
+						});
+					});
+				});
+			});
+		});
+
+		describe(`and then draws without using the ${fillStrokeStyleName}`, () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				drawRect(infiniteContext, 0, 0, 10, 10)
+			});
+
+			it(`should not have created a ${fillStrokeStyleName}`, () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe(`and then ${drawingVerb} using the ${fillStrokeStyleName}`, () => {
+
+				beforeEach(() => {
+					setFillStrokeStyle(infiniteContext, fillStrokeStyle);
+					contextMock.clear();
+					drawRect(infiniteContext, 30, 0, 10, 10)
+				});
+
+				it(`should have created a ${fillStrokeStyleName}`, () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+
+				describe(`and then ${drawingVerb} again using the same ${fillStrokeStyleName}`, () => {
+
+					beforeEach(() => {
+						contextMock.clear();
+						drawRect(infiniteContext, 50, 0, 10, 10);
+					});
+
+					it(`should still have created only one ${fillStrokeStyleName}`, () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+
+					describe(`and then clears both drawings with the ${fillStrokeStyleName}`, () => {
+
+						beforeEach(() => {
+							contextMock.clear();
+							infiniteContext.clearRect(25, -1, 50, 12);
+						});
+
+						it(`should not have created a ${fillStrokeStyleName}`, () => {
+							expect(contextMock.getLog()).toMatchSnapshot();
+						});
+					});
+
+					describe(`and then clears one drawing with the ${fillStrokeStyleName}`, () => {
+
+						beforeEach(() => {
+							contextMock.clear();
+							infiniteContext.clearRect(15, -1, 30, 12);
+						});
+
+						it(`should still have created only one ${fillStrokeStyleName}`, () => {
+							expect(contextMock.getLog()).toMatchSnapshot();
+						});
+
+						describe(`and then clears the other drawing with the ${fillStrokeStyleName}`, () => {
+
+							beforeEach(() => {
+								contextMock.clear();
+								infiniteContext.clearRect(45, -1, 20, 12);
+							});
+
+							it(`should not have created a ${fillStrokeStyleName}`, () => {
+								expect(contextMock.getLog()).toMatchSnapshot();
+							});
+
+							describe(`and then draws again using the ${fillStrokeStyleName}`, () => {
+
+								beforeEach(() => {
+									contextMock.clear();
+									drawRect(infiniteContext, 30, 0, 10, 10)
+								});
+
+								it(`should have created a ${fillStrokeStyleName}`, () => {
+									expect(contextMock.getLog()).toMatchSnapshot();
+								});
+							});
+						});
 					});
 				});
 			});

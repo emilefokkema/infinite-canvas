@@ -32,6 +32,12 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         return result;
     }
+    public destroy(): void {
+        this.initiallyWithState.destroy();
+        for(const added of this.added){
+            added.destroy();
+        }
+    }
     public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
         this.currentlyWithState.addClippedPath(clippedPath);
     }
@@ -39,10 +45,10 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         this.added.push(instructionSet);
         this.addedLast = instructionSet;
     }
-    public removeAll(predicate: (instructionSet: TInstructionSet) => boolean): void{
+    public removeAll(predicate: (instructionSet: TInstructionSet) => boolean, removeInstructionSet: (instructionSet: TInstructionSet) => void = () => {}): void{
         let indexToRemove: number;
         while((indexToRemove = this.added.findIndex(predicate)) > -1){
-            this.removeAtIndex(indexToRemove);
+            this.removeAtIndex(indexToRemove, removeInstructionSet);
         }
     }
     public contains(predicate: (instructionSet: TInstructionSet) => boolean): boolean{
@@ -79,10 +85,8 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         return this.added[index - 1];
     }
-    private stateAfterIndex(index: number): InfiniteCanvasState{
-        return this.added[index].state;
-    }
-    private removeAtIndex(index: number){
+    private removeAtIndex(index: number, removeInstructionSet: (instructionSet: TInstructionSet) => void){
+        const instructionSetToRemove: TInstructionSet = this.added[index];
         if(index === this.added.length - 1){
             if(this.added.length === 1){
                 this.addedLast = undefined;
@@ -90,7 +94,8 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
                 this.addedLast = this.added[index - 1];
             }
         }
-        this.reconstructState(this.beforeIndex(index), this.stateAfterIndex(index));
+        this.reconstructState(this.beforeIndex(index), instructionSetToRemove.state);
         this.added.splice(index, 1);
+        removeInstructionSet(instructionSetToRemove);
     }
 }

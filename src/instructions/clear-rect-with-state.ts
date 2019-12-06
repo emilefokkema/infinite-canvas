@@ -5,8 +5,8 @@ import { StateAndInstruction } from "./state-and-instruction";
 import {Instruction} from "./instruction";
 
 export class ClearRectWithState extends StateAndInstruction implements StateChangingInstructionSetWithCurrentStateAndArea{
-    constructor(initialState: InfiniteCanvasState, public area: Rectangle, stateChangeInstruction?: Instruction, currentState?: InfiniteCanvasState){
-        super(initialState, area.getInstructionToClear().instruction, stateChangeInstruction, currentState);
+    constructor(initialState: InfiniteCanvasState, public area: Rectangle, stateChangeInstruction: Instruction, currentState: InfiniteCanvasState, initialStateChangeInstruction: Instruction, stateForInstruction: InfiniteCanvasState){
+        super(initialState, area.getInstructionToClear().instruction, stateChangeInstruction, currentState, initialStateChangeInstruction, stateForInstruction);
     }
     public hasDrawingAcrossBorderOf(area: Rectangle): boolean{
         return false;
@@ -16,5 +16,8 @@ export class ClearRectWithState extends StateAndInstruction implements StateChan
     }
     public isContainedBy(area: Rectangle): boolean {
         return area.contains(this.area);
+    }
+    public static create(initialState: InfiniteCanvasState, area: Rectangle): ClearRectWithState{
+        return new ClearRectWithState(initialState, area, undefined, initialState, undefined, initialState);
     }
 }

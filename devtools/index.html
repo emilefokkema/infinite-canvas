@@ -12,6 +12,16 @@
 	<template id="imageLinkTemplate">
 		<li><a v-bind:href="'#' + titleandindex.index">{{titleandindex.title}}</a></li>
 	</template>
+	<template id="diffViewerTemplate">
+		<div class="diff-viewer" v-bind:class="{visible:visible}">
+			<div class="header">
+				<span class="close" v-on:click="$emit('close')">x</span>
+			</div>
+			<div>
+				<canvas width="400" height="400" ref="canvas"></canvas>
+			</div>
+		</div>
+	</template>
 	<template id="exampleTemplate">
 		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
 			<div class="example-title" v-bind:id="example.index">{{example.title}}</div>
@@ -29,11 +39,13 @@
 					<input type="checkbox" v-model="greedyGestureHandling"/>
 					<label>greedy gesture handling</label> 
 				</div>
+				<span v-on:click="onViewDiff" class="view-diff-link" v-if="!imagesAreEqual">view diff</span>
 			</div>
 		</div>
 		
 	</template>
 	<div id="main">
+		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
 		<div v-if="numberSkipped > 0" class="warning">{{numberSkipped}} examples were skipped</div>
 		<div v-if="unequalImages.length > 0" class="danger">
 			<div>Not all images appear to be equal. Please inspect:</div>
@@ -44,10 +56,36 @@
 		</div>
 		<span id="dark" class="darklight">dark</span>
 		<span id="light" class="darklight">light</span>
-		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal"></example>
+		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal" v-on:viewdiff="onViewDiff"></example>
 	</div>
 	<script type="text/javascript">
 		(function(){
+			var canvasWidth = 400;
+			var canvasHeight = 400;
+			var compareImages = function(imageData1, imageData2){
+				var newData = new Uint8ClampedArray(4 * canvasWidth * canvasHeight);
+				var currentIndex = 0;
+				var data1 = imageData1.data;
+				var data2 = imageData2.data;
+				for(var r = 0; r < canvasHeight; r++){
+					for(var c = 0; c < canvasWidth; c++){
+						var rDif = data2[currentIndex] - data1[currentIndex];
+						var gDif = data2[currentIndex + 1] - data1[currentIndex + 1];
+						var bDif = data2[currentIndex + 2] - data1[currentIndex + 2];
+						var aDif = data2[currentIndex + 3] - data1[currentIndex + 3];
+						var redValue = 0;
+						if(rDif !== 0 || gDif !== 0 || bDif !== 0 || aDif !== 0){
+							redValue = rDif * rDif + gDif * gDif + bDif * bDif + aDif * aDif;
+						}
+						newData[currentIndex] = redValue;
+						newData[currentIndex + 1] = 0;
+						newData[currentIndex + 2] = 0;
+						newData[currentIndex + 3] = 255;
+						currentIndex += 4;
+					}
+				}
+				return new ImageData(newData, canvasWidth);
+			};
 			var functionLinePattern = "([^\\r\\n]*?)([^\\s][^\\r\\n]*)";
 			function getLinesFromFunction(f){
 				var functionMatch = f.toString().match(/^\s*function\s*\([^)]*\)\s*\{([\w\W]*?)\}\s*$/);
@@ -620,6 +658,111 @@
 								ctx.fill();
 							},
 							title: "save, clip twice, fill, make rect, restore and fill"
+						},
+						{
+							code:function(ctx){
+								ctx.save();
+								ctx.translate(100, 100);
+								ctx.beginPath();
+								ctx.rect(0, 0, 90, 90);
+								ctx.save();
+								ctx.fillStyle = "#bbb"
+								ctx.fillRect(0, 0, 100, 100);
+								ctx.fillRect(0, 0, 100, 50);
+								ctx.restore();
+								ctx.stroke();
+								ctx.restore();
+								ctx.fillRect(0, 0, 20, 20)
+							},
+							title: "save, create path, fill two rects, restore and stroke"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.moveTo(10, 10);
+								ctx.lineTo(10, 90);
+								ctx.lineTo(90, 90);
+								ctx.fill();
+								ctx.clearRect(0, 0, 100, 100);
+								ctx.lineTo(90, 10);
+								ctx.stroke();
+							},
+							title: "make path, fill, clearRect and stroke"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.moveTo(30, 10);
+								ctx.lineTo(10, 10);
+								ctx.lineTo(10, 90);
+								ctx.lineTo(30, 90);
+								ctx.fillStyle = "#f00";
+								ctx.fill();
+								ctx.lineTo(90, 90);
+								ctx.fillStyle = "#00f";
+								ctx.fill();
+								ctx.clearRect(0, 0, 40, 100);
+							},
+							title: "make path, fill, expand, fill, clearRect"
+						},
+						{
+							code:function(ctx){
+								var gradient = ctx.createLinearGradient(0, 0, 0, 100);
+								gradient.addColorStop(0, "#f00");
+								gradient.addColorStop(1, "#00f");
+								ctx.fillStyle = gradient;
+								ctx.fillRect(0, 0, 200, 200);
+							},
+							title: "fill using gradient"
+						},
+						{
+							code:function(ctx){
+								var gradient = ctx.createLinearGradient(0, 0, 0, 100);
+								gradient.addColorStop(0, "#f00");
+								gradient.addColorStop(1, "#00f");
+								ctx.strokeStyle = gradient;
+								ctx.strokeRect(0, 0, 200, 200);
+							},
+							title: "stroke using linear gradient"
+						},
+						{
+							code: function(ctx){
+								// Create a radial gradient
+								// The inner circle is at x=110, y=90, with radius=30
+								// The outer circle is at x=100, y=100, with radius=70
+								var gradient = ctx.createRadialGradient(110,90,30, 100,100,70);
+
+								// Add three color stops
+								gradient.addColorStop(0, 'pink');
+								gradient.addColorStop(.9, 'white');
+								gradient.addColorStop(1, 'green');
+
+								// Set the fill style and draw a rectangle
+								ctx.fillStyle = gradient;
+								ctx.fillRect(20, 20, 160, 160);
+							},
+							title: "fill using radial gradient"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.rect(10, 10, 100, 100);
+								ctx.rect(30, 30, 30, 30);
+								ctx.fill("evenodd");
+							},
+							title: "fill using a fill rule"
+						},
+						{
+							code:function(ctx){
+								ctx.beginPath();
+								ctx.rect(10, 10, 100, 100);
+								ctx.rect(30, 30, 30, 30);
+								ctx.clip("evenodd");
+								ctx.beginPath();
+								ctx.arc(60, 60, 50 * (2 + Math.sqrt(2)) / 3, 0, 2 * Math.PI);
+								ctx.fill();
+							},
+							title: "clip using a fill rule"
 						}
 					];
 			new Vue({
@@ -640,10 +783,19 @@
 						examples:exaplesToShow,
 						dark:false,
 						numberSkipped: numberSkipped,
-						unequalImages: []
+						unequalImages: [],
+						viewDiff: false,
+						diffImageData: undefined
 					};
 				},
 				methods:{
+					onViewDiff:function(newImageData){
+						this.viewDiff = true;
+						this.diffImageData = newImageData;
+					},
+					onDiffViewerClose: function(){
+						this.viewDiff = false;
+					},
 					onImagesUnequal: function(titleAndIndex){
 						this.unequalImages.push(titleAndIndex);
 					},
@@ -690,6 +842,11 @@
 								imagesAreEqual: false
 							};
 						},
+						methods: {
+							onViewDiff: function(){
+								this.$emit("viewdiff", this.diffImageData);
+							}
+						},
 						watch:{
 							rotationEnabled:function(v){
 								this.infiniteCanvas.rotationEnabled = v;
@@ -723,20 +880,40 @@
 							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 							this.example.code(regularContext);
 							this.example.code(infiniteContext);
-							var dataUrlRegular = canvas.toDataURL();
-							var dataUrlInfinite = infCanvas.toDataURL();
-							this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
-							if(!this.imagesAreEqual){
-								this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
-							}
+							this.infiniteCanvas.addEventListener("draw", () => {
+								var dataUrlRegular = canvas.toDataURL();
+								var dataUrlInfinite = infCanvas.toDataURL();
+								this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								if(!this.imagesAreEqual){
+									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
+									this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
+								}
+							}, {once: true});
+
 						}
 					},
 					'image-link':{
 						template: document.getElementById("imageLinkTemplate").innerHTML,
 						props:{
 							titleandindex: Object
+						}
+					},
+					'diff-viewer': {
+						template: document.getElementById("diffViewerTemplate").innerHTML,
+						props:{
+							visible: Boolean,
+							imagedata: Object
 						},
-						mounted:function(){console.log(this.titleandindex);}
+						watch:{
+							imagedata:function(value){
+								if(!value){
+									return;
+								}
+								this.$refs.canvas.getContext("2d").putImageData(value, 0, 0);
+							}
+						}
 					}
 				}
 			});

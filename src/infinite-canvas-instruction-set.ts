@@ -37,11 +37,11 @@ export class InfiniteCanvasInstructionSet {
         this.setInstructionToRestoreState();
     }
 
-    public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
+    public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[], onDestroy?: () => void): void{
         if(pathInstructions){
-            this.drawPathInstructions(pathInstructions, instruction);
+            this.drawPathInstructions(pathInstructions, instruction, onDestroy);
         }else{
-            this.drawCurrentPath(instruction);
+            this.drawCurrentPath(instruction, onDestroy);
         }
         this.onChange();
     }
@@ -66,11 +66,11 @@ export class InfiniteCanvasInstructionSet {
         this.setInstructionToRestoreState();
     }
 
-    private drawCurrentPath(instruction: Instruction): void{
+    private drawCurrentPath(instruction: Instruction, onDestroy: () => void): void{
         if(!this.currentInstructionsWithPath){
             return;
         }
-        this.currentInstructionsWithPath.drawPath(instruction);
+        this.currentInstructionsWithPath.drawPath(instruction, onDestroy);
         this.setInstructionToRestoreState();
     }
 
@@ -86,9 +86,9 @@ export class InfiniteCanvasInstructionSet {
         this.instructionToRestoreState = latestVisibleState.convertToState(latestVisibleState.lastBeforeFirstSaved()).instruction;
     }
 
-    private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction): void{
+    private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction, onDestroy: () => void): void{
         const pathToDraw: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = InstructionsWithPath.create(this.state, pathInstructions);
-        pathToDraw.drawPath(instruction);
+        pathToDraw.drawPath(instruction, onDestroy);
         if(this.currentInstructionsWithPath){
             const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.currentInstructionsWithPath.recreatePath();
             recreatedPath.setInitialState(this.state);
