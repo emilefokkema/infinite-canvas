@@ -10,12 +10,19 @@ import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider"
 import {InfiniteCanvasLinearGradient} from "./infinite-canvas-linear-gradient";
 import {InfiniteCanvasAuxiliaryObject} from "./infinite-canvas-auxiliary-object";
 import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
+import { Rectangle } from "./rectangle";
+import { DrawingLock } from "./drawing-lock";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
 	private _transformation: Transformation;
 	private _auxiliaryObjects: InfiniteCanvasAuxiliaryObject[] = [];
-	constructor(public width: number, public height: number, private context: CanvasRenderingContext2D, private readonly drawingIterationProvider: DrawingIterationProvider){
+	constructor(
+		public width: number,
+		public height: number,
+		private context: CanvasRenderingContext2D,
+		private readonly drawingIterationProvider: DrawingIterationProvider,
+		private readonly drawLockProvider: () => DrawingLock){
 		this.instructionSet = new InfiniteCanvasInstructionSet(() => drawingIterationProvider.provideDrawingIteration(() => this.draw()));
 		this._transformation = Transformation.identity;
 	}
@@ -24,6 +31,9 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public set transformation(value: Transformation){
 		this._transformation = value;
 		this.drawingIterationProvider.provideDrawingIteration(() => this.draw());
+	}
+	public getDrawingLock(): DrawingLock{
+		return this.drawLockProvider();
 	}
 	public changeState(instruction: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
 		this.instructionSet.changeState(instruction);
@@ -36,6 +46,13 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public beginPath(): void{
 		this.instructionSet.beginPath();
+	}
+	public async createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>{
+		const bitmap: ImageBitmap = await createImageBitmap(imageData);
+		return this.context.createPattern(bitmap, 'no-repeat');
+	}
+	public drawUntransformed(instruction: Instruction, area: Rectangle): void{
+		this.instructionSet.addUntransformedInstruction(instruction, area);
 	}
 	public addPathInstruction(pathInstruction: PathInstruction): void{
 		this.instructionSet.addPathInstruction(pathInstruction);

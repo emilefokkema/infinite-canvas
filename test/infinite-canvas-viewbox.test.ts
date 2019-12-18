@@ -3,6 +3,7 @@ import { InfiniteContext } from "../src/infinite-context/infinite-context";
 import { ViewBox } from "../src/interfaces/viewbox";
 import { CanvasContextMock } from "./canvas-context-mock";
 import { Transformation } from "../src/transformation";
+import { DrawingLock } from "../src/drawing-lock";
 
 describe("an infinite canvas context", () => {
 	let width: number;
@@ -10,13 +11,22 @@ describe("an infinite canvas context", () => {
 	let infiniteContext: InfiniteContext;
 	let contextMock: CanvasContextMock;
 	let viewbox: ViewBox;
+	let getDrawingLockSpy: jest.Mock;
+	let releaseDrawingLockSpy: jest.SpyInstance;
+	let latestDrawingInstruction: () => void;
+	let executeLatestDrawingInstruction: () => void;
 
 	beforeEach(() => {
+		executeLatestDrawingInstruction = () => {latestDrawingInstruction();};
+		const drawingLock: DrawingLock = {release(){}};
+		releaseDrawingLockSpy = jest.spyOn(drawingLock, 'release');
+		const getDrawingLock: () => DrawingLock = () => drawingLock;
+		getDrawingLockSpy = jest.fn().mockReturnValue(drawingLock);
 		width = 200;
 		height = 200;
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
-		viewbox = new InfiniteCanvasViewBox(width, height, context, {provideDrawingIteration(draw: () => void): void {draw();}});
+		viewbox = new InfiniteCanvasViewBox(width, height, context, {provideDrawingIteration(draw: () => void): void {latestDrawingInstruction = draw; executeLatestDrawingInstruction();}}, getDrawingLockSpy);
 		infiniteContext = new InfiniteContext(undefined, viewbox);
 	});
 
@@ -1318,6 +1328,156 @@ describe("an infinite canvas context", () => {
 								});
 							});
 						});
+					});
+				});
+			});
+		});
+	});
+
+	describe("that creates image data", () => {
+		let width: number;
+		let height: number;
+		let returnImageBitmap: (bitmap: ImageBitmap) => void;
+		let createImageBitmapSpy: jest.SpyInstance;
+		let imageData: ImageData;
+
+		beforeEach(() => {
+			width = 10;
+			height = 10;
+			const imageBitmapPromise: Promise<ImageBitmap> = new Promise((res, rej) => {
+				returnImageBitmap = res;
+			});
+			createImageBitmapSpy = jest.spyOn(window, 'createImageBitmap').mockImplementation(() => imageBitmapPromise);
+			const array: Uint8ClampedArray = new Uint8ClampedArray(4 * width * height);
+			imageData = {data: array, height: height, width: width};
+		});
+
+		afterEach(() => {
+			createImageBitmapSpy.mockRestore();
+		});
+
+		describe("and then puts it on the context", () => {
+			let x: number;
+			let y: number;
+
+			beforeEach(() => {
+				executeLatestDrawingInstruction = () => {};
+				x = 10;
+				y = 10;
+				infiniteContext.putImageData(imageData, x, y);
+			});
+
+			it("should have gotten a drawing lock", () => {
+				expect(getDrawingLockSpy).toHaveBeenCalledTimes(1);
+			});
+	
+			it("should have asked for an image bitmap", () => {
+				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				expect(imageData.width).toBe(width);
+				expect(imageData.height).toBe(height);
+				expect(imageData.data.length).toBe(4 * width * height);
+			});
+	
+			describe("and then the bitmap is ready", () => {
+	
+				beforeEach(() => {
+					returnImageBitmap({height: height, width: width, close(){}});
+				});
+	
+				it("should have released the lock", () => {
+					expect(releaseDrawingLockSpy).toHaveBeenCalledTimes(1);
+				});
+	
+				describe("and then drawing is executed", () => {
+	
+					beforeEach(() => {
+						latestDrawingInstruction();
+					});
+	
+					it("should have filled a rect using a pattern created from the bitmap", () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+
+					describe("and then part of the drawing is cleared", () => {
+
+						beforeEach(() => {
+							executeLatestDrawingInstruction = () => latestDrawingInstruction();
+							contextMock.clear();
+							infiniteContext.clearRect(5, 5, 10, 10);
+						});
+
+						it("should have added a clearRect", () => {
+							expect(contextMock.getLog()).toMatchSnapshot();
+						});
+					});
+
+					describe("and then the entire drawing is cleared", () => {
+
+						beforeEach(() => {
+							executeLatestDrawingInstruction = () => latestDrawingInstruction();
+							contextMock.clear();
+							infiniteContext.clearRect(5, 5, 20, 20);
+						});
+
+						it("should have forgotten everything", () => {
+							expect(contextMock.getLog()).toMatchSnapshot();
+						});
+					});
+				});
+			});
+		});
+
+		describe("and then puts part of it on the context", () => {
+			let x: number;
+			let y: number;
+			let dirtyX: number;
+			let dirtyY: number;
+			let dirtyWidth: number;
+			let dirtyHeight: number;
+
+			beforeEach(() => {
+				executeLatestDrawingInstruction = () => {};
+				x = 10;
+				y = 10;
+				dirtyX = 1;
+				dirtyY = 1;
+				dirtyWidth = 8;
+				dirtyHeight = 8;
+				infiniteContext.putImageData(imageData, x, y, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+			});
+
+			it("should have gotten a drawing lock", () => {
+				expect(getDrawingLockSpy).toHaveBeenCalledTimes(1);
+			});
+	
+			it("should have asked for an image bitmap", () => {
+				expect(createImageBitmapSpy).toHaveBeenCalledTimes(1);
+				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				expect(imageData.width).toBe(dirtyWidth);
+				expect(imageData.height).toBe(dirtyHeight);
+				expect(imageData.data.length).toBe(4 * dirtyWidth * dirtyHeight);
+			});
+
+			describe("and then the bitmap is ready", () => {
+	
+				beforeEach(() => {
+					returnImageBitmap({height: dirtyHeight, width: dirtyWidth, close(){}});
+				});
+	
+				it("should have released the lock", () => {
+					expect(releaseDrawingLockSpy).toHaveBeenCalledTimes(1);
+				});
+	
+				describe("and then drawing is executed", () => {
+	
+					beforeEach(() => {
+						latestDrawingInstruction();
+					});
+	
+					it("should have filled a rect using a pattern created from the bitmap", () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
 					});
 				});
 			});

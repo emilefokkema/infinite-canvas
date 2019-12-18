@@ -1310,6 +1310,70 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed and then part of the drawing is cleared should have added a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.translate(10,10)",
+  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.imageSmoothingEnabled = false",
+  "context.fillRect(0,0,10,10)",
+  "context.restore()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.clearRect(5,5,10,10)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed and then the entire drawing is cleared should have forgotten everything 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed should have filled a rect using a pattern created from the bitmap 1`] = `
+Array [
+  "context.createPattern({\\"height\\":10,\\"width\\":10},\\"no-repeat\\")",
+  "=> [pattern-0]",
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.translate(10,10)",
+  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.imageSmoothingEnabled = false",
+  "context.fillRect(0,0,10,10)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that creates image data and then puts part of it on the context and then the bitmap is ready and then drawing is executed should have filled a rect using a pattern created from the bitmap 1`] = `
+Array [
+  "context.createPattern({\\"height\\":8,\\"width\\":8},\\"no-repeat\\")",
+  "=> [pattern-0]",
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.translate(10,10)",
+  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.imageSmoothingEnabled = false",
+  "context.fillRect(0,0,8,8)",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context that does this should have done this 1`] = `
 Array [
   "context.restore()",

@@ -3,11 +3,16 @@ import { CurrentState } from "./current-state";
 import { Instruction } from "../instructions/instruction";
 import { PathInstruction } from "./path-instruction";
 import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
+import { Rectangle } from "../rectangle";
+import { DrawingLock } from "../drawing-lock";
 
 export interface ViewBox extends Transformable, CurrentState{
     width: number;
     height: number;
     drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void;
+    drawUntransformed(instruction: Instruction, area: Rectangle): void;
+    createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
+    getDrawingLock(): DrawingLock;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;

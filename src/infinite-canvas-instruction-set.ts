@@ -10,6 +10,7 @@ import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from
 import { PreviousInstructions } from "./instructions/previous-instructions";
 import {StateChangingInstructionSetWithCurrentStateAndArea} from "./interfaces/state-changing-instruction-set-with-current-state-and-area";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
+import { RectangularDrawing } from "./instructions/rectangular-drawing";
 
 export class InfiniteCanvasInstructionSet {
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState;
@@ -43,6 +44,12 @@ export class InfiniteCanvasInstructionSet {
         }else{
             this.drawCurrentPath(instruction, onDestroy);
         }
+        this.onChange();
+    }
+
+    public addUntransformedInstruction(instruction: Instruction, area: Rectangle): void{
+        const drawing: RectangularDrawing = RectangularDrawing.create(this.state, instruction, area);
+        this.drawBeforeCurrentPath(drawing);
         this.onChange();
     }
 
@@ -89,12 +96,16 @@ export class InfiniteCanvasInstructionSet {
     private drawPathInstructions(pathInstructions: PathInstruction[], instruction: Instruction, onDestroy: () => void): void{
         const pathToDraw: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = InstructionsWithPath.create(this.state, pathInstructions);
         pathToDraw.drawPath(instruction, onDestroy);
+        this.drawBeforeCurrentPath(pathToDraw);
+    }
+
+    private drawBeforeCurrentPath(instruction: StateChangingInstructionSetWithCurrentStateAndArea): void{
         if(this.currentInstructionsWithPath){
             const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.currentInstructionsWithPath.recreatePath();
             recreatedPath.setInitialState(this.state);
-            this.replaceCurrentInstructionsWithPath(recreatedPath, pathToDraw);
+            this.replaceCurrentInstructionsWithPath(recreatedPath, instruction);
         }else{
-            this.previousInstructionsWithPath.add(pathToDraw);
+            this.previousInstructionsWithPath.add(instruction);
         }
     }
 
