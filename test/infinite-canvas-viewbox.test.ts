@@ -1483,4 +1483,26 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe("that creates a pattern", () => {
+		let pattern: CanvasPattern;
+
+		beforeEach(() => {
+			const imageBitmap: ImageBitmap = {width:1, height: 1, close(){}};
+			pattern = infiniteContext.createPattern(imageBitmap, 'repeat');
+		});
+
+		describe("and then uses it to fill a rect", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = pattern;
+				contextMock.clear();
+				infiniteContext.fillRect(0, 0, 1, 1);
+			});
+
+			it("should wrap the fill command in a transform", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
 })

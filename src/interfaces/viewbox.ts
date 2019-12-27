@@ -12,6 +12,7 @@ export interface ViewBox extends Transformable, CurrentState{
     drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void;
     drawUntransformed(instruction: Instruction, area: Rectangle): void;
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
+    createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
     getDrawingLock(): DrawingLock;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;

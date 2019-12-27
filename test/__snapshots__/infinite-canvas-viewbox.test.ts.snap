@@ -852,6 +852,26 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that creates a pattern and then uses it to fill a rect should wrap the fill command in a transform 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.lineTo(0,0)",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then fills using the radial gradient and then clears the drawing and then fills the path again should create a radial gradient again 1`] = `
 Array [
   "context.createRadialGradient(0,0,1,5,5,5)",

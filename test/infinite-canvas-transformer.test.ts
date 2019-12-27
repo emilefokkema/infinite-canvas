@@ -34,6 +34,7 @@ describe("an infinite canvas transformer", () => {
             addPathInstruction(){},
             drawUntransformed(){},
             createPatternFromImageData(){return undefined},
+            createPattern(){return undefined;},
             getDrawingLock(){return undefined;},
             createLinearGradient(){return undefined},
             createRadialGradient(){return undefined},

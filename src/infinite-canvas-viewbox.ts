@@ -12,6 +12,9 @@ import {InfiniteCanvasAuxiliaryObject} from "./infinite-canvas-auxiliary-object"
 import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
 import { Rectangle } from "./rectangle";
 import { DrawingLock } from "./drawing-lock";
+import { InfiniteCanvasPattern } from "./infinite-canvas-pattern";
+import { groupInstructions } from "./instructions/group-instructions";
+import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
@@ -59,9 +62,10 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void{
 		const currentFillStyle: string | CanvasGradient | CanvasPattern = getFillStrokeStyle(this.instructionSet.state.current);
-		if(currentFillStyle instanceof InfiniteCanvasAuxiliaryObject){
+		if(currentFillStyle instanceof InfiniteCanvasFillStrokeStyle){
 			currentFillStyle.use();
 			this.addAuxiliaryObject(currentFillStyle);
+			instruction = currentFillStyle.createInstruction(instruction);
 			this.instructionSet.drawPath(instruction, pathInstructions, () => currentFillStyle.stopUsing());
 		}else{
 			this.instructionSet.drawPath(instruction, pathInstructions);
@@ -81,6 +85,11 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient{
 		let result: InfiniteCanvasRadialGradient;
 		result = new InfiniteCanvasRadialGradient(() => this.removeAuxiliaryObject(result), this.context, x0, y0, r0, x1, y1, r1);
+		return result;
+	}
+	public createPattern(image: CanvasImageSource, repetition: string): CanvasPattern{
+		let result: InfiniteCanvasPattern;
+		result = new InfiniteCanvasPattern(() => this.removeAuxiliaryObject(result), this.context.createPattern(image, repetition));
 		return result;
 	}
 	private removeAuxiliaryObject(auxiliaryObject: InfiniteCanvasAuxiliaryObject): void{
