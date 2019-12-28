@@ -32,7 +32,7 @@ describe("an infinite canvas transformer", () => {
             clearArea(){},
             beginPath(){},
             addPathInstruction(){},
-            drawUntransformed(){},
+            addDrawing(){},
             createPatternFromImageData(){return undefined},
             createPattern(){return undefined;},
             getDrawingLock(){return undefined;},

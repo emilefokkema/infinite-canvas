@@ -54,8 +54,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		const bitmap: ImageBitmap = await createImageBitmap(imageData);
 		return this.context.createPattern(bitmap, 'no-repeat');
 	}
-	public drawUntransformed(instruction: Instruction, area: Rectangle): void{
-		this.instructionSet.addUntransformedInstruction(instruction, area);
+	public addDrawing(instruction: Instruction, area: Rectangle): void{
+		this.instructionSet.addDrawing(instruction, area);
 	}
 	public addPathInstruction(pathInstruction: PathInstruction): void{
 		this.instructionSet.addPathInstruction(pathInstruction);

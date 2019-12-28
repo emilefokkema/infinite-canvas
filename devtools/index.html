@@ -62,6 +62,23 @@
 		(function(){
 			var canvasWidth = 400;
 			var canvasHeight = 400;
+			var createRandomImage = async function(){
+				var width = 300;
+				var height = 227;
+				var array = new Uint8ClampedArray(4 * width * height);
+				for(var i=0;i<height;i++){
+					for(var j=0;j<width;j++){
+						var index = 4 * width * i + 4 * j;
+						array[index] = Math.floor(Math.random() * 255);
+						array[index + 1] = Math.floor(Math.random() * 255);
+						array[index + 2] = Math.floor(Math.random() * 255);
+						array[index + 3] = Math.floor(Math.random() * 255);
+					}
+				}
+				var imageData = new ImageData(array, width);
+				return await createImageBitmap(imageData);
+			};
+			var imagePromise = createRandomImage();
 			var compareImages = function(imageData1, imageData2){
 				var newData = new Uint8ClampedArray(4 * canvasWidth * canvasHeight);
 				var currentIndex = 0;
@@ -809,6 +826,14 @@
 									ctx.fillRect(0, 0, 100, 100);
 								});
 							}
+						},
+						{
+							code: function(ctx){
+								imagePromise.then(function(image){
+									ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
+								});
+							},
+							title: "draw image"
 						}
 					];
 			new Vue({

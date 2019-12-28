@@ -22,7 +22,8 @@ export class CanvasContextMock{
             "save",
             "restore",
             "stroke",
-            "clip"
+            "clip",
+            "drawImage"
         ];
         const setters: string[] = [
             "fillStyle",

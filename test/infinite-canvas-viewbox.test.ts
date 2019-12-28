@@ -4,11 +4,12 @@ import { ViewBox } from "../src/interfaces/viewbox";
 import { CanvasContextMock } from "./canvas-context-mock";
 import { Transformation } from "../src/transformation";
 import { DrawingLock } from "../src/drawing-lock";
+import { InfiniteCanvasRenderingContext2D } from "../src/infinite-context/infinite-canvas-rendering-context-2d";
 
 describe("an infinite canvas context", () => {
 	let width: number;
 	let height: number;
-	let infiniteContext: InfiniteContext;
+	let infiniteContext: InfiniteCanvasRenderingContext2D;
 	let contextMock: CanvasContextMock;
 	let viewbox: ViewBox;
 	let getDrawingLockSpy: jest.Mock;
@@ -1190,10 +1191,10 @@ describe("an infinite canvas context", () => {
 	])(`that creates a %s`, (
 		fillStrokeStyleName: string,
 		drawingVerb: string,
-		createFillStrokeStyle: (context: InfiniteContext) => CanvasGradient | CanvasPattern,
-		drawPath: (context: InfiniteContext) => void,
-		drawRect: (context: InfiniteContext, x: number, y: number, w:number, h:number) => void,
-		setFillStrokeStyle:(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => void) => {
+		createFillStrokeStyle: (context: InfiniteCanvasRenderingContext2D) => CanvasGradient | CanvasPattern,
+		drawPath: (context: InfiniteCanvasRenderingContext2D) => void,
+		drawRect: (context: InfiniteCanvasRenderingContext2D, x: number, y: number, w:number, h:number) => void,
+		setFillStrokeStyle:(context: InfiniteCanvasRenderingContext2D, fillStrokeStyle: CanvasGradient | CanvasPattern) => void) => {
 		let fillStrokeStyle: CanvasGradient | CanvasPattern;
 
 		beforeEach(() => {
@@ -1502,6 +1503,110 @@ describe("an infinite canvas context", () => {
 
 			it("should wrap the fill command in a transform", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
+	describe("that uses an image", () => {
+		let image: CanvasImageSource;
+		let imageWidth: number;
+		let imageHeight: number;
+
+		beforeEach(() => {
+			imageWidth = 100;
+			imageHeight = 100;
+			image = {width: imageWidth, height: imageHeight, close(){}};
+		});
+
+		describe("and draws it using three arguments", () => {
+			let x: number;
+			let y: number;
+			
+			beforeEach(() => {
+				x = 10;
+				y = 10;
+				contextMock.clear();
+				infiniteContext.drawImage(image, x, y);
+			});
+
+			it("should call the context using three arguments", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then clears the rectangle where the image was drawn", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(x-1, y-1, imageWidth+2, imageHeight+2);
+				});
+
+				it("should no longer draw the image", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and draws it using five arguments", () => {
+			let x: number;
+			let y: number;
+			let width: number;
+			let height: number;
+			
+			beforeEach(() => {
+				x = 10;
+				y = 10;
+				width = 40;
+				height = 40;
+				contextMock.clear();
+				infiniteContext.drawImage(image, x, y, width, height);
+			});
+
+			it("should call the context using five arguments", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then clears the rectangle where the image was drawn", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(x-1, y-1, width+2, height+2);
+				});
+
+				it("should no longer draw the image", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and draws it using nine arguments", () => {
+			let x: number;
+			let y: number;
+			let width: number;
+			let height: number;
+			
+			beforeEach(() => {
+				x = 10;
+				y = 10;
+				width = 40;
+				height = 40;
+				contextMock.clear();
+				infiniteContext.drawImage(image, 10, 10, 80, 80, x, y, width, height);
+			});
+
+			it("should call the context using nine arguments", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then clears the rectangle where the image was drawn", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(x-1, y-1, width+2, height+2);
+				});
+
+				it("should no longer draw the image", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
 			});
 		});
 	});

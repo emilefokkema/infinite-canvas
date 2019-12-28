@@ -27,6 +27,11 @@ export class InfiniteCanvasEventDispatcher<K extends keyof InfiniteCanvasEventMa
         }
     }
     private notifyListener(listener: EventListener<K>, event: InfiniteCanvasEventMap[K]): void{
-        listener.call(this.infiniteCanvas, event);
+        try {
+            listener.call(this.infiniteCanvas, event);
+        } catch (error) {
+            console.error(error);
+        }
+        
     }
 }

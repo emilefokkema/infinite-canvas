@@ -47,7 +47,7 @@ export class InfiniteCanvasInstructionSet {
         this.onChange();
     }
 
-    public addUntransformedInstruction(instruction: Instruction, area: Rectangle): void{
+    public addDrawing(instruction: Instruction, area: Rectangle): void{
         const drawing: RectangularDrawing = RectangularDrawing.create(this.state, instruction, area);
         this.drawBeforeCurrentPath(drawing);
         this.onChange();

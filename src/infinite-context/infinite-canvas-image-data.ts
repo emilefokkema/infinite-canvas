@@ -19,7 +19,7 @@ export class InfiniteCanvasImageData implements CanvasImageData{
 			pattern = resolvedPattern;
 			lock.release();
 		});
-		this.viewBox.drawUntransformed((context: CanvasRenderingContext2D, transformation: Transformation) => {
+		this.viewBox.addDrawing((context: CanvasRenderingContext2D, transformation: Transformation) => {
 			const {a, b, c, d, e, f} = transformation;
 			context.save();
 			context.setTransform(a, b, c, d, e, f);

@@ -2304,6 +2304,69 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that uses an image and draws it using five arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that uses an image and draws it using five arguments should call the context using five arguments 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10,40,40)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that uses an image and draws it using nine arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that uses an image and draws it using nine arguments should call the context using nine arguments 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10,80,80,10,10,40,40)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that uses an image and draws it using three arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that uses an image and draws it using three arguments should call the context using three arguments 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10)",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context whose state is changed and then draws something should have modified the context correctly 1`] = `
 Array [
   "context.restore()",
