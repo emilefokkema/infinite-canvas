@@ -1,8 +1,8 @@
 import { ViewBox } from "../interfaces/viewbox";
 import { Rectangle } from "../rectangle";
 import { sliceImageData } from "./slice-image-data";
-import { Transformation } from "../transformation";
 import { DrawingLock } from "../drawing-lock";
+import { TransformationKind } from "../transformation-kind";
 
 export class InfiniteCanvasImageData implements CanvasImageData{
 	constructor(private viewBox: ViewBox){
@@ -19,15 +19,11 @@ export class InfiniteCanvasImageData implements CanvasImageData{
 			pattern = resolvedPattern;
 			lock.release();
 		});
-		this.viewBox.addDrawing((context: CanvasRenderingContext2D, transformation: Transformation) => {
-			const {a, b, c, d, e, f} = transformation;
-			context.save();
-			context.setTransform(a, b, c, d, e, f);
+		this.viewBox.addDrawing((context: CanvasRenderingContext2D) => {
 			context.translate(dx, dy);
 			context.fillStyle = pattern;
 			context.imageSmoothingEnabled = false;
 			context.fillRect(0, 0, imagedata.width, imagedata.height);
-			context.restore();
-		}, new Rectangle(dx, dy, imagedata.width, imagedata.height));
+		}, new Rectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute);
 	}
 }

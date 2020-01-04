@@ -252,6 +252,10 @@ describe("a default state", () => {
                 "#f00",                                 //different
                 0,                                      //same
                 new Transformation(2, 0, 0, 2, 0, 0),    //different
+                "inherit",                              //same
+                "12px sans-serif",                      //different
+                "start",                                //same
+                "alphabetic",                           //same
                 undefined
             ));
             change = state.convertToState(otherState);

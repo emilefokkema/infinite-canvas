@@ -26,7 +26,7 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
         this.add(ClearRectWithState.create(this.state, area));
     }
     public clearContentsInsideArea(area: Rectangle): void{
-        this.removeAll(i => i.isContainedBy(area), instructionSet => instructionSet.destroy());
+        this.removeAll(i => i.isContainedBy(area));
     }
     public isContainedBy(area: Rectangle): boolean {
         return !this.contains(i => !i.isContainedBy(area));

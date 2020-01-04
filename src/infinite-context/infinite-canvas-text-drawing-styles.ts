@@ -1,6 +1,17 @@
+import { ViewBox } from "../interfaces/viewbox";
+
 export class InfiniteCanvasTextDrawingStyles implements CanvasTextDrawingStyles{
-	public direction: CanvasDirection;
-	public font: string;
-	public textAlign: CanvasTextAlign;
-	public textBaseline: CanvasTextBaseline;
+	constructor(private readonly viewBox: ViewBox){}
+	public set direction(value: CanvasDirection){
+		this.viewBox.changeState(s => s.setDirection(value));
+	}
+	public set font(value: string){
+		this.viewBox.changeState(s => s.setFont(value));
+	}
+	public set textAlign(value: CanvasTextAlign){
+		this.viewBox.changeState(s => s.setTextAlign(value));
+	}
+	public set textBaseline(value: CanvasTextBaseline){
+		this.viewBox.changeState(s => s.setTextBaseline(value));
+	}
 }

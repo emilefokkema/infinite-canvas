@@ -32,12 +32,6 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         return result;
     }
-    public destroy(): void {
-        this.initiallyWithState.destroy();
-        for(const added of this.added){
-            added.destroy();
-        }
-    }
     public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
         this.currentlyWithState.addClippedPath(clippedPath);
     }
@@ -45,10 +39,10 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         this.added.push(instructionSet);
         this.addedLast = instructionSet;
     }
-    public removeAll(predicate: (instructionSet: TInstructionSet) => boolean, removeInstructionSet: (instructionSet: TInstructionSet) => void = () => {}): void{
+    public removeAll(predicate: (instructionSet: TInstructionSet) => boolean): void{
         let indexToRemove: number;
         while((indexToRemove = this.added.findIndex(predicate)) > -1){
-            this.removeAtIndex(indexToRemove, removeInstructionSet);
+            this.removeAtIndex(indexToRemove);
         }
     }
     public contains(predicate: (instructionSet: TInstructionSet) => boolean): boolean{
@@ -85,7 +79,7 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         return this.added[index - 1];
     }
-    private removeAtIndex(index: number, removeInstructionSet: (instructionSet: TInstructionSet) => void){
+    private removeAtIndex(index: number){
         const instructionSetToRemove: TInstructionSet = this.added[index];
         if(index === this.added.length - 1){
             if(this.added.length === 1){
@@ -96,6 +90,5 @@ export class StateChangingInstructionSequence<TInstructionSet extends StateChang
         }
         this.reconstructState(this.beforeIndex(index), instructionSetToRemove.state);
         this.added.splice(index, 1);
-        removeInstructionSet(instructionSetToRemove);
     }
 }

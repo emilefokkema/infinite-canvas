@@ -23,14 +23,21 @@ export class CanvasContextMock{
             "restore",
             "stroke",
             "clip",
-            "drawImage"
+            "drawImage",
+            "measureText",
+            "fillText",
+            "strokeText"
         ];
         const setters: string[] = [
             "fillStyle",
             "strokeStyle",
             "lineWidth",
             "lineDashOffset",
-            "imageSmoothingEnabled"
+            "imageSmoothingEnabled",
+            "direction",
+            "font",
+            "textAlign",
+            "textBaseline"
         ];
         this.mock = {};
         for(const methodName of methods){

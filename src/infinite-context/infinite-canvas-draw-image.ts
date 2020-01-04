@@ -2,6 +2,8 @@ import { ViewBox } from "../interfaces/viewbox";
 import { Rectangle } from "../rectangle";
 import { Transformation } from "../transformation";
 import { Instruction } from "../instructions/instruction";
+import { InstructionBuilder } from "../instruction-builders/instruction-builder";
+import { TransformationKind } from "../transformation-kind";
 
 export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 	constructor(private readonly viewBox: ViewBox){}
@@ -23,15 +25,9 @@ export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 		}
 		const drawnWidth: number = this.getDrawnLength(image.width, sx, sw, dw);
 		const drawnHeight: number = this.getDrawnLength(image.height, sy, sh, dh);
-		const drawnRectangle: Rectangle = new Rectangle(dx, dy, drawnWidth, drawnHeight).transform(this.viewBox.state.current.transformation);
+		const drawnRectangle: Rectangle = new Rectangle(dx, dy, drawnWidth, drawnHeight);
 		const drawingInstruction: Instruction = this.getDrawImageInstruction(arguments.length, image, sx, sy, sw, sh, dx, dy, dw, dh);
-		this.viewBox.addDrawing((context: CanvasRenderingContext2D, transformation: Transformation) => {
-			context.save();
-			const {a, b, c, d, e, f} = transformation;
-			context.transform(a, b, c, d, e, f);
-			drawingInstruction(context, transformation);
-			context.restore();
-		}, drawnRectangle);
+		this.viewBox.addDrawing(drawingInstruction, drawnRectangle, TransformationKind.Relative);
 	}
 	private getDrawImageInstruction(
 		numberOfArguments: number,

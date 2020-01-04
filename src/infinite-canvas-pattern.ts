@@ -1,24 +1,19 @@
 import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
-import { Transformation } from "./transformation";
-import { Instruction } from "./instructions/instruction";
+import { InstructionBuilder } from "./instruction-builders/instruction-builder";
 
 export class InfiniteCanvasPattern extends InfiniteCanvasFillStrokeStyle implements CanvasPattern{
-    constructor(onNoLongerUsed: () => void, public readonly fillStrokeStyle: CanvasPattern){
-        super(onNoLongerUsed);
-    }
-    public update(transformation: Transformation): void{
-        
+    constructor(private readonly fillStrokeStyle: CanvasPattern){
+        super();
     }
     public setTransform(transform?: DOMMatrix2DInit): void {
         this.fillStrokeStyle.setTransform(transform);
     }
-    public createInstruction(fillOrStrokeInstruction: Instruction): Instruction{
-        return (context: CanvasRenderingContext2D, transformation: Transformation) => {
-            const {a, b, c, d, e, f} = transformation;
-            context.save();
-            context.transform(a, b, c, d, e, f);
-            fillOrStrokeInstruction(context, transformation);
-            context.restore();
-        };
+    public applyToDrawingInstruction(drawingInstruction: InstructionBuilder, setFillOrStrokeStyle: (context: CanvasRenderingContext2D, fillOrStrokeStyle: string | CanvasGradient | CanvasPattern) => void, transform: boolean): void{
+        drawingInstruction.prepend((context: CanvasRenderingContext2D) => {
+            setFillOrStrokeStyle(context, this.fillStrokeStyle);
+        });
+        if(transform){
+            drawingInstruction.transformRelative();
+        }
     }
 }

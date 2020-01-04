@@ -1610,4 +1610,72 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe("that takes text", () => {
+		let x: number;
+		let y: number;
+		let width: number;
+		let height: number;
+		let text: string;
+
+		beforeEach(() => {
+			text = "Some text";
+			width = 200;
+			height = 20;
+			jest.spyOn(contextMock.mock, "measureText").mockImplementation(()=> ({
+				actualBoundingBoxRight: width,
+				actualBoundingBoxLeft: 0,
+				actualBoundingBoxAscent: 0,
+				actualBoundingBoxDescent: height
+			}));
+			x = 100;
+			y = 100;
+		});
+
+		describe("and fills it", () => {
+
+			beforeEach(() => {
+				infiniteContext.fillText(text, x, y);
+			});
+
+			it("should contain the instruction to transform and fill text", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and clears it", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(x-1, y-1, width+2, height+2);
+				});
+
+				it("should forget the instructions", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+
+		describe("and strokes it", () => {
+
+			beforeEach(() => {
+				infiniteContext.strokeText(text, x, y);
+			});
+
+			it("should contain the instruction to transform and stroke text", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and clears it", () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(x-1, y-1, width+2, height+2);
+				});
+
+				it("should forget the instructions", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			});
+		});
+	});
 })

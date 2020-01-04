@@ -2,15 +2,19 @@ import { Transformable } from "../transformable";
 import { CurrentState } from "./current-state";
 import { Instruction } from "../instructions/instruction";
 import { PathInstruction } from "./path-instruction";
-import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
 import { Rectangle } from "../rectangle";
 import { DrawingLock } from "../drawing-lock";
+import { TransformationKind } from "../transformation-kind";
 
 export interface ViewBox extends Transformable, CurrentState{
     width: number;
     height: number;
-    drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void;
-    addDrawing(instruction: Instruction, area: Rectangle): void;
+    measureText(text: string): TextMetrics;
+    fillPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
+    strokePath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
+    addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
+    addFillingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
+    addStrokingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
     getDrawingLock(): DrawingLock;

@@ -8,18 +8,17 @@ import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
 import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider";
 import {InfiniteCanvasLinearGradient} from "./infinite-canvas-linear-gradient";
-import {InfiniteCanvasAuxiliaryObject} from "./infinite-canvas-auxiliary-object";
 import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
 import { Rectangle } from "./rectangle";
 import { DrawingLock } from "./drawing-lock";
 import { InfiniteCanvasPattern } from "./infinite-canvas-pattern";
-import { groupInstructions } from "./instructions/group-instructions";
 import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
+import { InstructionBuilder } from "./instruction-builders/instruction-builder";
+import { TransformationKind } from "./transformation-kind";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
 	private _transformation: Transformation;
-	private _auxiliaryObjects: InfiniteCanvasAuxiliaryObject[] = [];
 	constructor(
 		public width: number,
 		public height: number,
@@ -41,6 +40,16 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public changeState(instruction: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
 		this.instructionSet.changeState(instruction);
 	}
+	public measureText(text: string): TextMetrics{
+		this.context.save();
+		const changeToCurrentState: StateChange<InfiniteCanvasStateInstance> = InfiniteCanvasStateInstance.default.convertToState(this.state.current);
+		if(changeToCurrentState.instruction){
+			changeToCurrentState.instruction(this.context, Transformation.identity);
+		}
+		const result: TextMetrics = this.context.measureText(text);
+		this.context.restore();
+		return result;
+	}
 	public saveState(): void{
 		this.instructionSet.saveState();
 	}
@@ -54,22 +63,23 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		const bitmap: ImageBitmap = await createImageBitmap(imageData);
 		return this.context.createPattern(bitmap, 'no-repeat');
 	}
-	public addDrawing(instruction: Instruction, area: Rectangle): void{
-		this.instructionSet.addDrawing(instruction, area);
+	public addFillingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
+		this.instructionSet.addFillingDrawing(instruction, area, transformationKind);
+	}
+	public addStrokingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
+		this.instructionSet.addStrokingDrawing(instruction, area, transformationKind);
+	}
+	public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
+		this.instructionSet.addDrawing(instruction, area, transformationKind);
 	}
 	public addPathInstruction(pathInstruction: PathInstruction): void{
 		this.instructionSet.addPathInstruction(pathInstruction);
 	}
-	public drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void{
-		const currentFillStyle: string | CanvasGradient | CanvasPattern = getFillStrokeStyle(this.instructionSet.state.current);
-		if(currentFillStyle instanceof InfiniteCanvasFillStrokeStyle){
-			currentFillStyle.use();
-			this.addAuxiliaryObject(currentFillStyle);
-			instruction = currentFillStyle.createInstruction(instruction);
-			this.instructionSet.drawPath(instruction, pathInstructions, () => currentFillStyle.stopUsing());
-		}else{
-			this.instructionSet.drawPath(instruction, pathInstructions);
-		}
+	public fillPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
+		this.instructionSet.fillPath(instruction, pathInstructions);
+	}
+	public strokePath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
+		this.instructionSet.strokePath(instruction, pathInstructions);
 	}
 	public clipPath(instruction: Instruction): void{
 		this.instructionSet.clipPath(instruction);
@@ -79,34 +89,20 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient{
 		let result: InfiniteCanvasLinearGradient;
-		result = new InfiniteCanvasLinearGradient(() => this.removeAuxiliaryObject(result), this.context, x0, y0, x1, y1);
+		result = new InfiniteCanvasLinearGradient(this.context, x0, y0, x1, y1);
 		return result;
 	}
 	public createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient{
 		let result: InfiniteCanvasRadialGradient;
-		result = new InfiniteCanvasRadialGradient(() => this.removeAuxiliaryObject(result), this.context, x0, y0, r0, x1, y1, r1);
+		result = new InfiniteCanvasRadialGradient(this.context, x0, y0, r0, x1, y1, r1);
 		return result;
 	}
 	public createPattern(image: CanvasImageSource, repetition: string): CanvasPattern{
 		let result: InfiniteCanvasPattern;
-		result = new InfiniteCanvasPattern(() => this.removeAuxiliaryObject(result), this.context.createPattern(image, repetition));
+		result = new InfiniteCanvasPattern(this.context.createPattern(image, repetition));
 		return result;
 	}
-	private removeAuxiliaryObject(auxiliaryObject: InfiniteCanvasAuxiliaryObject): void{
-		const index: number = this._auxiliaryObjects.indexOf(auxiliaryObject);
-		if(index > -1){
-			this._auxiliaryObjects.splice(index, 1);
-		}
-	}
-	private addAuxiliaryObject(auxiliaryObject: InfiniteCanvasAuxiliaryObject): void{
-		if(this._auxiliaryObjects.indexOf(auxiliaryObject) === -1){
-			this._auxiliaryObjects.push(auxiliaryObject);
-		}
-	}
 	private draw(): void{
-		for(const auxiliaryObject of this._auxiliaryObjects){
-			auxiliaryObject.update(this._transformation);
-		}
 		this.context.restore();
 		this.context.save();
 		this.context.clearRect(0, 0, this.width, this.height);

@@ -26,8 +26,6 @@ export abstract class StateAndInstruction implements StateChangingInstructionSet
     public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
         this.change(s => s.withChangedState(change));
     }
-    public destroy(): void {
-    }
     public getAllInstructionsAndStates(): InstructionAndState[]{
         return [{instruction: this.initialInstruction, state: this.stateForInstruction}];
     }
