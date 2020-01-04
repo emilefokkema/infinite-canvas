@@ -4,16 +4,16 @@ import { InfiniteCanvasMovable } from "./infinite-canvas-movable";
 import { Gesture } from "./gesture";
 import { InfiniteCanvasTransformerContext } from "./infinite-canvas-transformer-context";
 import { Rotate } from "./rotate";
-import { ViewBox } from "../interfaces/viewbox";
 import { Zoom } from "./zoom";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+import { TransformableBox } from "../interfaces/transformable-box";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
     private gesture: Gesture;
     private context: InfiniteCanvasTransformerContext;
     private _zoom: Zoom;
-    constructor(private readonly viewBox: ViewBox, config: InfiniteCanvasConfig){
+    constructor(private readonly viewBox: TransformableBox, config: InfiniteCanvasConfig){
         this.context = new InfiniteCanvasTransformerContext(viewBox, config);
     }
     private createAnchor(movable: InfiniteCanvasMovable): Anchor{
