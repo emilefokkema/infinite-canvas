@@ -1159,34 +1159,34 @@ describe("an infinite canvas context", () => {
 		[
 			"linear gradient",
 			"fills",
-			(context: InfiniteContext) => context.createLinearGradient(10, 0, 10, 30),
-			(context: InfiniteContext) => context.fill(),
-			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
-			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
+			(context: InfiniteCanvasRenderingContext2D) => context.createLinearGradient(10, 0, 10, 30),
+			(context: InfiniteCanvasRenderingContext2D) => context.fill(),
+			(context: InfiniteCanvasRenderingContext2D, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
+			(context: InfiniteCanvasRenderingContext2D, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
 		],
 		[
 			"linear gradient",
 			"strokes",
-			(context: InfiniteContext) => context.createLinearGradient(10, 0, 10, 30),
-			(context: InfiniteContext) => context.stroke(),
-			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
-			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
+			(context: InfiniteCanvasRenderingContext2D) => context.createLinearGradient(10, 0, 10, 30),
+			(context: InfiniteCanvasRenderingContext2D) => context.stroke(),
+			(context: InfiniteCanvasRenderingContext2D, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
+			(context: InfiniteCanvasRenderingContext2D, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
 		],
 		[
 			"radial gradient",
 			"fills",
-			(context: InfiniteContext) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
-			(context: InfiniteContext) => context.fill(),
-			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
-			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
+			(context: InfiniteCanvasRenderingContext2D) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
+			(context: InfiniteCanvasRenderingContext2D) => context.fill(),
+			(context: InfiniteCanvasRenderingContext2D, x: number, y: number, w:number, h:number) => context.fillRect(x, y, w, h),
+			(context: InfiniteCanvasRenderingContext2D, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.fillStyle = fillStrokeStyle}
 		],
 		[
 			"radial gradient",
 			"strokes",
-			(context: InfiniteContext) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
-			(context: InfiniteContext) => context.stroke(),
-			(context: InfiniteContext, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
-			(context: InfiniteContext, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
+			(context: InfiniteCanvasRenderingContext2D) => context.createRadialGradient(0, 0, 1, 5, 5, 5),
+			(context: InfiniteCanvasRenderingContext2D) => context.stroke(),
+			(context: InfiniteCanvasRenderingContext2D, x: number, y: number, w:number, h:number) => context.strokeRect(x, y, w, h),
+			(context: InfiniteCanvasRenderingContext2D, fillStrokeStyle: CanvasGradient | CanvasPattern) => {context.strokeStyle = fillStrokeStyle}
 		]
 	])(`that creates a %s`, (
 		fillStrokeStyleName: string,
