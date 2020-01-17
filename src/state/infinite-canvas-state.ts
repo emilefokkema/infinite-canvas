@@ -46,15 +46,13 @@ export class InfiniteCanvasState{
         };
     }
 
-    private convertToLastSavedInstance(conversion: StateConversion, lastSavedInstance: InfiniteCanvasStateInstance): void{
-        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
+    private convertToLastSavedInstance(conversion: StateConversion, indexOfLastSavedInstance: number): void{
         for(let i: number = this.stack.length - 1; i > indexOfLastSavedInstance; i--){
             conversion.restore();
         }
     }
 
-    private convertFromLastSavedInstance(conversion: StateConversion, lastSavedInstance: InfiniteCanvasStateInstance): void{
-        const indexOfLastSavedInstance: number = this.stack.indexOf(lastSavedInstance);
+    private convertFromLastSavedInstance(conversion: StateConversion, indexOfLastSavedInstance: number): void{
         for(let i: number = indexOfLastSavedInstance + 1; i < this.stack.length; i++){
             conversion.changeCurrentInstanceTo(this.stack[i]);
             conversion.save();
@@ -64,8 +62,8 @@ export class InfiniteCanvasState{
 
     private convertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
         const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
-        this.convertToLastSavedInstance(conversion, this.stack[indexOfHighestCommon]);
-        other.convertFromLastSavedInstance(conversion, other.stack[indexOfHighestCommon]);
+        this.convertToLastSavedInstance(conversion, indexOfHighestCommon);
+        other.convertFromLastSavedInstance(conversion, indexOfHighestCommon);
         return conversion;
     }
     public convertToState(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
