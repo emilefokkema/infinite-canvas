@@ -1678,4 +1678,119 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe("that makes a rect, strokes it and then strokes text", () => {
+
+		beforeEach(() => {
+			jest.spyOn(contextMock.mock, "measureText").mockImplementation(()=> ({
+				actualBoundingBoxRight: 20,
+				actualBoundingBoxLeft: 0,
+				actualBoundingBoxAscent: 0,
+				actualBoundingBoxDescent: 10
+			}));
+			viewbox.transformation = new Transformation(2, 0, 0, 2, 0, 0);
+			infiniteContext.beginPath();
+			infiniteContext.rect(0, 0, 5, 5);
+			infiniteContext.stroke();
+			contextMock.clear();
+			infiniteContext.strokeText("text", 10, 10);
+		});
+
+		it("should set the line width twice", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe("that sets a line width, makes a rect, strokes it and then strokes text", () => {
+
+		beforeEach(() => {
+			jest.spyOn(contextMock.mock, "measureText").mockImplementation(()=> ({
+				actualBoundingBoxRight: 20,
+				actualBoundingBoxLeft: 0,
+				actualBoundingBoxAscent: 0,
+				actualBoundingBoxDescent: 10
+			}));
+			viewbox.transformation = new Transformation(2, 0, 0, 2, 0, 0);
+			infiniteContext.lineWidth = 2;
+			infiniteContext.beginPath();
+			infiniteContext.rect(0, 0, 5, 5);
+			infiniteContext.stroke();
+			contextMock.clear();
+			infiniteContext.strokeText("text", 10, 10);
+		});
+
+		it("should set the line width twice", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe("that sets a nonzero line dash and fills a rect", () => {
+
+		beforeEach(() => {
+			viewbox.transformation = new Transformation(2, 0, 0, 2, 0, 0);
+			infiniteContext.setLineDash([1, 1]);
+			contextMock.clear();
+			infiniteContext.fillRect(1, 1, 1, 1);
+		});
+
+		it("should set the correct line dash", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe("and then sets a pattern as fill style and fills another rect", () => {
+
+			beforeEach(() => {
+				const imageBitmap: ImageBitmap = {width:1, height: 1, close(){}};
+				infiniteContext.fillStyle = infiniteContext.createPattern(imageBitmap, 'repeat');
+				contextMock.clear();
+				infiniteContext.fillRect(5, 1, 1, 1);
+			});
+
+			it("should set the correct line dash again", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe("and then sets the fill style to something other than a pattern and fills a third rect", () => {
+
+				beforeEach(() => {
+					infiniteContext.fillStyle = "#000";
+					contextMock.clear();
+					infiniteContext.fillRect(9, 1, 1, 1);
+				});
+
+				it("should set the correct line dash again", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+
+				describe("and then clears the rect that was filled with a pattern", () => {
+
+					beforeEach(() => {
+						contextMock.clear();
+						infiniteContext.clearRect(4, 0, 3, 3);
+					});
+
+					it("should set the line dash one fewer time", () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+				});
+			});
+		});
+	});
+
+	describe("that makes a path, saves state, clips, fills a rect and then strokes the path", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(10, 10, 50, 50);
+			infiniteContext.save();
+			infiniteContext.clip();
+			infiniteContext.fillRect(-1, -1, 2, 2);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should set the clipped path before stroking", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
 })

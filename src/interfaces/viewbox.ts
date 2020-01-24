@@ -11,8 +11,6 @@ export interface ViewBox extends TransformableBox, CurrentState{
     fillPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
     strokePath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
     addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
-    addFillingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
-    addStrokingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void;
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
     getDrawingLock(): DrawingLock;

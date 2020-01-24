@@ -1,12 +1,12 @@
-import { Rectangle } from "../rectangle";
-import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { StateChangingInstructionSetWithCurrentStateAndArea } from "../interfaces/state-changing-instruction-set-with-current-state-and-area";
 import { StateAndInstruction } from "./state-and-instruction";
-import {Instruction} from "./instruction";
+import { StateChangingInstructionSetWithArea } from "../interfaces/state-changing-instruction-set-with-area";
+import { InfiniteCanvasState } from "../state/infinite-canvas-state";
+import { Instruction } from "./instruction";
+import { Rectangle } from "../rectangle";
 
-export class ClearRectWithState extends StateAndInstruction implements StateChangingInstructionSetWithCurrentStateAndArea{
-    constructor(initialState: InfiniteCanvasState, public area: Rectangle, stateChangeInstruction: Instruction, currentState: InfiniteCanvasState, initialStateChangeInstruction: Instruction, stateForInstruction: InfiniteCanvasState){
-        super(initialState, area.getInstructionToClear().instruction, stateChangeInstruction, currentState, initialStateChangeInstruction, stateForInstruction);
+export class ClearRectWithState extends StateAndInstruction implements StateChangingInstructionSetWithArea{
+    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, instruction: Instruction, combinedInstruction: Instruction, public area: Rectangle){
+        super(initialState, state, instruction, combinedInstruction);
     }
     public hasDrawingAcrossBorderOf(area: Rectangle): boolean{
         return false;
@@ -17,7 +17,8 @@ export class ClearRectWithState extends StateAndInstruction implements StateChan
     public isContainedBy(area: Rectangle): boolean {
         return area.contains(this.area);
     }
-    public static create(initialState: InfiniteCanvasState, area: Rectangle): ClearRectWithState{
-        return new ClearRectWithState(initialState, area, undefined, initialState, undefined, initialState);
+    public static createClearRect(initialState: InfiniteCanvasState, area: Rectangle): ClearRectWithState{
+        const instructionToClear: Instruction = area.getInstructionToClear().instruction;
+        return new ClearRectWithState(initialState, initialState, instructionToClear, instructionToClear, area);
     }
 }

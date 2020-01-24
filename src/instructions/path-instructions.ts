@@ -5,17 +5,15 @@ import { AreaChange } from "../area-change";
 import { Point } from "../point";
 import { drawRect } from "../infinite-context/draw-rect";
 import { PathInstruction } from "../interfaces/path-instruction";
-import { InstructionBuilder } from "../instruction-builders/instruction-builder";
+import { transformInstructionAbsolutely } from "../instruction-utils";
 
 export class PathInstructions{
 
     public static clearRect(x: number, y: number, width: number, height: number): PathInstruction{
-        const builder: InstructionBuilder = new InstructionBuilder((context: CanvasRenderingContext2D, transformation: Transformation) => {
-            context.clearRect(x, y, width, height);
-        });
-        builder.transformAbsolute();
         return {
-            instruction:builder.build(),
+            instruction:transformInstructionAbsolutely((context: CanvasRenderingContext2D, transformation: Transformation) => {
+                context.clearRect(x, y, width, height);
+            }),
             changeArea: AreaChange.to(new Rectangle(x, y, width, height))
         };
     }

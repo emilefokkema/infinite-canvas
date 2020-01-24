@@ -1,61 +1,37 @@
-import { StateChangingInstructionSetWithCurrentState } from "../interfaces/state-changing-instruction-set-with-current-state";
-import { Instruction } from "./instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { StateChange } from "../state/state-change";
+import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
 import { InstructionAndState } from "../interfaces/instruction-and-state";
-import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
-import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
+import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
+import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { prependToInstruction } from "../instruction-utils";
 
-export abstract class StateAndInstruction implements StateChangingInstructionSetWithCurrentState{
-    protected constructor(
-        private _initialState: InfiniteCanvasState,
-        protected readonly initialInstruction: Instruction,
-        protected stateChangeInstruction: Instruction,
-        public state: InfiniteCanvasState,
-        protected initialStateChangeInstruction: Instruction,
-        protected readonly stateForInstruction: InfiniteCanvasState){
+export class StateAndInstruction implements StateChangingInstructionSet{
+    constructor(public initialState: InfiniteCanvasState, public state: InfiniteCanvasState, public readonly instruction: Instruction, protected combinedInstruction: Instruction){
     }
-    private change(change: (state: InfiniteCanvasState) => StateChange<InfiniteCanvasState>): void{
-        this.changeToState(change(this.state).newState)
+    public setInitialState(previousState: InfiniteCanvasState): void{
+        this.initialState = previousState;
+        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToState(this.state);
+        this.combinedInstruction = prependToInstruction(instructionToConvert, this.instruction);
     }
-    public get initialState(): InfiniteCanvasState{return this._initialState;}
-    public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): void{
+    public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): void{
         this.state = this.state.withClippedPath(clippedPath);
     }
-    public changeState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
-        this.change(s => s.withChangedState(change));
+    public setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void{
+        this.initialState = previousState;
+        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToStateWithClippedPath(this.state);
+        this.combinedInstruction = prependToInstruction(instructionToConvert, this.instruction);
     }
     public getAllInstructionsAndStates(): InstructionAndState[]{
-        return [{instruction: this.initialInstruction, state: this.stateForInstruction}];
+        return [{instruction: this.instruction, state: this.state}];
     }
-    public saveState(): void{
-        this.change(s => s.save());
+    public copy(): StateAndInstruction{
+        return new StateAndInstruction(this.initialState, this.state, this.instruction, this.combinedInstruction);
     }
-    public restoreState(): void{
-        this.change(s => s.restore());
+    public execute(context: CanvasRenderingContext2D, transformation: Transformation): void{
+        this.combinedInstruction(context, transformation);
     }
-    public changeToState(state: InfiniteCanvasState): void{
-        this.state = state;
-        this.stateChangeInstruction = this.stateForInstruction.convertToState(this.state).instruction;
-    }
-    public changeToStateWithClippedPaths(state: InfiniteCanvasState): void {
-        this.state = state;
-        this.stateChangeInstruction = this.stateForInstruction.convertToStateWithClippedPath(this.state).instruction;
-    }
-    public setInitialState(newInitialState: InfiniteCanvasState): void{
-        this.initialStateChangeInstruction = newInitialState.convertToState(this.stateForInstruction).instruction;
-        this._initialState = newInitialState;
-    }
-    public execute(context: CanvasRenderingContext2D, transformation: Transformation){
-        if(this.initialStateChangeInstruction){
-            this.initialStateChangeInstruction(context, transformation);
-        }
-        if(this.initialInstruction){
-            this.initialInstruction(context, transformation);
-        }
-        if(this.stateChangeInstruction){
-            this.stateChangeInstruction(context, transformation);
-        }
+    public static create(state: InfiniteCanvasState, instruction: Instruction): StateAndInstruction{
+        return new StateAndInstruction(state, state, instruction, instruction);
     }
 }

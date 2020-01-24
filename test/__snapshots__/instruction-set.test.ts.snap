@@ -6,6 +6,7 @@ Array [
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
   "context.lineTo(0,3)",
+  "context.lineWidth = 1",
   "context.fill()",
   "context.save()",
   "context.setTransform(1,0,0,1,0,0)",
@@ -17,6 +18,7 @@ Array [
 exports[`an instruction set that changes state and draws a rectangle and changes state and draws another rectangle should have recorded everything in the right order 1`] = `
 Array [
   "context.fillStyle = \\"#f00\\"",
+  "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",
@@ -40,6 +42,7 @@ exports[`an instruction set that changes state and draws a rectangle and then cl
 exports[`an instruction set that changes state and draws a rectangle and then partially clears that rectangle should end up with a rectangle followed by a clearRect 1`] = `
 Array [
   "context.fillStyle = \\"#f00\\"",
+  "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",

@@ -1,9 +1,7 @@
 import { Transformation } from "./transformation"
 import { ViewBox } from "./interfaces/viewbox";
 import { Instruction } from "./instructions/instruction";
-import { StateChange } from "./state/state-change";
 import { PathInstruction } from "./interfaces/path-instruction";
-import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
 import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider";
@@ -12,9 +10,8 @@ import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
 import { Rectangle } from "./rectangle";
 import { DrawingLock } from "./drawing-lock";
 import { InfiniteCanvasPattern } from "./infinite-canvas-pattern";
-import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
-import { InstructionBuilder } from "./instruction-builders/instruction-builder";
 import { TransformationKind } from "./transformation-kind";
+import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
@@ -37,15 +34,13 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public getDrawingLock(): DrawingLock{
 		return this.drawLockProvider();
 	}
-	public changeState(instruction: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): void{
+	public changeState(instruction: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void{
 		this.instructionSet.changeState(instruction);
 	}
 	public measureText(text: string): TextMetrics{
 		this.context.save();
-		const changeToCurrentState: StateChange<InfiniteCanvasStateInstance> = InfiniteCanvasStateInstance.default.convertToState(this.state.current);
-		if(changeToCurrentState.instruction){
-			changeToCurrentState.instruction(this.context, Transformation.identity);
-		}
+		const changeToCurrentState: Instruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToState(this.state.currentlyTransformed(false).current);
+		changeToCurrentState(this.context, Transformation.identity);
 		const result: TextMetrics = this.context.measureText(text);
 		this.context.restore();
 		return result;
@@ -62,12 +57,6 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public async createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>{
 		const bitmap: ImageBitmap = await createImageBitmap(imageData);
 		return this.context.createPattern(bitmap, 'no-repeat');
-	}
-	public addFillingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
-		this.instructionSet.addFillingDrawing(instruction, area, transformationKind);
-	}
-	public addStrokingDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
-		this.instructionSet.addStrokingDrawing(instruction, area, transformationKind);
 	}
 	public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
 		this.instructionSet.addDrawing(instruction, area, transformationKind);

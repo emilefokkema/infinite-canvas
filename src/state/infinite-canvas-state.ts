@@ -1,49 +1,32 @@
-import { StateChange } from "./state-change";
-import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
 import {StateConversion} from "./state-conversion";
 import {StateConversionWithClippedPaths} from "./state-conversion-with-clipped-paths";
+import { Instruction } from "../instructions/instruction";
+import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 
 export class InfiniteCanvasState{
     constructor(public current: InfiniteCanvasStateInstance, public stack: InfiniteCanvasStateInstance[] = []){}
     public replaceCurrent(newCurrent: InfiniteCanvasStateInstance): InfiniteCanvasState{
         return new InfiniteCanvasState(newCurrent, this.stack);
     }
-    public withChangedState(change: (state: InfiniteCanvasStateInstance) => StateChange<InfiniteCanvasStateInstance>): StateChange<InfiniteCanvasState>{
-        const stateChange: StateChange<InfiniteCanvasStateInstance> = change(this.current);
-        return {
-            newState: new InfiniteCanvasState(stateChange.newState, this.stack),
-            instruction: stateChange.instruction
-        };
+    public withCurrentState(newCurrent: InfiniteCanvasStateInstance): InfiniteCanvasState{
+        return new InfiniteCanvasState(newCurrent, this.stack);
     }
-    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState): InfiniteCanvasState{
+    public currentlyTransformed(transformed: boolean): InfiniteCanvasState{
+        return this.withCurrentState(this.current.changeProperty("fillAndStrokeStylesTransformed", transformed));
+    }
+    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasState{
         return new InfiniteCanvasState(this.current.withClippedPath(clippedPath), this.stack);
     }
-    public save(): StateChange<InfiniteCanvasState>{
-        return {
-            newState: new InfiniteCanvasState(this.current, (this.stack || []).concat([this.current])),
-            instruction: (context: CanvasRenderingContext2D) => {context.save();}
-        };
+    public saved(): InfiniteCanvasState{
+        return new InfiniteCanvasState(this.current, (this.stack || []).concat([this.current]));
     }
-    public lastBeforeFirstSaved(): InfiniteCanvasState{
-        if(this.stack.length === 0){
+    public restored(): InfiniteCanvasState{
+        if(!this.stack || this.stack.length === 0){
             return this;
         }
-        const firstInstance: InfiniteCanvasStateInstance = this.stack[0];
-        return new InfiniteCanvasState(firstInstance);
-    }
-    public restore(): StateChange<InfiniteCanvasState>{
-        if(!this.stack || this.stack.length === 0){
-            return {
-                newState: this,
-                instruction: undefined
-            };
-        }
         const topOfStack: InfiniteCanvasStateInstance = this.stack[this.stack.length - 1];
-        return {
-            newState: new InfiniteCanvasState(topOfStack, this.stack.slice(0, this.stack.length - 1)),
-            instruction: (context: CanvasRenderingContext2D) => {context.restore();}
-        };
+        return new InfiniteCanvasState(topOfStack, this.stack.slice(0, this.stack.length - 1));
     }
 
     private convertToLastSavedInstance(conversion: StateConversion, indexOfLastSavedInstance: number): void{
@@ -60,17 +43,25 @@ export class InfiniteCanvasState{
         conversion.changeCurrentInstanceTo(this.current);
     }
 
-    private convertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
+    private getInstructionToConvertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState): Instruction{
         const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
         this.convertToLastSavedInstance(conversion, indexOfHighestCommon);
         other.convertFromLastSavedInstance(conversion, indexOfHighestCommon);
-        return conversion;
+        return conversion.instruction;
     }
-    public convertToState(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
-        return this.convertToStateUsingConversion(new StateConversion(this), other);
+    public getInstructionToConvertToState(other: InfiniteCanvasState): Instruction{
+        return this.getInstructionToConvertToStateUsingConversion(new StateConversion(this), other);
     }
-    public convertToStateWithClippedPath(other: InfiniteCanvasState): StateChange<InfiniteCanvasState>{
-        return this.convertToStateUsingConversion(new StateConversionWithClippedPaths(this), other);
+    public getInstructionToClearStack(): Instruction{
+        const length: number = this.stack.length;
+        return (context: CanvasRenderingContext2D) => {
+            for(let i: number = 0; i < length; i++){
+                context.restore();
+            }
+        };
+    }
+    public getInstructionToConvertToStateWithClippedPath(other: InfiniteCanvasState): Instruction{
+        return this.getInstructionToConvertToStateUsingConversion(new StateConversionWithClippedPaths(this), other);
     }
     private static findIndexOfHighestCommon(one: InfiniteCanvasStateInstance[], other: InfiniteCanvasStateInstance[]): number{
         let result: number = 0;

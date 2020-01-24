@@ -1,8 +1,6 @@
 import { ViewBox } from "../interfaces/viewbox";
 import { Rectangle } from "../rectangle";
-import { Transformation } from "../transformation";
 import { Instruction } from "../instructions/instruction";
-import { InstructionBuilder } from "../instruction-builders/instruction-builder";
 import { TransformationKind } from "../transformation-kind";
 
 export class InfiniteCanvasDrawImage implements CanvasDrawImage{

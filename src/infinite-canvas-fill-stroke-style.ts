@@ -1,5 +1,6 @@
-import { InstructionBuilder } from "./instruction-builders/instruction-builder";
+import { Instruction } from "./instructions/instruction";
 
 export abstract class InfiniteCanvasFillStrokeStyle {
-    public abstract applyToDrawingInstruction(drawingInstruction: InstructionBuilder, setFillOrStrokeStyle: (context: CanvasRenderingContext2D, fillOrStrokeStyle: string | CanvasGradient | CanvasPattern) => void, transform: boolean): void;
+    public abstract getInstructionToSetUntransformed(propName: "fillStyle" | "strokeStyle"): Instruction;
+    public abstract getInstructionToSetTransformed(propName: "fillStyle" | "strokeStyle"): Instruction;
 }
