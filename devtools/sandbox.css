@@ -2,6 +2,34 @@ body{
     font-family: monospace;
     color: #333;
 }
+body.dark{
+	background-color: #333;
+	color: #ddd;
+}
+a{
+	color:inherit;
+	text-decoration: none;
+}
+.darklight{
+	cursor: pointer;
+}
+#light-button{
+    display: none;
+}
+body.dark #light-button{
+    display: initial;
+}
+body.dark #dark-button{
+    display: none;
+}
+.option{
+	padding: 5px;
+	border-color: rgba(0, 255, 100, 0.5);
+	border-width: 1px;
+	border-style: solid;
+	width:200px;
+	display: inline-block;
+}
 .block{
     display: inline-block;
     vertical-align: top;

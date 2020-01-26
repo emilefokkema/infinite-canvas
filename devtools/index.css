@@ -24,18 +24,17 @@ a:hover{
 .danger{
 	background-color: rgba(255, 0, 0, 0.5)
 }
+.option{
+	padding: 5px;
+	border-color: rgba(0, 255, 100, 0.5);
+	border-width: 1px;
+	border-style: solid;
+	width:200px;
+	display: inline-block;
+}
 body.dark{
 	background-color: #333;
 	color: #ddd;
-}
-#light{
-	display: none;
-}
-body.dark #light{
-	display: initial;
-}
-body.dark #dark{
-	display: none;
 }
 .example{
 	margin-bottom: 30px;
@@ -58,6 +57,7 @@ body.dark #dark{
 	background-color: #fff;
 	border: 1pt solid #000;
 	display: none;
+	z-index: 1000;
 }
 .diff-viewer.visible{
 	display: block;

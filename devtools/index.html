@@ -24,7 +24,7 @@
 	</template>
 	<template id="exampleTemplate">
 		<div class="example" v-bind:class="{danger: !imagesAreEqual && !ignoredMessage, warning: !!ignoredMessage}">
-			<div class="example-title" v-bind:id="example.index">{{example.title}}</div>
+			<div class="example-title" v-bind:id="example.index">{{example.index + 1}}. {{example.title}}</div>
 			<div class="example-ignored-message" v-if="!!ignoredMessage">{{ignoredMessage}}</div>
 			<div>
 				<div class="column">
@@ -40,13 +40,17 @@
 					<input type="checkbox" v-model="greedyGestureHandling"/>
 					<label>greedy gesture handling</label> 
 				</div>
-				<span v-on:click="onViewDiff" class="view-diff-link" v-if="!imagesAreEqual">view diff</span>
+				<span v-on:click="onViewDiff" class="view-diff-link" v-if="diffImageData">view diff</span>
 			</div>
 		</div>
 		
 	</template>
 	<div id="main">
-		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
+		<div class="option">
+			<span class="darklight" v-on:click="setDark" v-if="!dark">dark</span>
+			<span class="darklight" v-on:click="setLight" v-if="dark">light</span>
+		</div>
+		<div class="option"><a href="/sandbox.html">sandbox</a></div>
 		<div v-if="numberSkipped > 0" class="notification">{{numberSkipped}} examples were skipped</div>
 		<div v-if="unequalImages.length > 0" class="danger">
 			<div>Not all images appear to be equal. Please inspect:</div>
@@ -62,9 +66,8 @@
 			</ul>
 			
 		</div>
-		<span id="dark" class="darklight">dark</span>
-		<span id="light" class="darklight">light</span>
 		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal" v-on:ignored="onIgnored" v-on:viewdiff="onViewDiff"></example>
+		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
 	</div>
 	<script type="text/javascript">
 		(function(){
@@ -863,11 +866,14 @@
 						},
 						{
 							code: function(ctx){
-								imagePromise.then(function(image){
+								var image = new Image(300, 227);
+								image.addEventListener('load', e => {
 									ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
 								});
+								image.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";
 							},
-							title: "draw image"
+							title: "draw image",
+							ignored: "can't compare, because toDataURL can't be called because canvas is tainted"
 						},
 						{
 							code:function(ctx){
@@ -984,27 +990,21 @@
 					setDark:function(){
 						document.body.setAttribute("class","dark");
 						this.dark = true;
-						var params = new URLSearchParams(window.location.search);
-						if(!params.has("d")){
-							window.history.replaceState(null, "", "?d=1");
+						if(!localStorage.getItem("dark")){
+							localStorage.setItem("dark", true);
 						}
 					},
 					setLight:function(){
 						document.body.setAttribute("class","");
 						this.dark = false;
-						window.location.search = "";
+						if(localStorage.getItem("dark")){
+							localStorage.removeItem("dark");
+						}
 					}
 				},
 				mounted:function(){
-					var self = this;
-					document.getElementById("light").addEventListener("click", function(){
-						self.setLight();
-					});
-					document.getElementById("dark").addEventListener("click", function(){
-						self.setDark();
-					});
 					var searchParams = new URLSearchParams(window.location.search);
-					if(searchParams.get("d") === "1"){
+					if(localStorage.getItem("dark")){
 						this.setDark();
 					}
 				},
@@ -1022,12 +1022,27 @@
 								infiniteCanvas: undefined,
 								editor: undefined,
 								imagesAreEqual: false,
-								ignoredMessage: undefined
+								ignoredMessage: undefined,
+								diffImageData: undefined
 							};
 						},
 						methods: {
 							onViewDiff: function(){
 								this.$emit("viewdiff", this.diffImageData);
+							},
+							handleImagesUnequal(canvas, infCanvas){
+								try{
+									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
+								}catch(e){}
+								
+								if(this.example.ignored){
+									this.ignoredMessage = this.example.ignored;
+									this.$emit("ignored", {title: this.example.title, index: this.example.index})
+								}else{
+									this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
+								}
 							}
 						},
 						watch:{
@@ -1058,25 +1073,18 @@
 							this.editor.session.setMode("ace/mode/javascript");
 							this.editor.setValue(code);
 							this.editor.clearSelection();
-							//editor.setReadOnly(true);
-							//this.codeText = lines.join("<br/>");
-							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 							this.example.code(regularContext);
 							this.example.code(infiniteContext);
 							this.infiniteCanvas.addEventListener("draw", () => {
-								var dataUrlRegular = canvas.toDataURL();
-								var dataUrlInfinite = infCanvas.toDataURL();
-								this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								try{
+									var dataUrlRegular = canvas.toDataURL();
+									var dataUrlInfinite = infCanvas.toDataURL();
+									this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								}catch(e){
+									this.imagesAreEqual = false;
+								}
 								if(!this.imagesAreEqual){
-									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
-									if(this.example.ignored){
-										this.ignoredMessage = this.example.ignored;
-										this.$emit("ignored", {title: this.example.title, index: this.example.index})
-									}else{
-										this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
-									}
+									this.handleImagesUnequal(canvas, infCanvas);
 								}
 							}, {once: true});
 
