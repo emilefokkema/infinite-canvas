@@ -1,7 +1,6 @@
 import { ViewBox } from "../interfaces/viewbox";
-import { lineWidth } from "../state/dimensions/line-width";
+import { lineWidth, lineDashOffset } from "../state/dimensions/infinite-canvas-transformable-scalar-state-instance-dimension";
 import { lineDash } from "../state/dimensions/line-dash";
-import { lineDashOffset } from "../state/dimensions/line-dash-offset";
 
 export class InfiniteCanvasPathDrawingStyles implements CanvasPathDrawingStyles{
 	constructor(private viewBox: ViewBox){}

@@ -1,5 +1,6 @@
 import { Transformation } from "../transformation";
 import { ClippedPaths } from "../instructions/clipped-paths";
+import { Point } from "../point";
 
 export interface StateInstanceProperties {
     fillStyle: string | CanvasGradient | CanvasPattern;
@@ -14,4 +15,7 @@ export interface StateInstanceProperties {
     textBaseline: CanvasTextBaseline;
     clippedPaths: ClippedPaths;
     fillAndStrokeStylesTransformed: boolean;
+    shadowOffset: Point;
+    shadowColor: string;
+    shadowBlur: number;
 }

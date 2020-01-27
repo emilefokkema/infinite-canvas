@@ -5,6 +5,7 @@ import {Rectangle} from "../rectangle";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { Point } from "../point";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -19,6 +20,9 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly textBaseline: CanvasTextBaseline;
     public readonly clippedPaths: ClippedPaths;
     public readonly fillAndStrokeStylesTransformed: boolean;
+    public readonly shadowOffset: Point;
+    public readonly shadowColor: string;
+    public readonly shadowBlur: number;
     constructor(
         props: StateInstanceProperties
     ){
@@ -34,6 +38,9 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         this.textBaseline = props.textBaseline;
         this.clippedPaths = props.clippedPaths;
         this.fillAndStrokeStylesTransformed = props.fillAndStrokeStylesTransformed;
+        this.shadowOffset = props.shadowOffset;
+        this.shadowColor = props.shadowColor;
+        this.shadowBlur = props.shadowBlur;
     }
     public changeProperty<K extends keyof StateInstanceProperties>(property: K, newValue: StateInstanceProperties[K]): InfiniteCanvasStateInstance{
         const {fillStyle,
@@ -47,7 +54,10 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             textAlign,
             textBaseline,
             clippedPaths,
-            fillAndStrokeStylesTransformed} = this;
+            fillAndStrokeStylesTransformed,
+            shadowOffset,
+            shadowColor,
+            shadowBlur} = this;
         const newProps: StateInstanceProperties = {
             fillStyle,
             lineWidth,
@@ -60,7 +70,10 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             textAlign,
             textBaseline,
             clippedPaths,
-            fillAndStrokeStylesTransformed
+            fillAndStrokeStylesTransformed,
+            shadowOffset,
+            shadowColor,
+            shadowBlur
         };
         newProps[property] = newValue;
         return new InfiniteCanvasStateInstance(newProps);
@@ -110,7 +123,10 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         textAlign: "start",
         textBaseline: "alphabetic",
         clippedPaths: undefined,
-        fillAndStrokeStylesTransformed: false
+        fillAndStrokeStylesTransformed: false,
+        shadowOffset: {x: 0, y: 0},
+        shadowColor: 'rgba(0, 0, 0, 0)',
+        shadowBlur: 0
     });
     public static setDefault: Instruction = () => {};
 }

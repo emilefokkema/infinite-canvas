@@ -1793,4 +1793,31 @@ describe("an infinite canvas context", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	});
+
+	describe("that uses shadow styles", () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle ="#f00";
+			infiniteContext.shadowColor = "#000";
+			infiniteContext.shadowOffsetX = 10;
+			infiniteContext.shadowOffsetY = 10;
+			infiniteContext.fillRect(30, 30, 100, 100);
+		});
+
+		it("should use shadow styles", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe("and then transforms", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				viewbox.transformation = Transformation.scale(0.5).before(new Transformation(0, 1, -1, 0, 0, 0)).before(Transformation.translation(10, 10));
+			});
+
+			it("should transform the shadow offsets together", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
 })

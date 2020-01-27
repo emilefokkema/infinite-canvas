@@ -37,7 +37,11 @@ export class CanvasContextMock{
             "direction",
             "font",
             "textAlign",
-            "textBaseline"
+            "textBaseline",
+            "shadowOffsetX",
+            "shadowOffsetY",
+            "shadowColor",
+            "shadowBlur"
         ];
         this.mock = {};
         for(const methodName of methods){

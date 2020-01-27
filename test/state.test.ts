@@ -266,7 +266,10 @@ describe("a default state", () => {
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same
                 clippedPaths: undefined,                                //same
-                fillAndStrokeStylesTransformed: false
+                fillAndStrokeStylesTransformed: false,
+                shadowOffset: {x: 0, y: 0},
+                shadowColor: 'rgba(0, 0, 0, 0)',
+                shadowBlur: 0
             }));
             changeInstruction = state.getInstructionToConvertToState(otherState);
         });

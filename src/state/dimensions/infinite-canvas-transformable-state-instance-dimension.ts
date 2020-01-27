@@ -4,7 +4,7 @@ import { InfiniteCanvasStateInstance } from "../infinite-canvas-state-instance";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 
 export abstract class InfiniteCanvasTransformableStateInstanceDimension<K extends keyof StateInstanceProperties> implements TypedStateInstanceDimension<StateInstanceProperties[K]>{
-    constructor(private readonly propertyName: K){}
+    constructor(protected readonly propertyName: K){}
     protected abstract changeToNewValueTransformed(newValue: StateInstanceProperties[K]): Instruction;
     protected abstract changeToNewValueUntransformed(newValue: StateInstanceProperties[K]): Instruction;
     protected abstract valuesAreEqual(oldValue: StateInstanceProperties[K], newValue: StateInstanceProperties[K]): boolean;

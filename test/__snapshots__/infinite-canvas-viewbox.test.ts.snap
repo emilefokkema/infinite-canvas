@@ -2617,6 +2617,46 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that uses shadow styles and then transforms should transform the shadow offsets together 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = \\"#f00\\"",
+  "context.lineWidth = 0.5",
+  "context.shadowOffsetX = -5",
+  "context.shadowOffsetY = 5",
+  "context.shadowColor = \\"#000\\"",
+  "context.beginPath()",
+  "context.moveTo(-5,25)",
+  "context.lineTo(-5,75)",
+  "context.lineTo(-55,75)",
+  "context.lineTo(-55,25)",
+  "context.lineTo(-5,25)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that uses shadow styles should use shadow styles 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = \\"#f00\\"",
+  "context.lineWidth = 1",
+  "context.shadowOffsetX = 10",
+  "context.shadowOffsetY = 10",
+  "context.shadowColor = \\"#000\\"",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(130,30)",
+  "context.lineTo(130,130)",
+  "context.lineTo(30,130)",
+  "context.lineTo(30,30)",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context whose state is changed and then draws something should have modified the context correctly 1`] = `
 Array [
   "context.restore()",
