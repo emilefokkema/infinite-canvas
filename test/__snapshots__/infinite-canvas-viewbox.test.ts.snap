@@ -339,6 +339,33 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that clips and then draws an image and then clears an area covering the clipped area but not the image should forget about the image and not add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that clips and then puts image data and then clears an area covering the clipped area but not the image should not forget about the image and add a clearRect 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.translate(0,0)",
+  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.imageSmoothingEnabled = false",
+  "context.fillRect(0,0,200,200)",
+  "context.restore()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.clearRect(9,9,12,12)",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects and then removes the second filled rectangle by clearing a rect and then removes the first filled rectangle by clearing a rect should still contain two clipping instructions 1`] = `
 Array [
   "context.restore()",

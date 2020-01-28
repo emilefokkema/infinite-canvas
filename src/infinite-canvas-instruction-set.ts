@@ -58,12 +58,15 @@ export class InfiniteCanvasInstructionSet{
         }
 		this.drawPath(instruction, pathInstructions);
 	}
-    public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind): void{
+    public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
         if(transformationKind === TransformationKind.Relative){
 			instruction = transformInstructionRelatively(instruction);
 			area = area.transform(this.state.current.transformation);
 		}else if(transformationKind === TransformationKind.Absolute){
 			instruction = transformInstructionAbsolutely(instruction);
+        }
+        if(this.state.current.clippingRegion && takeClippingRegionIntoAccount){
+            area = area.intersectWith(this.state.current.clippingRegion);
         }
         const drawing: RectangularDrawing = RectangularDrawing.createDrawing(this.state.currentlyTransformed(false), instruction, area);
         this.drawBeforeCurrentPath(drawing);

@@ -11,7 +11,7 @@ export class InfiniteCanvasText implements CanvasText{
 		}: (context: CanvasRenderingContext2D) => {
 			context.fillText(text, x, y, maxWidth);
 		};
-		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative);
+		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative, true);
 	}
 	public measureText(text: string): TextMetrics{return this.viewBox.measureText(text);}
 	public strokeText(text: string, x: number, y: number, maxWidth?: number): void{
@@ -20,7 +20,7 @@ export class InfiniteCanvasText implements CanvasText{
 		}: (context: CanvasRenderingContext2D) => {
 			context.strokeText(text, x, y, maxWidth);
 		};
-		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative);
+		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative, true);
 	}
 	private getDrawnRectangle(x: number, y: number, text: string): Rectangle{
 		const measured: TextMetrics = this.viewBox.measureText(text);

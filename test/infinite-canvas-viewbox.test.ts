@@ -1507,6 +1507,85 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that clips and then puts image data", () => {
+		let clipX: number;
+		let clipY: number;
+		let clipWidth: number;
+		let clipHeight: number;
+		let imageDataWidth: number;
+		let imageDataHeight: number;
+		let createImageBitmapSpy: jest.SpyInstance;
+
+		beforeEach((done) => {
+			imageDataWidth = 100;
+			imageDataHeight = 100;
+			clipX = 10;
+			clipY = 10;
+			clipWidth = 10;
+			clipHeight = 10;
+			let resolveImageBitmap: (bitmap: ImageBitmap | PromiseLike<ImageBitmap>) => void;
+			const imageBitmap: ImageBitmap = {width: imageDataWidth, height: imageDataHeight, close(){}};
+			createImageBitmapSpy = jest.spyOn(window, 'createImageBitmap').mockImplementation(() => new Promise((res) => {resolveImageBitmap = res;}));
+			const array: Uint8ClampedArray = new Uint8ClampedArray(4 * width * height);
+			const imageData: ImageData = {data: array, height: height, width: width};
+			infiniteContext.putImageData(imageData, 0, 0);
+			resolveImageBitmap(imageBitmap);
+			setTimeout(() => {
+				contextMock.clear();
+				executeLatestDrawingInstruction();
+				done();
+			}, 0);
+		});
+
+		describe("and then clears an area covering the clipped area but not the image", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(clipX - 1, clipY - 1, clipWidth + 2, clipHeight + 2);
+			});
+
+			it("should not forget about the image and add a clearRect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		afterEach(() => {
+			createImageBitmapSpy.mockRestore();
+		});
+
+	});
+
+	describe("that clips and then draws an image", () => {
+		let clipX: number;
+		let clipY: number;
+		let clipWidth: number;
+		let clipHeight: number;
+
+		beforeEach(() => {
+			clipX = 10;
+			clipY = 10;
+			clipWidth = 10;
+			clipHeight = 10;
+			let image: CanvasImageSource = {width: 100, height: 100, close(){}};
+			infiniteContext.beginPath();
+			infiniteContext.rect(clipX, clipY, clipWidth, clipHeight);
+			infiniteContext.clip();
+			infiniteContext.drawImage(image, 0, 0);
+		});
+
+		describe("and then clears an area covering the clipped area but not the image", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(clipX - 1, clipY - 1, clipWidth + 2, clipHeight + 2);
+			});
+
+			it("should forget about the image and not add a clearRect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
 	describe("that uses an image", () => {
 		let image: CanvasImageSource;
 		let imageWidth: number;

@@ -24,6 +24,6 @@ export class InfiniteCanvasImageData implements CanvasImageData{
 			context.fillStyle = pattern;
 			context.imageSmoothingEnabled = false;
 			context.fillRect(0, 0, imagedata.width, imagedata.height);
-		}, new Rectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute);
+		}, new Rectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute, false);
 	}
 }
