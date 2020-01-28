@@ -8,7 +8,8 @@
     "test": "jest",
     "build": "npx webpack",
     "update-snapshot": "jest --updateSnapshot",
-    "build:dev": "node build-dev.js"
+    "run:dev": "node run-dev.js",
+    "build:dev": "webpack --mode=development"
   },
   "keywords": [
     "canvas",
