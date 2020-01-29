@@ -1,6 +1,6 @@
 import {InfiniteCanvasFillStrokeStyle} from "./infinite-canvas-fill-stroke-style";
-import { Transformation } from "./transformation";
-import { Instruction } from "./instructions/instruction";
+import { Transformation } from "../transformation";
+import { Instruction } from "../instructions/instruction";
 
 export abstract class InfiniteCanvasGradient extends InfiniteCanvasFillStrokeStyle implements CanvasGradient{
     private colorStops: {offset: number; color: string}[] = [];

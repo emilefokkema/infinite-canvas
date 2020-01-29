@@ -1,5 +1,5 @@
 import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
-import { Instruction } from "./instructions/instruction";
+import { Instruction } from "../instructions/instruction";
 
 export class InfiniteCanvasPattern extends InfiniteCanvasFillStrokeStyle implements CanvasPattern{
     constructor(private readonly fillStrokeStyle: CanvasPattern){

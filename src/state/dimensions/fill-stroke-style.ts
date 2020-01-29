@@ -1,8 +1,8 @@
-import { InfiniteCanvasFillStrokeStyle } from "../../infinite-canvas-fill-stroke-style";
+import { InfiniteCanvasFillStrokeStyle } from "../../styles/infinite-canvas-fill-stroke-style";
 import { Instruction } from "../../instructions/instruction";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 import { InfiniteCanvasStateInstance } from "../infinite-canvas-state-instance";
-import { InfiniteCanvasPattern } from "../../infinite-canvas-pattern";
+import { InfiniteCanvasPattern } from "../../styles/infinite-canvas-pattern";
 
 class FillStrokeStyle<K extends "fillStyle" | "strokeStyle"> implements TypedStateInstanceDimension<string | CanvasGradient | CanvasPattern>{
     constructor(private readonly propName: K){}

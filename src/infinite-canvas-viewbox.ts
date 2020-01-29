@@ -5,11 +5,11 @@ import { PathInstruction } from "./interfaces/path-instruction";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
 import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider";
-import {InfiniteCanvasLinearGradient} from "./infinite-canvas-linear-gradient";
-import {InfiniteCanvasRadialGradient} from "./infinite-canvas-radial-gradient";
+import {InfiniteCanvasLinearGradient} from "./styles/infinite-canvas-linear-gradient";
+import {InfiniteCanvasRadialGradient} from "./styles/infinite-canvas-radial-gradient";
 import { Rectangle } from "./rectangle";
 import { DrawingLock } from "./drawing-lock";
-import { InfiniteCanvasPattern } from "./infinite-canvas-pattern";
+import { InfiniteCanvasPattern } from "./styles/infinite-canvas-pattern";
 import { TransformationKind } from "./transformation-kind";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 
