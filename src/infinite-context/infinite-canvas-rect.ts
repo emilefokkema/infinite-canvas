@@ -9,10 +9,10 @@ export class InfiniteCanvasRect implements CanvasRect{
     }
     public fillRect(x: number, y: number, w: number, h: number): void{
         let instruction: Instruction = (context: CanvasRenderingContext2D) => context.fill();
-        this.viewBox.fillPath(instruction, [PathInstructions.rect(x, y, w, h)])
+        this.viewBox.drawPath(instruction, [PathInstructions.rect(x, y, w, h)])
     }
     public strokeRect(x: number, y: number, w: number, h: number): void{
         let instruction: Instruction = (context: CanvasRenderingContext2D) => context.stroke();
-        this.viewBox.strokePath(instruction, [PathInstructions.rect(x, y, w, h)]);
+        this.viewBox.drawPath(instruction, [PathInstructions.rect(x, y, w, h)]);
     }
 }

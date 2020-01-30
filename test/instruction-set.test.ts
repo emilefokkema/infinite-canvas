@@ -29,7 +29,7 @@ describe("an instruction set", () => {
         describe("and then fills it", () => {
 
             beforeEach(() => {
-                instructionSet.fillPath((context: CanvasRenderingContext2D) => {context.fill();});
+                instructionSet.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
             });
 
             it("should have called onchange", () => {
@@ -60,7 +60,7 @@ describe("an instruction set", () => {
 
         beforeEach(() => {
             instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
-            instructionSet.fillPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
                 context.fill();
             }, [PathInstructions.rect(0, 0, 1, 1)]);
         });
@@ -109,7 +109,7 @@ describe("an instruction set", () => {
 
             beforeEach(() => {
                 instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
-                instructionSet.fillPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
+                instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
                     context.fill();
                 }, [PathInstructions.rect(2, 0, 1, 1)]);
             });

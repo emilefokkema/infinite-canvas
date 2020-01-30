@@ -36,7 +36,11 @@ export class InfiniteCanvasInstructionSet{
         this.setInstructionToRestoreState();
     }
 
-    private drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
+    public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
+        const stateIsTransformable: boolean = this.state.current.isTransformable();
+        if(!stateIsTransformable){
+            instruction = transformInstructionRelatively(instruction);
+        }
         if(pathInstructions){
             this.drawPathInstructions(pathInstructions, instruction);
         }else{
@@ -44,20 +48,7 @@ export class InfiniteCanvasInstructionSet{
         }
         this.onChange();
     }
-    public fillPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
-        const stateIsTransformable: boolean = this.state.current.isTransformable();
-        if(!stateIsTransformable){
-            instruction = transformInstructionRelatively(instruction);
-        }
-		this.drawPath(instruction, pathInstructions);
-	}
-	public strokePath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
-        const stateIsTransformable: boolean = this.state.current.isTransformable();
-        if(!stateIsTransformable){
-            instruction = transformInstructionRelatively(instruction);
-        }
-		this.drawPath(instruction, pathInstructions);
-	}
+
     public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
         if(transformationKind === TransformationKind.Relative){
 			instruction = transformInstructionRelatively(instruction);

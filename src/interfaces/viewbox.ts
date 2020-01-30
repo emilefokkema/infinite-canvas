@@ -8,8 +8,7 @@ import { TransformableBox } from "./transformable-box";
 
 export interface ViewBox extends TransformableBox, CurrentState{
     measureText(text: string): TextMetrics;
-    fillPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
-    strokePath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
+    drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
     addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void;
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;

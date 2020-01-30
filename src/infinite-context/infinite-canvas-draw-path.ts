@@ -27,7 +27,7 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 			(context: CanvasRenderingContext2D) => {
 				context.fill();
 			};
-		this.viewBox.fillPath(instruction);
+		this.viewBox.drawPath(instruction);
 	}
 	public isPointInPath(xOrPath: number | Path2D, xOry: number, yOrFillRule: number | CanvasFillRule, fillRule?: CanvasFillRule): boolean{return true;}
 	public isPointInStroke(xOrPath: number | Path2D, xOry: number, y?:number): boolean{return true;}
@@ -35,6 +35,6 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 		let instruction: Instruction = (context: CanvasRenderingContext2D) => {
 			context.stroke();
 		};
-		this.viewBox.strokePath(instruction);
+		this.viewBox.drawPath(instruction);
 	}
 }
