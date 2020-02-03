@@ -9,7 +9,7 @@ Array [
   "context.lineWidth = 1",
   "context.fill()",
   "context.save()",
-  "context.setTransform(1,0,0,1,0,0)",
+  "context.transform(1,0,0,1,0,0)",
   "context.clearRect(0,0,1,1)",
   "context.restore()",
 ]
@@ -51,7 +51,7 @@ Array [
   "context.lineTo(0,0)",
   "context.fill()",
   "context.save()",
-  "context.setTransform(1,0,0,1,0,0)",
+  "context.transform(1,0,0,1,0,0)",
   "context.clearRect(0.5,0,2,2)",
   "context.restore()",
 ]

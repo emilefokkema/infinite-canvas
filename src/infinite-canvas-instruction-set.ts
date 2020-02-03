@@ -149,15 +149,19 @@ export class InfiniteCanvasInstructionSet{
     }
 
     public clearArea(x: number, y: number, width: number, height: number): void{
-        const rectangle: Rectangle = new Rectangle(x, y, width, height).transform(this.state.current.transformation);
-        if(!this.intersects(rectangle)){
+        const rectangle: Rectangle = new Rectangle(x, y, width, height);
+        const transformedRectangle: Rectangle = rectangle.transform(this.state.current.transformation)
+        if(!this.intersects(transformedRectangle)){
             return;
         }
-        this.clearContentsInsideArea(rectangle);
-        if(this.currentInstructionsWithPath && this.currentInstructionsWithPath.hasDrawingAcrossBorderOf(rectangle)){
-            this.currentInstructionsWithPath.addClearRect(rectangle);
-        }else if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(rectangle)){
-            this.previousInstructionsWithPath.addClearRect(rectangle);
+        this.clearContentsInsideArea(transformedRectangle);
+        if(this.currentInstructionsWithPath && this.currentInstructionsWithPath.hasDrawingAcrossBorderOf(transformedRectangle)){
+            this.currentInstructionsWithPath.addClearRect(rectangle, this.state);
+        }else if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(transformedRectangle)){
+            this.previousInstructionsWithPath.addClearRect(rectangle, this.state);
+            if(this.currentInstructionsWithPath){
+                this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state);
+            }
         }
 		this.onChange();
     }
