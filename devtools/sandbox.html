@@ -8,6 +8,11 @@
     <title>InfiniteCanvas sandbox</title>
 </head>
 <body>
+    <div class="option">
+        <span id="dark-button" class="darklight">dark</span>
+        <span id="light-button" class="darklight">light</span>
+    </div>
+    <div class="option"><a href="/">test examples</a></div>
     <div class="title"><h3>InfiniteCanvas Sandbox</h3></div>
     <div class="block">
         <canvas width="600" height="600" id="canvas"></canvas>
@@ -20,14 +25,18 @@
         (function(){
             var editor = ace.edit(document.getElementById("code"));
             editor.session.setMode("ace/mode/javascript");
-            editor.setValue(
-                "var canvasElement = document.getElementById(\"canvas\");\r\n"
+            var sandboxCode = localStorage.getItem("sandboxCode") || "var canvasElement = document.getElementById(\"canvas\");\r\n"
                 +"var infiniteCanvas = new InfiniteCanvas(canvasElement);\r\n"
-                +"var context = infiniteCanvas.getContext();\r\n"
+                +"var context = infiniteCanvas.getContext(\"2d\");\r\n"
                 +"infiniteCanvas.greedyGestureHandling = true;\r\n"
                 +"\r\n"
                 +"context.fillStyle =\"#f00\";\r\n"
-                +"context.fillRect(30, 30, 100, 100);");
+                +"context.fillRect(30, 30, 100, 100);";
+            localStorage.setItem("sandboxCode", sandboxCode);
+            editor.setValue(sandboxCode);
+            editor.on("change", function(){
+                localStorage.setItem("sandboxCode", editor.getValue());
+            });
             editor.clearSelection();
             function run(){
                 var canvas = document.getElementById("canvas");
@@ -44,7 +53,30 @@
 
                 eval(code);
             }
+            var setLight = function(){
+                document.body.setAttribute("class", "");
+                editor.setTheme("");
+                if(localStorage.getItem("dark")){
+                    localStorage.removeItem("dark");
+                }
+            };
+            var setDark = function(){
+                document.body.setAttribute("class", "dark");
+                editor.setTheme("ace/theme/monokai");
+                if(!localStorage.getItem("dark")){
+                    localStorage.setItem("dark", true);
+                }
+            };
+            if(localStorage.getItem("dark")){
+                setDark();
+            }
             document.getElementById("run").addEventListener("click", run);
+            document.getElementById("dark-button").addEventListener("click", function(){
+                setDark();
+            });
+            document.getElementById("light-button").addEventListener("click", function(){
+                setLight();
+            });
             run();
         })();
     </script>

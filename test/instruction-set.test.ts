@@ -1,7 +1,8 @@
-import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
 import { Transformation } from "../src/transformation";
 import { PathInstructions } from "../src/instructions/path-instructions";
 import { logInstruction } from "./log-instruction";
+import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
+import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -58,7 +59,7 @@ describe("an instruction set", () => {
     describe("that changes state and draws a rectangle", () => {
 
         beforeEach(() => {
-            instructionSet.changeState(s => s.setFillStyle("#f00"));
+            instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
             instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
                 context.fill();
             }, [PathInstructions.rect(0, 0, 1, 1)]);
@@ -107,7 +108,7 @@ describe("an instruction set", () => {
         describe("and changes state and draws another rectangle", () => {
 
             beforeEach(() => {
-                instructionSet.changeState(s => s.setFillStyle("#00f"));
+                instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
                 instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
                     context.fill();
                 }, [PathInstructions.rect(2, 0, 1, 1)]);

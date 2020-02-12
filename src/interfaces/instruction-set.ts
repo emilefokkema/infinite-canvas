@@ -4,5 +4,4 @@ import { InstructionAndState } from "./instruction-and-state";
 export interface InstructionSet{
     execute: Instruction;
     getAllInstructionsAndStates(): InstructionAndState[];
-    destroy(): void;
 }

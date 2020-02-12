@@ -14,6 +14,8 @@ import { EventListener } from "./custom-events/event-listener";
 import { EventDispatchers } from "./custom-events/event-dispatchers";
 import { InfiniteCanvasEventDispatcher } from "./custom-events/infinite-canvas-event-dispatcher";
 import { DrawingIterationProviderWithCallback } from "./drawing-iteration-provider-with-callback";
+import { DrawingLock } from "./drawing-lock";
+import { LockableDrawingIterationProvider } from "./lockable-drawing-iteration-provider";
 
 export class InfiniteCanvas implements InfiniteCanvasConfig{
 	private context: InfiniteCanvasRenderingContext2D;
@@ -28,7 +30,13 @@ export class InfiniteCanvas implements InfiniteCanvasConfig{
 		};
 		const drawingIterationProvider: DrawingIterationProviderWithCallback = new DrawingIterationProviderWithCallback(new AnimationFrameDrawingIterationProvider());
 		drawingIterationProvider.onDraw(() => this.dispatchDrawEvent());
-		this.viewBox = new InfiniteCanvasViewBox(canvas.width, canvas.height, canvas.getContext("2d"), drawingIterationProvider);
+		const lockableDrawingIterationProvider: LockableDrawingIterationProvider = new LockableDrawingIterationProvider(drawingIterationProvider);
+		this.viewBox = new InfiniteCanvasViewBox(
+			canvas.width,
+			canvas.height,
+			canvas.getContext("2d"),
+			lockableDrawingIterationProvider,
+			() => lockableDrawingIterationProvider.getLock());
 		this.transformer = new InfiniteCanvasTransformer(this.viewBox, this.config);
 		const events: InfiniteCanvasEvents = new InfiniteCanvasEvents(canvas, this.viewBox, this.transformer, this.config);
 	}

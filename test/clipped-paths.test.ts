@@ -1,50 +1,39 @@
 import { ClippedPaths } from "../src/instructions/clipped-paths";
-import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { PathInstructions } from "../src/instructions/path-instructions";
 import { InstructionSet } from "../src/interfaces/instruction-set";
 import { logInstruction } from "./log-instruction";
 import { Transformation } from "../src/transformation";
 import { defaultState } from "../src/state/default-state";
-import {StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState} from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
+import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 
 describe("a clipped paths", () => {
     let clippedPaths: ClippedPaths;
+    let currentState: InfiniteCanvasState;
 
     describe("and another one", () => {
         let clippedPath: InstructionsWithPath;
         let otherOne: ClippedPaths;
 
         beforeEach(() => {
-            clippedPath = InstructionsWithPath.create(defaultState);
-            clippedPath.addPathInstruction(PathInstructions.moveTo(0, 0));
-            clippedPath.addPathInstruction(PathInstructions.lineTo(1, 0));
-            clippedPath.addPathInstruction(PathInstructions.lineTo(1, 1));
-            let copy: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = clippedPath.recreateClippedPath();
-            clippedPaths = new ClippedPaths(copy.getClippedArea(), copy);
-            otherOne = new ClippedPaths(copy.getClippedArea(), copy);
-        });
-
-        describe("containing the same clipped paths", () => {
-
-            beforeEach(() => {
-                clippedPath.addPathInstruction(PathInstructions.lineTo(0, 1));
-                let copy: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = clippedPath.recreateClippedPath();
-                clippedPaths = clippedPaths.withClippedPath(copy);
-                otherOne = otherOne.withClippedPath(copy);
-            });
-
-            it("should be equal", () => {
-                expect(clippedPaths.equals(otherOne)).toBe(true);
-            });
+            currentState = defaultState;
+            clippedPath = InstructionsWithPath.create(currentState);
+            clippedPath.addPathInstruction(PathInstructions.moveTo(0, 0), currentState);
+            clippedPath.addPathInstruction(PathInstructions.lineTo(1, 0), currentState);
+            clippedPath.addPathInstruction(PathInstructions.lineTo(1, 1), currentState);
+            clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+            currentState = clippedPath.state;
+            clippedPaths = currentState.current.clippedPaths;
+            otherOne = clippedPaths;
         });
 
         describe("containing one more clipped path", () => {
 
             beforeEach(() => {
-                clippedPath.addPathInstruction(PathInstructions.lineTo(0, 1));
-                let copy: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = clippedPath.recreateClippedPath();
-                otherOne = otherOne.withClippedPath(copy);
+                clippedPath.addPathInstruction(PathInstructions.lineTo(0, 1), currentState);
+                clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                otherOne = clippedPath.state.current.clippedPaths;
             });
 
             it("then one should contain the other, but not the other way around", () => {
@@ -69,9 +58,9 @@ describe("a clipped paths", () => {
             describe("and another one, still based on the same path", () => {
 
                 beforeEach(() => {
-                    clippedPath.addPathInstruction(PathInstructions.lineTo(0, 0));
-                    let copy: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = clippedPath.recreateClippedPath();
-                    otherOne = otherOne.withClippedPath(copy);
+                    clippedPath.addPathInstruction(PathInstructions.lineTo(0, 0), currentState);
+                    clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                    otherOne = clippedPath.state.current.clippedPaths;
                 });
 
                 describe("and then the other is recreated, starting from the first", () => {
@@ -92,10 +81,12 @@ describe("a clipped paths", () => {
             describe("and another one", () => {
 
                 beforeEach(() => {
-                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(clippedPath.state);
-                    otherClippedPath.changeState(s => s.setFillStyle("#f00"));
-                    otherClippedPath.addPathInstruction(PathInstructions.moveTo(1,1));
-                    otherOne = otherOne.withClippedPath(otherClippedPath);
+                    currentState = clippedPath.state;
+                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
+                    currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
+                    otherClippedPath.addPathInstruction(PathInstructions.moveTo(1,1), currentState);
+                    otherClippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                    otherOne = otherClippedPath.state.current.clippedPaths;
                 });
 
                 describe("and then the other is recreated, starting from the first", () => {

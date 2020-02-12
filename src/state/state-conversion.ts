@@ -1,35 +1,32 @@
 import {InfiniteCanvasState} from "./infinite-canvas-state";
 import {Instruction} from "../instructions/instruction";
-import {StateChange} from "./state-change";
 import {Transformation} from "../transformation";
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
 
-export class StateConversion implements StateChange<InfiniteCanvasState>{
+export class StateConversion {
     private instructions: Instruction[] = [];
-    public newState: InfiniteCanvasState;
-    constructor(private readonly initial: InfiniteCanvasState) {
-        this.newState = initial;
+    constructor(protected currentState: InfiniteCanvasState) {
+
     }
     public restore(): void{
-        this.change(s => s.restore());
+        this.addChangeToState(this.currentState.restored(), (context: CanvasRenderingContext2D) => {context.restore();});
     }
     public save(): void{
-        this.change(s => s.save());
+        this.addChangeToState(this.currentState.saved(), (context: CanvasRenderingContext2D) => {context.save();});
     }
     public changeCurrentInstanceTo(instance: InfiniteCanvasStateInstance): void{
-        if(this.newState.current.equals(instance)){
+        if(this.currentState.current.equals(instance)){
             return;
         }
-        this.change(s => s.withChangedState(s => s.convertToState(instance)));
+        const instructionToChangeCurrentInstance: Instruction = this.currentState.current.getInstructionToConvertToState(instance);
+        const stateWithNewCurrentInstance: InfiniteCanvasState = this.currentState.withCurrentState(instance);
+        this.addChangeToState(stateWithNewCurrentInstance, instructionToChangeCurrentInstance);
     }
-    protected addChange(stateChange: StateChange<InfiniteCanvasState>){
-        this.newState = stateChange.newState;
-        if(stateChange.instruction){
-            this.instructions.push(stateChange.instruction);
+    protected addChangeToState(newState: InfiniteCanvasState, instruction: Instruction): void{
+        this.currentState = newState;
+        if(instruction){
+            this.instructions.push(instruction);
         }
-    }
-    protected change(change: (state: InfiniteCanvasState) => StateChange<InfiniteCanvasState>){
-        this.addChange(change(this.newState))
     }
     public get instruction(): Instruction{
         if(this.instructions.length === 0){

@@ -6,11 +6,13 @@ export class CanvasContextMock{
         this.logs = [];
         let linearGradientId: number = 0;
         let radialGradientId: number = 0;
+        let patternId: number = 0;
         const methods: string[] = [
             "setLineDash",
             "clearRect",
             "fillRect",
             "setTransform",
+            "translate",
             "transform",
             "beginPath",
             "moveTo",
@@ -20,13 +22,26 @@ export class CanvasContextMock{
             "save",
             "restore",
             "stroke",
-            "clip"
+            "clip",
+            "drawImage",
+            "measureText",
+            "fillText",
+            "strokeText"
         ];
         const setters: string[] = [
             "fillStyle",
             "strokeStyle",
             "lineWidth",
-            "lineDashOffset"
+            "lineDashOffset",
+            "imageSmoothingEnabled",
+            "direction",
+            "font",
+            "textAlign",
+            "textBaseline",
+            "shadowOffsetX",
+            "shadowOffsetY",
+            "shadowColor",
+            "shadowBlur"
         ];
         this.mock = {};
         for(const methodName of methods){
@@ -43,6 +58,12 @@ export class CanvasContextMock{
         this.mock.createRadialGradient = function(...args: any){
             self.logMethod("createRadialGradient", ...args);
             const returnValue: string  = `[radial-gradient-${radialGradientId++}]`;
+            self.logs.push(`=> ${returnValue}`);
+            return returnValue;
+        };
+        this.mock.createPattern = function(...args: any){
+            self.logMethod("createPattern", ...args);
+            const returnValue: string  = `[pattern-${patternId++}]`;
             self.logs.push(`=> ${returnValue}`);
             return returnValue;
         };

@@ -39,16 +39,16 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 		this.canvasTransform = new InfiniteCanvasTransform(viewBox);
 		this.canvasCompositing = new InfiniteCanvasCompositing();
 		this.canvasStrokeStyles = new InfiniteCanvasFillStrokeStyles(viewBox);
-		this.canvasShadowStyles = new InfiniteCanvasShadowStyles();
+		this.canvasShadowStyles = new InfiniteCanvasShadowStyles(viewBox);
 		this.canvasFilters = new InfinitCanvasFilters();
 		this.canvasRect = new InfiniteCanvasRect(viewBox);
 		this.canvasDrawPath = new InfiniteCanvasDrawPath(viewBox);
 		this.canvasUserInterface = new InfiniteCanvasUserInterface();
-		this.canvasText = new InfiniteCanvasText();
-		this.canvasDrawImage = new InfiniteCanvasDrawImage();
-		this.canvasImageData = new InfiniteCanvasImageData();
+		this.canvasText = new InfiniteCanvasText(viewBox);
+		this.canvasDrawImage = new InfiniteCanvasDrawImage(viewBox);
+		this.canvasImageData = new InfiniteCanvasImageData(viewBox);
 		this.canvasPathDrawingStyles = new InfiniteCanvasPathDrawingStyles(viewBox);
-		this.canvasTextDrawingStyles = new InfiniteCanvasTextDrawingStyles();
+		this.canvasTextDrawingStyles = new InfiniteCanvasTextDrawingStyles(viewBox);
 		this.canvasPath = new InfiniteCanvasPath(viewBox);
 	}
 	public save():void{

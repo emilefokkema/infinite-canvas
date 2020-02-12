@@ -27,13 +27,14 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 			(context: CanvasRenderingContext2D) => {
 				context.fill();
 			};
-		this.viewBox.drawPath(instruction, state => state.fillStyle);
+		this.viewBox.drawPath(instruction);
 	}
 	public isPointInPath(xOrPath: number | Path2D, xOry: number, yOrFillRule: number | CanvasFillRule, fillRule?: CanvasFillRule): boolean{return true;}
 	public isPointInStroke(xOrPath: number | Path2D, xOry: number, y?:number): boolean{return true;}
 	public stroke(path?: Path2D): void{
-		this.viewBox.drawPath((context: CanvasRenderingContext2D) => {
+		let instruction: Instruction = (context: CanvasRenderingContext2D) => {
 			context.stroke();
-		}, state => state.strokeStyle);
+		};
+		this.viewBox.drawPath(instruction);
 	}
 }

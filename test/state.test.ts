@@ -1,59 +1,68 @@
 import { InfiniteCanvasStateInstance } from "../src/state/infinite-canvas-state-instance";
-import { StateChange } from "../src/state/state-change";
 import { logInstruction } from "./log-instruction";
 import { Instruction } from "../src/instructions/instruction";
 import { Transformation } from "../src/transformation";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
-import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { PathInstructions } from "../src/instructions/path-instructions";
 import { defaultState } from "../src/state/default-state";
+import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
+import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
+
+function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
+    const newInstance: InfiniteCanvasStateInstance = change(state.current);
+    return state.withCurrentState(newInstance);
+}
 
 describe("a state with a clipped path", () => {
     let currentPath: InstructionsWithPath;
     let stateWithOneClippedPath: InfiniteCanvasState;
+    let currentState: InfiniteCanvasState;
 
     beforeEach(() => {
+        currentState = defaultState;
         currentPath = InstructionsWithPath.create(defaultState);
-        currentPath.changeState(s => s.setFillStyle("#f00"));
-        currentPath.addPathInstruction(PathInstructions.rect(0, 0, 3, 3));
-        currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip());
-        stateWithOneClippedPath = currentPath.state;
+        currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
+        currentPath.addPathInstruction(PathInstructions.rect(0, 0, 3, 3), currentState);
+        currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
+        currentState = currentPath.state;
+        stateWithOneClippedPath = currentState;
     });
 
     describe("and another one with, higher up its stack, another clipped path that is based on the same path", () => {
         let stateWithOneMoreClippedPath: InfiniteCanvasState;
 
         beforeEach(() => {
-            currentPath.saveState();
-            currentPath.addPathInstruction(PathInstructions.moveTo(0,0));
-            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip());
-            stateWithOneMoreClippedPath = currentPath.state;
+            currentState = currentState.saved();
+            currentPath.addPathInstruction(PathInstructions.moveTo(0,0), currentState);
+            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
+            currentState = currentPath.state;
+            stateWithOneMoreClippedPath = currentState;
         });
 
         describe("and the other one saves once more and changes state", () => {
             let otherOneSavedAndChanged: InfiniteCanvasState;
 
             beforeEach(() => {
-                currentPath.saveState();
-                currentPath.changeState(s => s.setFillStyle("#ff0"));
-                otherOneSavedAndChanged = currentPath.state;
+                currentState = currentState.saved();
+                currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#ff0"));
+                otherOneSavedAndChanged = currentState;
             });
 
             it("should result in the right changes", () => {
-                const stateChange: StateChange<InfiniteCanvasState> = stateWithOneClippedPath.convertToStateWithClippedPath(otherOneSavedAndChanged);
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                const stateChangeInstruction: Instruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(otherOneSavedAndChanged);
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
 
         describe("when the one with one clipped path is converted (including clipped paths) to the one with another clipped path", () => {
-            let stateChange: StateChange<InfiniteCanvasState>;
+            let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChange = stateWithOneClippedPath.convertToStateWithClippedPath(stateWithOneMoreClippedPath);
+                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath);
             });
 
             it("should result in the right instructions", () => {
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -62,20 +71,20 @@ describe("a state with a clipped path", () => {
         let stateWithOneMoreClippedPath: InfiniteCanvasState;
 
         beforeEach(() => {
-            currentPath.addPathInstruction(PathInstructions.moveTo(0,0));
-            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip());
+            currentPath.addPathInstruction(PathInstructions.moveTo(0,0), currentState);
+            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
             stateWithOneMoreClippedPath = currentPath.state;
         });
 
         describe("when the one with one clipped path is converted (including clipped paths) to the one with another clipped path", () => {
-            let stateChange: StateChange<InfiniteCanvasState>;
+            let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChange = stateWithOneClippedPath.convertToStateWithClippedPath(stateWithOneMoreClippedPath);
+                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath);
             });
 
             it("should result in the right instructions", () => {
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -84,18 +93,18 @@ describe("a state with a clipped path", () => {
         let stateWitoutClippedPath: InfiniteCanvasState;
 
         beforeEach(() => {
-            stateWitoutClippedPath = defaultState.withChangedState(s => s.setFillStyle("#00f")).newState;
+            stateWitoutClippedPath = applyChangeToCurrentState(defaultState, s => fillStyle.changeInstanceValue(s, "#00f"));
         });
 
         describe("when the one without is converted (including clipped paths) to the one with clipped paths", () => {
-            let stateChange: StateChange<InfiniteCanvasState>;
+            let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChange = stateWitoutClippedPath.convertToStateWithClippedPath(stateWithOneClippedPath);
+                stateChangeInstruction = stateWitoutClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneClippedPath);
             });
 
             it("should", () => {
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -105,28 +114,29 @@ describe("a state with a clipped path", () => {
         let addedClippedPath: InstructionsWithPath;
 
         beforeEach(()=> {
-            currentPath.saveState();
-            addedClippedPath = InstructionsWithPath.create(currentPath.state);
-            addedClippedPath.addPathInstruction(PathInstructions.moveTo(1, 1));
-            addedClippedPath.clipPath(((context, transformation) => {context.clip();}));
-            stateWithCurrentlyAnAdditionalClippedPath = addedClippedPath.state;
+            currentState = currentState.saved();
+            addedClippedPath = InstructionsWithPath.create(currentState);
+            addedClippedPath.addPathInstruction(PathInstructions.moveTo(1, 1), currentState);
+            addedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
+            currentState = addedClippedPath.state;
+            stateWithCurrentlyAnAdditionalClippedPath = currentState;
         });
 
         describe("and that is then restored, saved again and to which another clipped path is added", () => {
             let stateWithCurrentlyADifferentAdditionalClippedPath: InfiniteCanvasState;
 
             beforeEach(() => {
-                addedClippedPath.restoreState();
-                addedClippedPath.saveState();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(addedClippedPath.state);
-                differentAddedClippedPath.addPathInstruction(PathInstructions.moveTo(2, 2));
-                differentAddedClippedPath.clipPath(((context, transformation) => {context.clip();}));
+                currentState = currentState.restored();
+                currentState = currentState.saved();
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
+                differentAddedClippedPath.addPathInstruction(PathInstructions.moveTo(2, 2), currentState);
+                differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
-                const stateChange: StateChange<InfiniteCanvasState> = stateWithCurrentlyAnAdditionalClippedPath.convertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
 
@@ -134,16 +144,16 @@ describe("a state with a clipped path", () => {
             let stateWithCurrentlyADifferentAdditionalClippedPath: InfiniteCanvasState;
 
             beforeEach(() => {
-                addedClippedPath.restoreState();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(addedClippedPath.state);
-                differentAddedClippedPath.addPathInstruction(PathInstructions.moveTo(2, 2));
-                differentAddedClippedPath.clipPath(((context, transformation) => {context.clip();}));
+                currentState = currentState.restored();
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
+                differentAddedClippedPath.addPathInstruction(PathInstructions.moveTo(2, 2), currentState);
+                differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
-                const stateChange: StateChange<InfiniteCanvasState> = stateWithCurrentlyAnAdditionalClippedPath.convertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
-                expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
+                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -153,18 +163,18 @@ describe("a state with a clipped path", () => {
         let changedOtherWay: InfiniteCanvasState;
 
         beforeEach(() => {
-            currentPath.saveState();
-            currentPath.changeState(s => s.setFillStyle("#00f"));
-            changedOneWay = currentPath.state;
-            currentPath.restoreState();
-            currentPath.saveState();
-            currentPath.changeState(s => s.setFillStyle("#0f0"));
-            changedOtherWay = currentPath.state;
+            currentState = currentState.saved();
+            currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#00f"));
+            changedOneWay = currentState;
+            currentState = currentState.restored();
+            currentState = currentState.saved();
+            currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#0f0"));
+            changedOtherWay = currentState;
         });
 
         it("should, when one is converted to the other without clipping paths, result in a change of state in that property alone", () => {
-            const stateChange: StateChange<InfiniteCanvasState> = changedOneWay.convertToState(changedOtherWay);
-            expect(logInstruction(stateChange.instruction)).toMatchSnapshot();
+            const stateChangeInstruction: Instruction = changedOneWay.getInstructionToConvertToState(changedOtherWay);
+            expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
         });
     });
 
@@ -180,7 +190,7 @@ describe("a default state", () => {
     describe("that changes and saves", () => {
 
         beforeEach(() => {
-            state = state.withChangedState(s => s.setFillStyle("#f00")).newState.save().newState;
+            state = applyChangeToCurrentState(state, s => fillStyle.changeInstanceValue(s, "#f00")).saved();
         });
 
         describe("and then changes in two different ways", () => {
@@ -188,127 +198,113 @@ describe("a default state", () => {
             let otherWay: InfiniteCanvasState;
 
             beforeEach(() => {
-                oneWay = state.withChangedState(s => s.setStrokeStyle("#f00")).newState;
-                otherWay = state.withChangedState(s => s.setFillStyle("#00f")).newState;
+                oneWay = applyChangeToCurrentState(state, s => strokeStyle.changeInstanceValue(s, "#f00"));
+                otherWay = applyChangeToCurrentState(state, s => fillStyle.changeInstanceValue(s, "#00f"));
             });
 
             describe("and then one way is converted to the other way", () => {
-                let change: StateChange<InfiniteCanvasState>;
+                let changeInstruction: Instruction;
 
                 beforeEach(() => {
-                    change = oneWay.convertToState(otherWay);
+                    changeInstruction = oneWay.getInstructionToConvertToState(otherWay);
                 });
 
                 it("should result in instructions that change the state, but no restoring", () => {
-                    expect(change.instruction).toBeTruthy();
-                    expect(logInstruction(change.instruction)).toMatchSnapshot();
+                    expect(changeInstruction).toBeTruthy();
+                    expect(logInstruction(changeInstruction)).toMatchSnapshot();
                 });
             });
         });
 
         describe("and is then converted to another that also changed and saved", () => {
             let other: InfiniteCanvasState;
-            let change: StateChange<InfiniteCanvasState>;
+            let changeInstruction: Instruction;
 
             beforeEach(() => {
-                other = defaultState.withChangedState(s => s.setFillStyle("#00f")).newState.save().newState;
-                change = state.convertToState(other);
+                other = applyChangeToCurrentState(defaultState, s => fillStyle.changeInstanceValue(s, "#00f")).saved();
+                changeInstruction = state.getInstructionToConvertToState(other);
             });
 
             it("should have created intructions to restore, change and save", () => {
-                expect(change.instruction).toBeTruthy();
-                expect(logInstruction(change.instruction)).toMatchSnapshot();
+                expect(changeInstruction).toBeTruthy();
+                expect(logInstruction(changeInstruction)).toMatchSnapshot();
             });
         });
 
         describe("and is then converted to another that changed, saved and then changed again", () => {
             let other: InfiniteCanvasState;
-            let change: StateChange<InfiniteCanvasState>;
+            let changeInstruction: Instruction;
 
             beforeEach(() => {
-                other = defaultState
-                    .withChangedState(s => s.setFillStyle("#00f")).newState
-                    .save().newState
-                    .withChangedState(s => s.setFillStyle("#ff0")).newState;
-                change = state.convertToState(other);
+                other = applyChangeToCurrentState(defaultState, s => fillStyle.changeInstanceValue(s, "#00f"))
+                    .saved();
+                other = applyChangeToCurrentState(other, s => fillStyle.changeInstanceValue(s, "#ff0"));
+                changeInstruction = state.getInstructionToConvertToState(other);
             });
 
             it("should have created intructions to restore, change, save and change again", () => {
-                expect(change.instruction).toBeTruthy();
-                expect(logInstruction(change.instruction)).toMatchSnapshot();
+                expect(changeInstruction).toBeTruthy();
+                expect(logInstruction(changeInstruction)).toMatchSnapshot();
             });
         });
     });
 
     describe("that is changed to a non-default state that differs on some fields but not all", () => {
-        let change: StateChange<InfiniteCanvasState>;
+        let changeInstruction: Instruction;
         let otherState: InfiniteCanvasState;
 
         beforeEach(() => {
-            otherState = new InfiniteCanvasState(new InfiniteCanvasStateInstance(
-                "#000",                                 //same
-                2,                                      //different
-                [1,2],                                  //different
-                "#f00",                                 //different
-                0,                                      //same
-                new Transformation(2, 0, 0, 2, 0, 0),    //different
-                undefined
-            ));
-            change = state.convertToState(otherState);
+            otherState = new InfiniteCanvasState(new InfiniteCanvasStateInstance({
+                fillStyle: '#000',                                      //same
+                lineWidth: 2,                                           //different
+                lineDash: [1,2],                                        //different
+                strokeStyle: '#f00',                                    //different
+                lineDashOffset: 0,                                      //same
+                transformation: new Transformation(2, 0, 0, 2, 0, 0),   //different
+                direction: "inherit",                                   //same
+                font: "12px sans-serif",                                //different
+                textAlign: "start",                                     //same
+                textBaseline: "alphabetic",                             //same
+                clippedPaths: undefined,                                //same
+                fillAndStrokeStylesTransformed: false,
+                shadowOffset: {x: 0, y: 0},
+                shadowColor: 'rgba(0, 0, 0, 0)',
+                shadowBlur: 0
+            }));
+            changeInstruction = state.getInstructionToConvertToState(otherState);
         });
 
         it("should have created an instruction that sets the fields that differ", () => {
-            const createdInstruction: Instruction = change.instruction;
-            expect(createdInstruction).toBeTruthy();
-            expect(logInstruction(createdInstruction)).toMatchSnapshot();
-        });
-
-        it("should have created a change with a new state that is equal to the state that it changed to", () => {
-            const newState: InfiniteCanvasStateInstance = change.newState.current;
-            expect(newState.fillStyle).toBe(otherState.current.fillStyle);
-            expect(newState.lineWidth).toBe(otherState.current.lineWidth);
-            expect(newState.lineDash).toEqual(otherState.current.lineDash);
-            expect(newState.strokeStyle).toBe(otherState.current.strokeStyle);
-            expect(newState.lineDashOffset).toBe(otherState.current.lineDashOffset);
-            expect(newState.transformation.equals(otherState.current.transformation)).toBe(true);
-        });
-
-        describe("and is then changed to that same state again", () => {
-            let newChange: StateChange<InfiniteCanvasState>;
-
-            beforeEach(() => {
-                newChange = change.newState.convertToState(otherState);
-            });
-
-            it("should not have created an instruction", () => {
-                expect(newChange.instruction).toBeFalsy();
-            });
+            expect(changeInstruction).toBeTruthy();
+            expect(logInstruction(changeInstruction)).toMatchSnapshot();
         });
     });
 
     describe("that sets the fill style", () => {
-        let change: StateChange<InfiniteCanvasState>;
+        let changeInstruction: Instruction;
+        let newState: InfiniteCanvasState;
 
         beforeEach(() => {
-            change = state.withChangedState(s => s.setFillStyle("#f00"));
+            const newInstance: InfiniteCanvasStateInstance = fillStyle.changeInstanceValue(state.current, "#f00")
+            newState = state.withCurrentState(newInstance);
+            changeInstruction = fillStyle.getInstructionToChange(state.current, newInstance);
         });
 
         it("should have created an instruction", () => {
-            const createdInstruction: Instruction = change.instruction;
-            expect(createdInstruction).toBeTruthy();
-            expect(logInstruction(createdInstruction)).toMatchSnapshot();
+            expect(changeInstruction).toBeTruthy();
+            expect(logInstruction(changeInstruction)).toMatchSnapshot();
         });
 
         describe("and then sets it again on the new state", () => {
-            let newChange: StateChange<InfiniteCanvasState>;
+            let newChangeInstruction: Instruction;
 
             beforeEach(() => {
-                newChange = change.newState.withChangedState(s => s.setFillStyle("#f00"));
+                const newInstance: InfiniteCanvasStateInstance = fillStyle.changeInstanceValue(newState.current, "#f00")
+                newChangeInstruction = fillStyle.getInstructionToChange(newState.current, newInstance);
             });
 
             it("should not have created an instruction", () => {
-                const createdInstruction: Instruction = newChange.instruction;
-                expect(createdInstruction).toBeFalsy();
+                expect(logInstruction(newChangeInstruction)).toMatchSnapshot();
             });
         });
     });

@@ -1,21 +1,21 @@
+import { StateChangingInstructionSequence } from "./state-changing-instruction-sequence";
+import { PathInstructionWithState } from "./path-instruction-with-state";
+import { StateAndInstruction } from "./state-and-instruction";
+import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Rectangle } from "../rectangle";
+import { PathInstruction } from "../interfaces/path-instruction";
+import { Transformation } from "../transformation";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
-import { PathInstruction } from "../interfaces/path-instruction";
-import { StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
-import { StateChangingInstructionSequence } from "./state-changing-instruction-sequence";
-import { Transformation } from "../transformation";
-import {InfiniteCanvasStateAndInstruction} from "./infinite-canvas-state-and-instruction";
-import {PathInstructionWithState} from "./path-instruction-with-state";
-import {DrawingPathInstructionWithState} from "./drawing-path-instruction-with-state";
-import {ClippingPathInstructionWithState} from "./clipping-path-instruction-with-state";
+import { ClippingPathInstructionWithState } from "./clipping-path-instruction-with-state";
+import { DrawingPathInstructionWithState } from "./drawing-path-instruction-with-state";
 
-export class InstructionsWithPath extends StateChangingInstructionSequence<PathInstructionWithState> implements StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
+export class InstructionsWithPath extends StateChangingInstructionSequence<PathInstructionWithState> implements StateChangingInstructionSetWithAreaAndCurrentPath{
     private area: Rectangle;
     private drawnArea: Rectangle;
     public visible: boolean;
-    constructor(initiallyWithState: InfiniteCanvasStateAndInstruction){
-        super(initiallyWithState);
+    constructor(private _initiallyWithState: StateAndInstruction){
+        super(_initiallyWithState);
     }
     private getCurrentlyDrawableArea(): Rectangle{
         if(!this.area){
@@ -27,26 +27,32 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
         return this.state.current.clippingRegion.intersectWith(this.area);
     }
     private copy(): InstructionsWithPath{
-        const result: InstructionsWithPath = new InstructionsWithPath(this.initiallyWithState.copy());
+        const result: InstructionsWithPath = new InstructionsWithPath(this._initiallyWithState.copy());
         for(const added of this.added){
             result.add(added.copy());
         }
         return result;
     }
-    public drawPath(instruction: Instruction, onDestroy?: () => void): void{
+    public drawPath(instruction: Instruction, state: InfiniteCanvasState): void{
         const newlyDrawnArea: Rectangle = this.getCurrentlyDrawableArea();
         this.drawnArea = this.drawnArea ? this.drawnArea.expandToInclude(newlyDrawnArea) : newlyDrawnArea;
-        this.add(DrawingPathInstructionWithState.createDrawing(this.state, instruction, this.drawnArea, onDestroy));
+        const toAdd: DrawingPathInstructionWithState = DrawingPathInstructionWithState.createDrawing(state, instruction, this.drawnArea);
+        toAdd.setInitialState(this.state);
+        this.add(toAdd);
         this.visible = true;
     }
-    public clipPath(instruction: Instruction): void{
-        this.add(ClippingPathInstructionWithState.create(this.state, instruction));
-        const clippedPath: StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState = this.recreateClippedPath();
+    public clipPath(instruction: Instruction, state: InfiniteCanvasState): void{
+        const toAdd: ClippingPathInstructionWithState = ClippingPathInstructionWithState.create(state, instruction);
+        toAdd.setInitialState(this.state);
+        this.add(toAdd);
+        const clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath = this.recreateClippedPath();
         this.addClippedPath(clippedPath);
     }
-    public addPathInstruction(pathInstruction: PathInstruction): void{
-        this.area = pathInstruction.changeArea.execute(this.state.current.transformation, this.area);
-        this.add(PathInstructionWithState.create(this.state, pathInstruction.instruction));
+    public addPathInstruction(pathInstruction: PathInstruction, state: InfiniteCanvasState): void{
+        this.area = pathInstruction.changeArea.execute(state.current.transformation, this.area);
+        const toAdd: PathInstructionWithState = PathInstructionWithState.create(state, pathInstruction.instruction);
+        toAdd.setInitialState(this.state);
+        this.add(toAdd);
     }
     public execute(context: CanvasRenderingContext2D, transformation: Transformation){
         if(!this.visible){
@@ -81,34 +87,33 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<PathI
         if(!this.drawnArea || !this.visible){
             return;
         }
-        this.removeAll(i => i instanceof DrawingPathInstructionWithState && area.contains(i.drawnArea), instructionSet => instructionSet.destroy());
+        this.removeAll(i => i instanceof DrawingPathInstructionWithState && area.contains(i.drawnArea));
         if(area.contains(this.drawnArea)){
             this.visible = false;
         }
     }
-    public addClearRect(area: Rectangle): void{
-        this.addPathInstruction(area.getInstructionToClear());
+    public addClearRect(area: Rectangle, state: InfiniteCanvasState): void{
+        this.addPathInstruction(area.getInstructionToClear(), state);
     }
-    public recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
+    public recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPath{
         const result: InstructionsWithPath = this.copy();
-        result.removeAll(i => (i instanceof DrawingPathInstructionWithState) || (i instanceof ClippingPathInstructionWithState));
+        result.removeAll(i => (i instanceof DrawingPathInstructionWithState));
         result.area = this.area;
         return result;
     }
-    public recreateClippedPath(): StateChangingInstructionSetWithAreaAndCurrentPathAndCurrentState{
+    private recreateClippedPath(): StateChangingInstructionSetWithAreaAndCurrentPath{
         const result: InstructionsWithPath = this.copy();
         result.removeAll(i => i instanceof DrawingPathInstructionWithState);
         result.area = this.area;
         return result;
     }
     public static create(initialState: InfiniteCanvasState, pathInstructions?: PathInstruction[]): InstructionsWithPath{
-        const result: InstructionsWithPath = new InstructionsWithPath(
-            InfiniteCanvasStateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}));
+        const result: InstructionsWithPath = new InstructionsWithPath(StateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}));
         if(!pathInstructions){
             return result;
         }
         for(const pathInstruction of pathInstructions){
-            result.addPathInstruction(pathInstruction);
+            result.addPathInstruction(pathInstruction, initialState);
         }
         return result;
     }

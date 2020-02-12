@@ -2,8 +2,8 @@ import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-tr
 import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
 import { Point } from "../src/point";
-import { ViewBox } from "../src/interfaces/viewbox";
 import { InfiniteCanvasConfig } from "../src/config/infinite-canvas-config";
+import { TransformableBox } from "../src/interfaces/transformable-box";
 
 jest.useFakeTimers();
 
@@ -16,7 +16,7 @@ function expectPointToBeTransformedTo(point: Point, transformation: Transformati
 describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
-    let viewBox: ViewBox;
+    let viewBox: TransformableBox;
     let config: InfiniteCanvasConfig;
 
     beforeEach(() => {
@@ -25,17 +25,6 @@ describe("an infinite canvas transformer", () => {
         viewBox = {
             width: 16,
             height: 8,
-            state: undefined,
-            changeState(){},
-            saveState(){},
-            restoreState(){},
-            clearArea(){},
-            beginPath(){},
-            addPathInstruction(){},
-            createLinearGradient(){return undefined},
-            createRadialGradient(){return undefined},
-            drawPath(){},
-            clipPath(){},
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };

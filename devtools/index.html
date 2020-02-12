@@ -23,8 +23,9 @@
 		</div>
 	</template>
 	<template id="exampleTemplate">
-		<div class="example" v-bind:class="{danger: !imagesAreEqual}">
-			<div class="example-title" v-bind:id="example.index">{{example.title}}</div>
+		<div class="example" v-bind:class="{danger: !imagesAreEqual && !ignoredMessage, warning: !!ignoredMessage}">
+			<div class="example-title" v-bind:id="example.index">{{example.index + 1}}. {{example.title}}</div>
+			<div class="example-ignored-message" v-if="!!ignoredMessage">{{ignoredMessage}}</div>
 			<div>
 				<div class="column">
 					<canvas width="400" height="400" ref="canvas"></canvas>
@@ -39,14 +40,18 @@
 					<input type="checkbox" v-model="greedyGestureHandling"/>
 					<label>greedy gesture handling</label> 
 				</div>
-				<span v-on:click="onViewDiff" class="view-diff-link" v-if="!imagesAreEqual">view diff</span>
+				<span v-on:click="onViewDiff" class="view-diff-link" v-if="diffImageData">view diff</span>
 			</div>
 		</div>
 		
 	</template>
 	<div id="main">
-		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
-		<div v-if="numberSkipped > 0" class="warning">{{numberSkipped}} examples were skipped</div>
+		<div class="option">
+			<span class="darklight" v-on:click="setDark" v-if="!dark">dark</span>
+			<span class="darklight" v-on:click="setLight" v-if="dark">light</span>
+		</div>
+		<div class="option"><a href="/sandbox.html">sandbox</a></div>
+		<div v-if="numberSkipped > 0" class="notification">{{numberSkipped}} examples were skipped</div>
 		<div v-if="unequalImages.length > 0" class="danger">
 			<div>Not all images appear to be equal. Please inspect:</div>
 			<ul>
@@ -54,14 +59,37 @@
 			</ul>
 			
 		</div>
-		<span id="dark" class="darklight">dark</span>
-		<span id="light" class="darklight">light</span>
-		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal" v-on:viewdiff="onViewDiff"></example>
+		<div v-if="ignoredImages.length > 0" class="warning">
+			<div>Some differences were ignored. Click the name to see the reason</div>
+			<ul>
+				<image-link v-for="titleAndIndex in ignoredImages" v-bind:titleandindex="titleAndIndex"></image-link>
+			</ul>
+			
+		</div>
+		<example v-for="example in examples" v-bind:example="example" v-bind:dark="dark" v-on:imagesunequal="onImagesUnequal" v-on:ignored="onIgnored" v-on:viewdiff="onViewDiff"></example>
+		<diff-viewer v-bind:visible="viewDiff" v-on:close="onDiffViewerClose" v-bind:imagedata="diffImageData"></diff-viewer>
 	</div>
 	<script type="text/javascript">
 		(function(){
 			var canvasWidth = 400;
 			var canvasHeight = 400;
+			var createRandomImage = async function(){
+				var width = 300;
+				var height = 227;
+				var array = new Uint8ClampedArray(4 * width * height);
+				for(var i=0;i<height;i++){
+					for(var j=0;j<width;j++){
+						var index = 4 * width * i + 4 * j;
+						array[index] = Math.floor(Math.random() * 255);
+						array[index + 1] = Math.floor(Math.random() * 255);
+						array[index + 2] = Math.floor(Math.random() * 255);
+						array[index + 3] = Math.floor(Math.random() * 255);
+					}
+				}
+				var imageData = new ImageData(array, width);
+				return await createImageBitmap(imageData);
+			};
+			var imagePromise = createRandomImage();
 			var compareImages = function(imageData1, imageData2){
 				var newData = new Uint8ClampedArray(4 * canvasWidth * canvasHeight);
 				var currentIndex = 0;
@@ -638,7 +666,8 @@
 								ctx.fill();
 
 							},
-							title: "fill a rect, begin a path, clip, make it smaller, clip, make it smaller and fill"
+							title: "fill a rect, begin a path, clip, make it smaller, clip, make it smaller and fill",
+							ignored: "could look different because a path ends up being clipped multiple times"
 						},
 						{
 							code:function(ctx){
@@ -763,6 +792,187 @@
 								ctx.fill();
 							},
 							title: "clip using a fill rule"
+						},
+						{
+							code: function(ctx){
+								var width = 30;
+								var height = 30;
+								var centerX = 5;
+								var centerY = 5;
+								var radiusSq = 25;
+								var array = new Uint8ClampedArray(4 * width * height);
+								for(var j=0;j<height;j++){
+									for(var i=0;i<width;i++){
+									var dx = i - centerX;
+									var dy = j - centerY;
+									var index = 4 * j * width + 4 * i;
+									var inside = dx * dx + dy * dy < radiusSq;
+									array[index] = inside ? 255:0;
+									array[index + 3] = 255;
+								}
+								}
+								var imageData = new ImageData(array, width);
+								ctx.putImageData(imageData, 20, 20);
+							},
+							title: "put image data"
+						},
+						{
+							code: function(ctx){
+								var length = 20;
+								var array = new Uint8ClampedArray(4 * length * length);
+								for(var j=0;j<length;j++){
+									for(var i=0;i<length;i++){
+										var dx = i - length / 2;
+										var dy = j - length / 2;
+										var index = 4 * j * length + 4 * i;
+										var inside = dx * dx + dy * dy < length * length / 4;
+										array[index] = inside ? 255:0;
+										array[index + 3] = 255;
+									}
+								}
+								var imageData = new ImageData(array, length);
+								createImageBitmap(imageData).then(function(bitmap){
+									var pattern = ctx.createPattern(bitmap, 'repeat');
+									ctx.translate(17, 17);
+									ctx.strokeStyle = pattern;
+									ctx.strokeRect(0, 0, 100, 100);
+								});
+							},
+							title: "stroke rectangle with a pattern"
+						},
+						{
+							code:function(ctx){
+								var length = 20;
+								var array = new Uint8ClampedArray(4 * length * length);
+								for(var j=0;j<length;j++){
+									for(var i=0;i<length;i++){
+										var dx = i - length / 2;
+										var dy = j - length / 2;
+										var index = 4 * j * length + 4 * i;
+										var inside = dx * dx + dy * dy < length * length / 4;
+										array[index] = inside ? 255:0;
+										array[index + 3] = 255;
+									}
+								}
+								var imageData = new ImageData(array, length);
+								createImageBitmap(imageData).then(function(bitmap){
+									var pattern = ctx.createPattern(bitmap, 'repeat');
+									ctx.translate(17, 17);
+									ctx.fillStyle = pattern;
+									ctx.fillRect(0, 0, 100, 100);
+								});
+							},
+							title: "fill rectangle with a pattern"
+						},
+						{
+							code: function(ctx){
+								var image = new Image(300, 227);
+								image.addEventListener('load', e => {
+									ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
+								});
+								image.src = "rhino.jpg";
+							},
+							title: "draw image"
+						},
+						{
+							code:function(ctx){
+								var gradient = ctx.createLinearGradient(0, 0, 0, 70);
+								gradient.addColorStop(0, "#000");
+								gradient.addColorStop(1, "#fff");
+								ctx.fillStyle = gradient;
+								ctx.font = "30px sans-serif";
+								ctx.fillText("Text", 0, 30);
+							},
+							title: "fill text"
+						},
+						{
+							code:function(ctx){
+								var gradient1 = ctx.createLinearGradient(0, 0, 0, 100);
+								gradient1.addColorStop(0, "#f00");
+								gradient1.addColorStop(1, "#00f");
+								var gradient2 = ctx.createLinearGradient(0, 0, 0, 100);
+								gradient2.addColorStop(0, "#00f");
+								gradient2.addColorStop(1, "#f00");
+								ctx.setLineDash([10, 10]);
+								ctx.lineWidth = 5;
+								ctx.font = "80px sans-serif";
+								ctx.strokeStyle = gradient1;
+								ctx.fillStyle = gradient2;
+								ctx.strokeText("Text", 0, 70);
+								ctx.fillText("Text", 0, 70);
+							},
+							title: "fill and stroke text with gradient"
+						},
+						{
+							code: function(ctx){
+								var length = 20;
+								var array = new Uint8ClampedArray(4 * length * length);
+								for(var j=0;j<length;j++){
+									for(var i=0;i<length;i++){
+										var dx = i - length / 2;
+										var dy = j - length / 2;
+										var index = 4 * j * length + 4 * i;
+										var inside = dx * dx + dy * dy < length * length / 4;
+										array[index] = inside ? 255:0;
+										array[index + 3] = 255;
+									}
+								}
+								var imageData = new ImageData(array, length);
+								createImageBitmap(imageData).then(function(bitmap){
+									var pattern = ctx.createPattern(bitmap, 'repeat');
+									ctx.strokeStyle = pattern;
+									ctx.lineWidth = 3;
+									ctx.setLineDash([12, 2]);
+									ctx.font = "100px sans-serif";
+									ctx.strokeRect(10, 10, 90, 90);
+									ctx.beginPath();
+									ctx.moveTo(20, 20);
+									ctx.lineTo(100, 0);
+									ctx.lineTo(30, 100);
+									ctx.strokeText("text", 30, 90);
+									ctx.stroke();
+								});
+							},
+							title: "using a pattern and a line dash, stroke a rect, make a path, stroke text and then stroke the current path"
+						},
+						{
+							code: function(ctx){
+								ctx.lineWidth = 4;
+                        		ctx.beginPath();
+                        		ctx.rect(10, 10, 50, 50);
+								ctx.save();
+								ctx.clip();
+								ctx.fillRect(-1, -1, 2, 2);
+								ctx.stroke();
+							},
+							title: "begin a path, save, clip, fill a rect and stroke the clipped path"
+						},
+						{
+							code: function(ctx){
+								ctx.fillStyle ="#f00";
+								ctx.shadowColor = "#000";
+								ctx.shadowOffsetX = 10;
+								ctx.shadowOffsetY = 10;
+								ctx.shadowBlur = 10;
+								ctx.font = "50px sans-serif";
+								ctx.fillRect(10, 20, 100, 100);
+								ctx.fillStyle = "#00f"
+								ctx.fillText("text", 50, 50);
+								ctx.translate(90, 120);
+								ctx.scale(0.5, 0.5);
+								ctx.fillRect(0, 0, 40, 40);
+							},
+							title: "draw rectangles and text with shadow"
+						},
+						{
+							code: function(ctx){
+								ctx.translate(10, 10);
+								ctx.fillRect(0, 0, 100, 100);
+								ctx.translate(30, 30);
+								ctx.rotate(0.2);
+								ctx.clearRect(0, 0, 20, 20);
+							},
+							title: "translate, fill a rect, translate and rotate, clear a rect"
 						}
 					];
 			new Vue({
@@ -784,6 +994,7 @@
 						dark:false,
 						numberSkipped: numberSkipped,
 						unequalImages: [],
+						ignoredImages: [],
 						viewDiff: false,
 						diffImageData: undefined
 					};
@@ -799,30 +1010,27 @@
 					onImagesUnequal: function(titleAndIndex){
 						this.unequalImages.push(titleAndIndex);
 					},
+					onIgnored: function(titleAndIndex){
+						this.ignoredImages.push(titleAndIndex);
+					},
 					setDark:function(){
 						document.body.setAttribute("class","dark");
 						this.dark = true;
-						var params = new URLSearchParams(window.location.search);
-						if(!params.has("d")){
-							window.history.replaceState(null, "", "?d=1");
+						if(!localStorage.getItem("dark")){
+							localStorage.setItem("dark", true);
 						}
 					},
 					setLight:function(){
 						document.body.setAttribute("class","");
 						this.dark = false;
-						window.location.search = "";
+						if(localStorage.getItem("dark")){
+							localStorage.removeItem("dark");
+						}
 					}
 				},
 				mounted:function(){
-					var self = this;
-					document.getElementById("light").addEventListener("click", function(){
-						self.setLight();
-					});
-					document.getElementById("dark").addEventListener("click", function(){
-						self.setDark();
-					});
 					var searchParams = new URLSearchParams(window.location.search);
-					if(searchParams.get("d") === "1"){
+					if(localStorage.getItem("dark")){
 						this.setDark();
 					}
 				},
@@ -839,12 +1047,28 @@
 								greedyGestureHandling: false,
 								infiniteCanvas: undefined,
 								editor: undefined,
-								imagesAreEqual: false
+								imagesAreEqual: false,
+								ignoredMessage: undefined,
+								diffImageData: undefined
 							};
 						},
 						methods: {
 							onViewDiff: function(){
 								this.$emit("viewdiff", this.diffImageData);
+							},
+							handleImagesUnequal(canvas, infCanvas){
+								try{
+									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
+									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
+								}catch(e){}
+								
+								if(this.example.ignored){
+									this.ignoredMessage = this.example.ignored;
+									this.$emit("ignored", {title: this.example.title, index: this.example.index})
+								}else{
+									this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
+								}
 							}
 						},
 						watch:{
@@ -875,20 +1099,18 @@
 							this.editor.session.setMode("ace/mode/javascript");
 							this.editor.setValue(code);
 							this.editor.clearSelection();
-							//editor.setReadOnly(true);
-							//this.codeText = lines.join("<br/>");
-							//console.log(this.codeText.match(/[^\s][^\r\n]*/g));
 							this.example.code(regularContext);
 							this.example.code(infiniteContext);
 							this.infiniteCanvas.addEventListener("draw", () => {
-								var dataUrlRegular = canvas.toDataURL();
-								var dataUrlInfinite = infCanvas.toDataURL();
-								this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								try{
+									var dataUrlRegular = canvas.toDataURL();
+									var dataUrlInfinite = infCanvas.toDataURL();
+									this.imagesAreEqual = dataUrlRegular === dataUrlInfinite;
+								}catch(e){
+									this.imagesAreEqual = false;
+								}
 								if(!this.imagesAreEqual){
-									var regularCanvasData = canvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-									var infiniteCanvasData = infCanvas.getContext("2d").getImageData(0, 0, canvasWidth, canvasHeight);
-									this.diffImageData = compareImages(regularCanvasData, infiniteCanvasData);
-									this.$emit("imagesunequal", {title: this.example.title, index: this.example.index});
+									this.handleImagesUnequal(canvas, infCanvas);
 								}
 							}, {once: true});
 

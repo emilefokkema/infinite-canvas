@@ -1,13 +1,18 @@
-import { Transformable } from "../transformable";
 import { CurrentState } from "./current-state";
 import { Instruction } from "../instructions/instruction";
 import { PathInstruction } from "./path-instruction";
-import {InfiniteCanvasStateInstance} from "../state/infinite-canvas-state-instance";
+import { Rectangle } from "../rectangle";
+import { DrawingLock } from "../drawing-lock";
+import { TransformationKind } from "../transformation-kind";
+import { TransformableBox } from "./transformable-box";
 
-export interface ViewBox extends Transformable, CurrentState{
-    width: number;
-    height: number;
-    drawPath(instruction: Instruction, getFillStrokeStyle: (stateInstance: InfiniteCanvasStateInstance) => string | CanvasGradient | CanvasPattern, pathInstructions?: PathInstruction[]): void;
+export interface ViewBox extends TransformableBox, CurrentState{
+    measureText(text: string): TextMetrics;
+    drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void;
+    addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void;
+    createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
+    createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
+    getDrawingLock(): DrawingLock;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;

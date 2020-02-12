@@ -1,5 +1,6 @@
 import { ViewBox } from "../interfaces/viewbox";
 import { Transformation } from "../transformation";
+import { transformation } from "../state/dimensions/transformation";
 
 export class InfiniteCanvasTransform implements CanvasTransform{
 	constructor(private viewBox: ViewBox){}
@@ -18,13 +19,13 @@ export class InfiniteCanvasTransform implements CanvasTransform{
 		return undefined;
 	}
 	public resetTransform(): void{
-		this.viewBox.changeState(state => state.setTransformation(Transformation.identity));
+		this.viewBox.changeState(state => transformation.changeInstanceValue(state, Transformation.identity));
 	}
 	public rotate(angle: number): void{
-		this.viewBox.changeState(state => state.addTransformation(Transformation.rotation(0, 0, angle)));
+		this.addTransformation(Transformation.rotation(0, 0, angle));
 	}
 	public scale(x: number, y: number): void{
-		this.viewBox.changeState(state => state.addTransformation(new Transformation(x, 0, 0, y, 0, 0)));
+		this.addTransformation(new Transformation(x, 0, 0, y, 0, 0));
 	}
 	public setTransform(a: number | DOMMatrix2DInit, b?: number, c?: number, d?: number, e?: number, f?: number): void{
 		let _a: number,
@@ -57,12 +58,17 @@ export class InfiniteCanvasTransform implements CanvasTransform{
 				_f = a.m42;
 			}
 		}
-		this.viewBox.changeState(state => state.setTransformation(new Transformation(_a, _b, _c, _d, _e, _f)));
+		this.viewBox.changeState(state => transformation.changeInstanceValue(state, new Transformation(_a, _b, _c, _d, _e, _f)));
 	}
 	public transform(a: number, b: number, c: number, d: number, e: number, f: number): void{
-		this.viewBox.changeState(state => state.addTransformation(new Transformation(a, b, c, d, e, f)))
+		this.addTransformation(new Transformation(a, b, c, d, e, f));
 	}
 	public translate(x: number, y: number): void{
-		this.viewBox.changeState(state => state.addTransformation(Transformation.translation(x, y)));
+		this.addTransformation(Transformation.translation(x, y));
+	}
+	private addTransformation(transformationToAdd: Transformation): void{
+		const currentTransformation: Transformation = this.viewBox.state.current.transformation;
+		const newTransformation: Transformation = transformationToAdd.before(currentTransformation);
+		this.viewBox.changeState(state => transformation.changeInstanceValue(state, newTransformation));
 	}
 }

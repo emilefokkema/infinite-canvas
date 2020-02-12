@@ -1,19 +1,25 @@
-import { InfiniteCanvasStateAndInstruction } from "../src/instructions/infinite-canvas-state-and-instruction";
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
 import { defaultState } from "../src/state/default-state";
+import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
+import { StateAndInstruction } from "../src/instructions/state-and-instruction";
+import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 
 describe("a set of intructions that is only about state", () => {
-    let instructionsWithState: InfiniteCanvasStateAndInstruction;
+    let instructionsWithState: StateAndInstruction;
+    let state: InfiniteCanvasState;
+    let initialState: InfiniteCanvasState;
 
     beforeEach(() => {
-        instructionsWithState = InfiniteCanvasStateAndInstruction.create(defaultState, () => {});
+        state = defaultState;
+        initialState = state;
+        instructionsWithState = StateAndInstruction.create(state, () => {});
     });
 
     describe("that receives a change", () => {
 
         beforeEach(() => {
-            instructionsWithState.changeState(s => s.setFillStyle("#f00"));
+            initialState = initialState.withCurrentState(fillStyle.changeInstanceValue(initialState.current, "#f00"))
+            instructionsWithState.setInitialState(initialState);
         });
 
         it("should have recorded the change", () => {
@@ -23,7 +29,8 @@ describe("a set of intructions that is only about state", () => {
         describe("and then receives a change that reverts that one", () => {
 
             beforeEach(() => {
-                instructionsWithState.changeState(s => s.setFillStyle("#000"));
+                initialState = initialState.withCurrentState(fillStyle.changeInstanceValue(initialState.current, "#000"))
+                instructionsWithState.setInitialState(initialState);
             });
 
             it("should contain no instructions anymore", () => {
@@ -34,7 +41,8 @@ describe("a set of intructions that is only about state", () => {
         describe("and then receives a change on a different property", () => {
 
             beforeEach(() => {
-                instructionsWithState.changeState(s => s.setStrokeStyle("#ff0"));
+                initialState = initialState.withCurrentState(strokeStyle.changeInstanceValue(initialState.current, "#ff0"))
+                instructionsWithState.setInitialState(initialState);
             });
 
             it("should now contain two instructions", () => {
@@ -45,7 +53,8 @@ describe("a set of intructions that is only about state", () => {
         describe("and then receives a change on the same property", () => {
 
             beforeEach(() => {
-                instructionsWithState.changeState(s => s.setFillStyle("#00f"));
+                initialState = initialState.withCurrentState(fillStyle.changeInstanceValue(initialState.current, "#00f"))
+                instructionsWithState.setInitialState(initialState);
             });
 
             it("should still contain only one instruction", () => {
