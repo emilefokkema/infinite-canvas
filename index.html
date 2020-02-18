@@ -17,24 +17,37 @@
 <div class="markdown language-js">
 # InfiniteCanvas
 ## About
-`InfiniteCanvas` makes any `&lt;canvas&gt;` element infinite in size. In other words, it allows you to pan the canvas in any direction and zoom in or out as far as you like. All it takes is a few lines of code:
+`InfiniteCanvas` makes any `&lt;canvas&gt;` element infinite in size, so that you can pan the canvas in any direction and zoom in or out as far as you like. Simply instantiate an `InfiniteCanvas` like this:
 
-    var infCanvas = new InfiniteCanvas(canvas); // assuming 'canvas' refers to an HTMLCanvasElement
-    var ctx = infCanvas.getContext("2d");
+    // assuming 'canvas' refers to an HTMLCanvasElement
+    var infCanvas = new InfiniteCanvas(canvas);
 
-That's all! The variable `ctx` now holds a `CanvasRenderingContext2D`, which you can use to draw as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Check out this live example:
+And then get a `CanvasRenderingContext2D` from it like you would with a regular `&lt;canvas&gt;`:
+
+    var context = infCanvas.getContext("2d");
+
+That's all! Now you can use `context` to draw on the `InfiniteCanvas` as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Check out this live example:
 </div>
-<div class="infinite-canvas-example">
-var infCanvas = new InfiniteCanvas(canvas);
-var ctx = infCanvas.getContext("2d");
-
-//Earth
-ctx.beginPath();
-ctx.arc(150, 100250, 100000, 0, 2 * Math.PI);
-ctx.save();
-ctx.fillStyle = "#888";
-ctx.fill();
-ctx.restore();
+<div
+    class="codepen"
+    data-prefill='{
+        "title": "Example 1",
+        "description": "Draw using a CanvasRenderingContext2D",
+        "scripts": ["https://cdn.jsdelivr.net/gh/emilefokkema/infinite-canvas-2@v0.2-alpha/dist/infinite-canvas.js"]
+    }'
+    style="height: 400px; overflow: auto;"
+    data-height="430" 
+    data-theme-id="light"
+    data-default-tab="js,result" 
+    data-editable="false">
+    <pre data-lang="html">
+&lt;canvas id="my-house" width="300" height="300"&gt;&lt;/canvas&gt;
+Use Ctrl + scroll to zoom
+    </pre>
+    <pre data-lang="js">
+let canvas = document.getElementById('my-house');
+canvas = new InfiniteCanvas(canvas);
+const ctx = canvas.getContext('2d');
 
 // Set line width
 ctx.lineWidth = 10;
@@ -52,38 +65,18 @@ ctx.lineTo(150, 60);
 ctx.lineTo(250, 140);
 ctx.closePath();
 ctx.stroke();
+    </pre>
+    <pre data-lang="css">
+canvas{
+    border: 1pt solid #000;
+}
+    </pre>
 </div>
-<div class="markdown language-js">
-## Controlling user interaction
-In the example above, you can only zoom the canvas by pressing the Control key and using the mouse wheel. You can change this behavior by setting one of the `InfiniteCanvas`'s properties:
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
-    infCanvas.greedyGestureHandling = true;
 
-Now, you can zoom the canvas by simply using the mouse wheel, as in this example:
-</div>
-<div class="infinite-canvas-example">
-var infCanvas = new InfiniteCanvas(canvas);
-infCanvas.greedyGestureHandling = true;
-var ctx = infCanvas.getContext("2d");
 
-ctx.fillStyle = "#f00";
-ctx.fillRect(20, 20, 100, 100);
-</div>
-<div class="markdown language-js">
-In the two preceding examples, you could rotate the canvas by pressing the mouse's middle button and moving the mouse. You can disable rotation by setting another of the `InfiniteCanvas`'s properties:
 
-    infCanvas.rotationEnabled = false;
-
-Now rotating the canvas is no longer possible, as in the following example:
-</div>
-<div class="infinite-canvas-example">
-var infCanvas = new InfiniteCanvas(canvas);
-infCanvas.rotationEnabled = false;
-var ctx = infCanvas.getContext("2d");
-
-ctx.fillStyle = "#00f";
-ctx.fillRect(20, 20, 100, 100);
-</div>
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 <script>
@@ -125,14 +118,14 @@ ctx.fillRect(20, 20, 100, 100);
             runButton.addEventListener("click", run);
         };
         Prism.highlightAll(true, function(){
-            if(examplesCreated){
-                return;
-            }
-            var examples = document.querySelectorAll(".infinite-canvas-example");
-            for(var i=0; i<examples.length;i++){
-                createExample(examples[i]);
-            }
-            examplesCreated = true;
+            // if(examplesCreated){
+            //     return;
+            // }
+            // var examples = document.querySelectorAll(".infinite-canvas-example");
+            // for(var i=0; i<examples.length;i++){
+            //     createExample(examples[i]);
+            // }
+            // examplesCreated = true;
         });
     })();
 </script>
