@@ -1,13 +1,15 @@
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
-import { PathInstructions } from "../src/instructions/path-instructions";
 import { defaultState } from "../src/state/default-state";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { Point } from "../src/geometry/point";
+import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
+import { FakeViewboxInfinityProvider } from "./fake-viewbox-infinity-provider";
 
 function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPath, state: InfiniteCanvasState): string[]{
-    instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
+    instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
     return logWithState(instructionsWithPath);
 }
 
@@ -17,7 +19,7 @@ describe("a set of instructions that is also about a path", () => {
 
     beforeEach(() => {
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState);
+        instructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
     });
 
     describe("that receives a change of state", () => {
@@ -26,14 +28,10 @@ describe("a set of instructions that is also about a path", () => {
             currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
         });
 
-        it("should contain an instruction to begin a path and one to change the state", () => {
-            expect(drawAndLog(instructionsWithPath, currentState)).toMatchSnapshot();
-        });
-
         describe("and then receives an instruction that modifies the path", () => {
 
             beforeEach(() => {
-                instructionsWithPath.addPathInstruction(PathInstructions.moveTo(0, 0), currentState);
+                instructionsWithPath.moveTo(new Point(0, 0), currentState);
             });
 
             it("should contain an instruction to begin a path, change the state and modify the path", () => {
@@ -53,7 +51,7 @@ describe("a set of instructions that is also about a path", () => {
                 describe("and then draws the path and receives another change of state on the same property", () => {
 
                     beforeEach(() => {
-                        instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
+                        instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {
                             context.fill();
                         }, currentState);
                         currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#ff0"));
@@ -65,35 +63,19 @@ describe("a set of instructions that is also about a path", () => {
                 });
             });
         });
-
-        describe("and then receives a change of state on the same property", () => {
-
-            beforeEach(() => {
-                currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#00f"));
-            });
-
-            it("should still contain only two instructions", () => {
-                expect(drawAndLog(instructionsWithPath, currentState)).toMatchSnapshot();
-            });
-        });
     });
 
     describe("that describes a path that is drawn, altered and then recreated", () => {
         let recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPath;
 
         beforeEach(() => {
-            instructionsWithPath.addPathInstruction(PathInstructions.moveTo(0, 0), currentState);
-            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(10,0), currentState);
-            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(10,10), currentState);
-            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(0,10), currentState);
+            instructionsWithPath.moveTo(new Point(0, 0), currentState);
+            instructionsWithPath.lineTo(new Point(10, 0), currentState);
+            instructionsWithPath.lineTo(new Point(10, 10), currentState);
+            instructionsWithPath.lineTo(new Point(0, 10), currentState);
             currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#00f"));
-            instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {context.fill();}, currentState);
-            instructionsWithPath.addPathInstruction(PathInstructions.lineTo(5, 5), currentState);
+            instructionsWithPath.lineTo(new Point(5, 5), currentState);
             recreatedPath = instructionsWithPath.recreatePath();
-        });
-
-        it("should not contain the intermediate drawing instruction", () => {
-            expect(drawAndLog(recreatedPath, currentState)).toMatchSnapshot();
         });
 
         it("should have the same area", () => {
@@ -119,8 +101,9 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
 
     beforeEach(() => {
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, [PathInstructions.rect(0, 0, 1, 1)]);
-        instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
+        instructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+        instructionsWithPath.rect(0, 0, 1, 1, currentState);
+        instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {
             context.fill();
         }, currentState)
     });

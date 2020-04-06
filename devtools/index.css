@@ -78,6 +78,11 @@ body.dark{
 .diff-viewer .header{
 	text-align: center;
 }
-.view-diff-link{
+.cursor-pointer{
 	cursor: pointer;
+}
+.code-toggle{
+	background-color: #ccc;
+	padding: 5px;
+	margin-bottom: 5px;
 }

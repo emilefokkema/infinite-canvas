@@ -1,7 +1,8 @@
 import { ViewBox } from "../interfaces/viewbox";
-import { Rectangle } from "../rectangle";
 import { Instruction } from "../instructions/instruction";
 import { TransformationKind } from "../transformation-kind";
+import {Area} from "../areas/area";
+import {ConvexPolygon} from "../areas/polygons/convex-polygon";
 
 export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 	constructor(private readonly viewBox: ViewBox){}
@@ -23,7 +24,7 @@ export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 		}
 		const drawnWidth: number = this.getDrawnLength(image.width, sx, sw, dw);
 		const drawnHeight: number = this.getDrawnLength(image.height, sy, sh, dh);
-		const drawnRectangle: Rectangle = new Rectangle(dx, dy, drawnWidth, drawnHeight);
+		const drawnRectangle: Area = ConvexPolygon.createRectangle(dx, dy, drawnWidth, drawnHeight);
 		const drawingInstruction: Instruction = this.getDrawImageInstruction(arguments.length, image, sx, sy, sw, sh, dx, dy, dw, dh);
 		this.viewBox.addDrawing(drawingInstruction, drawnRectangle, TransformationKind.Relative, true);
 	}

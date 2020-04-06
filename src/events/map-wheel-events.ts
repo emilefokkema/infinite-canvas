@@ -1,6 +1,6 @@
 import { AnchorSet } from "./anchor-set";
 import { Transformer } from "../transformer/transformer"
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 export function mapWheelEvents(

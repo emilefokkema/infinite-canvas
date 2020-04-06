@@ -4,7 +4,7 @@ import { Transformer } from "../transformer/transformer";
 import { AnchorSet } from "./anchor-set";
 import { mapTouchEvents } from "./map-touch-events";
 import { mapWheelEvents } from "./map-wheel-events";
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 export class InfiniteCanvasEvents{
@@ -13,10 +13,7 @@ export class InfiniteCanvasEvents{
         this.anchorSet = new AnchorSet();
         function getRelativePosition(clientX: number, clientY: number): Point{
             const rect: ClientRect = canvasElement.getBoundingClientRect();
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
+            return new Point(clientX - rect.left, clientY - rect.top);
         }
         mapWheelEvents(canvasElement, transformer, this.anchorSet, getRelativePosition, config);
         mapMouseEvents(canvasElement, transformer, this.anchorSet, getRelativePosition, config);

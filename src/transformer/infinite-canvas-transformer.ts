@@ -7,6 +7,7 @@ import { Rotate } from "./rotate";
 import { Zoom } from "./zoom";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 import { TransformableBox } from "../interfaces/transformable-box";
+import { Point } from "../geometry/point";
 
 
 export class InfiniteCanvasTransformer implements Transformer{
@@ -34,7 +35,7 @@ export class InfiniteCanvasTransformer implements Transformer{
         this._zoom = new Zoom(this.viewBox, x, y, scale, () => this._zoom = undefined);
     }
     public getAnchor(x: number, y: number): Anchor{
-        const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
+        const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable(new Point(x, y));
         if(!this.gesture){
             this.gesture = this.context.getGestureForOneMovable(movable);
             return this.createAnchor(movable);
@@ -47,7 +48,7 @@ export class InfiniteCanvasTransformer implements Transformer{
         return this.createAnchor(movable);
     }
     public getRotationAnchor(x: number, y:number): Anchor{
-        const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable({x,y});
+        const movable: InfiniteCanvasMovable = new InfiniteCanvasMovable(new Point(x, y));
         const rotate: Rotate = new Rotate(movable, this.viewBox);
         return {
             moveTo(x: number, y: number){

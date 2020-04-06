@@ -1,6 +1,6 @@
 import { Transformation } from "../transformation";
 import { ClippedPaths } from "../instructions/clipped-paths";
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 
 export interface StateInstanceProperties {
     fillStyle: string | CanvasGradient | CanvasPattern;
