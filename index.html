@@ -14,6 +14,12 @@
 <div class="inner">
 <div class="markdown language-js">
 # InfiniteCanvas
+
+* [About](#about)
+* [Infinity](#infinity)
+    * [Infinitely big rectangles](#infinitelybigrectangles)
+    * [Paths to and from infinity](#pathstoandfrominfinity)
+
 ## About
 `InfiniteCanvas` makes a `&lt;canvas&gt;` element virtually infinite in size, allowing you to pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
 
@@ -57,6 +63,13 @@ So these are the kinds of infinite rectangles you can draw:
 </div>
 <div>
     <iframe width="100%" height="650" src="https://jsfiddle.net/EmileFokkema/y64wn0e8/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+### Paths to and from infinity
+But there's more. `InfiniteCanvasRenderingContext2D` not only implements some existing methods differently, it also has additional methods. One of them is `lineToInfinityInDirection`. A variation on the existing `lineTo`, it modifies the current subpath so as to add, not a line segment to another point having some x and y coordinates, but rather a ray extending in the given direction. Here's an example:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/pehjaut9/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
