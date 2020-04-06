@@ -1,11 +1,11 @@
 import { Transformation } from "../transformation";
 import { Instruction } from "../instructions/instruction";
 import { ClippedPaths } from "../instructions/clipped-paths";
-import {Rectangle} from "../rectangle";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
-import { Point } from "../point";
+import { Point } from "../geometry/point";
+import { Area } from "../areas/area";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -78,7 +78,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         newProps[property] = newValue;
         return new InfiniteCanvasStateInstance(newProps);
     }
-    public get clippingRegion(): Rectangle{return this.clippedPaths ? this.clippedPaths.area : undefined;}
+    public get clippingRegion(): Area{return this.clippedPaths ? this.clippedPaths.area : undefined;}
     public equals(other: InfiniteCanvasStateInstance): boolean{
         for(let dimension of allDimensions){
             if(!dimension.isEqualForInstances(this, other)){
@@ -87,6 +87,12 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         }
 
         return (!this.clippedPaths && !other.clippedPaths || this.clippedPaths && this.clippedPaths === other.clippedPaths) && this.fillAndStrokeStylesTransformed === other.fillAndStrokeStylesTransformed;
+    }
+    public getMaximumLineWidth(): number{
+        return this.lineWidth * this.transformation.getMaximumLineWidthScale();
+    }
+    public getLineDashPeriod(): number{
+        return this.lineDash.reduce((total, s2) => total + s2, 0);
     }
     public isTransformable(): boolean{
         for(let dimension of allDimensions){
@@ -124,7 +130,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         textBaseline: "alphabetic",
         clippedPaths: undefined,
         fillAndStrokeStylesTransformed: false,
-        shadowOffset: {x: 0, y: 0},
+        shadowOffset: Point.origin,
         shadowColor: 'rgba(0, 0, 0, 0)',
         shadowBlur: 0
     });

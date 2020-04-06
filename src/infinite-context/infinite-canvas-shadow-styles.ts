@@ -1,6 +1,6 @@
 import { ViewBox } from "../interfaces/viewbox";
 import { shadowColor } from "../state/dimensions/shadow-color";
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 import { shadowOffset } from "../state/dimensions/shadow-offset";
 import { shadowBlur } from "../state/dimensions/shadow-blur";
 
@@ -16,14 +16,14 @@ export class InfiniteCanvasShadowStyles implements CanvasShadowStyles{
 		return this.viewBox.state.current.shadowOffset.x;
 	}
 	public set shadowOffsetX(value: number){
-		const newShadowOffset: Point = {x: value, y: this.viewBox.state.current.shadowOffset.y};
+		const newShadowOffset: Point = new Point(value, this.viewBox.state.current.shadowOffset.y);
 		this.viewBox.changeState(state => shadowOffset.changeInstanceValue(state, newShadowOffset));
     }
     public get shadowOffsetY(): number{
 		return this.viewBox.state.current.shadowOffset.y;
 	}
 	public set shadowOffsetY(value: number){
-		const newShadowOffset = {x: this.viewBox.state.current.shadowOffset.x, y: value};
+		const newShadowOffset: Point = new Point(this.viewBox.state.current.shadowOffset.x, value);
 		this.viewBox.changeState(state => shadowOffset.changeInstanceValue(state, newShadowOffset));
 	}
 	public get shadowColor(): string{

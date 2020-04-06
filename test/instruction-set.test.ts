@@ -1,8 +1,9 @@
 import { Transformation } from "../src/transformation";
-import { PathInstructions } from "../src/instructions/path-instructions";
 import { logInstruction } from "./log-instruction";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
+import { Point } from "../src/geometry/point";
+import { InfiniteCanvasViewboxInfinityProvider } from "../src/infinite-canvas-viewbox-infinity-provider";
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -10,16 +11,16 @@ describe("an instruction set", () => {
 
     beforeEach(() => {
         onChangeSpy = jest.fn();
-        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy);
+        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy, new InfiniteCanvasViewboxInfinityProvider(200, 200));
     });
 
     describe("that begins drawing a path", () => {
 
         beforeEach(() => {
             instructionSet.beginPath();
-            instructionSet.addPathInstruction(PathInstructions.moveTo(0, 0));
-            instructionSet.addPathInstruction(PathInstructions.lineTo(3, 0));
-            instructionSet.addPathInstruction(PathInstructions.lineTo(0, 3));
+            instructionSet.moveTo(new Point(0, 0));
+            instructionSet.lineTo(new Point(3, 0));
+            instructionSet.lineTo(new Point(0, 3));
         });
 
         it("should not have called onchange", () => {
@@ -29,7 +30,7 @@ describe("an instruction set", () => {
         describe("and then fills it", () => {
 
             beforeEach(() => {
-                instructionSet.drawPath((context: CanvasRenderingContext2D) => {context.fill();});
+                instructionSet.fillPath((context: CanvasRenderingContext2D) => {context.fill();});
             });
 
             it("should have called onchange", () => {
@@ -60,9 +61,9 @@ describe("an instruction set", () => {
 
         beforeEach(() => {
             instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
-            instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
+            instructionSet.fillRect(0, 0, 1, 1, (context: CanvasRenderingContext2D, transformation: Transformation) => {
                 context.fill();
-            }, [PathInstructions.rect(0, 0, 1, 1)]);
+            });
         });
 
         it("should have called onchange", () => {
@@ -109,9 +110,9 @@ describe("an instruction set", () => {
 
             beforeEach(() => {
                 instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
-                instructionSet.drawPath((context: CanvasRenderingContext2D, transformation: Transformation) => {
+                instructionSet.fillRect(2, 0, 1, 1, (context: CanvasRenderingContext2D, transformation: Transformation) => {
                     context.fill();
-                }, [PathInstructions.rect(2, 0, 1, 1)]);
+                });
             });
 
             it("should have recorded everything in the right order", () => {

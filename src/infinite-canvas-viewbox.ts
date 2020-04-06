@@ -7,14 +7,19 @@ import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instanc
 import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider";
 import {InfiniteCanvasLinearGradient} from "./styles/infinite-canvas-linear-gradient";
 import {InfiniteCanvasRadialGradient} from "./styles/infinite-canvas-radial-gradient";
-import { Rectangle } from "./rectangle";
 import { DrawingLock } from "./drawing-lock";
 import { InfiniteCanvasPattern } from "./styles/infinite-canvas-pattern";
 import { TransformationKind } from "./transformation-kind";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
+import { Area } from "./areas/area";
+import { Position } from "./geometry/position"
+import {InfiniteCanvasViewboxInfinityProvider} from "./infinite-canvas-viewbox-infinity-provider";
+import {rectangleHasArea} from "./geometry/rectangle-has-area";
+import {rectangleIsPlane} from "./geometry/rectangle-is-plane";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
+	private infinityProvider: InfiniteCanvasViewboxInfinityProvider;
 	private _transformation: Transformation;
 	constructor(
 		public width: number,
@@ -22,13 +27,15 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		private context: CanvasRenderingContext2D,
 		private readonly drawingIterationProvider: DrawingIterationProvider,
 		private readonly drawLockProvider: () => DrawingLock){
-		this.instructionSet = new InfiniteCanvasInstructionSet(() => drawingIterationProvider.provideDrawingIteration(() => this.draw()));
+		this.infinityProvider = new InfiniteCanvasViewboxInfinityProvider(width, height);
+		this.instructionSet = new InfiniteCanvasInstructionSet(() => drawingIterationProvider.provideDrawingIteration(() => this.draw()), this.infinityProvider);
 		this._transformation = Transformation.identity;
 	}
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
 	public get transformation(): Transformation{return this._transformation};
 	public set transformation(value: Transformation){
 		this._transformation = value;
+		this.infinityProvider.viewBoxTransformation = value;
 		this.drawingIterationProvider.provideDrawingIteration(() => this.draw());
 	}
 	public getDrawingLock(): DrawingLock{
@@ -58,14 +65,49 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		const bitmap: ImageBitmap = await createImageBitmap(imageData);
 		return this.context.createPattern(bitmap, 'no-repeat');
 	}
-	public addDrawing(instruction: Instruction, area: Rectangle, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
+	public addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
 		this.instructionSet.addDrawing(instruction, area, transformationKind, takeClippingRegionIntoAccount);
 	}
 	public addPathInstruction(pathInstruction: PathInstruction): void{
 		this.instructionSet.addPathInstruction(pathInstruction);
 	}
-	public drawPath(instruction: Instruction, pathInstructions?: PathInstruction[]): void{
-		this.instructionSet.drawPath(instruction, pathInstructions);
+	public closePath(): void{
+		if(!this.instructionSet.currentSubpathIsClosable()){
+			return;
+		}
+		this.instructionSet.closePath();
+	}
+	public moveTo(position: Position): void{
+		this.instructionSet.moveTo(position);
+	}
+	public lineTo(position: Position): void{
+		if(this.instructionSet.canAddLineTo(position)){
+			this.instructionSet.lineTo(position);
+		}
+	}
+	public rect(x: number, y: number, w: number, h: number): void{
+		this.instructionSet.rect(x, y, w, h);
+	}
+	public currentPathCanBeFilled(): boolean{
+		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathContainsFinitePoint();
+	}
+	public fillPath(instruction: Instruction): void{
+		this.instructionSet.fillPath(instruction);
+	}
+	public strokePath(): void{
+		this.instructionSet.strokePath();
+	}
+	public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
+		if(!rectangleHasArea(x, y, w, h)){
+			return;
+		}
+		this.instructionSet.fillRect(x, y, w, h, instruction);
+	}
+	public strokeRect(x: number, y: number, w: number, h: number): void{
+		if(!rectangleHasArea(x, y, w, h) || rectangleIsPlane(x, y, w, h)){
+			return;
+		}
+		this.instructionSet.strokeRect(x, y, w, h);
 	}
 	public clipPath(instruction: Instruction): void{
 		this.instructionSet.clipPath(instruction);

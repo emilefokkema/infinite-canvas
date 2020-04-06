@@ -1,7 +1,7 @@
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Anchor } from "../src/transformer/anchor";
-import { Point } from "../src/point";
+import { Point } from "../src/geometry/point";
 import { InfiniteCanvasConfig } from "../src/config/infinite-canvas-config";
 import { TransformableBox } from "../src/interfaces/transformable-box";
 
@@ -102,7 +102,7 @@ describe("an infinite canvas transformer", () => {
             });
 
             it("should have resulted in a transformation that translates", () => {
-                expectPointToBeTransformedTo({x: 1, y: 1}, currentTransformation, {x: 2, y: 2});
+                expectPointToBeTransformedTo(new Point(1, 1), currentTransformation, new Point(2, 2));
             });
 
             describe("and then releases it and creates another", () => {
@@ -119,7 +119,7 @@ describe("an infinite canvas transformer", () => {
                     });
 
                     it("should have resulted in a transformation that translates", () => {
-                        expectPointToBeTransformedTo({x: 1, y: 1}, currentTransformation, {x: 3, y: 2});
+                        expectPointToBeTransformedTo(new Point(1, 1), currentTransformation, new Point(3, 2));
                     });
                 });
             });

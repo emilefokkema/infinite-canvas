@@ -225,13 +225,22 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public lineTo(x: number, y: number): void{
 		this.canvasPath.lineTo(x, y);
 	}
+	public lineToInfinityInDirection(x: number, y: number): void{
+		this.canvasPath.lineToInfinityInDirection(x,  y);
+	}
 	public moveTo(x: number, y: number): void{
 		this.canvasPath.moveTo(x, y);
+	}
+	public moveToInfinityInDirection(x: number, y: number): void{
+		this.canvasPath.moveToInfinityInDirection(x, y);
 	}
 	public quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void{
 		this.canvasPath.quadraticCurveTo(cpx, cpy, x, y);
 	}
 	public rect(x: number, y: number, w: number, h: number): void{
+		if(!Number.isFinite(x) && !Number.isFinite(y)){
+			throw new Error(`The starting coordinates provided (${x} and ${y}) do not determine a direction.`)
+		}
 		this.canvasPath.rect(x, y, w, h);
 	}
 }

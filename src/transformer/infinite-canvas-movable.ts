@@ -1,4 +1,4 @@
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 import { MoveSubscription } from "./move-subscription";
 import { Movable } from "./movable";
 
@@ -15,7 +15,7 @@ export class InfiniteCanvasMovable implements Movable{
         return this;
     }
     public moveTo(x: number, y:number): void{
-        const newPoint: Point = {x,y};
+        const newPoint: Point = new Point(x, y);
         this.point = newPoint;
         for(const handler of this.handlers){
             handler(newPoint);

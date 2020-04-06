@@ -1,5 +1,6 @@
 import {InfiniteCanvasGradient} from "./infinite-canvas-gradient";
 import {Transformation} from "../transformation";
+import { Point } from "../geometry/point";
 
 export class InfiniteCanvasRadialGradient extends InfiniteCanvasGradient{
     constructor(
@@ -13,8 +14,8 @@ export class InfiniteCanvasRadialGradient extends InfiniteCanvasGradient{
         super();
     }
     protected createTransformedGradient(transformation: Transformation): CanvasGradient{
-        const {x: tx0, y: ty0} = transformation.apply({x: this.x0, y: this.y0});
-        const {x: tx1, y: ty1} = transformation.apply({x: this.x1, y: this.y1});
+        const {x: tx0, y: ty0} = transformation.apply(new Point(this.x0, this.y0));
+        const {x: tx1, y: ty1} = transformation.apply(new Point(this.x1, this.y1));
         const tr0: number = this.r0 * transformation.scale;
         const tr1: number = this.r1 * transformation.scale;
         const gradient: CanvasGradient = this.context.createRadialGradient(tx0, ty0, tr0, tx1, ty1, tr1);

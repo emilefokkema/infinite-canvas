@@ -1,7 +1,7 @@
 import { AnchorSet } from "./anchor-set";
 import { Transformer } from "../transformer/transformer"
 import { Anchor } from "../transformer/anchor";
-import { Point } from "../point";
+import { Point } from "../geometry/point";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
 
 export function mapTouchEvents(

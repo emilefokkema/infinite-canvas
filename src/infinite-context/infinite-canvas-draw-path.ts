@@ -20,6 +20,9 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 		this.viewBox.clipPath(instruction);
 	}
 	public fill(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
+		if((!pathOrFillRule || this.isFillRule(pathOrFillRule)) && !this.viewBox.currentPathCanBeFilled()){
+			return;
+		}
 		let instruction: Instruction = this.isFillRule(pathOrFillRule) ?
 			(context: CanvasRenderingContext2D) => {
 				context.fill(pathOrFillRule);
@@ -27,14 +30,11 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 			(context: CanvasRenderingContext2D) => {
 				context.fill();
 			};
-		this.viewBox.drawPath(instruction);
+		this.viewBox.fillPath(instruction);
 	}
 	public isPointInPath(xOrPath: number | Path2D, xOry: number, yOrFillRule: number | CanvasFillRule, fillRule?: CanvasFillRule): boolean{return true;}
 	public isPointInStroke(xOrPath: number | Path2D, xOry: number, y?:number): boolean{return true;}
 	public stroke(path?: Path2D): void{
-		let instruction: Instruction = (context: CanvasRenderingContext2D) => {
-			context.stroke();
-		};
-		this.viewBox.drawPath(instruction);
+		this.viewBox.strokePath();
 	}
 }
