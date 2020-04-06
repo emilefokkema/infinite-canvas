@@ -17,60 +17,19 @@
 <div class="markdown language-js">
 # InfiniteCanvas
 ## About
-`InfiniteCanvas` makes any `&lt;canvas&gt;` element infinite in size, so that you can pan the canvas in any direction and zoom in or out as far as you like. Simply instantiate an `InfiniteCanvas` like this:
+`InfiniteCanvas` makes a `&lt;canvas&gt;` element infinite in size, so that you can pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
 
-    // assuming 'canvas' refers to an HTMLCanvasElement
-    var infCanvas = new InfiniteCanvas(canvas);
+    var canvasElement = document.getElementById("canvas");
+    var infCanvas = new InfiniteCanvas(canvasElement);
 
 And then get a `CanvasRenderingContext2D` from it like you would with a regular `&lt;canvas&gt;`:
 
     var context = infCanvas.getContext("2d");
 
-That's all! Now you can use `context` to draw on the `InfiniteCanvas` as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Check out this live example:
+That's all! Now you can use `context` to draw on the `InfiniteCanvas` as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Check out this example:
 </div>
-<div
-    class="codepen"
-    data-prefill='{
-        "title": "Example 1",
-        "description": "Draw using a CanvasRenderingContext2D",
-        "scripts": ["https://cdn.jsdelivr.net/gh/emilefokkema/infinite-canvas-2@v0.2-alpha/dist/infinite-canvas.js"]
-    }'
-    style="height: 400px; overflow: auto;"
-    data-height="430" 
-    data-theme-id="light"
-    data-default-tab="js,result" 
-    data-editable="false">
-    <pre data-lang="html">
-&lt;canvas id="my-house" width="300" height="300"&gt;&lt;/canvas&gt;
-Use Ctrl + scroll to zoom
-    </pre>
-    <pre data-lang="js">
-let canvas = document.getElementById('my-house');
-canvas = new InfiniteCanvas(canvas);
-const ctx = canvas.getContext('2d');
-
-// Set line width
-ctx.lineWidth = 10;
-
-// Wall
-ctx.strokeRect(75, 140, 150, 110);
-
-// Door
-ctx.fillRect(130, 190, 40, 60);
-
-// Roof
-ctx.beginPath();
-ctx.moveTo(50, 140);
-ctx.lineTo(150, 60);
-ctx.lineTo(250, 140);
-ctx.closePath();
-ctx.stroke();
-    </pre>
-    <pre data-lang="css">
-canvas{
-    border: 1pt solid #000;
-}
-    </pre>
+<div>
+    <iframe width="100%" height="300" src="http://jsfiddle.net/EmileFokkema/1mfv09b3/embedded/result,js,html,css" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
