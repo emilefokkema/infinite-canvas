@@ -9,8 +9,7 @@
     "build": "npx webpack",
     "update-snapshot": "jest --updateSnapshot",
     "run:dev": "node run-dev.js",
-    "build:dev": "webpack --mode=development",
-    "build:gh-pages": "npx webpack --config webpack-gh-pages.config.js"
+    "build:dev": "webpack --mode=development"
   },
   "keywords": [
     "canvas",
