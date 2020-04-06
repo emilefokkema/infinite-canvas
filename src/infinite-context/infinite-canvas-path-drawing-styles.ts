@@ -21,6 +21,9 @@ export class InfiniteCanvasPathDrawingStyles implements CanvasPathDrawingStyles{
 	public miterLimit: number;
 	public getLineDash(): number[]{return this.viewBox.state.current.lineDash;}
 	public setLineDash(segments: number[]): void{
+		if(segments.length % 2 === 1){
+			segments = segments.concat(segments);
+		}
 		this.viewBox.changeState(state => lineDash.changeInstanceValue(state, segments));
 	}
 }

@@ -1,8 +1,8 @@
 import { ViewBox } from "../interfaces/viewbox";
-import { Rectangle } from "../rectangle";
 import { sliceImageData } from "./slice-image-data";
 import { DrawingLock } from "../drawing-lock";
 import { TransformationKind } from "../transformation-kind";
+import {ConvexPolygon} from "../areas/polygons/convex-polygon";
 
 export class InfiniteCanvasImageData implements CanvasImageData{
 	constructor(private viewBox: ViewBox){
@@ -24,6 +24,6 @@ export class InfiniteCanvasImageData implements CanvasImageData{
 			context.fillStyle = pattern;
 			context.imageSmoothingEnabled = false;
 			context.fillRect(0, 0, imagedata.width, imagedata.height);
-		}, new Rectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute, false);
+		}, ConvexPolygon.createRectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute, false);
 	}
 }

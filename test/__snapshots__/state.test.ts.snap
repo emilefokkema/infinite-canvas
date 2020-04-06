@@ -44,6 +44,15 @@ Array [
 
 exports[`a state with a clipped path and another one with another clipped path that is based on the same path when the one with one clipped path is converted (including clipped paths) to the one with another clipped path should result in the right instructions 1`] = `
 Array [
+  "context.fillStyle = \\"#000\\"",
+  "context.beginPath()",
+  "context.fillStyle = \\"#f00\\"",
+  "context.moveTo(0,0)",
+  "context.lineTo(3,0)",
+  "context.lineTo(3,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.clip()",
   "context.moveTo(0,0)",
   "context.clip()",
 ]
@@ -51,6 +60,17 @@ Array [
 
 exports[`a state with a clipped path and another one with, higher up its stack, another clipped path that is based on the same path and the other one saves once more and changes state should result in the right changes 1`] = `
 Array [
+  "context.save()",
+  "context.restore()",
+  "context.fillStyle = \\"#000\\"",
+  "context.beginPath()",
+  "context.fillStyle = \\"#f00\\"",
+  "context.moveTo(0,0)",
+  "context.lineTo(3,0)",
+  "context.lineTo(3,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.clip()",
   "context.save()",
   "context.moveTo(0,0)",
   "context.clip()",
@@ -61,6 +81,17 @@ Array [
 
 exports[`a state with a clipped path and another one with, higher up its stack, another clipped path that is based on the same path when the one with one clipped path is converted (including clipped paths) to the one with another clipped path should result in the right instructions 1`] = `
 Array [
+  "context.save()",
+  "context.restore()",
+  "context.fillStyle = \\"#000\\"",
+  "context.beginPath()",
+  "context.fillStyle = \\"#f00\\"",
+  "context.moveTo(0,0)",
+  "context.lineTo(3,0)",
+  "context.lineTo(3,3)",
+  "context.lineTo(0,3)",
+  "context.lineTo(0,0)",
+  "context.clip()",
   "context.save()",
   "context.moveTo(0,0)",
   "context.clip()",

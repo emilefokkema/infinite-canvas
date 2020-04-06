@@ -1,49 +1,48 @@
 import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
-import { Rectangle } from "../rectangle";
-import { AreaChange } from "../area-change";
-import { Point } from "../point";
-import { drawRect } from "../infinite-context/draw-rect";
+import { AreaChange } from "../areas/area-change";
+import { Point } from "../geometry/point";
 import { PathInstruction } from "../interfaces/path-instruction";
-import { transformInstructionRelatively } from "../instruction-utils";
+import { AreaBuilder } from "../areas/area-builder";
 
 export class PathInstructions{
-
-    public static clearRect(x: number, y: number, width: number, height: number): PathInstruction{
-        return {
-            instruction:transformInstructionRelatively((context: CanvasRenderingContext2D, transformation: Transformation) => {
-                context.clearRect(x, y, width, height);
-            }),
-            changeArea: AreaChange.to(new Rectangle(x, y, width, height))
-        };
-    }
 
     public static arc(_x: number, _y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
         const instruction: Instruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
             const transformationAngle: number = transformation.getRotationAngle();
-            const {x, y} = transformation.apply({x:_x,y:_y});
+            const {x, y} = transformation.apply(new Point(_x, _y));
             context.arc(x, y, radius * transformation.scale, startAngle + transformationAngle, endAngle + transformationAngle, anticlockwise);
         };
-        const changeArea: AreaChange = AreaChange.to(new Rectangle(_x - radius, _y - radius, 2 * radius, 2 * radius));
+        const changeArea: AreaChange = (builder: AreaBuilder) => {
+            builder.addPosition(new Point(_x - radius, _y - radius));
+            builder.addPosition(new Point(_x - radius, _y + radius));
+            builder.addPosition(new Point(_x + radius, _y - radius));
+            builder.addPosition(new Point(_x + radius, _y + radius));
+        };
         return {
             instruction: instruction,
-            changeArea: changeArea
+            changeArea: changeArea,
+            positionChange: new Point(_x, _y).plus(Transformation.rotation(0, 0, endAngle).apply(new Point(radius, 0))),
+            initialPoint: new Point(_x, _y).plus(Transformation.rotation(0, 0, startAngle).apply(new Point(radius, 0)))
         };
     }
 
     public static arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): PathInstruction{
-        const p1: Point = {x:x1,y:y1};
-        const p2: Point = {x:x2,y:y2};
-        const newRectangle: Rectangle = Rectangle.create(p1).expandToInclude(p2);
+        const p1: Point = new Point(x1, y1);
+        const p2: Point = new Point(x2, y2);
         const instruction: Instruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
             const tp1: Point = transformation.apply(p1);
             const tp2: Point = transformation.apply(p2);
             context.arcTo(tp1.x, tp1.y, tp2.x, tp2.y, radius * transformation.scale);
         };
-        const changeArea: AreaChange = AreaChange.to(newRectangle);
+        const changeArea: AreaChange = (builder: AreaBuilder) => {
+            builder.addPosition(p1);
+            builder.addPosition(p2);
+        };
         return {
             instruction: instruction,
-            changeArea: changeArea
+            changeArea: changeArea,
+            positionChange: new Point(x2, y2)
         };
     }
 
@@ -51,60 +50,39 @@ export class PathInstructions{
         return undefined;
     }
 
-    public static closePath(): PathInstruction{
-        return {
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                context.closePath();
-            },
-            changeArea: AreaChange.to()
-        };
-    }
-
     public static ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
-        const newRectangle: Rectangle = new Rectangle(x - radiusX, y - radiusY, 2 * radiusX, 2 * radiusY).transform(Transformation.rotation(x, y, rotation));
         return {
             instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                const tCenter: Point = transformation.apply({x:x,y:y});
+                const tCenter: Point = transformation.apply(new Point(x, y));
                 const transformationAngle: number = transformation.getRotationAngle();
                 context.ellipse(tCenter.x, tCenter.y, radiusX * transformation.scale, radiusY * transformation.scale, rotation + transformationAngle, startAngle, endAngle, anticlockwise);
             },
-            changeArea: AreaChange.to(newRectangle)
-        };
-    }
-
-    public static lineTo(_x: number, _y: number): PathInstruction{
-        const point: Point = {x: _x, y: _y};
-        return {
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                const {x, y} = transformation.apply(point);
-                context.lineTo(x, y);
+            changeArea: (builder: AreaBuilder) => {
+                builder.addPosition(new Point(x - radiusX, y - radiusY));
+                builder.addPosition(new Point(x - radiusX, y + radiusY));
+                builder.addPosition(new Point(x + radiusX, y - radiusY));
+                builder.addPosition(new Point(x + radiusX, y + radiusY));
             },
-            changeArea: AreaChange.to(point)
-        };
-    }
-
-    public static moveTo(_x: number, _y: number): PathInstruction{
-        const point: Point = {x: _x, y: _y};
-        return {
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                const {x, y} = transformation.apply(point);
-                context.moveTo(x, y);
-            },
-            changeArea: AreaChange.to(point)
+            positionChange: new Point(x, y)
+                .plus(
+                        Transformation.rotation(0, 0, endAngle).before(
+                        new Transformation(radiusX, 0, 0, radiusY, 0, 0)).before(
+                        Transformation.rotation(0, 0, rotation)
+                        )
+                    .apply(new Point(1, 0))
+                ),
+            initialPoint: new Point(x, y)
+            .plus(
+                    Transformation.rotation(0, 0, startAngle).before(
+                    new Transformation(radiusX, 0, 0, radiusY, 0, 0)).before(
+                    Transformation.rotation(0, 0, rotation)
+                    )
+                .apply(new Point(1, 0))
+            )
         };
     }
 
     public static quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): PathInstruction{
         return undefined;
-    }
-
-    public static rect(x: number, y: number, w: number, h: number): PathInstruction{
-        const rectangle: Rectangle = new Rectangle(x, y, w, h);
-        return {
-            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                drawRect(x, y, w, h, context, transformation);
-            },
-            changeArea: AreaChange.to(rectangle)
-        };
     }
 }

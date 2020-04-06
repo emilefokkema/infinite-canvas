@@ -5,6 +5,7 @@ import { StateChangingInstructionSetWithAreaAndCurrentPath } from "./state-chang
 export interface StateChangingInstructionSet extends InstructionSet{
     state: InfiniteCanvasState;
     initialState: InfiniteCanvasState;
+    stateOfFirstInstruction: InfiniteCanvasState;
     setInitialState(previousState: InfiniteCanvasState): void;
     setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void;
     addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): void;

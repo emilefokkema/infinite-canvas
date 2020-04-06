@@ -1,5 +1,5 @@
 import { Transformation } from "../src/transformation"
-import { Point } from "../src/point"
+import { Point } from "../src/geometry/point"
 
 function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
 	const actualTransformedPoint: Point = transformation.apply(point);
@@ -14,7 +14,7 @@ describe.each([
 	let originalPoint: Point;
 
 	beforeEach(() => {
-		originalPoint = {x: 1, y: 1};
+		originalPoint = new Point(1, 1);
 	});
 
 	describe("transforms a point", () => {
@@ -57,12 +57,12 @@ describe("a translate, rotate, zoom transformation", () => {
 	let to3: Point;
 
 	beforeEach(() => {
-		from1 = {x:0, y: 1};
-		from2 = {x:0, y: 3};
-		from3 = {x: 2, y: 3};
-		to1 = {x: 0, y: 0};
-		to2 = {x: 1, y: 0};
-		to3 = {x:1, y: -1};
+		from1 = new Point(0, 1);
+		from2 = new Point(0, 3);
+		from3 = new Point(2, 3);
+		to1 = new Point(0, 0);
+		to2 = new Point(1, 0);
+		to3 = new Point(1, -1);
 		translateRotateZoom = Transformation.translateRotateZoom(from1.x, from1.y, from2.x, from2.y, to1.x, to1.y, to2.x, to2.y);
 	});
 
@@ -81,17 +81,17 @@ describe("a translating and zooming transformation", () => {
 	let to2: Point;
 
 	beforeEach(() => {
-		from1 = {x:0, y: 1};
-		from2 = {x:0, y: 3};
-		to1 = {x: 0, y: 0};
-		to2 = {x: 1, y: 0};
+		from1 = new Point(0, 1);
+		from2 = new Point(0, 3);
+		to1 = new Point(0, 0);
+		to2 = new Point(1, 0);
 		translateZoom = Transformation.translateZoom(from1.x, from1.y, from2.x, from2.y, to1.x, to1.y, to2.x, to2.y);
 	});
 
 	it("should transform points correctly", () => {
-		expectPointToBeTransformedTo(from1, translateZoom, {x: 0, y: 0});
-		expectPointToBeTransformedTo(from2, translateZoom, {x: 0, y: 1});
-		expectPointToBeTransformedTo({x: 2, y: 3}, translateZoom, {x: 1, y: 1});
+		expectPointToBeTransformedTo(from1, translateZoom, new Point(0, 0));
+		expectPointToBeTransformedTo(from2, translateZoom, new Point(0, 1));
+		expectPointToBeTransformedTo(new Point(2, 3), translateZoom, new Point(1, 1));
 	});
 });
 
@@ -115,7 +115,7 @@ describe("a zooming transformation", () => {
 			[2, 0, 3, -1]
 	])("that is applied to point (%f,%f)", (fromX: number, fromY: number, toX: number, toY: number) => {
 		it("should transform it correctly", () => {
-			expectPointToBeTransformedTo({x:fromX, y:fromY}, zoom, {x: toX, y: toY});
+			expectPointToBeTransformedTo(new Point(fromX, fromY), zoom, new Point(toX, toY));
 		});
 	});
 
@@ -160,6 +160,6 @@ describe("a translation", () => {
 	it("should translate a point", () => {
 		let x: number = 5;
 		let y: number = 6;
-		expectPointToBeTransformedTo({x:x, y:y}, translation, {x: x + dx, y: y + dy});
+		expectPointToBeTransformedTo(new Point(x, y), translation, new Point(x + dx, y + dy));
 	});
 });

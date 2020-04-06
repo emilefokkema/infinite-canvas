@@ -1,4 +1,5 @@
-import { Point } from "./point"
+import { Point } from "./geometry/point"
+import { PointAtInfinity } from "./geometry/point-at-infinity";
 
 export class Transformation{
 	public scale: number;
@@ -11,6 +12,13 @@ export class Transformation{
 		public f: number
 		){
 			this.scale = Math.sqrt(a * d - b * c);
+	}
+	public getMaximumLineWidthScale(): number{
+		const x1: number = this.a + this.c,
+		y1: number = this.b + this.d,
+		x2: number = this.a - this.c,
+		y2: number = this.b - this.d;
+		return Math.sqrt(Math.max(x1 * x1 + y1 * y1, x2 * x2 + y2 * y2));
 	}
 	public getRotationAngle(): number{
 		const cos: number = this.a / this.scale;
@@ -39,11 +47,15 @@ export class Transformation{
 		}
 		return Math.PI + atan;
 	}
+	public applyToPointAtInfinity(pointAtInfinity: PointAtInfinity): PointAtInfinity{
+		return {direction: this.untranslated().apply(pointAtInfinity.direction)};
+	}
 	public apply(point: Point): Point{
-		return {
-			x: this.a * point.x + this.c * point.y + this.e,
-			y: this.b * point.x + this.d * point.y + this.f
-		};
+		return new Point(this.a * point.x + this.c * point.y + this.e, this.b * point.x + this.d * point.y + this.f);
+	}
+	public untranslated(): Transformation{
+		const {x: originTransformedX, y: originTransformedY} = this.apply(Point.origin);
+		return this.before(Transformation.translation(-originTransformedX, -originTransformedY));
 	}
 	public before(other: Transformation): Transformation{
 		const a: number = other.a * this.a + other.c * this.b;

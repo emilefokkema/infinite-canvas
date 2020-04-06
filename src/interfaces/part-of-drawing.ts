@@ -1,7 +1,7 @@
-import { Rectangle } from "../rectangle";
+import { Area } from "../areas/area";
 
 export interface PartOfDrawing{
-    hasDrawingAcrossBorderOf(area: Rectangle): boolean;
-    intersects(area: Rectangle): boolean;
-    isContainedBy(area: Rectangle): boolean;
+    hasDrawingAcrossBorderOf(area: Area): boolean;
+    intersects(area: Area): boolean;
+    isContainedBy(area: Area): boolean;
 }
