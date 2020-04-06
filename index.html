@@ -31,10 +31,19 @@ That's all! Now you can use `context` to draw on the `InfiniteCanvas` as describ
 <div>
     <iframe width="100%" height="300" src="http://jsfiddle.net/EmileFokkema/1mfv09b3/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+<div class="markdown language-js">
+## Infinity
+But there's more. This `CanvasRenderingContext2D` is also a (you guessed it) `InfiniteCanvasRenderingContext2D`. Meaning it can do intersting stuff having to do with infinity.
+### Infinitely big rectangles
+The [html specifications for the canvas element](https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-fillrect) say that when one of the arguments to the function `fillRect` is infinite (i.e. has the value `Infinity` or `-Infinity`), the canvas should draw nothing. Well, `InfiniteCanvas` does draw something. If you call `fillRect` with one or more arguments being infinite, like so:
 
+    context.fillRect(50, 50, Infinity, 30);
 
-
+then the result will be just what you would expect: a rectangle whose top left corner is situated at (50, 50), that has a height of 30 and that extends to the right indefinitely. Like this (zoom out to see more of the rectangle):
+</div>
+<div>
+    <iframe width="100%" height="300" src="http://jsfiddle.net/EmileFokkema/gqmez58r/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
 
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
