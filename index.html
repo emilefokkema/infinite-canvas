@@ -17,7 +17,7 @@
 <div class="markdown language-js">
 # InfiniteCanvas
 ## About
-`InfiniteCanvas` makes a `&lt;canvas&gt;` element infinite in size, so that you can pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
+`InfiniteCanvas` makes a `&lt;canvas&gt;` element virtually infinite in size, allowing you to pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
 
     var canvasElement = document.getElementById("canvas");
     var infCanvas = new InfiniteCanvas(canvasElement);
@@ -29,11 +29,11 @@ And then get a `CanvasRenderingContext2D` from it like you would with a regular 
 That's all! Now you can use `context` to draw on the `InfiniteCanvas` as described [here](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D). Check out this example:
 </div>
 <div>
-    <iframe width="100%" height="300" src="http://jsfiddle.net/EmileFokkema/1mfv09b3/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+    <iframe width="600" height="400" src="http://jsfiddle.net/EmileFokkema/1mfv09b3/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 <div class="markdown language-js">
 ## Infinity
-But there's more. This `CanvasRenderingContext2D` is also a (you guessed it) `InfiniteCanvasRenderingContext2D`. Meaning it can do intersting stuff having to do with infinity.
+But there's more. This `CanvasRenderingContext2D` is also a (you guessed it) `InfiniteCanvasRenderingContext2D`. Meaning it can do interesting stuff having to do with infinity.
 ### Infinitely big rectangles
 The [html specifications for the canvas element](https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-fillrect) say that when one of the arguments to the function `fillRect` is infinite (i.e. has the value `Infinity` or `-Infinity`), the canvas should draw nothing. Well, `InfiniteCanvas` does draw something. If you call `fillRect` with one or more arguments being infinite, like so:
 
@@ -42,9 +42,24 @@ The [html specifications for the canvas element](https://html.spec.whatwg.org/mu
 then the result will be just what you would expect: a rectangle whose top left corner is situated at (50, 50), that has a height of 30 and that extends to the right indefinitely. Like this (zoom out to see more of the rectangle):
 </div>
 <div>
-    <iframe width="100%" height="300" src="http://jsfiddle.net/EmileFokkema/gqmez58r/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+    <iframe width="600" height="400" src="http://jsfiddle.net/EmileFokkema/gqmez58r/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
+<div class="markdown language-js">
+But not only the width or height of the rectangle can be infinite; so can the x or y coordinate of the corner. So doing
 
+    context.fillRect(-Infinity, 50, Infinity, 50);
+
+will give you a rectangle whose top is at 50, whose bottom is at 100 and that extends to the left and right indefinitely. However, if the x coordinate of the corner is infinite, a rectangle will only be visible if the width is also infinite and has the opposite sign. (The same goes for the y coordinate of the corner and the height.) So doing
+
+    context.fillRect(-Infinity, -Infinity, 50, 50);
+
+would draw a rectangle with width and height equal to 50, and located nowhere. It would not be visible.
+
+So these are the kinds of infinite rectangles you can draw:
+</div>
+<div>
+    <iframe width="600" height="650" src="http://jsfiddle.net/EmileFokkema/y64wn0e8/17/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 <script>
@@ -56,45 +71,7 @@ then the result will be just what you would expect: a rectangle whose top left c
             var html = converter.makeHtml(md);
             markdownDivs[i].innerHTML = html;
         }
-        var examplesCreated = false;
-        var createExample = function(exampleEl){
-            var code = exampleEl.textContent.replace(/^\s*/g,"").replace(/\s*$/, "");
-            exampleEl.innerHTML = "";
-            var canvas;
-            var editorDiv = document.createElement("div");
-            editorDiv.setAttribute("class","example-editor");
-            exampleEl.appendChild(editorDiv);
-            var runButton = document.createElement("button");
-            runButton.innerHTML = "Run";
-            exampleEl.appendChild(runButton);
-            var editor = ace.edit(editorDiv);
-            editor.session.setMode("ace/mode/javascript");
-            editor.setValue(code);
-            editor.clearSelection();
-            var run = function(){
-                if(canvas){
-                    exampleEl.removeChild(canvas);
-                }
-                canvas = document.createElement("canvas");
-                canvas.setAttribute("width", 400);
-                canvas.setAttribute("height", 400);
-                exampleEl.insertBefore(canvas, editorDiv);
-                var f = new Function("canvas", editor.getValue());
-                f.apply(window, [canvas]);
-            };
-            run();
-            runButton.addEventListener("click", run);
-        };
-        Prism.highlightAll(true, function(){
-            // if(examplesCreated){
-            //     return;
-            // }
-            // var examples = document.querySelectorAll(".infinite-canvas-example");
-            // for(var i=0; i<examples.length;i++){
-            //     createExample(examples[i]);
-            // }
-            // examplesCreated = true;
-        });
+        Prism.highlightAll(true);
     })();
 </script>
 </body>
