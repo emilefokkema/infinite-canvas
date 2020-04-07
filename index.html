@@ -163,7 +163,7 @@ An object containing configuration properties may be passed to the `InfiniteCanv
 			greedyGestureHandling: true
 		});
 
-`rotationEnabled` enables or disables rotation using either two fingers or the combination of holding the mouse wheel down and moving the mouse. When `greedyGestureHandling` is `false`, the `InfiniteCanvas` is not zoomed when the user scrolls without holding the Ctrl key, and is not panned when the user uses only one finger. These properties may also be set on the `InfiniteCanvas` instance itself after construction like this:
+`rotationEnabled` enables or disables rotation using either two fingers or the combination of holding the mouse wheel down and moving the mouse (default is `true`). When `greedyGestureHandling` is `false` (the default), the `InfiniteCanvas` is not zoomed when the user scrolls without holding the Ctrl key, and is not panned when the user uses only one finger. These properties may also be set on the `InfiniteCanvas` instance itself after construction like this:
 
 	canvas.rotationEnabled = true;
 	canvas.greedyGestureHandling = false;
