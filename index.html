@@ -7,6 +7,7 @@
     <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
     <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.min.js" data-manual></script>
     <script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/gh/emilefokkema/infinite-canvas-2@v0.3-alpha/dist/infinite-canvas.js"></script>
     <link rel="stylesheet" type="text/css" href="index.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism.css" rel="stylesheet" />
 </head>
@@ -19,6 +20,7 @@
 * [Infinity](#infinity)
     * [Infinitely big rectangles](#infinitelybigrectangles)
     * [Paths to and from infinity](#pathstoandfrominfinity)
+    * [Why two points "at infinity" that are opposite each other cannot be connected by a line](#whytwopointsatinfinitythatareoppositeeachothercannotbeconnectedbyaline)
 
 ## About
 `InfiniteCanvas` makes a `&lt;canvas&gt;` element virtually infinite in size, allowing you to pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
@@ -71,6 +73,38 @@ But there's more. `InfiniteCanvasRenderingContext2D` not only implements some ex
 <div>
     <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/pehjaut9/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
+<div class="markdown language-js">
+Once you've added such a line to infinity, the end point of the current subpath is - so to speak - at infinity. Which means that if you add another line to, say, a point at position (x, y), the new line will again be a ray, coming from infinity (in the same direction as the previous ray) and ending up at (x, y). Like this:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/nvs6z7fo/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+When a regular canvas fills a path, it temporarily connects every endpoint of a subpath to its starting point, so as to get a closed area to fill. `InfiniteCanvas` does the same for a subpath whose end point is at infinity, i.e. it temporarily connects the starting point of the subpath to the end point at infinity:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/d09o27hn/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+Even if the endpoint of the current subpath is at infinity, you can still call `lineToInfinityInDirection` with a different direction. `InfiniteCanvas` will then not draw a ray (because where would its starting point be?) but it will update the end point of the current subpath. So if, before filling the path from the previous example, you had called `lineToInfinityInDirection` again, using a different direction, you would have gotten this:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/bzsuj49f/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+There is one case in which calling `lineToInfinityInDirection` does nothing, and that is if the given direction is directly opposite the current subpath's ending direction.
+
+### Why two points &quot;at infinity" that are opposite each other cannot be connected by a line
+For this, it helps to imagine all `InfiniteCanvas`'s infinities as lying on a circle surrounding the plane. To make this a little bit consistent, we then also have to imagine all finite points as lying in the center of this circle. Now imagine you have a path that starts at some finite point and extends toward infinity, like this:
+</div>
+<div>
+	<canvas id="explanation" width="500" height="500"></canvas>
+</div>
+<div class="markdown language-js">
+If you now call `lineToInfinityInDirection` with the direction of A, `InfiniteCanvas` will internally add a "line segment at infinity" from your position to A, as shown in the diagram. Similarly if you call it with the direction of B. But if you call it with the direction of C, there is no way for `InfiniteCanvas` to choose which way to go along the circle: it could go left or right. But there is also no way to go to C through the center, because that would mean choosing one of the (infinitely many) finite points to go through. So there is no consistent way to connect the end of the path to C.
+
+(A projective geometrist would [say](https://en.wikipedia.org/wiki/Line_at_infinity) that the end of the path and C are actually the same point, and because two points are needed to define a line, this point alone does not.)
+</div>
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
 <script>
@@ -83,6 +117,57 @@ But there's more. `InfiniteCanvasRenderingContext2D` not only implements some ex
             markdownDivs[i].innerHTML = html;
         }
         Prism.highlightAll(true);
+        var explanationCanvasElement = document.getElementById("explanation");
+        var explanationContext = new InfiniteCanvas(explanationCanvasElement, {rotationEnabled: false}).getContext("2d");
+        (function(ctx){
+        	ctx.font = "12pt Georgia"
+        	var point1 = {x: 391.42, y: 391.42};
+        	var opposite = {x: 108.57, y: 108.57};
+        	var angle = 3 * Math.PI / 4;
+        	var pointA = {x : 250 + 200 * Math.cos(Math.PI / 4 - angle), y : 250 + 200 * Math.sin(Math.PI / 4 - angle)};
+        	var pointB = {x : 250 + 200 * Math.cos(Math.PI / 4 + angle), y : 250 + 200 * Math.sin(Math.PI / 4 + angle)};
+        	function drawPoint(x, y, name, color, textOffsetX, textOffsetY){
+        		ctx.save();
+        		ctx.fillStyle = color;
+        		ctx.beginPath();
+        		ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        		ctx.fill();
+        		ctx.fillText(name, x + textOffsetX, y + textOffsetY);
+        		ctx.restore();
+        	}
+        	ctx.save();
+        	ctx.strokeStyle = "#aaa";
+        	ctx.fillStyle = "#aaa";
+
+        	ctx.beginPath();
+        	ctx.arc(250, 250, 200, 0, 2 * Math.PI);
+        	ctx.stroke();
+        	ctx.fillText("'points' at infinity", 370, 75);
+        	ctx.beginPath();
+        	ctx.moveTo(opposite.x, opposite.y);
+        	ctx.lineTo(250, 250);
+        	ctx.stroke();
+        	ctx.restore();
+        	ctx.beginPath();
+
+        	ctx.moveTo(250, 250);
+        	ctx.lineTo(point1.x, point1.y);
+        	ctx.stroke();
+
+        	ctx.strokeStyle = "#f00";
+        	ctx.beginPath();
+        	ctx.arc(250, 250, 200, Math.PI / 4, Math.PI / 4 - angle, true);
+        	ctx.stroke();
+        	ctx.strokeStyle = "#00f";
+        	ctx.beginPath();
+        	ctx.arc(250, 250, 200, Math.PI / 4, Math.PI / 4 + angle);
+        	ctx.stroke();
+        	drawPoint(250, 250, "from here", "#000", -20, -7);
+        	drawPoint(point1.x, point1.y, "to here", "#000", 0, -7);
+        	drawPoint(opposite.x, opposite.y, "C", "#0f0", 0, -7);
+        	drawPoint(pointA.x, pointA.y, "A", "#f00", 0, -7);
+        	drawPoint(pointB.x, pointB.y, "B", "#00f", 0, -7);
+        })(explanationContext);
     })();
 </script>
 </body>
