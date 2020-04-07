@@ -19,8 +19,10 @@
 * [About](#about)
 * [Infinity](#infinity)
     * [Infinitely big rectangles](#infinitelybigrectangles)
-    * [Paths to and from infinity](#pathstoandfrominfinity)
-    * [Why two points "at infinity" that are opposite each other cannot be connected by a line](#whytwopointsatinfinitythatareoppositeeachothercannotbeconnectedbyaline)
+	* [Paths to and from infinity](#pathstoandfrominfinity)
+	* [`rect`](#rect)
+	* [Why two points "at infinity" that are opposite each other cannot be connected by a line](#whytwopointsatinfinitythatareoppositeeachothercannotbeconnectedbyaline)
+	* [performance](#performance)
 
 ## About
 `InfiniteCanvas` makes a `&lt;canvas&gt;` element virtually infinite in size, allowing you to pan the canvas in any direction and zoom in or out as far as you like. Simply create an `InfiniteCanvas` like this:
@@ -67,8 +69,15 @@ So these are the kinds of infinite rectangles you can draw:
     <iframe width="100%" height="650" src="https://jsfiddle.net/EmileFokkema/y64wn0e8/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 <div class="markdown language-js">
+
+When you call `clearRect` on an `InfiniteCanvasRenderingContext2D`, the `x`, `y`, `width` and `height` parameters are treated the same way as `fillRect` treats them. Meaning you can use
+
+	context.clearRect(-Infinity, -Infinity, Infinity, Infinity);
+
+to clear the entire `InfiniteCanvas`.
+
 ### Paths to and from infinity
-But there's more. `InfiniteCanvasRenderingContext2D` not only implements some existing methods differently, it also has additional methods. One of them is `lineToInfinityInDirection`. A variation on the existing `lineTo`, it modifies the current subpath so as to add, not a line segment to another point having some x and y coordinates, but rather a ray extending in the given direction. Here's an example:
+But there's more. `InfiniteCanvasRenderingContext2D` not only implements some existing methods differently, it also has additional methods. One of them is `lineToInfinityInDirection`. A variation on the existing [`lineTo`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo), it modifies the current subpath so as to add, not a line segment to another point having some x and y coordinates, but rather a ray extending in the given direction. Here's an example:
 </div>
 <div>
     <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/pehjaut9/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
@@ -86,15 +95,53 @@ When a regular canvas fills a path, it temporarily connects every endpoint of a 
     <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/d09o27hn/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 <div class="markdown language-js">
-Even if the endpoint of the current subpath is at infinity, you can still call `lineToInfinityInDirection` with a different direction. `InfiniteCanvas` will then not draw a ray (because where would its starting point be?) but it will update the end point of the current subpath. So if, before filling the path from the previous example, you had called `lineToInfinityInDirection` again, using a different direction, you would have gotten this:
+Even if the endpoint of the current subpath is at infinity, you can still call `lineToInfinityInDirection` with a different direction. `InfiniteCanvas` will then not draw a ray (because where would its starting point be?) but it will change the end point of the current subpath. So if, before filling the path from the previous example, you had called `lineToInfinityInDirection` again, using a different direction, you would have gotten this:
 </div>
 <div>
     <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/bzsuj49f/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 </div>
 <div class="markdown language-js">
-There is one case in which calling `lineToInfinityInDirection` does nothing, and that is if the given direction is directly opposite the current subpath's ending direction.
+There is one case in which calling `lineToInfinityInDirection` does nothing, and that is if the current subpath's end is at infinity and the given direction is directly opposite the current subpath's ending direction. ([This](#whytwopointsatinfinitythatareoppositeeachothercannotbeconnectedbyaline) is the reason.)
 
-### Why two points &quot;at infinity" that are opposite each other cannot be connected by a line
+But you can also start a path at infinity, and that is what another one of `InfiniteCanvasRenderingContext2D`'s extra methods is for. A variation on the existing [`moveTo`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/moveTo), this method, called `moveToInfinityInDirection`, begins a new subpath at infinity. This means that if you subsequently call `lineTo` with the coordinates of a point, the resulting subpath will be a ray in the original direction and with starting point (or in this case, end point) at the point specified.
+
+Using `moveToInfinityInDirection`, it is possible to create a path that cannot be filled. This path:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/v8aypdzt/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+can not be filled, because the start and end are both at infinity, but in opposite directions. In order to fill this path, `InfiniteCanvas` would have to temporarily connect the path's start and end (as described above) but that is not possible. (Because of this [reason](#whytwopointsatinfinitythatareoppositeeachothercannotbeconnectedbyaline).) Calling `fill` in this case does nothing.
+
+You can also use `moveToInfinityInDirection` to create a path that is situated entirely at infinity and is still visible. If you start a path at infinity in one direction, add a line to infinity in another direction (not opposite, of course) and then add a line to infinity in a third direction such that the direction opposite the third direction is between the first two directions, the resulting path will surround the entire plane. See this example:
+</div>
+<div>
+    <iframe width="100%" height="400" src="https://jsfiddle.net/EmileFokkema/jpvtc4qk/embedded/result,js,html,css,resources" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</div>
+<div class="markdown language-js">
+The path drawn above first fills the entire plane. A point is then added to the path, so that it no longer spans the entire plane, but only the porton between the infinities that it started with.
+
+### rect
+
+Because `CanvasRenderingContext2D` has a method called [`rect`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rect), so does `InfiniteCanvasRenderingContext2D`. It treats its `x`, `y`, `width` and `height` parameters the same as does `fillRect`, but with one important difference. What `rect` actually does is to create a new subpath starting at the position specified by `x` and `y`, add lines that form a rectangle with the specified `width` and `height` and come back to the starting position. But this means that `x` and `y` together must specify either a point or a direction of infinity. In other words,
+
+	context.rect(-Infinity, 10, Infinity, 10);
+
+makes perfect sense: move to infinity to the left, add a rectangle of infinite width and height 10 and end up back at infinity to the left. Note that even the following makes sense:
+
+	context.rect(-Infinity, 10, 10, 10);
+
+Even though this rectangle would never be visible (because it is situated infinitely far to the left and has finite width), the effect would be the creation of a new subpath whose start (and end) are at infinity to the left. It would do the same as
+
+	context.moveToInfinityInDirection(-1, 0);
+
+But doing this does not make sense:
+
+	context.rect(-Infinity, -Infinity, Infinity, Infinity);
+
+This will throw an exception because, even though these four arguments make perfect sense if you're calling `fillRect` (if you're filling the entire plane) or `clearRect` (if you're clearing the entire plane), the combination of `-Infinity` as x-coordinate and `-Infinity` as y-coordinate does not amount to either a point or a direction of infinity at which a subpath can start or end. 
+
+### Why two points "at infinity" that are opposite each other cannot be connected by a line
 For this, it helps to imagine all `InfiniteCanvas`'s infinities as lying on a circle surrounding the plane. To make this a little bit consistent, we then also have to imagine all finite points as lying in the center of this circle. Now imagine you have a path that starts at some finite point and extends toward infinity, like this:
 </div>
 <div>
@@ -104,6 +151,35 @@ For this, it helps to imagine all `InfiniteCanvas`'s infinities as lying on a ci
 If you now call `lineToInfinityInDirection` with the direction of A, `InfiniteCanvas` will internally add a "line segment at infinity" from your position to A, as shown in the diagram. Similarly if you call it with the direction of B. But if you call it with the direction of C, there is no way for `InfiniteCanvas` to choose which way to go along the circle: it could go left or right. But there is also no way to go to C through the center, because that would mean choosing one of the (infinitely many) finite points to go through. So there is no consistent way to connect the end of the path to C.
 
 (A projective geometrist would [say](https://en.wikipedia.org/wiki/Line_at_infinity) that the end of the path and C are actually the same point, and because two points are needed to define a line, this point alone does not.)
+
+## Configuration
+
+An object containing configuration properties may be passed to the `InfiniteCanvas` constructor as a second argument like this:
+
+	var canvas = new InfiniteCanvas(canvasElement, 
+		{
+			rotationEnabled: false,
+			greedyGestureHandling: true
+		});
+
+`rotationEnabled` enables or disables rotation using either two fingers or the combination of holding the mouse wheel down and moving the mouse. When `greedyGestureHandling` is `false`, the `InfiniteCanvas` is not zoomed when the user scrolls without holding the Ctrl key, and is not panned when the user uses only one finger. These properties may also be set on the `InfiniteCanvas` instance itself after construction like this:
+
+	canvas.rotationEnabled = true;
+	canvas.greedyGestureHandling = false;
+
+## Performance
+
+`InfiniteCanvas` internally maintains a list of all the instructions given, so that it can replay them every time the user zooms or pans. This list has to be managed very carefully. Currently, the only way to reduce the size of this list, i.e. to "forget" previous instructions, it to call `clearRect`. This method will attempt to find all instructions that contribute to any drawing within the specified rectangle and then delete them from memory. This means of course that calling
+
+	context.clearRect(-Infinity, -Infinity, Infinity, Infinity);
+
+will remove all previous instructions from memory. (The [state](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/save), of course, will be maintained.) When animating `InfiniteCanvas`, it is highly recommended to make the above call every drawing cycle.
+
+Please note that, in the design of `InfiniteCanvas`, performance of zooming and panning took precedence over the perfomance of adding or removing instructions. Every time an instruction is added (or removed using `clearRect`), the internal list of instructions has to be brought up to date. This process is slower than replaying the list. So don't go overboard with animations.
+
+
+
+
 </div>
 </div>
 <a href="https://github.com/emilefokkema/infinite-canvas-2" id="githubLink"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
