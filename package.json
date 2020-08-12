@@ -1,12 +1,15 @@
 {
-  "name": "infinite-canvas-2",
-  "version": "1.0.0",
+  "name": "ef-infinite-canvas",
+  "version": "0.4.1-alpha",
   "description": "An infinite version of the html canvas",
   "main": "dist/infinite-canvas.js",
-  "private": true,
+  "types": "dist/types/infinite-canvas.d.ts",
+  "private": false,
+  "files": ["dist/**/*"],
   "scripts": {
     "test": "jest",
     "build": "npx webpack",
+    "build:types": "npx tsc --project ts-config-types.json",
     "update-snapshot": "jest --updateSnapshot",
     "run:dev": "node run-dev.js",
     "build:dev": "webpack --mode=development"
@@ -15,8 +18,16 @@
     "canvas",
     "infinite"
   ],
+  "homepage": "https://github.com/emilefokkema/infinite-canvas",
+  "bugs": {
+    "url": "https://github.com/emilefokkema/infinite-canvas/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emilefokkema/infinite-canvas.git"
+  },
   "author": "Emile Fokkema",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",

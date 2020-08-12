@@ -17,6 +17,8 @@ module.exports = {
   output: {
     filename: 'infinite-canvas.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'InfiniteCanvas'
+    library: 'InfiniteCanvas',
+    libraryTarget: 'umd',
+    globalObject: 'this'
   }
 };
