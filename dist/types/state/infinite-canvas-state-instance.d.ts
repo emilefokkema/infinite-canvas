@@ -1,0 +1,35 @@
+import { Transformation } from "../transformation";
+import { Instruction } from "../instructions/instruction";
+import { ClippedPaths } from "../instructions/clipped-paths";
+import { StateInstanceProperties } from "./state-instance-properties";
+import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { Point } from "../geometry/point";
+import { Area } from "../areas/area";
+export declare class InfiniteCanvasStateInstance implements StateInstanceProperties {
+    readonly fillStyle: string | CanvasGradient | CanvasPattern;
+    readonly lineWidth: number;
+    readonly lineDash: number[];
+    readonly strokeStyle: string | CanvasGradient | CanvasPattern;
+    readonly lineDashOffset: number;
+    readonly transformation: Transformation;
+    readonly direction: CanvasDirection;
+    readonly font: string;
+    readonly textAlign: CanvasTextAlign;
+    readonly textBaseline: CanvasTextBaseline;
+    readonly clippedPaths: ClippedPaths;
+    readonly fillAndStrokeStylesTransformed: boolean;
+    readonly shadowOffset: Point;
+    readonly shadowColor: string;
+    readonly shadowBlur: number;
+    constructor(props: StateInstanceProperties);
+    changeProperty<K extends keyof StateInstanceProperties>(property: K, newValue: StateInstanceProperties[K]): InfiniteCanvasStateInstance;
+    get clippingRegion(): Area;
+    equals(other: InfiniteCanvasStateInstance): boolean;
+    getMaximumLineWidth(): number;
+    getLineDashPeriod(): number;
+    isTransformable(): boolean;
+    getInstructionToConvertToState(other: InfiniteCanvasStateInstance): Instruction;
+    withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasStateInstance;
+    static default: InfiniteCanvasStateInstance;
+    static setDefault: Instruction;
+}
