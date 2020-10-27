@@ -10,6 +10,20 @@ var context = infiniteCanvas.getContext("2d");
 
 `InfiniteCanvas` has no dependencies that are not `devDependencies`.
 
+## Installation
+
+Include `InfiniteCanvas` in your web page:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas/dist/infinite-canvas.js"></script>
+```
+
+or install it using npm:
+
+```
+npm install ef-infinite-canvas
+```
+
 ## Build
 ```
 npm run build

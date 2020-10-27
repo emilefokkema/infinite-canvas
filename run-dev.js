@@ -67,6 +67,10 @@ File.prototype.copyAndWatch = async function(){
 	}, 200));
 };
 
+if(!fs.existsSync('./dist')){
+	fs.mkdirSync('./dist');
+}
+
 fs.readdir('./devtools/', (err, files) => {
 	if(err){
 		throw err;
