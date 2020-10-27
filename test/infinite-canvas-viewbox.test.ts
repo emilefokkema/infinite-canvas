@@ -1862,6 +1862,24 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that translates and draws this shape using a line dash", () => {
+
+		beforeEach(() => {
+			infiniteContext.translate(20, 20);
+			infiniteContext.setLineDash([2, 2]);
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(250, 50);
+			infiniteContext.lineToInfinityInDirection(1, 0);
+			infiniteContext.lineTo(100, 100);
+			contextMock.clear();
+			infiniteContext.stroke();
+		});
+
+		it("should make sure the length of the drawn path is a multiple of the line dash period", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
 	describe("that sets a nonzero line dash and fills a rect", () => {
 
 		beforeEach(() => {

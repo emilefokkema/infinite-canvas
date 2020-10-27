@@ -3785,6 +3785,28 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that translates and draws this shape using a line dash should make sure the length of the drawn path is a multiple of the line dash period 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setLineDash([2,2])",
+  "context.setTransform(1,0,0,1,20,20)",
+  "context.beginPath()",
+  "context.moveTo(250,50)",
+  "context.lineTo(250,50)",
+  "context.lineTo(181.4142135623731,100)",
+  "context.lineTo(182.97599346165563,100)",
+  "context.lineTo(181.4142135623731,100)",
+  "context.lineTo(182.70710678118655,100)",
+  "context.lineTo(181.4142135623731,100)",
+  "context.lineTo(100,100)",
+  "context.setLineDash([2,2])",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
 exports[`an infinite canvas context that translates and then draws a line to inifinity should draw a line to the right border of the viewbox 1`] = `
 Array [
   "context.restore()",

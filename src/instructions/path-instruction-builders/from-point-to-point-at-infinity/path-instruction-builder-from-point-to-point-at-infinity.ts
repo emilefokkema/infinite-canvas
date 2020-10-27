@@ -22,7 +22,7 @@ export class PathInstructionBuilderFromPointToPointAtInfinity extends InfiniteCa
             }
             return this.lineToInfinityFromInfinityFromPoint(shape.initialPoint, shape.currentPosition.direction, position.direction);
         }
-        return instructionSequence(this.lineFromInfinityFromPointToInfinityFromPoint(this.shape.initialPoint, position, shape.currentPosition.direction), this.lineFromInfinityFromPointToPoint(position, shape.currentPosition.direction));
+        return instructionSequence(this.lineFromInfinityFromPointToInfinityFromPoint(shape.initialPoint, position, shape.currentPosition.direction), this.lineFromInfinityFromPointToPoint(position, shape.currentPosition.direction));
     }
     public canAddLineTo(position: Position): boolean{
         return !isPointAtInfinity(position) || !position.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
