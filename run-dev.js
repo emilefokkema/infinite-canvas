@@ -1,6 +1,5 @@
 const fs = require("fs");
 const { exec } = require('child_process');
-var static = require('node-static');
 var http = require('http');
 
 var debounce = function(f, timeout){
@@ -20,6 +19,9 @@ var debounce = function(f, timeout){
 };
 
 var webpackWatch = function(){
+	var resolve;
+	var promise = new Promise((res) => {resolve = res;});
+	console.log(`calling webpack with watch...`)
 	var ls = exec("webpack --mode=development --watch", (error, stdout, stderr) => {
 		if (error) {
 			console.error(`exec error: ${error}`);
@@ -29,16 +31,25 @@ var webpackWatch = function(){
 		console.error(`stderr: ${stderr}`);	
 	});
 	ls.stdout.on('data', (data) => {
-		console.log(`stdout: ${data}`);
+		resolve();
+		console.log(`webpack: ${data}`);
 	});
+	return promise;
 };
 
 var serveFiles = function(){
-	var file = new(static.Server)('./dist', {cache: 0});
-	http.createServer(function (req, res) {
-		file.serve(req, res);
-	}).listen(8080);
-	console.log("listening on port 8080...");
+	console.log(`going to serve files...`)
+	var p = exec("npx http-server ./dist -c-1", (error, stdout, stderr) => {
+		if (error) {
+			console.error(`serve files error: ${error}`);
+			return;
+		}
+		console.log(`serve files out: ${stdout}`);
+		console.error(`serve files error: ${stderr}`);	
+	})
+	p.stdout.on('data', (data) => {
+		console.log(`serve files: ${data}`);
+	});
 };
 
 var File = function(fileName){
@@ -71,14 +82,12 @@ if(!fs.existsSync('./dist')){
 	fs.mkdirSync('./dist');
 }
 
-fs.readdir('./devtools/', (err, files) => {
+fs.readdir('./devtools/', async (err, files) => {
 	if(err){
 		throw err;
 	}
 	files = files.map(f => new File(f));
-	Promise.all(files.map(file => file.copyAndWatch())
-	).then(() => {
-		webpackWatch();
-		serveFiles();
-	});
+	await Promise.all(files.map(file => file.copyAndWatch()));
+	await webpackWatch();
+	serveFiles();
 });
