@@ -3,7 +3,8 @@ import { logInstruction } from "./log-instruction";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
 import { Point } from "../src/geometry/point";
-import { InfiniteCanvasViewboxInfinityProvider } from "../src/infinite-canvas-viewbox-infinity-provider";
+import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -11,7 +12,7 @@ describe("an instruction set", () => {
 
     beforeEach(() => {
         onChangeSpy = jest.fn();
-        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy, new InfiniteCanvasViewboxInfinityProvider(200, 200));
+        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy, new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {}));
     });
 
     describe("that begins drawing a path", () => {

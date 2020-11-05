@@ -54,6 +54,9 @@
 			<span class="darklight" v-on:click="setLight" v-if="dark">light</span>
 		</div>
 		<div class="option"><a href="/sandbox.html">sandbox</a></div>
+		<div>
+			<div v-for="otherLink in otherLinks"><a v-bind:href="otherLink.url" target="_blank">{{otherLink.text}}</a></div>
+		</div>
 		<div v-if="numberSkipped > 0" class="notification">{{numberSkipped}} examples were skipped</div>
 		<div v-if="unequalImages.length > 0" class="danger">
 			<div>Not all images appear to be equal. Please inspect:</div>
@@ -131,6 +134,32 @@
 				var minIndentLength = Math.min.apply(null, matchedLines.map(function(l){return l[1].length;}));
 				return lines.map(function(l){return l.substring(minIndentLength);})
 			}
+			var otherLinks = [
+				{
+					text: "A full-screen canvas using canvas units",
+					url: "canvas-width-height.html"
+				},
+				{
+					text: "A fixed-size canvas with width and height set before creation of the InfiniteCanvas",
+					url: "canvas-width-height-2.html"
+				},
+				{
+					text: "A fixed-size canvas with width and height set after creation of the InfiniteCanvas",
+					url: "canvas-width-height-3.html"
+				},
+				{
+					text: "A full-screen canvas using css units",
+					url: "canvas-width-height-4.html"
+				},
+				{
+					text: "A canvas whose used units can be switched",
+					url: "canvas-width-height-5.html"
+				},
+				{
+					text: "A canvas that uses the transformation given in the draw event",
+					url: "canvas-width-height-6.html"
+				}
+			];
 			var examples = [
 						{
 							code:function(ctx){
@@ -861,15 +890,18 @@
 								var array = new Uint8ClampedArray(4 * width * height);
 								for(var j=0;j<height;j++){
 									for(var i=0;i<width;i++){
-									var dx = i - centerX;
-									var dy = j - centerY;
-									var index = 4 * j * width + 4 * i;
-									var inside = dx * dx + dy * dy < radiusSq;
-									array[index] = inside ? 255:0;
-									array[index + 3] = 255;
-								}
+										var dx = i - centerX;
+										var dy = j - centerY;
+										var index = 4 * j * width + 4 * i;
+										var inside = dx * dx + dy * dy < radiusSq;
+										array[index] = inside ? 255:0;
+										array[index + 3] = 255;
+									}
 								}
 								var imageData = new ImageData(array, width);
+								ctx.translate(50, 30);
+								ctx.fillStyle = "#f00";
+								ctx.fillRect(0, 0, 10, 10);
 								ctx.putImageData(imageData, 20, 20);
 							},
 							title: "put image data"
@@ -1286,7 +1318,8 @@
 						ignoredImages: [],
 						viewDiff: false,
 						diffImageData: undefined,
-						differenceMeasure: undefined
+						differenceMeasure: undefined,
+						otherLinks: otherLinks
 					};
 				},
 				methods:{

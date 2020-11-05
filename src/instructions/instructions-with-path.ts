@@ -13,12 +13,12 @@ import {InstructionsWithSubpath} from "./instructions-with-subpath";
 import {down, left, right, up} from "../geometry/points-at-infinity";
 import {rectangleHasArea} from "../geometry/rectangle-has-area";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
-import { ViewboxInfinityProvider } from "../interfaces/viewbox-infinity-provider";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class InstructionsWithPath extends StateChangingInstructionSequence<InstructionsWithSubpath> implements StateChangingInstructionSetWithAreaAndCurrentPath{
     private areaBuilder: InfiniteCanvasAreaBuilder = new InfiniteCanvasAreaBuilder();
     private drawnArea: Area;
-    constructor(private _initiallyWithState: StateAndInstruction, private readonly viewboxInfinityProvider: ViewboxInfinityProvider, private readonly pathInfinityProvider: PathInfinityProvider){
+    constructor(private _initiallyWithState: StateAndInstruction, private readonly rectangle: CanvasRectangle, private readonly pathInfinityProvider: PathInfinityProvider){
         super(_initiallyWithState);
     }
     private get area(): Area{return this.areaBuilder.area;}
@@ -71,7 +71,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
         const newlyDrawnArea: Area = this.getCurrentlyDrawableArea();
         this.drawnArea = newlyDrawnArea;
-        const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction);
+        const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction, this.rectangle);
         currentSubpath.addInstruction(toAdd);
     }
     public clipPath(instruction: Instruction, state: InfiniteCanvasState): void{
@@ -79,7 +79,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
             return;
         }
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
-        const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction);
+        const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction, this.rectangle);
         currentSubpath.addInstruction(toAdd);
         const clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath = this.recreatePath();
         this.addClippedPath(clippedPath);
@@ -94,7 +94,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
     public moveTo(position: Position, state: InfiniteCanvasState): void{
         const transformedPointToMoveTo: Position = transformPosition(position, state.current.transformation);
         this.areaBuilder.addPosition(transformedPointToMoveTo);
-        const newSubpath: InstructionsWithSubpath = InstructionsWithSubpath.create(state, position, this.pathInfinityProvider);
+        const newSubpath: InstructionsWithSubpath = InstructionsWithSubpath.create(state, position, this.pathInfinityProvider, this.rectangle);
         newSubpath.setInitialState(this.state);
         this.add(newSubpath);
     }
@@ -186,7 +186,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
             }
         }
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
-        const toAdd: StateAndInstruction = StateAndInstruction.create(state, pathInstruction.instruction);
+        const toAdd: StateAndInstruction = StateAndInstruction.create(state, pathInstruction.instruction, this.rectangle);
         pathInstruction.changeArea(this.areaBuilder.transformedWith(state.current.transformation));
         currentSubpath.addPathInstruction(pathInstruction, toAdd, state);
     }
@@ -210,8 +210,8 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         return previouslyClipped ? this.area.intersectWith(previouslyClipped): this.area;
     }
     public recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPath{
-        const newInfinityProvider: PathInfinityProvider = this.viewboxInfinityProvider.getForPath();
-        const result: InstructionsWithPath = new InstructionsWithPath(this._initiallyWithState.copy(), this.viewboxInfinityProvider, newInfinityProvider);
+        const newInfinityProvider: PathInfinityProvider = this.rectangle.getForPath();
+        const result: InstructionsWithPath = new InstructionsWithPath(this._initiallyWithState.copy(), this.rectangle, newInfinityProvider);
         for(const added of this.added){
             result.add(added.copy(newInfinityProvider));
         }
@@ -219,7 +219,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         result.setInitialState(result.stateOfFirstInstruction);
         return result;
     }
-    public static create(initialState: InfiniteCanvasState, viewboxInfinityProvider: ViewboxInfinityProvider, pathInfinityProvider: PathInfinityProvider): InstructionsWithPath{
-        return new InstructionsWithPath(StateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}), viewboxInfinityProvider, pathInfinityProvider);
+    public static create(initialState: InfiniteCanvasState, rectangle: CanvasRectangle, pathInfinityProvider: PathInfinityProvider): InstructionsWithPath{
+        return new InstructionsWithPath(StateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}, rectangle), rectangle, pathInfinityProvider);
     }
 }

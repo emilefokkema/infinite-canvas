@@ -13,30 +13,27 @@ import { TransformationKind } from "./transformation-kind";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 import { Area } from "./areas/area";
 import { Position } from "./geometry/position"
-import {InfiniteCanvasViewboxInfinityProvider} from "./infinite-canvas-viewbox-infinity-provider";
 import {rectangleHasArea} from "./geometry/rectangle-has-area";
 import {rectangleIsPlane} from "./geometry/rectangle-is-plane";
+import {CanvasRectangle} from "./rectangle/canvas-rectangle";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
-	private infinityProvider: InfiniteCanvasViewboxInfinityProvider;
-	private _transformation: Transformation;
 	constructor(
-		public width: number,
-		public height: number,
+		private readonly canvasRectangle: CanvasRectangle,
 		private context: CanvasRenderingContext2D,
 		private readonly drawingIterationProvider: DrawingIterationProvider,
-		private readonly drawLockProvider: () => DrawingLock){
-		this.infinityProvider = new InfiniteCanvasViewboxInfinityProvider(width, height);
-		this.instructionSet = new InfiniteCanvasInstructionSet(() => drawingIterationProvider.provideDrawingIteration(() => this.draw()), this.infinityProvider);
-		this._transformation = Transformation.identity;
+		private readonly drawLockProvider: () => DrawingLock,
+		private readonly isTransforming: () => boolean){
+			this.instructionSet = new InfiniteCanvasInstructionSet(() => this.draw(), canvasRectangle);
 	}
+	public get width(): number{return this.canvasRectangle.viewboxWidth;}
+	public get height(): number{return this.canvasRectangle.viewboxHeight;}
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
-	public get transformation(): Transformation{return this._transformation};
+	public get transformation(): Transformation{return this.canvasRectangle.transformation};
 	public set transformation(value: Transformation){
-		this._transformation = value;
-		this.infinityProvider.viewBoxTransformation = value;
-		this.drawingIterationProvider.provideDrawingIteration(() => this.draw());
+		this.canvasRectangle.transformation = value;
+		this.draw();
 	}
 	public getDrawingLock(): DrawingLock{
 		return this.drawLockProvider();
@@ -46,7 +43,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public measureText(text: string): TextMetrics{
 		this.context.save();
-		const changeToCurrentState: Instruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToState(this.state.currentlyTransformed(false).current);
+		const changeToCurrentState: Instruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToState(this.state.currentlyTransformed(false).current, this.canvasRectangle);
 		changeToCurrentState(this.context, Transformation.identity);
 		const result: TextMetrics = this.context.measureText(text);
 		this.context.restore();
@@ -130,10 +127,16 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		result = new InfiniteCanvasPattern(this.context.createPattern(image, repetition));
 		return result;
 	}
-	private draw(): void{
-		this.context.restore();
-		this.context.save();
-		this.context.clearRect(0, 0, this.width, this.height);
-		this.instructionSet.execute(this.context, this._transformation);
+	public draw(): void{
+		this.drawingIterationProvider.provideDrawingIteration(() => {
+			if(!this.isTransforming()){
+				this.canvasRectangle.measure();
+			}
+			this.context.restore();
+			this.context.save();
+			this.context.clearRect(0, 0, this.width, this.height);
+			this.canvasRectangle.applyInitialTransformation(this.context);
+			this.instructionSet.execute(this.context, this.transformation);
+		});
 	}
 }

@@ -3,16 +3,17 @@ import { Instruction } from "./instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Transformation } from "../transformation";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export abstract class InstructionWithState implements StateChangingInstructionSet{
     protected stateConversion: Instruction;
-    constructor(public initialState: InfiniteCanvasState, public state: InfiniteCanvasState){
+    constructor(public initialState: InfiniteCanvasState, public state: InfiniteCanvasState, protected readonly rectangle: CanvasRectangle){
         this.stateConversion = () => {};
     }
     protected abstract executeInstruction(context: CanvasRenderingContext2D, transformation: Transformation): void;
     public setInitialState(previousState: InfiniteCanvasState): void{
         this.initialState = previousState;
-        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToState(this.state);
+        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToState(this.state, this.rectangle);
         this.stateConversion = instructionToConvert;
     }
     public get stateOfFirstInstruction(): InfiniteCanvasState{
@@ -23,7 +24,7 @@ export abstract class InstructionWithState implements StateChangingInstructionSe
     }
     public setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void{
         this.initialState = previousState;
-        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToStateWithClippedPath(this.state);
+        const instructionToConvert: Instruction = this.initialState.getInstructionToConvertToStateWithClippedPath(this.state, this.rectangle);
         this.stateConversion = instructionToConvert;
     }
     public execute(context: CanvasRenderingContext2D, transformation: Transformation): void{

@@ -44,6 +44,14 @@ body.dark #dark-button{
     margin: 20px;
     padding: 10px;
 }
-canvas{
+.canvas-block{
+    resize: both;
+    overflow: auto;
     border: 1pt solid #000;
+    width: 600px;
+    height: 600px;
+}
+canvas{
+    width: 99%;
+    height: 99%;
 }

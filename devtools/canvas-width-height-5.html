@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<title>With different width and height</title>
+		<script type="text/javascript" src="infinite-canvas.js"></script>
+		<style type="text/css">
+			body{
+				padding: 0px;
+				margin: 0px;
+			}
+			.canvas-block{
+				resize: both;
+				overflow: auto;
+				border: 1pt solid #000;
+				width: 600px;
+				height: 600px;
+			}
+			canvas{
+				width: 99%;
+				height: 99%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="canvas-block">
+			<canvas id="canvas"></canvas>
+		</div>
+		<div>
+			units used:
+			<form id="units-form" name="units">
+				<input type="radio" name="units" value="css" id="css-units-radio"/>
+				<label for="css-units-radio">CSS</label>
+				<input type="radio" name="units" value="canvas" id="canvas-units-radio"/>
+				<label for="canvas-units-radio">canvas</label>
+			</form>
+		</div>
+		<script>
+
+			(function(){
+				var unitsForm = (function(){
+					var valueChangeListeners = [];
+					var form = document.getElementById("units-form");
+					var cssRadio = document.getElementById("css-units-radio");
+					var canvasRadio = document.getElementById("canvas-units-radio");
+					form.addEventListener("click", () => {
+						var data = new FormData(form);
+						var unitsValue = data.get('units');
+						var newUnits = unitsValue === "css" ? InfiniteCanvas.CSS_UNITS : InfiniteCanvas.CANVAS_UNITS;
+						emitValueChange(newUnits);
+					});
+					function setValue(value){
+						if(value === InfiniteCanvas.CSS_UNITS){
+							cssRadio.checked = true;
+						}else{
+							canvasRadio.checked = true;
+						}
+					}
+					function addValueChangeListener(l){
+						valueChangeListeners.push(l);
+					}
+					function emitValueChange(value){
+						for(var listener of valueChangeListeners){
+							listener(value);
+						}
+					}
+					return {
+						addValueChangeListener,
+						setValue
+					}
+				})();
+				var canvasEl = document.getElementById("canvas");
+				canvasEl.width = 1200;
+				canvasEl.height = 1200;
+				var infCanvas = new InfiniteCanvas(canvasEl, {greedyGestureHandling: true});
+				var unitsUsed = infCanvas.units;
+				unitsForm.setValue(unitsUsed);
+				unitsForm.addValueChangeListener(v => {
+					infCanvas.units = v;
+				});
+				var ctx = infCanvas.getContext();
+
+				ctx.fillStyle = '#aaa';
+				ctx.rotate(Math.PI / 8)
+				ctx.fillRect(50, 50, Infinity, 100);
+				ctx.strokeRect(50, 50, Infinity, 100);
+				ctx.fillStyle = '#faa';
+				ctx.translate(100, 50);
+				ctx.rotate(Math.PI / 8);
+				ctx.fillRect(-50, -100, Infinity, 100);
+				ctx.strokeRect(-50, -100, Infinity, 100);
+			})();
+		</script>
+	</body>
+</html>

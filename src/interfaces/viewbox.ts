@@ -18,6 +18,7 @@ export interface ViewBox extends TransformableBox, CurrentState{
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
     getDrawingLock(): DrawingLock;
+    draw(): void;
     clearArea(x: number, y: number, width: number, height: number): void;
     beginPath(): void;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;

@@ -8,14 +8,16 @@ import { AtInfinity } from "./at-infinity";
 import { FromPointAtInfinityToPoint } from "../from-point-at-infinity-to-point/from-point-at-infinity-to-point";
 import { PointAtInfinity } from "../../../geometry/point-at-infinity";
 import { instructionSequence, combineInstructions } from "../../../instruction-utils";
+import { ViewboxInfinity } from "../../../interfaces/viewbox-infinity";
+import { Transformation } from "../../../transformation";
 
 export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstructionBuilder<AtInfinity> implements PathInstructionBuilder{
-    constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, private readonly instructionToGoAroundViewbox: InstructionUsingInfinity, shape: AtInfinity){
+    constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: AtInfinity){
         super(shape);
     }
     protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity{
         if(shape.containsFinitePoint){
-            return this.instructionToGoAroundViewbox;
+            return (context: CanvasRenderingContext2D, transformation: Transformation, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context)
         }
         return () => {};
     }

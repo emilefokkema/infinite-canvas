@@ -6,6 +6,7 @@ import { allDimensions } from "./dimensions/all-dimensions";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -103,8 +104,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         return true;
     }
 
-    public getInstructionToConvertToState(other: InfiniteCanvasStateInstance): Instruction{
-        const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other));
+    public getInstructionToConvertToState(other: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction{
+        const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other, rectangle));
         return (context: CanvasRenderingContext2D, transformation: Transformation) => {
             for(let i: number = 0; i< instructions.length; i++){
                 instructions[i](context, transformation);

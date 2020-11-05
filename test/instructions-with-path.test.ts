@@ -6,7 +6,9 @@ import { InstructionsWithPath } from "../src/instructions/instructions-with-path
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Point } from "../src/geometry/point";
 import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
-import { FakeViewboxInfinityProvider } from "./fake-viewbox-infinity-provider";
+import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
+import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPath, state: InfiniteCanvasState): string[]{
     instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
@@ -16,10 +18,12 @@ function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAnd
 describe("a set of instructions that is also about a path", () => {
     let instructionsWithPath: InstructionsWithPath;
     let currentState: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
     });
 
     describe("that receives a change of state", () => {
@@ -98,10 +102,12 @@ describe("a set of instructions that is also about a path", () => {
 describe("a set of instructions that describe a rectangle path that is drawn", () => {
     let instructionsWithPath: InstructionsWithPath;
     let currentState: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
         instructionsWithPath.rect(0, 0, 1, 1, currentState);
         instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {
             context.fill();

@@ -7,8 +7,10 @@ import { defaultState } from "../src/state/default-state";
 import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
-import { FakeViewboxInfinityProvider } from "./fake-viewbox-infinity-provider";
 import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
+import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
+import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);
@@ -19,10 +21,12 @@ describe("a state with a clipped path", () => {
     let currentPath: InstructionsWithPath;
     let stateWithOneClippedPath: InfiniteCanvasState;
     let currentState: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        currentPath = InstructionsWithPath.create(defaultState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+        currentPath = InstructionsWithPath.create(defaultState, rectangle, new FakePathInfinityProvider());
         currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
         currentPath.rect(0, 0, 3, 3, currentState);
         currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
@@ -51,7 +55,7 @@ describe("a state with a clipped path", () => {
             });
 
             it("should result in the right changes", () => {
-                const stateChangeInstruction: Instruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(otherOneSavedAndChanged);
+                const stateChangeInstruction: Instruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(otherOneSavedAndChanged, rectangle);
                 expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
@@ -60,7 +64,7 @@ describe("a state with a clipped path", () => {
             let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath);
+                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath, rectangle);
             });
 
             it("should result in the right instructions", () => {
@@ -82,7 +86,7 @@ describe("a state with a clipped path", () => {
             let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath);
+                stateChangeInstruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneMoreClippedPath, rectangle);
             });
 
             it("should result in the right instructions", () => {
@@ -102,7 +106,7 @@ describe("a state with a clipped path", () => {
             let stateChangeInstruction: Instruction;
 
             beforeEach(() => {
-                stateChangeInstruction = stateWitoutClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneClippedPath);
+                stateChangeInstruction = stateWitoutClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithOneClippedPath, rectangle);
             });
 
             it("should", () => {
@@ -117,7 +121,7 @@ describe("a state with a clipped path", () => {
 
         beforeEach(()=> {
             currentState = currentState.saved();
-            addedClippedPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+            addedClippedPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
             addedClippedPath.moveTo(new Point(1, 1), currentState);
             addedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
             currentState = addedClippedPath.state;
@@ -130,14 +134,14 @@ describe("a state with a clipped path", () => {
             beforeEach(() => {
                 currentState = currentState.restored();
                 currentState = currentState.saved();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
                 differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
-                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
+                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath, rectangle);
                 expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
@@ -147,14 +151,14 @@ describe("a state with a clipped path", () => {
 
             beforeEach(() => {
                 currentState = currentState.restored();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
                 differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
-                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
+                const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath, rectangle);
                 expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
@@ -175,7 +179,7 @@ describe("a state with a clipped path", () => {
         });
 
         it("should, when one is converted to the other without clipping paths, result in a change of state in that property alone", () => {
-            const stateChangeInstruction: Instruction = changedOneWay.getInstructionToConvertToState(changedOtherWay);
+            const stateChangeInstruction: Instruction = changedOneWay.getInstructionToConvertToState(changedOtherWay, rectangle);
             expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
         });
     });
@@ -184,8 +188,10 @@ describe("a state with a clipped path", () => {
 
 describe("a default state", () => {
     let state: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
     });
 
@@ -208,7 +214,7 @@ describe("a default state", () => {
                 let changeInstruction: Instruction;
 
                 beforeEach(() => {
-                    changeInstruction = oneWay.getInstructionToConvertToState(otherWay);
+                    changeInstruction = oneWay.getInstructionToConvertToState(otherWay, rectangle);
                 });
 
                 it("should result in instructions that change the state, but no restoring", () => {
@@ -224,7 +230,7 @@ describe("a default state", () => {
 
             beforeEach(() => {
                 other = applyChangeToCurrentState(defaultState, s => fillStyle.changeInstanceValue(s, "#00f")).saved();
-                changeInstruction = state.getInstructionToConvertToState(other);
+                changeInstruction = state.getInstructionToConvertToState(other, rectangle);
             });
 
             it("should have created intructions to restore, change and save", () => {
@@ -241,7 +247,7 @@ describe("a default state", () => {
                 other = applyChangeToCurrentState(defaultState, s => fillStyle.changeInstanceValue(s, "#00f"))
                     .saved();
                 other = applyChangeToCurrentState(other, s => fillStyle.changeInstanceValue(s, "#ff0"));
-                changeInstruction = state.getInstructionToConvertToState(other);
+                changeInstruction = state.getInstructionToConvertToState(other, rectangle);
             });
 
             it("should have created intructions to restore, change, save and change again", () => {
@@ -273,7 +279,7 @@ describe("a default state", () => {
                 shadowColor: 'rgba(0, 0, 0, 0)',
                 shadowBlur: 0
             }));
-            changeInstruction = state.getInstructionToConvertToState(otherState);
+            changeInstruction = state.getInstructionToConvertToState(otherState, rectangle);
         });
 
         it("should have created an instruction that sets the fields that differ", () => {
