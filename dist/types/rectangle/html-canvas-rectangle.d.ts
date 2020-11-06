@@ -1,0 +1,36 @@
+import { ConvexPolygon } from "../areas/polygons/convex-polygon";
+import { Point } from "../geometry/point";
+import { CanvasRectangle } from "./canvas-rectangle";
+import { InfiniteCanvasState } from "../state/infinite-canvas-state";
+import { Transformation } from "../transformation";
+import { CanvasMeasurementProvider } from "./canvas-measurement-provider";
+import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
+import { Instruction } from "../instructions/instruction";
+import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+export declare class HTMLCanvasRectangle implements CanvasRectangle {
+    private readonly measurementProvider;
+    private readonly config;
+    viewboxWidth: number;
+    viewboxHeight: number;
+    polygon: ConvexPolygon;
+    private unitsUsed;
+    private screenWidth;
+    private screenHeight;
+    private coordinateSystems;
+    get transformation(): Transformation;
+    set transformation(value: Transformation);
+    get infiniteCanvasContextBase(): Transformation;
+    get inverseInfiniteCanvasContextBase(): Transformation;
+    constructor(measurementProvider: CanvasMeasurementProvider, config: InfiniteCanvasConfig);
+    private isChange;
+    private addMeasurement;
+    measure(): void;
+    getTransformationInstruction(toTransformation: Transformation): Instruction;
+    getCSSPosition(clientX: number, clientY: number): Point;
+    getForPath(): PathInfinityProvider;
+    getViewboxFromState(state: InfiniteCanvasState, margin: number): ConvexPolygon;
+    applyInitialTransformation(context: CanvasRenderingContext2D): void;
+    transformRelatively(instruction: Instruction): Instruction;
+    transformAbsolutely(instruction: Instruction): Instruction;
+    addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void;
+}

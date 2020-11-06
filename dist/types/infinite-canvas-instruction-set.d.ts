@@ -6,15 +6,15 @@ import { TransformationKind } from "./transformation-kind";
 import { Transformation } from "./transformation";
 import { Area } from "./areas/area";
 import { Position } from "./geometry/position";
-import { ViewboxInfinityProvider } from "./interfaces/viewbox-infinity-provider";
+import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 export declare class InfiniteCanvasInstructionSet {
     private readonly onChange;
-    private readonly infinityProvider;
+    private readonly rectangle;
     private currentInstructionsWithPath;
     private previousInstructionsWithPath;
     state: InfiniteCanvasState;
     private instructionToRestoreState;
-    constructor(onChange: () => void, infinityProvider: ViewboxInfinityProvider);
+    constructor(onChange: () => void, rectangle: CanvasRectangle);
     beginPath(): void;
     changeState(change: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void;
     saveState(): void;

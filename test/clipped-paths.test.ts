@@ -1,20 +1,24 @@
 import { ClippedPaths } from "../src/instructions/clipped-paths";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
-import { PathInstructions } from "../src/instructions/path-instructions";
-import { InstructionSet } from "../src/interfaces/instruction-set";
 import { logInstruction } from "./log-instruction";
-import { Transformation } from "../src/transformation";
 import { defaultState } from "../src/state/default-state";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
-import { FakeViewboxInfinityProvider } from "./fake-viewbox-infinity-provider";
 import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { Instruction } from "../src/instructions/instruction";
+import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
+import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a clipped paths", () => {
     let clippedPaths: ClippedPaths;
     let currentState: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
+
+    beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+    });
 
     describe("and another one", () => {
         let clippedPath: InstructionsWithPath;
@@ -22,7 +26,7 @@ describe("a clipped paths", () => {
 
         beforeEach(() => {
             currentState = defaultState;
-            clippedPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+            clippedPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
             clippedPath.moveTo(new Point(0, 0), currentState);
             clippedPath.lineTo(new Point(1, 0), currentState);
             clippedPath.lineTo(new Point(1, 1), currentState);
@@ -49,7 +53,7 @@ describe("a clipped paths", () => {
                 let recreation: Instruction;
 
                 beforeEach(() => {
-                    recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
+                    recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
                 });
 
                 it("then the recreation should contain the difference", () => {
@@ -69,7 +73,7 @@ describe("a clipped paths", () => {
                     let recreation: Instruction;
     
                     beforeEach(() => {
-                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
+                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
                     });
     
                     it("then the recreation should contain the difference", () => {
@@ -82,7 +86,7 @@ describe("a clipped paths", () => {
 
                 beforeEach(() => {
                     currentState = clippedPath.state;
-                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, new FakeViewboxInfinityProvider(), new FakePathInfinityProvider());
+                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
                     currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
                     otherClippedPath.moveTo(new Point(1, 1), currentState);
                     otherClippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
@@ -93,7 +97,7 @@ describe("a clipped paths", () => {
                     let recreation: Instruction;
     
                     beforeEach(() => {
-                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
+                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
                     });
     
                     it("then the recreation should contain the difference", () => {

@@ -6,8 +6,7 @@ import { InstructionUsingInfinity } from "../../instruction-using-infinity";
 import { AtInfinity } from "./at-infinity";
 export declare class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstructionBuilder<AtInfinity> implements PathInstructionBuilder {
     private readonly pathBuilderProvider;
-    private readonly instructionToGoAroundViewbox;
-    constructor(pathBuilderProvider: PathInstructionBuilderProvider, instructionToGoAroundViewbox: InstructionUsingInfinity, shape: AtInfinity);
+    constructor(pathBuilderProvider: PathInstructionBuilderProvider, shape: AtInfinity);
     protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity;
     protected getInstructionToExtendShapeWithLineTo(shape: AtInfinity, position: Position): InstructionUsingInfinity;
     canAddLineTo(position: Position): boolean;

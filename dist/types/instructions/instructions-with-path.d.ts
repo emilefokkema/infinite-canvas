@@ -8,14 +8,14 @@ import { Area } from "../areas/area";
 import { Position } from "../geometry/position";
 import { InstructionsWithSubpath } from "./instructions-with-subpath";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
-import { ViewboxInfinityProvider } from "../interfaces/viewbox-infinity-provider";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 export declare class InstructionsWithPath extends StateChangingInstructionSequence<InstructionsWithSubpath> implements StateChangingInstructionSetWithAreaAndCurrentPath {
     private _initiallyWithState;
-    private readonly viewboxInfinityProvider;
+    private readonly rectangle;
     private readonly pathInfinityProvider;
     private areaBuilder;
     private drawnArea;
-    constructor(_initiallyWithState: StateAndInstruction, viewboxInfinityProvider: ViewboxInfinityProvider, pathInfinityProvider: PathInfinityProvider);
+    constructor(_initiallyWithState: StateAndInstruction, rectangle: CanvasRectangle, pathInfinityProvider: PathInfinityProvider);
     private get area();
     private getCurrentlyDrawableArea;
     containsFinitePoint(): boolean;
@@ -37,5 +37,5 @@ export declare class InstructionsWithPath extends StateChangingInstructionSequen
     intersects(area: Area): boolean;
     getClippedArea(previouslyClipped?: Area): Area;
     recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPath;
-    static create(initialState: InfiniteCanvasState, viewboxInfinityProvider: ViewboxInfinityProvider, pathInfinityProvider: PathInfinityProvider): InstructionsWithPath;
+    static create(initialState: InfiniteCanvasState, rectangle: CanvasRectangle, pathInfinityProvider: PathInfinityProvider): InstructionsWithPath;
 }

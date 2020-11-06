@@ -7,8 +7,8 @@ export declare class Zoom {
     private maxScaleLogStep;
     private currentScaleLog;
     private targetScaleLog;
-    private initialTransformation;
     private stepTimeout;
+    private readonly initialTransformation;
     constructor(transformable: Transformable, centerX: number, centerY: number, targetScale: number, onFinish: () => void);
     private makeStep;
     private setTransformToCurrentScaleLog;

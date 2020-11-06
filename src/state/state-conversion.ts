@@ -2,6 +2,7 @@ import {InfiniteCanvasState} from "./infinite-canvas-state";
 import {Instruction} from "../instructions/instruction";
 import {Transformation} from "../transformation";
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class StateConversion {
     private instructions: Instruction[] = [];
@@ -14,11 +15,11 @@ export class StateConversion {
     public save(): void{
         this.addChangeToState(this.currentState.saved(), (context: CanvasRenderingContext2D) => {context.save();});
     }
-    public changeCurrentInstanceTo(instance: InfiniteCanvasStateInstance): void{
+    public changeCurrentInstanceTo(instance: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): void{
         if(this.currentState.current.equals(instance)){
             return;
         }
-        const instructionToChangeCurrentInstance: Instruction = this.currentState.current.getInstructionToConvertToState(instance);
+        const instructionToChangeCurrentInstance: Instruction = this.currentState.current.getInstructionToConvertToState(instance, rectangle);
         const stateWithNewCurrentInstance: InfiniteCanvasState = this.currentState.withCurrentState(instance);
         this.addChangeToState(stateWithNewCurrentInstance, instructionToChangeCurrentInstance);
     }

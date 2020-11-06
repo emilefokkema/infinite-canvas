@@ -14,8 +14,8 @@
     </div>
     <div class="option"><a href="/">test examples</a></div>
     <div class="title"><h3>InfiniteCanvas Sandbox</h3></div>
-    <div class="block">
-        <canvas width="600" height="600" id="canvas"></canvas>
+    <div class="block canvas-block">
+        <canvas id="canvas"></canvas>
     </div>
     <div class="block">
         <div id="code"></div>
@@ -41,12 +41,8 @@
             function run(){
                 var canvas = document.getElementById("canvas");
                 var canvasParent = canvas.parentElement;
-                var width = canvas.width;
-                var height = canvas.height;
                 canvasParent.removeChild(canvas);
                 var newCanvas = document.createElement("canvas");
-                newCanvas.setAttribute("width", width);
-                newCanvas.setAttribute("height", height);
                 newCanvas.setAttribute("id", "canvas");
                 canvasParent.appendChild(newCanvas);
                 var code = editor.getValue();

@@ -5,6 +5,7 @@ import { StateInstanceProperties } from "./state-instance-properties";
 import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 export declare class InfiniteCanvasStateInstance implements StateInstanceProperties {
     readonly fillStyle: string | CanvasGradient | CanvasPattern;
     readonly lineWidth: number;
@@ -28,7 +29,7 @@ export declare class InfiniteCanvasStateInstance implements StateInstancePropert
     getMaximumLineWidth(): number;
     getLineDashPeriod(): number;
     isTransformable(): boolean;
-    getInstructionToConvertToState(other: InfiniteCanvasStateInstance): Instruction;
+    getInstructionToConvertToState(other: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction;
     withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasStateInstance;
     static default: InfiniteCanvasStateInstance;
     static setDefault: Instruction;

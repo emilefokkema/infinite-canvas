@@ -1,10 +1,14 @@
-import { InfiniteCanvasViewBox } from "../src/infinite-canvas-viewbox"
-import { InfiniteContext } from "../src/infinite-context/infinite-context";
-import { ViewBox } from "../src/interfaces/viewbox";
-import { CanvasContextMock } from "./canvas-context-mock";
-import { Transformation } from "../src/transformation";
-import { DrawingLock } from "../src/drawing-lock";
-import { InfiniteCanvasRenderingContext2D } from "../src/infinite-context/infinite-canvas-rendering-context-2d";
+import {InfiniteCanvasViewBox} from "../src/infinite-canvas-viewbox"
+import {InfiniteContext} from "../src/infinite-context/infinite-context";
+import {ViewBox} from "../src/interfaces/viewbox";
+import {CanvasContextMock} from "./canvas-context-mock";
+import {Transformation} from "../src/transformation";
+import {DrawingLock} from "../src/drawing-lock";
+import {InfiniteCanvasRenderingContext2D} from "../src/infinite-context/infinite-canvas-rendering-context-2d";
+import {HTMLCanvasRectangle} from "../src/rectangle/html-canvas-rectangle";
+import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
+import {InfiniteCanvasConfig} from "../src/config/infinite-canvas-config";
+import {InfiniteCanvasUnits} from "../src/infinite-canvas-units";
 
 describe("an infinite canvas context", () => {
 	let width: number;
@@ -16,18 +20,34 @@ describe("an infinite canvas context", () => {
 	let releaseDrawingLockSpy: jest.SpyInstance;
 	let latestDrawingInstruction: () => void;
 	let executeLatestDrawingInstruction: () => void;
+	let isTransforming: boolean;
+	let measurementProvider: MockCanvasMeasurementProvider;
+	let config: InfiniteCanvasConfig;
 
 	beforeEach(() => {
+		config = {};
+		width = 200;
+		height = 200;
+		isTransforming = false;
+		measurementProvider = new MockCanvasMeasurementProvider(width, height);
 		executeLatestDrawingInstruction = () => {latestDrawingInstruction();};
 		const drawingLock: DrawingLock = {release(){}};
 		releaseDrawingLockSpy = jest.spyOn(drawingLock, 'release');
 		const getDrawingLock: () => DrawingLock = () => drawingLock;
 		getDrawingLockSpy = jest.fn().mockReturnValue(drawingLock);
-		width = 200;
-		height = 200;
+
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
-		viewbox = new InfiniteCanvasViewBox(width, height, context, {provideDrawingIteration(draw: () => void): void {latestDrawingInstruction = draw; executeLatestDrawingInstruction();}}, getDrawingLockSpy);
+		viewbox = new InfiniteCanvasViewBox(
+			new HTMLCanvasRectangle(measurementProvider, config),
+			context,
+			{
+				provideDrawingIteration(draw: () => void): void {
+					latestDrawingInstruction = draw; executeLatestDrawingInstruction();
+				}
+			},
+			getDrawingLockSpy,
+			() => isTransforming);
 		infiniteContext = new InfiniteContext(undefined, viewbox);
 	});
 
@@ -3294,6 +3314,123 @@ describe("an infinite canvas context", () => {
 
 			it("should take the line width into account for the stroked path", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
+	describe("whose canvas has a non-identity screen transformation", () => {
+
+		beforeEach(() => {
+			measurementProvider.measurement = {
+				screenWidth: 500,
+				screenHeight: 1000,
+				viewboxWidth: 300,
+				viewboxHeight: 300,
+				left: 0,
+				top: 0
+			};
+		});
+
+		describe('and that uses canvas units', () => {
+
+			beforeEach(() => {
+				config.units = InfiniteCanvasUnits.CANVAS;
+			});
+
+			describe('and then draws a square', () => {
+
+				beforeEach(() => {
+					infiniteContext.fillRect(0, 0, 20, 20);
+				});
+
+				it("should not have applied an initial transformation", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+
+				describe('and then rotates', () => {
+					let counterClockwiseRotation: Transformation;
+
+					beforeEach(() => {
+						counterClockwiseRotation = new Transformation(0, -1, 1, 0, 0, 0).before(Transformation.translation(0, 20));
+						contextMock.clear();
+						viewbox.transformation = counterClockwiseRotation;
+					});
+
+					it("should have applied an initial transformation that makes the square appear with the same distortion, only rotated", () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+
+					describe('and then resizes the canvas to exacerbate the distortion', () => {
+
+						beforeEach(() => {
+							measurementProvider.measurement = {
+								screenWidth: 1000,
+								screenHeight: 1000,
+								viewboxWidth: 300,
+								viewboxHeight: 300,
+								left: 0,
+								top: 0
+							};
+						});
+
+						describe('and then draws again', () => {
+
+							beforeEach(() => {
+								contextMock.clear();
+								infiniteContext.fillRect(5, 5, 10, 10);
+							});
+
+							it("should have applied an initial transformation that makes the drawing appear more distorted", () => {
+								expect(contextMock.getLog()).toMatchSnapshot();
+							});
+
+							describe('and then rotates again', () => {
+
+								beforeEach(() => {
+									contextMock.clear();
+									viewbox.transformation = viewbox.transformation.before(counterClockwiseRotation);
+								});
+
+								it("should have applied an initial transformation that makes the drawing appear with the same distortion, but rotated", () => {
+									const log: string[] = contextMock.getLog();
+									expect(contextMock.getLog()).toMatchSnapshot();
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+
+		describe('that uses CSS units', () => {
+
+			beforeEach(() => {
+				config.units = InfiniteCanvasUnits.CSS;
+			});
+
+			describe('and then draws a square', () => {
+
+				beforeEach(() => {
+					infiniteContext.fillRect(0, 0, 20, 20);
+				});
+
+				it("should have applied an initial transformation that is the inverse of the screen transformation", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+
+				describe('and then rotates', () => {
+					let counterClockwiseRotation: Transformation;
+
+					beforeEach(() => {
+						counterClockwiseRotation = new Transformation(0, -1, 1, 0, 0, 0).before(Transformation.translation(0, 20));
+						contextMock.clear();
+						viewbox.transformation = counterClockwiseRotation;
+					});
+
+					it("should have applied the same initial transformation", () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					});
+				});
 			});
 		});
 	});

@@ -1,21 +1,16 @@
 import { Transformer } from "../transformer/transformer"
-import { AnchorSet } from "./anchor-set";
-import { Anchor } from "../transformer/anchor";
-import { Point } from "../geometry/point";
 import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export function mapMouseEvents(
         canvasElement: HTMLCanvasElement,
         transformer: Transformer,
-        anchorSet: AnchorSet,
-        getRelativePosition: (clientX: number, clientY: number) => Point,
+        rectangle: CanvasRectangle,
         config: InfiniteCanvasConfig): void{
             let mouseAnchorIdentifier: number;
             function releaseAnchor(): void{
                 if(mouseAnchorIdentifier !== undefined){
-                    const anchor: Anchor = anchorSet.getAnchorByIdentifier(mouseAnchorIdentifier);
-                    anchor.release();
-                    anchorSet.removeAnchorByIdentifier(mouseAnchorIdentifier);
+                    transformer.releaseAnchorByIdentifier(mouseAnchorIdentifier);
                     mouseAnchorIdentifier = undefined;
                 }
             }
@@ -23,24 +18,22 @@ export function mapMouseEvents(
                 if(mouseAnchorIdentifier !== undefined){
                     return;
                 }
-                let anchor: Anchor;
-                const {x, y} = getRelativePosition(ev.clientX, ev.clientY);
+                const {x, y} = rectangle.getCSSPosition(ev.clientX, ev.clientY);
                 if(ev.button === 1){
                     if(!config.rotationEnabled){
                         return true;
                     }
-                    anchor = transformer.getRotationAnchor(x, y);
+                    mouseAnchorIdentifier = transformer.createRotationAnchor(x, y);
                 }else{
-                    anchor = transformer.getAnchor(x, y);
+                    mouseAnchorIdentifier = transformer.createAnchor(x, y);
                 }
-                mouseAnchorIdentifier = anchorSet.addAnchor(anchor);
                 ev.preventDefault();
                 return false;
             });
             canvasElement.addEventListener("mousemove", (ev: MouseEvent) => {
                 if(mouseAnchorIdentifier !== undefined){
-                    const {x, y} = getRelativePosition(ev.clientX, ev.clientY);
-                    anchorSet.getAnchorByIdentifier(mouseAnchorIdentifier).moveTo(x, y);
+                    const {x, y} = rectangle.getCSSPosition(ev.clientX, ev.clientY);
+                    transformer.moveAnchorByIdentifier(mouseAnchorIdentifier, x, y);
                 }
             });
             canvasElement.addEventListener("mouseup", (ev: MouseEvent) => {

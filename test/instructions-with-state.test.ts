@@ -3,16 +3,21 @@ import { defaultState } from "../src/state/default-state";
 import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
 import { StateAndInstruction } from "../src/instructions/state-and-instruction";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
+import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
+import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a set of intructions that is only about state", () => {
     let instructionsWithState: StateAndInstruction;
     let state: InfiniteCanvasState;
     let initialState: InfiniteCanvasState;
+    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
+        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
         initialState = state;
-        instructionsWithState = StateAndInstruction.create(state, () => {});
+        instructionsWithState = StateAndInstruction.create(state, () => {}, rectangle);
     });
 
     describe("that receives a change", () => {

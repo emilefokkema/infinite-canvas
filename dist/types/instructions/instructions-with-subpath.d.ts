@@ -7,11 +7,13 @@ import { PathInstructionBuilder } from "./path-instruction-builders/path-instruc
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
 import { StateAndInstruction } from "./state-and-instruction";
 import { CopyableInstructionSet } from "../interfaces/copyable-instruction-set";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 export declare class InstructionsWithSubpath extends StateChangingInstructionSequence<CopyableInstructionSet> {
     private _initiallyWithState;
     private readonly pathInfinityProvider;
     private pathInstructionBuilder;
-    constructor(_initiallyWithState: PathInstructionWithState, pathInfinityProvider: PathInfinityProvider, pathInstructionBuilder: PathInstructionBuilder);
+    private readonly rectangle;
+    constructor(_initiallyWithState: PathInstructionWithState, pathInfinityProvider: PathInfinityProvider, pathInstructionBuilder: PathInstructionBuilder, rectangle: CanvasRectangle);
     addInstruction(instruction: StateAndInstruction): void;
     closePath(): void;
     copy(pathInfinityProvider: PathInfinityProvider): InstructionsWithSubpath;
@@ -21,5 +23,5 @@ export declare class InstructionsWithSubpath extends StateChangingInstructionSeq
     lineTo(position: Position, state: InfiniteCanvasState): void;
     private addInstructionToDrawLineTo;
     addPathInstruction(pathInstruction: PathInstruction, pathInstructionWithState: StateAndInstruction, state: InfiniteCanvasState): void;
-    static create(initialState: InfiniteCanvasState, initialPosition: Position, infinityProvider: PathInfinityProvider): InstructionsWithSubpath;
+    static create(initialState: InfiniteCanvasState, initialPosition: Position, infinityProvider: PathInfinityProvider, rectangle: CanvasRectangle): InstructionsWithSubpath;
 }

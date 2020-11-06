@@ -9,16 +9,17 @@ import { DrawingLock } from "./drawing-lock";
 import { TransformationKind } from "./transformation-kind";
 import { Area } from "./areas/area";
 import { Position } from "./geometry/position";
+import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 export declare class InfiniteCanvasViewBox implements ViewBox {
-    width: number;
-    height: number;
+    private readonly canvasRectangle;
     private context;
     private readonly drawingIterationProvider;
     private readonly drawLockProvider;
+    private readonly isTransforming;
     private instructionSet;
-    private infinityProvider;
-    private _transformation;
-    constructor(width: number, height: number, context: CanvasRenderingContext2D, drawingIterationProvider: DrawingIterationProvider, drawLockProvider: () => DrawingLock);
+    constructor(canvasRectangle: CanvasRectangle, context: CanvasRenderingContext2D, drawingIterationProvider: DrawingIterationProvider, drawLockProvider: () => DrawingLock, isTransforming: () => boolean);
+    get width(): number;
+    get height(): number;
     get state(): InfiniteCanvasState;
     get transformation(): Transformation;
     set transformation(value: Transformation);
@@ -45,5 +46,5 @@ export declare class InfiniteCanvasViewBox implements ViewBox {
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
-    private draw;
+    draw(): void;
 }

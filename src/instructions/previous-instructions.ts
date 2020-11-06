@@ -7,11 +7,11 @@ import { StateAndInstruction } from "./state-and-instruction";
 import { ClearRectWithState } from "./clear-rect-with-state";
 import { Area } from "../areas/area";
 import { PartOfDrawing } from "../interfaces/part-of-drawing";
-import { ViewboxInfinityProvider } from "../interfaces/viewbox-infinity-provider";
 import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class PreviousInstructions extends StateChangingInstructionSequence<StateChangingInstructionSetWithArea> implements PartOfDrawing{
-    constructor(initiallyWithState: StateAndInstruction, private readonly viewboxInfinityProvider: ViewboxInfinityProvider){
+    constructor(initiallyWithState: StateAndInstruction, private readonly rectangle: CanvasRectangle){
         super(initiallyWithState);
     }
     protected reconstructState(fromState: InfiniteCanvasState, toInstructionSet: StateChangingInstructionSetWithArea): void{
@@ -24,8 +24,8 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
         return this.contains(i => i.intersects(area));
     }
     public addClearRect(area: Area, state: InfiniteCanvasState, x: number, y: number, width: number, height: number): void{
-        const infinity: ViewboxInfinity = this.viewboxInfinityProvider.getForPath().getInfinity(state);
-        const clearRect: ClearRectWithState = ClearRectWithState.createClearRect(state, area, infinity, x, y, width, height);
+        const infinity: ViewboxInfinity = this.rectangle.getForPath().getInfinity(state);
+        const clearRect: ClearRectWithState = ClearRectWithState.createClearRect(state, area, infinity, x, y, width, height, this.rectangle);
         clearRect.setInitialState(this.state);
         this.add(clearRect);
     }
@@ -35,7 +35,7 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
     public isContainedBy(area: Area): boolean {
         return !this.contains(i => !i.isContainedBy(area));
     }
-    public static create(viewboxInfinityProvider: ViewboxInfinityProvider): PreviousInstructions{
-        return new PreviousInstructions(StateAndInstruction.create(defaultState, InfiniteCanvasStateInstance.setDefault), viewboxInfinityProvider);
+    public static create(rectangle: CanvasRectangle): PreviousInstructions{
+        return new PreviousInstructions(StateAndInstruction.create(defaultState, InfiniteCanvasStateInstance.setDefault, rectangle), rectangle);
     }
 }

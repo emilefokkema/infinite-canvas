@@ -5,6 +5,7 @@ import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
 import { instructionSequence } from "../instruction-utils";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class ClippedPaths {
     constructor(public area: Area, public latestClippedPath: StateChangingInstructionSet, public readonly previouslyClippedPaths?: ClippedPaths){}
@@ -36,13 +37,13 @@ export class ClippedPaths {
         }
         return false;
     }
-    public getInstructionToRecreate(): Instruction{
+    public getInstructionToRecreate(rectangle: CanvasRectangle): Instruction{
         const instructionToRecreateLatest: Instruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
             this.latestClippedPath.execute(context, transformation);
         };
         if(this.previouslyClippedPaths){
-            const instructionToRecreatePrevious: Instruction = this.previouslyClippedPaths.getInstructionToRecreate();
-            const instructionToConvertToLatest: Instruction = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState);
+            const instructionToRecreatePrevious: Instruction = this.previouslyClippedPaths.getInstructionToRecreate(rectangle);
+            const instructionToConvertToLatest: Instruction = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState, rectangle);
             return (context: CanvasRenderingContext2D, transformation: Transformation) => {
                 instructionToRecreatePrevious(context, transformation);
                 instructionToConvertToLatest(context, transformation);

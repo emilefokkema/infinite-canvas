@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>With different width and height</title>
+		<script type="text/javascript" src="infinite-canvas.js"></script>
+		<style type="text/css">
+
+			#canvas{
+				width:500px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<script>
+			(function(){
+				function produceImageData(width, height){
+					var array = new Uint8ClampedArray(4 * width * height);
+					for(var row = 0; row < height; row++){
+						for(var col = 0; col < width; col++){
+							var redIndex = 4 * (width * row + col);
+							array[redIndex] = row * 10;
+							array[redIndex + 3] = 255;
+						}
+					}
+					return new ImageData(array, width);
+				}
+                var canvas = document.getElementById("canvas");
+                canvas.width = 1000;
+                canvas.height = 1000;
+				var infCanvas = new InfiniteCanvas(canvas);
+				var ctx = infCanvas.getContext();
+
+				ctx.fillStyle = '#aaa';
+				ctx.rotate(Math.PI / 8)
+				ctx.fillRect(50, 50, Infinity, 100);
+				ctx.strokeRect(50, 50, Infinity, 100);
+				ctx.fillStyle = '#faa';
+				ctx.translate(100, 50);
+				ctx.rotate(Math.PI / 8);
+				ctx.fillRect(-50, -100, Infinity, 100);
+				ctx.strokeRect(-50, -100, Infinity, 100);
+				ctx.putImageData(produceImageData(20, 20), 0, 0)
+			})();
+		</script>
+	</body>
+</html>

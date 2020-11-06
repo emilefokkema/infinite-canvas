@@ -7,7 +7,6 @@ import { PathInstructionBuilderFromPointAtInfinityToPoint } from "./from-point-a
 import { PathInstructionBuilderFromPointToPointAtInfinity } from "./from-point-to-point-at-infinity/path-instruction-builder-from-point-to-point-at-infinity";
 import { PathInstructionBuilderFromPointToPoint } from "./from-point-to-point/path-instruction-builder-from-point-to-point";
 import { PathInstructionBuilderAtInfinity } from "./at-infinity/path-instruction-builder-at-infinity";
-import { InstructionUsingInfinity } from "../instruction-using-infinity";
 import { FromPointAtInfinityToPointAtInfinity } from "./from-point-at-infinity-to-point-at-infinity/from-point-at-infinity-to-point-at-infinity";
 import { FromPointAtInfinityToPoint } from "./from-point-at-infinity-to-point/from-point-at-infinity-to-point";
 import { FromPointToPointAtInfinity } from "./from-point-to-point-at-infinity/from-point-to-point-at-infinity";
@@ -15,7 +14,6 @@ import { FromPointToPoint } from "./from-point-to-point/from-point-to-point";
 import { AtInfinity } from "./at-infinity/at-infinity";
 
 export class InfiniteCanvasPathInstructionBuilderProvider implements PathInstructionBuilderProvider {
-    constructor(private readonly instructionToGoAroundViewbox: InstructionUsingInfinity){}
     fromPointAtInfinityToPointAtInfinity(shape: FromPointAtInfinityToPointAtInfinity): PathInstructionBuilder{
         return new PathInstructionBuilderFromPointAtInfinityToPointAtInfinity(this, shape);
     }
@@ -29,11 +27,11 @@ export class InfiniteCanvasPathInstructionBuilderProvider implements PathInstruc
         return new PathInstructionBuilderFromPointToPoint(this, shape);
     }
     atInfinity(shape: AtInfinity): PathInstructionBuilder{
-        return new PathInstructionBuilderAtInfinity(this, this.instructionToGoAroundViewbox, shape);
+        return new PathInstructionBuilderAtInfinity(this, shape);
     }
     getBuilderFromPosition(position: Position): PathInstructionBuilder{
         if(isPointAtInfinity(position)){
-           return new PathInstructionBuilderAtInfinity(this, this.instructionToGoAroundViewbox, new AtInfinity(position, false, [position], position));
+           return new PathInstructionBuilderAtInfinity(this, new AtInfinity(position, false, [position], position));
         }
         return new PathInstructionBuilderFromPointToPoint(this, new FromPointToPoint(position, position));
     }

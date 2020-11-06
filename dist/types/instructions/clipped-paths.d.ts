@@ -3,6 +3,7 @@ import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces
 import { Area } from "../areas/area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 export declare class ClippedPaths {
     area: Area;
     latestClippedPath: StateChangingInstructionSet;
@@ -12,5 +13,5 @@ export declare class ClippedPaths {
     get initialState(): InfiniteCanvasState;
     except(other: ClippedPaths): ClippedPaths;
     contains(other: ClippedPaths): boolean;
-    getInstructionToRecreate(): Instruction;
+    getInstructionToRecreate(rectangle: CanvasRectangle): Instruction;
 }
