@@ -1,5 +1,7 @@
 # InfiniteCanvas
 
+[![npm version](https://badge.fury.io/js/ef-infinite-canvas.svg)](https://badge.fury.io/js/ef-infinite-canvas)
+
 `InfiniteCanvas` wraps an HTML5 `<canvas>` element and allows the user to zoom, pan and rotate the contents of the canvas. Content can be drawn on the canvas using the `CanvasRenderingContext2D` that is returned by `InfiniteCanvas`'s `getContext` method.
 
 ```js
@@ -15,7 +17,7 @@ var context = infiniteCanvas.getContext("2d");
 Include `InfiniteCanvas` in your web page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas/dist/infinite-canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.0-alpha/dist/infinite-canvas.js"></script>
 ```
 
 or install it using npm:
