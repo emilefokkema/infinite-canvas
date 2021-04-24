@@ -42,3 +42,5 @@ The other level of testing happens by running
 npm run run:dev
 ```
 which builds `InfiniteCanvas`, puts it in a folder together with a web page and serves the page at `localhost:8080`. The web page contains a list of code snippets that make use of a `CanvasRenderingContext2D` to create drawings. Each code snippet is executed twice: once for a `CanvasRenderingContext2D` as returned by a regular `<canvas>` element, and once for a `CanvasRenderingContext2D` as returned by `InfiniteCanvas`. (Some cases have two code snippets: one that is written for a regular `<canvas>` and one written for an `InfiniteCanvas`.) For each code snippet, the two resulting images are expected to be the same, pixel by pixel. (There are some exceptions where a maximum amount of difference is allowed.) Messages are displayed for each pair of images that fails to meet this expectation.
+
+*Even though not much has happened in this repository lately, I have not forgotten about it. Quite to the contrary, there are a lot more features I'm planning to add in the not-too-distant future.*
