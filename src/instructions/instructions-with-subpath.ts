@@ -20,6 +20,7 @@ export class InstructionsWithSubpath extends StateChangingInstructionSequence<Co
     constructor(private _initiallyWithState: PathInstructionWithState, private readonly pathInfinityProvider: PathInfinityProvider, private pathInstructionBuilder: PathInstructionBuilder, private readonly rectangle: CanvasRectangle) {
         super(_initiallyWithState);
     }
+    public get currentPosition(): Position{return this.pathInstructionBuilder.currentPosition;}
     public addInstruction(instruction: StateAndInstruction): void{
         instruction.setInitialState(this.state);
         this.add(instruction);

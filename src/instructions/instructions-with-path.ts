@@ -186,8 +186,10 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
             }
         }
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
+        const currentPosition: Position = currentSubpath.currentPosition;
+        const inverseTransformedCurrentPosition = transformPosition(currentPosition, state.current.transformation.inverse());
+        pathInstruction.changeArea(this.areaBuilder.transformedWith(state.current.transformation), inverseTransformedCurrentPosition);
         const toAdd: StateAndInstruction = StateAndInstruction.create(state, pathInstruction.instruction, this.rectangle);
-        pathInstruction.changeArea(this.areaBuilder.transformedWith(state.current.transformation));
         currentSubpath.addPathInstruction(pathInstruction, toAdd, state);
     }
 

@@ -2040,6 +2040,63 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe("that draws a quadratic curve", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(20, 20);
+			infiniteContext.lineTo(40, 20);
+			infiniteContext.translate(40, 20);
+			infiniteContext.quadraticCurveTo(20, 0, 20, 20);
+			infiniteContext.lineTo(20, 60);
+			contextMock.clear();
+			infiniteContext.fill();
+		});
+
+		it("should draw a quadratic curve", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe("that draws a quadratic curve", () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(10, 10);
+			infiniteContext.quadraticCurveTo(60, 60, 110, 10);
+			contextMock.clear();
+			infiniteContext.fill();
+		});
+
+		it("should draw a quadratic curve", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe("and then clears a rect that does not cover the quadratic curve", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(5, 5, 110, 25);
+			});
+
+			fit("should still draw a quadratic curve", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		describe("and then clears a rect that covers the quadratic curve", () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(5, 5, 110, 35);
+			});
+
+			it("should no longer draw a quadratic curve", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
 	describe("that draws a line", () => {
 
 		beforeEach(() => {
