@@ -2329,6 +2329,60 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that draws a quadratic curve and then clears a rect that covers the quadratic curve should no longer draw a quadratic curve 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that draws a quadratic curve and then clears a rect that does not cover the quadratic curve should still draw a quadratic curve 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.quadraticCurveTo(60,60,110,10)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(5,5,110,25)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that draws a quadratic curve should draw a quadratic curve 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(20,20)",
+  "context.lineTo(40,20)",
+  "context.setTransform(1,0,0,1,40,20)",
+  "context.quadraticCurveTo(20,0,20,20)",
+  "context.lineTo(20,60)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that draws a quadratic curve should draw a quadratic curve 2`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.quadraticCurveTo(60,60,110,10)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context that draws a square by translating and then fully clears the drawn square should not have added a clearRect 1`] = `
 Array [
   "context.restore()",

@@ -29,7 +29,8 @@ export class CanvasContextMock{
             "drawImage",
             "measureText",
             "fillText",
-            "strokeText"
+            "strokeText",
+            "quadraticCurveTo"
         ];
         const setters: string[] = [
             "fillStyle",

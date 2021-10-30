@@ -2,8 +2,10 @@ import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
 import { AreaChange } from "../areas/area-change";
 import { Point } from "../geometry/point";
+import { Position } from "../geometry/position"
 import { PathInstruction } from "../interfaces/path-instruction";
 import { AreaBuilder } from "../areas/area-builder";
+import { isPointAtInfinity } from "../geometry/is-point-at-infinity";
 
 export class PathInstructions{
 
@@ -83,6 +85,21 @@ export class PathInstructions{
     }
 
     public static quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): PathInstruction{
-        return undefined;
+        return {
+            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
+                const tControl = transformation.apply(new Point(cpx, cpy));
+                const tEnd = transformation.apply(new Point(x, y));
+                context.quadraticCurveTo(tControl.x, tControl.y, tEnd.x, tEnd.y);
+            },
+            changeArea: (builder: AreaBuilder, currentPosition: Position) => {
+                if(isPointAtInfinity(currentPosition)){
+                    return;
+                }
+                builder.addPosition(new Point((currentPosition.x + cpx) / 2, (currentPosition.y + cpy) / 2));
+                builder.addPosition(new Point((cpx + x) / 2, (cpy + y) / 2));
+                builder.addPosition(new Point(x, y))
+            },
+            positionChange: new Point(x, y)
+        };
     }
 }
