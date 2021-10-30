@@ -2079,7 +2079,7 @@ describe("an infinite canvas context", () => {
 				infiniteContext.clearRect(5, 5, 110, 25);
 			});
 
-			fit("should still draw a quadratic curve", () => {
+			it("should still draw a quadratic curve", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
