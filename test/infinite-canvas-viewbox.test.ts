@@ -22,7 +22,7 @@ describe("an infinite canvas context", () => {
 	let executeLatestDrawingInstruction: () => void;
 	let isTransforming: boolean;
 	let measurementProvider: MockCanvasMeasurementProvider;
-	let config: InfiniteCanvasConfig;
+	let config: Partial<InfiniteCanvasConfig>;
 
 	beforeEach(() => {
 		config = {};
@@ -2079,7 +2079,7 @@ describe("an infinite canvas context", () => {
 				infiniteContext.clearRect(5, 5, 110, 25);
 			});
 
-			fit("should still draw a quadratic curve", () => {
+			it("should still draw a quadratic curve", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});

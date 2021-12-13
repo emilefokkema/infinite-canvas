@@ -2,7 +2,6 @@ import {InfiniteCanvasRenderingContext2D} from "./infinite-context/infinite-canv
 import {InfiniteContext} from "./infinite-context/infinite-context"
 import {ViewBox} from "./interfaces/viewbox";
 import {InfiniteCanvasViewBox} from "./infinite-canvas-viewbox";
-import {Transformer} from "./transformer/transformer"
 import {InfiniteCanvasTransformer} from "./transformer/infinite-canvas-transformer";
 import {InfiniteCanvasEvents} from "./events/infinite-canvas-events";
 import {InfiniteCanvasConfig} from "./config/infinite-canvas-config";
@@ -22,8 +21,9 @@ import {EventDispatcher} from "./custom-events/event-dispatcher";
 import {InfiniteCanvasDrawEvent} from "./custom-events/infinite-canvas-draw-event";
 import {EventDispatcherCollection} from "./custom-events/event-dispatcher-collection";
 import {representTransformation} from "./transformer/represent-transformation";
+import {InfiniteCanvas as InfiniteCanvasDeclaration} from './infinite-canvas-declaration'
 
-export class InfiniteCanvas implements InfiniteCanvasConfig{
+export class InfiniteCanvas implements InfiniteCanvasDeclaration{
 	private context: InfiniteCanvasRenderingContext2D;
 	private viewBox: ViewBox;
 	private config: InfiniteCanvasConfig;

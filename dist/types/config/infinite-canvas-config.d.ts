@@ -1,6 +1,6 @@
 import { InfiniteCanvasUnits } from "../infinite-canvas-units";
 export interface InfiniteCanvasConfig {
-    rotationEnabled?: boolean;
-    greedyGestureHandling?: boolean;
-    units?: InfiniteCanvasUnits;
+    rotationEnabled: boolean;
+    greedyGestureHandling: boolean;
+    units: InfiniteCanvasUnits;
 }
