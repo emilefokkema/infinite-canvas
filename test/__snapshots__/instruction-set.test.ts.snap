@@ -25,6 +25,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#00f\\"",
   "context.beginPath()",
@@ -33,6 +35,8 @@ Array [
   "context.lineTo(3,1)",
   "context.lineTo(2,1)",
   "context.lineTo(2,0)",
+  "context.closePath()",
+  "context.moveTo(2,0)",
   "context.fill()",
 ]
 `;
@@ -49,6 +53,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",

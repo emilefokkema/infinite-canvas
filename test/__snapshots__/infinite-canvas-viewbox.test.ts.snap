@@ -455,6 +455,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(10,10)",
@@ -481,6 +483,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#f00\\"",
   "context.beginPath()",
@@ -512,6 +516,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(10,10)",
@@ -538,6 +544,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -555,6 +563,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(10,10)",
@@ -582,6 +592,8 @@ Array [
   "context.lineTo(30,30)",
   "context.lineTo(10,30)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.fill()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -590,6 +602,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.restore()",
   "context.lineWidth = 1",
   "context.fill()",
@@ -609,6 +623,8 @@ Array [
   "context.lineTo(30,30)",
   "context.lineTo(10,30)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.fill()",
   "context.lineWidth = 1",
   "context.save()",
@@ -619,6 +635,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.restore()",
   "context.lineWidth = 1",
   "context.fill()",
@@ -639,6 +657,8 @@ Array [
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -665,6 +685,8 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(1,2)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
 ]
 `;
@@ -963,6 +985,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1029,6 +1053,8 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#000\\"",
   "context.lineWidth = 1",
@@ -1039,6 +1065,8 @@ Array [
   "context.lineTo(2,4)",
   "context.lineTo(0,4)",
   "context.lineTo(0,2)",
+  "context.closePath()",
+  "context.moveTo(0,2)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -1057,6 +1085,8 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1073,6 +1103,8 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -1116,6 +1148,8 @@ Array [
   "context.lineTo(9,9)",
   "context.lineTo(1,9)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(2,2)",
@@ -1123,6 +1157,8 @@ Array [
   "context.lineTo(8,8)",
   "context.lineTo(2,8)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1131,6 +1167,8 @@ Array [
   "context.lineTo(6,7)",
   "context.lineTo(5,7)",
   "context.lineTo(5,5)",
+  "context.closePath()",
+  "context.moveTo(5,5)",
   "context.fill()",
 ]
 `;
@@ -1146,6 +1184,8 @@ Array [
   "context.lineTo(9,9)",
   "context.lineTo(1,9)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1154,6 +1194,8 @@ Array [
   "context.lineTo(2,7)",
   "context.lineTo(0,7)",
   "context.lineTo(0,5)",
+  "context.closePath()",
+  "context.moveTo(0,5)",
   "context.fill()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1162,6 +1204,8 @@ Array [
   "context.lineTo(8,8)",
   "context.lineTo(2,8)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1170,6 +1214,8 @@ Array [
   "context.lineTo(6,7)",
   "context.lineTo(5,7)",
   "context.lineTo(5,5)",
+  "context.closePath()",
+  "context.moveTo(5,5)",
   "context.fill()",
 ]
 `;
@@ -1185,6 +1231,8 @@ Array [
   "context.lineTo(9,9)",
   "context.lineTo(1,9)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1193,6 +1241,8 @@ Array [
   "context.lineTo(2,7)",
   "context.lineTo(0,7)",
   "context.lineTo(0,5)",
+  "context.closePath()",
+  "context.moveTo(0,5)",
   "context.fill()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1201,6 +1251,8 @@ Array [
   "context.lineTo(8,8)",
   "context.lineTo(2,8)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -1209,6 +1261,8 @@ Array [
   "context.lineTo(9,7)",
   "context.lineTo(7,7)",
   "context.lineTo(7,5)",
+  "context.closePath()",
+  "context.moveTo(7,5)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(5,5)",
@@ -1216,6 +1270,8 @@ Array [
   "context.lineTo(6,7)",
   "context.lineTo(5,7)",
   "context.lineTo(5,5)",
+  "context.closePath()",
+  "context.moveTo(5,5)",
   "context.fill()",
 ]
 `;
@@ -1320,6 +1376,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1336,6 +1394,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-3]",
@@ -1346,6 +1406,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
 ]
 `;
@@ -1362,6 +1424,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1378,6 +1442,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-2]",
@@ -1388,6 +1454,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.fill()",
 ]
 `;
@@ -1404,6 +1472,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
@@ -1414,6 +1484,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(50,0)",
@@ -1421,6 +1493,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.fill()",
 ]
 `;
@@ -1437,6 +1511,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
@@ -1447,6 +1523,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
 ]
 `;
@@ -1463,6 +1541,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -1479,6 +1559,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-3]",
@@ -1489,6 +1571,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
 ]
 `;
@@ -1505,6 +1589,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -1521,6 +1607,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-2]",
@@ -1531,6 +1619,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.stroke()",
 ]
 `;
@@ -1547,6 +1637,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
@@ -1557,6 +1649,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
   "context.beginPath()",
   "context.moveTo(50,0)",
@@ -1564,6 +1658,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.stroke()",
 ]
 `;
@@ -1580,6 +1676,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
@@ -1590,6 +1688,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
 ]
 `;
@@ -1606,6 +1706,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1622,6 +1724,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -1638,6 +1742,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
   "context.fill()",
@@ -1745,6 +1851,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1761,6 +1869,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-3]",
@@ -1771,6 +1881,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
 ]
 `;
@@ -1787,6 +1899,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -1803,6 +1917,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-2]",
@@ -1813,6 +1929,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.fill()",
 ]
 `;
@@ -1829,6 +1947,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
@@ -1839,6 +1959,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(50,0)",
@@ -1846,6 +1968,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.fill()",
 ]
 `;
@@ -1862,6 +1986,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
@@ -1872,6 +1998,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.fill()",
 ]
 `;
@@ -1888,6 +2016,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -1904,6 +2034,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-3]",
@@ -1914,6 +2046,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
 ]
 `;
@@ -1930,6 +2064,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -1946,6 +2082,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-2]",
@@ -1956,6 +2094,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.stroke()",
 ]
 `;
@@ -1972,6 +2112,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
@@ -1982,6 +2124,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
   "context.beginPath()",
   "context.moveTo(50,0)",
@@ -1989,6 +2133,8 @@ Array [
   "context.lineTo(60,10)",
   "context.lineTo(50,10)",
   "context.lineTo(50,0)",
+  "context.closePath()",
+  "context.moveTo(50,0)",
   "context.stroke()",
 ]
 `;
@@ -2005,6 +2151,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
@@ -2015,6 +2163,8 @@ Array [
   "context.lineTo(40,10)",
   "context.lineTo(30,10)",
   "context.lineTo(30,0)",
+  "context.closePath()",
+  "context.moveTo(30,0)",
   "context.stroke()",
 ]
 `;
@@ -2031,6 +2181,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -2047,6 +2199,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.stroke()",
 ]
 `;
@@ -2062,6 +2216,8 @@ Array [
   "context.lineTo(201.4142135623731,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.lineWidth = 1",
   "context.stroke()",
   "context.lineWidth = 1",
@@ -2071,6 +2227,8 @@ Array [
   "context.lineTo(205.65685424949237,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.lineWidth = 4",
   "context.stroke()",
 ]
@@ -2087,6 +2245,8 @@ Array [
   "context.lineTo(201.4142135623731,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.lineWidth = 1",
   "context.stroke()",
 ]
@@ -2105,6 +2265,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.fill()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -2113,6 +2275,8 @@ Array [
   "context.lineTo(50,50)",
   "context.lineTo(0,50)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -2131,6 +2295,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.stroke()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -2139,6 +2305,8 @@ Array [
   "context.lineTo(50,50)",
   "context.lineTo(0,50)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 1",
   "context.stroke()",
 ]
@@ -2220,6 +2388,8 @@ Array [
   "context.lineTo(25,25)",
   "context.lineTo(0,25)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.setTransform(1,0,0,1,60,10)",
   "context.beginPath()",
@@ -2228,6 +2398,8 @@ Array [
   "context.lineTo(25,25)",
   "context.lineTo(0,25)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
 ]
@@ -2323,6 +2495,8 @@ Array [
   "context.lineTo(110,110)",
   "context.lineTo(10,110)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.lineWidth = 6",
   "context.setTransform(0.2,0,0,1,0,0)",
   "context.stroke()",
@@ -2473,6 +2647,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
@@ -2494,6 +2670,8 @@ Array [
   "context.lineTo(20,0)",
   "context.lineTo(20,0)",
   "context.lineTo(20,20)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
   "context.fill()",
 ]
 `;
@@ -2511,6 +2689,8 @@ Array [
   "context.lineTo(20,200)",
   "context.lineTo(20,200)",
   "context.lineTo(20,20)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
   "context.fill()",
 ]
 `;
@@ -2527,6 +2707,8 @@ Array [
   "context.lineTo(0,50)",
   "context.lineTo(20,50)",
   "context.lineTo(20,20)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
   "context.fill()",
 ]
 `;
@@ -2544,6 +2726,7 @@ Array [
   "context.lineTo(100,200)",
   "context.lineTo(100,0)",
   "context.lineTo(100,0)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2561,6 +2744,7 @@ Array [
   "context.lineTo(200,200)",
   "context.lineTo(0,200)",
   "context.lineTo(0,100)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2577,6 +2761,8 @@ Array [
   "context.lineTo(200,50)",
   "context.lineTo(20,50)",
   "context.lineTo(20,20)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
   "context.fill()",
 ]
 `;
@@ -2596,6 +2782,7 @@ Array [
   "context.lineTo(20,0)",
   "context.lineTo(20,0)",
   "context.lineTo(20,200)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2613,6 +2800,7 @@ Array [
   "context.lineTo(200,50)",
   "context.lineTo(0,50)",
   "context.lineTo(0,50)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2630,6 +2818,7 @@ Array [
   "context.lineTo(0,50)",
   "context.lineTo(0,50)",
   "context.lineTo(200,50)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2647,6 +2836,7 @@ Array [
   "context.lineTo(20,200)",
   "context.lineTo(20,0)",
   "context.lineTo(20,0)",
+  "context.closePath()",
   "context.fill()",
 ]
 `;
@@ -2663,6 +2853,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(0,5)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.setTransform(1,0,0,1,1,1)",
   "context.save()",
@@ -2684,6 +2876,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(0,5)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
@@ -2705,6 +2899,8 @@ Array [
   "context.lineTo(100,100)",
   "context.lineTo(0,100)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#00f\\"",
   "context.save()",
@@ -2733,6 +2929,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(0,5)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
@@ -2768,6 +2966,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 1",
   "context.fill()",
   "context.save()",
@@ -2790,6 +2990,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
@@ -2811,6 +3013,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -2828,6 +3032,8 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -2843,11 +3049,15 @@ Array [
   "context.lineTo(110,110)",
   "context.lineTo(10,110)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.moveTo(30,30)",
   "context.lineTo(60,30)",
   "context.lineTo(60,60)",
   "context.lineTo(30,60)",
   "context.lineTo(30,30)",
+  "context.closePath()",
+  "context.moveTo(30,30)",
   "context.lineWidth = 1",
   "context.fill(\\"evenodd\\")",
 ]
@@ -2909,6 +3119,8 @@ Array [
   "context.lineTo(4,4)",
   "context.lineTo(3,4)",
   "context.lineTo(3,3)",
+  "context.closePath()",
+  "context.moveTo(3,3)",
   "context.fill()",
 ]
 `;
@@ -2934,6 +3146,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
   "context.fillStyle = \\"#f00\\"",
   "context.lineWidth = 1",
@@ -2970,6 +3184,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
 ]
 `;
@@ -3002,6 +3218,8 @@ Array [
   "context.lineTo(60,60)",
   "context.lineTo(10,60)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.save()",
   "context.clip()",
   "context.lineWidth = 1",
@@ -3011,6 +3229,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(-1,1)",
   "context.lineTo(-1,-1)",
+  "context.closePath()",
+  "context.moveTo(-1,-1)",
   "context.fill()",
   "context.restore()",
   "context.beginPath()",
@@ -3019,6 +3239,8 @@ Array [
   "context.lineTo(60,60)",
   "context.lineTo(10,60)",
   "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
   "context.save()",
   "context.clip()",
   "context.lineWidth = 1",
@@ -3040,6 +3262,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 2",
   "context.stroke()",
   "context.lineWidth = 1",
@@ -3062,6 +3286,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -3078,6 +3304,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3103,6 +3331,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3111,6 +3341,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3137,6 +3369,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3145,6 +3379,8 @@ Array [
   "context.lineTo(6,6)",
   "context.lineTo(0,6)",
   "context.lineTo(0,4)",
+  "context.closePath()",
+  "context.moveTo(0,4)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3162,6 +3398,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3170,6 +3408,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3187,6 +3427,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3195,6 +3437,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(0,4)",
@@ -3202,6 +3446,8 @@ Array [
   "context.lineTo(6,6)",
   "context.lineTo(0,6)",
   "context.lineTo(0,4)",
+  "context.closePath()",
+  "context.moveTo(0,4)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3218,6 +3464,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -3235,6 +3483,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3243,6 +3493,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
   "context.beginPath()",
@@ -3251,6 +3503,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -3268,6 +3522,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.fill()",
 ]
 `;
@@ -3284,6 +3540,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3292,6 +3550,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
   "context.lineWidth = 1",
@@ -3301,6 +3561,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.fill()",
 ]
 `;
@@ -3317,6 +3579,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3325,6 +3589,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3342,6 +3608,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -3350,6 +3618,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(0,3)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
 ]
@@ -3367,6 +3637,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3400,6 +3672,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -3417,6 +3691,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3433,6 +3709,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.lineWidth = 1",
   "context.fill()",
 ]
@@ -3450,6 +3728,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.fill()",
 ]
 `;
@@ -3466,6 +3746,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3483,6 +3765,8 @@ Array [
   "context.lineTo(8,1)",
   "context.lineTo(7,1)",
   "context.lineTo(7,0)",
+  "context.closePath()",
+  "context.moveTo(7,0)",
   "context.fill()",
 ]
 `;
@@ -3499,6 +3783,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(2,5)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.clip()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3530,6 +3816,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -3549,6 +3837,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3556,6 +3846,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
   "context.beginPath()",
@@ -3564,6 +3856,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 1",
   "context.stroke()",
   "context.restore()",
@@ -3574,6 +3868,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -3593,6 +3889,8 @@ Array [
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.lineWidth = 4",
   "context.stroke()",
   "context.lineWidth = 2",
@@ -3616,6 +3914,8 @@ Array [
   "context.lineTo(4,4)",
   "context.lineTo(2,4)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(18,2)",
@@ -3623,6 +3923,8 @@ Array [
   "context.lineTo(20,4)",
   "context.lineTo(18,4)",
   "context.lineTo(18,2)",
+  "context.closePath()",
+  "context.moveTo(18,2)",
   "context.fill()",
 ]
 `;
@@ -3640,6 +3942,8 @@ Array [
   "context.lineTo(4,4)",
   "context.lineTo(2,4)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.fill()",
   "context.fillStyle = \\"[pattern-0]\\"",
   "context.setLineDash([1,1])",
@@ -3650,6 +3954,8 @@ Array [
   "context.lineTo(12,4)",
   "context.lineTo(10,4)",
   "context.lineTo(10,2)",
+  "context.closePath()",
+  "context.moveTo(10,2)",
   "context.save()",
   "context.transform(2,0,0,2,0,0)",
   "context.fill()",
@@ -3663,6 +3969,8 @@ Array [
   "context.lineTo(20,4)",
   "context.lineTo(18,4)",
   "context.lineTo(18,2)",
+  "context.closePath()",
+  "context.moveTo(18,2)",
   "context.fill()",
 ]
 `;
@@ -3680,6 +3988,8 @@ Array [
   "context.lineTo(4,4)",
   "context.lineTo(2,4)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.fill()",
   "context.fillStyle = \\"[pattern-0]\\"",
   "context.setLineDash([1,1])",
@@ -3690,6 +4000,8 @@ Array [
   "context.lineTo(12,4)",
   "context.lineTo(10,4)",
   "context.lineTo(10,2)",
+  "context.closePath()",
+  "context.moveTo(10,2)",
   "context.save()",
   "context.transform(2,0,0,2,0,0)",
   "context.fill()",
@@ -3710,6 +4022,8 @@ Array [
   "context.lineTo(4,4)",
   "context.lineTo(2,4)",
   "context.lineTo(2,2)",
+  "context.closePath()",
+  "context.moveTo(2,2)",
   "context.fill()",
 ]
 `;
@@ -3747,6 +4061,8 @@ Array [
   "context.lineTo(201.4142135623731,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.stroke()",
   "context.lineWidth = 4",
   "context.beginPath()",
@@ -3755,6 +4071,8 @@ Array [
   "context.lineTo(205.65685424949237,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.stroke()",
 ]
 `;
@@ -3771,6 +4089,8 @@ Array [
   "context.lineTo(201.4142135623731,100)",
   "context.lineTo(50,100)",
   "context.lineTo(50,50)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
   "context.stroke()",
 ]
 `;
@@ -3995,6 +4315,8 @@ Array [
   "context.lineTo(-55,75)",
   "context.lineTo(-55,25)",
   "context.lineTo(-5,25)",
+  "context.closePath()",
+  "context.moveTo(-5,25)",
   "context.fill()",
 ]
 `;
@@ -4015,6 +4337,8 @@ Array [
   "context.lineTo(130,130)",
   "context.lineTo(30,130)",
   "context.lineTo(30,30)",
+  "context.closePath()",
+  "context.moveTo(30,30)",
   "context.fill()",
 ]
 `;
@@ -4032,6 +4356,8 @@ Array [
   "context.lineTo(0,0)",
   "context.lineTo(20,0)",
   "context.lineTo(20,20)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(15,15)",
@@ -4039,6 +4365,8 @@ Array [
   "context.lineTo(5,5)",
   "context.lineTo(15,5)",
   "context.lineTo(15,15)",
+  "context.closePath()",
+  "context.moveTo(15,15)",
   "context.fill()",
 ]
 `;
@@ -4056,6 +4384,8 @@ Array [
   "context.lineTo(20,0)",
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
+  "context.closePath()",
+  "context.moveTo(0,20)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(5,15)",
@@ -4063,6 +4393,8 @@ Array [
   "context.lineTo(15,5)",
   "context.lineTo(15,15)",
   "context.lineTo(5,15)",
+  "context.closePath()",
+  "context.moveTo(5,15)",
   "context.fill()",
 ]
 `;
@@ -4080,6 +4412,8 @@ Array [
   "context.lineTo(20,0)",
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
+  "context.closePath()",
+  "context.moveTo(0,20)",
   "context.fill()",
 ]
 `;
@@ -4096,6 +4430,8 @@ Array [
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -4113,6 +4449,8 @@ Array [
   "context.lineTo(20,0)",
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
+  "context.closePath()",
+  "context.moveTo(0,20)",
   "context.fill()",
 ]
 `;
@@ -4130,6 +4468,8 @@ Array [
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -4147,6 +4487,8 @@ Array [
   "context.lineTo(20,20)",
   "context.lineTo(0,20)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
 ]
 `;
@@ -4164,6 +4506,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
   "context.fillStyle = \\"#00f\\"",
   "context.save()",
@@ -4176,6 +4520,8 @@ Array [
   "context.lineTo(4,2)",
   "context.lineTo(3,2)",
   "context.lineTo(3,1)",
+  "context.closePath()",
+  "context.moveTo(3,1)",
   "context.fill()",
 ]
 `;
@@ -4193,6 +4539,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
 ]
 `;
@@ -4210,6 +4558,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
 ]
 `;
@@ -4235,6 +4585,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(4,3)",
   "context.lineTo(4,1)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
   "context.fill()",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
@@ -4256,6 +4608,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(4,3)",
   "context.lineTo(4,1)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
   "context.fill()",
 ]
 `;
@@ -4273,6 +4627,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(4,1)",
@@ -4280,6 +4636,8 @@ Array [
   "context.lineTo(6,3)",
   "context.lineTo(4,3)",
   "context.lineTo(4,1)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
   "context.fill()",
 ]
 `;
@@ -4297,6 +4655,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
   "context.beginPath()",
   "context.moveTo(9,1)",
@@ -4304,6 +4664,8 @@ Array [
   "context.lineTo(11,3)",
   "context.lineTo(9,3)",
   "context.lineTo(9,1)",
+  "context.closePath()",
+  "context.moveTo(9,1)",
   "context.fill()",
 ]
 `;
@@ -4321,6 +4683,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
   "context.fillStyle = \\"#00f\\"",
   "context.beginPath()",
@@ -4329,6 +4693,8 @@ Array [
   "context.lineTo(7,3)",
   "context.lineTo(5,3)",
   "context.lineTo(5,1)",
+  "context.closePath()",
+  "context.moveTo(5,1)",
   "context.fill()",
   "context.fillStyle = \\"#f00\\"",
   "context.beginPath()",
@@ -4337,6 +4703,8 @@ Array [
   "context.lineTo(11,3)",
   "context.lineTo(9,3)",
   "context.lineTo(9,1)",
+  "context.closePath()",
+  "context.moveTo(9,1)",
   "context.fill()",
 ]
 `;
@@ -4354,6 +4722,8 @@ Array [
   "context.lineTo(3,3)",
   "context.lineTo(1,3)",
   "context.lineTo(1,1)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
   "context.fill()",
 ]
 `;

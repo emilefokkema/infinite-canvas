@@ -8,6 +8,8 @@ Array [
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
   "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.fillStyle = \\"#f00\\"",
   "context.fill()",

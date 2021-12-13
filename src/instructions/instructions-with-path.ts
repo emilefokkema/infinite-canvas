@@ -176,6 +176,8 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
             }
             this.lineTo(x < 0 ? left : right, state);
         }
+        this.closePath();
+        this.moveToPositionDeterminedBy(x, y, state);
     }
     public addPathInstruction(pathInstruction: PathInstruction, state: InfiniteCanvasState): void{
         if(this.added.length === 0){
