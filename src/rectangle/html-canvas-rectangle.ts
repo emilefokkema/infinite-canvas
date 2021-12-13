@@ -40,7 +40,7 @@ export class HTMLCanvasRectangle implements CanvasRectangle{
     }
     public get infiniteCanvasContextBase(): Transformation{return this.coordinateSystems.infiniteCanvasContextBase;}
     public get inverseInfiniteCanvasContextBase(): Transformation{return this.coordinateSystems.inverseInfiniteCanvasContextBase;}
-    constructor(private readonly measurementProvider: CanvasMeasurementProvider, private readonly config: InfiniteCanvasConfig) {
+    constructor(private readonly measurementProvider: CanvasMeasurementProvider, private readonly config: Partial<InfiniteCanvasConfig>) {
         this.unitsUsed = config.units === InfiniteCanvasUnits.CSS ? InfiniteCanvasUnits.CSS : InfiniteCanvasUnits.CANVAS;
         const measurement: RectangleMeasurement = createRectangleMeasurement(this.measurementProvider.measure());
         this.addMeasurement(measurement);

@@ -13,7 +13,6 @@ import { Translate } from "./translate";
 import { TranslateZoom } from "./translate-zoom";
 import { TranslateRotateZoom } from "./translate-rotate-zoom";
 import { Movable } from "./movable";
-import {EventDispatcher} from "../custom-events/event-dispatcher";
 import { Event } from "../custom-events/event";
 import {ChangeMonitor} from "./change-monitor";
 
@@ -24,7 +23,7 @@ export class InfiniteCanvasTransformer implements Transformer{
     private _zoom: Zoom;
     private _transformationChangeMonitor: ChangeMonitor<Transformation>;
     public get isTransforming(): boolean{return this._transformationChangeMonitor.changing;}
-    constructor(private readonly viewBox: TransformableBox, private readonly config: InfiniteCanvasConfig){
+    constructor(private readonly viewBox: TransformableBox, private readonly config: Partial<InfiniteCanvasConfig>){
         this.anchorSet = new AnchorSet();
         this._transformationChangeMonitor = new ChangeMonitor<Transformation>((transformation: Transformation) => this.viewBox.transformation = transformation, 100);
     }

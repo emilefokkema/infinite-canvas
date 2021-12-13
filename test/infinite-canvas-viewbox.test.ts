@@ -22,7 +22,7 @@ describe("an infinite canvas context", () => {
 	let executeLatestDrawingInstruction: () => void;
 	let isTransforming: boolean;
 	let measurementProvider: MockCanvasMeasurementProvider;
-	let config: InfiniteCanvasConfig;
+	let config: Partial<InfiniteCanvasConfig>;
 
 	beforeEach(() => {
 		config = {};

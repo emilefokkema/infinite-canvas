@@ -16,7 +16,7 @@ describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
     let viewBox: TransformableBox;
-    let config: InfiniteCanvasConfig;
+    let config: Partial<InfiniteCanvasConfig>;
 
     beforeEach(() => {
         config = {};
