@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <template id="codeEditorTemplate">
+            <div class="code" ref="code"></div>
+        </template>
+        <template id="infiniteCanvasTemplate">
+            <div class="infinite-canvas-wrapper"><iframe ref="iframe"></iframe></div>
+        </template>
+        <template id="inputHeaderTemplate">
+            <div class="header" v-bind:class="{running: running}">
+                <div class="section">
+                    <button
+                        v-bind:disabled="disabled"
+                        class="run-button"
+                        v-on:click="onRunClicked()">
+                        <i class="run-icon fa fa-play"></i>
+                        <i class="running-icon fa fa-circle-notch fa-spin"></i> Run
+                    </button>
+                    <div
+                        class="dock-icon dock-bottom-icon"
+                        v-if="!issmallwidth && !ishorizontal"
+                        v-on:click="onDockBottomClicked()">
+                    </div>
+                    <div
+                        class="dock-icon dock-right-icon"
+                        v-if="!issmallwidth && ishorizontal"
+                        v-on:click="onDockRightClicked()">
+                    </div>
+                </div>
+                <div class="section">
+                    <label for="width">width </label><input class="dimension-input" type="number" id="width" v-model="width"/>
+                    <label for="height">height </label><input class="dimension-input" type="number" id="height" v-model="height"/>
+                    <span class="sync-button" v-on:click="onSyncSizeClicked()"><i class="fa fa-sync-alt"></i></span>
+                </div>
+                <div class="section">
+                    <input type="radio" id="canvasUnits" name="units" v-bind:value="canvasUnits" v-model="chosenUnits"/><label for="canvasUnits">Canvas</label>
+                    <input type="radio" id="cssUnits" name="units" v-bind:value="cssUnits" v-model="chosenUnits" /><label for="cssUnits">CSS</label>
+                </div>
+                <div class="section">
+                    <input type="checkbox" id="rotationEnabled" v-model="rotationEnabled"/><label for="rotationEnabled">Enable rotation</label>
+                    <input type="checkbox" id="greedyGestureHandling" v-model="greedyGestureHandling"/><label for="greedyGestureHandling">Greedy gesture handling</label>
+               
+                </div>
+                <div class="section" v-if="errormessage">
+                    <div class="error-message">{{errormessage}}</div>
+                </div>
+            </div>
+        </template>
+        <div id="app" v-bind:class="{resizing: resizingInput}" v-on:mouseup="onMouseUp()" v-on:mouseleave="onMouseLeave()" v-on:touchend="stopResizingCanvas()" v-on:touchmove="onTouchMove($event)" v-on:mousemove="onMouseMove($event)">
+            <div class="vertical canvas-container" v-bind:style="{width: canvasContainerWidthStyle}" v-if="!isHorizontal">
+                <infinite-canvas
+                    v-bind:instruction="instruction"
+                    v-bind:additionalconfig="additionalConfig"
+                    v-on:executed="onCanvasExecuted($event)"
+                    v-on:sizeknown="onCanvasSizeKnown($event)"
+                    v-on:canvaserror="onCanvasError($event)"></infinite-canvas>
+            </div>
+            <div class="horizontal canvas-container" v-bind:style="{height: canvasHeightStyle}" v-if="isHorizontal">
+                <infinite-canvas
+                    v-bind:instruction="instruction"
+                    v-bind:additionalconfig="additionalConfig"
+                    v-on:executed="onCanvasExecuted($event)"
+                    v-on:sizeknown="onCanvasSizeKnown($event)"
+                    v-on:canvaserror="onCanvasError($event)"></infinite-canvas>
+            </div>
+            <div class="divider-background" v-if="resizingInput || resizingCanvas"></div>
+            <div class="vertical divider" v-on:mousedown="startResizingInput($event)" v-bind:style="{right: dividerRightStyle}" v-if="!isHorizontal"></div>
+            <div class="horizontal divider smallwidth" v-on:touchstart="startResizingCanvas($event)" v-if="isSmallWidth && isHorizontal">
+                <span class="sliding-icon"><i class="fa fa-arrows-alt-v"></i></span>
+            </div>
+            <div class="horizontal divider bigwidth" v-on:mousedown="startResizingCanvas($event)" v-if="!isSmallWidth && isHorizontal"></div>
+            <div class="vertical input-container" v-bind:style="{width: inputContainerWidthStyle}" v-if="!isHorizontal">
+                <input-header 
+                    v-bind:disabled="inputDisabled"
+                    v-bind:running="running"
+                    v-on:runclicked="run()"
+                    v-on:headervalueschanged="onInputHeaderValuesChanged($event)"
+                    v-bind:ishorizontal="isHorizontal"
+                    v-bind:issmallwidth="isSmallWidth"
+                    v-on:dockrightclicked="dockRight()"
+                    v-on:dockbottomclicked="dockBottom()"
+                    v-bind:errormessage="errorMessage"
+                    v-bind:headervalues="inputHeaderValues"
+                    v-on:syncsizeclicked="onSyncCanvasSize()"></input-header>
+                <code-editor v-bind:code="code" v-on:change="onEditorChange($event)" v-on:blur="onEditorBlur()" v-bind:errorrange="errorRange"></code-editor>
+            </div>
+            <div class="horizontal input-container" v-if="isHorizontal">
+                <input-header
+                    v-bind:disabled="inputDisabled"
+                    v-bind:running="running"
+                    v-on:runclicked="run()"
+                    v-on:headervalueschanged="onInputHeaderValuesChanged($event)"
+                    v-bind:ishorizontal="isHorizontal"
+                    v-bind:issmallwidth="isSmallWidth"
+                    v-on:dockrightclicked="dockRight()"
+                    v-on:dockbottomclicked="dockBottom()"
+                    v-bind:errormessage="errorMessage"
+                    v-bind:headervalues="inputHeaderValues"
+                    v-on:syncsizeclicked="onSyncCanvasSize()"></input-header>
+                <code-editor v-bind:code="code" v-on:change="onEditorChange($event)" v-on:blur="onEditorBlur()" v-bind:errorrange="errorRange"></code-editor>
+            </div>
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>

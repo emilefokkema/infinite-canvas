@@ -1,0 +1,62 @@
+body{
+    font-family: Verdana;
+    font-size: 14px;
+}
+canvas{
+    width: 400px;
+    height: 400px;
+    border-color: #999;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+}
+.panel{
+    vertical-align: top;
+    display: inline-block;
+    border: 2px solid #999;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    margin: 3px;
+}
+.panel .code-display{
+    border-color: #999;
+    border-width: 1px 0 0 0;
+    border-style: solid;
+}
+.panel .name{
+    padding: 3px;
+}
+.hidden{
+    display: none;
+}
+.title{
+    padding: 3px;
+    margin: 3px;
+    font-size: 1.5em;
+    line-height: 3em;
+}
+.message{
+    padding: 3px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    margin: 3px;
+}
+.success-message{
+    background-color: #beb;
+}
+.error-message{
+    background-color: #ebb;
+}
+.code-display .code{
+    width: 400px;
+    height: 300px;
+}
+.code-display .playground-button-container{
+    background-color: #eee;
+    padding: 3px;
+    height: 1.3em;
+}
+.playground-button-container .playground-button{
+    display: inline;
+    float: right;
+    cursor: pointer;
+}
