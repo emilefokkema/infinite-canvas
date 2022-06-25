@@ -2040,6 +2040,76 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe('that draws a bezier curve', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.translate(20, 20)
+			infiniteContext.moveTo(0, 0);
+			infiniteContext.bezierCurveTo(20, 0, 20, 20, 40, 20);
+			infiniteContext.lineTo(40, 40);
+			infiniteContext.lineTo(0, 40);
+			infiniteContext.fill();
+		});
+
+		it("should draw a bezier curve", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	});
+
+	describe('that draws a bezier curve', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveTo(50, 0);
+			infiniteContext.bezierCurveTo(100, 50, 0, 50, 50, 0);
+			infiniteContext.fill();
+		});
+
+		it("should draw a bezier curve", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe('and then clears a rect that does not overlap the bezier curve', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.save();
+				infiniteContext.transform(1, 1, 1, -1, 50, 75);
+				infiniteContext.clearRect(0, 0, 100, 100);
+				infiniteContext.restore();
+			});
+
+			it("should not do anything else", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		describe('and then clears a rect that partially covers the bezier curve', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(0, 30, 100, 100);
+			});
+
+			it("should add a clearRect command", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+
+		describe('and then clear a rect that fully covers the bezier curve', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(20, -5, 60, 60);
+			});
+
+			it("should no longer draw a bezier curve", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		});
+	});
+
 	describe("that draws a quadratic curve", () => {
 
 		beforeEach(() => {

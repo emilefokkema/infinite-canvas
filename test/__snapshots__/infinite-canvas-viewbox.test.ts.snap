@@ -2405,6 +2405,62 @@ Array [
 ]
 `;
 
+exports[`an infinite canvas context that draws a bezier curve and then clear a rect that fully covers the bezier curve should no longer draw a bezier curve 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that draws a bezier curve and then clears a rect that does not overlap the bezier curve should not do anything else 1`] = `Array []`;
+
+exports[`an infinite canvas context that draws a bezier curve and then clears a rect that partially covers the bezier curve should add a clearRect command 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,0)",
+  "context.bezierCurveTo(100,50,0,50,50,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,30,100,100)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context that draws a bezier curve should draw a bezier curve 1`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.setTransform(1,0,0,1,20,20)",
+  "context.moveTo(0,0)",
+  "context.bezierCurveTo(20,0,20,20,40,20)",
+  "context.lineTo(40,40)",
+  "context.lineTo(0,40)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that draws a bezier curve should draw a bezier curve 2`] = `
+Array [
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,0)",
+  "context.bezierCurveTo(100,50,0,50,50,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context that draws a line and then draws a line to infinity in a different direction and fills the path should have filled the right shape 1`] = `
 Array [
   "context.restore()",

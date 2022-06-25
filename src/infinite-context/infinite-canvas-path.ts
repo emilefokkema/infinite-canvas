@@ -10,7 +10,6 @@ export class InfiniteCanvasPath implements CanvasPath{
 	public arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void{
 		this.viewBox.addPathInstruction(PathInstructions.arcTo(x1, y1, x2, y2, radius));
 	}
-	public bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void{}
 	public closePath(): void{
 		this.viewBox.closePath();
 	}
@@ -32,7 +31,9 @@ export class InfiniteCanvasPath implements CanvasPath{
 	public quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void{
 		this.viewBox.addPathInstruction(PathInstructions.quadraticCurveTo(cpx, cpy, x, y));
 	}
-
+	public bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void{
+		this.viewBox.addPathInstruction(PathInstructions.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y));
+	}
 	public rect(x: number, y: number, w: number, h: number): void{
 		this.viewBox.rect(x, y, w, h);
 	}

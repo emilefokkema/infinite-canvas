@@ -48,10 +48,6 @@ export class PathInstructions{
         };
     }
 
-    public static bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): PathInstruction{
-        return undefined;
-    }
-
     public static ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
         return {
             instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
@@ -81,6 +77,27 @@ export class PathInstructions{
                     )
                 .apply(new Point(1, 0))
             )
+        };
+    }
+
+    public static bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): PathInstruction{
+        return {
+            instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => {
+                const cp1 = transformation.apply(new Point(cp1x, cp1y));
+                const cp2 = transformation.apply(new Point(cp2x, cp2y));
+                const end = transformation.apply(new Point(x, y));
+                context.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
+            },
+            changeArea: (builder: AreaBuilder, currentPosition: Position) => {
+                if(isPointAtInfinity(currentPosition)){
+                    return;
+                }
+                builder.addPosition(new Point((currentPosition.x + cp1x) / 2, (currentPosition.y + cp1y) / 2));
+                builder.addPosition(new Point((cp1x + cp2x) / 2, (cp1y + cp2y) / 2));
+                builder.addPosition(new Point((cp2x + x) / 2, (cp2y + y) / 2));
+                builder.addPosition(new Point(x, y))
+            },
+            positionChange: new Point(x,y)
         };
     }
 
