@@ -1,0 +1,6 @@
+{
+    "title": "A canvas implementation that uses the transformation given in the draw event",
+    "page": "index.html",
+    "scripts": ["index.js"],
+    "styles": ["index.css"]
+}

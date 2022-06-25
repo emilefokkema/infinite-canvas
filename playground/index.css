@@ -1,0 +1,111 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Verdana;
+    font-size: 12px;
+    color: #222;
+}
+#app.resizing{
+    cursor:ew-resize;
+}
+.canvas-container.vertical{
+    height: 100%;
+}
+.infinite-canvas-wrapper{
+    width: 100%;
+    height: 100%;
+}
+.infinite-canvas-wrapper iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.divider-background{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+.divider{
+    background-color: #ddd;
+}
+.horizontal.divider.bigwidth{
+    cursor:ns-resize;
+    height: 3px;
+}
+.horizontal.divider.smallwidth{
+    padding-top: 3px;
+    padding-right: 7px;
+    height: 20px;
+    border-bottom: 1px solid #aaa;
+}
+.horizontal.divider.smallwidth .sliding-icon{
+    float: right;
+}
+.vertical.divider{
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 3px;
+    cursor:ew-resize;
+}
+.input-container{
+    background-color: #ddd;
+}
+.input-container.vertical{
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.header .running-icon{
+    display: none;
+}
+.header.running .run-icon{
+    display: none;
+}
+.header.running .running-icon{
+    display: inline-block;
+}
+.input-container.vertical .header{
+    height: 300px;
+}
+.input-container .header .section{
+    padding: 3px;
+}
+.section .dimension-input{
+    width: 75px;
+}
+.input-container.vertical .code{
+    height: calc(100% - 300px);
+}
+.input-container.horizontal .code{
+    height: 600px;
+}
+.dock-icon{
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    display: inline;
+    float: right;
+}
+.dock-right-icon{
+    background-image: url('dock-right.svg');
+}
+.dock-bottom-icon{
+    background-image: url('dock-bottom.svg');
+}
+.error-message{
+    background-color: #d77;
+    padding: 3px;
+    border: 1px solid #f00;
+    border-radius: 3px;
+}
+.error-marker{
+    border-bottom: 1px solid #f00;
+    position:absolute;
+}
+.sync-button{
+    cursor: pointer;
+}

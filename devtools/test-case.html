@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>InfiniteCanvas - Test case</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="test-case.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.6/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="infinite-canvas.js"></script>
+    </head>
+    <body>
+        <template id="codeDisplayTemplate">
+            <div class="code-display">
+                <div class="code" ref="code"></div>
+                <div class="playground-button-container" v-if="runinplayground">
+                    <div class="playground-button" v-on:click="onRunInPlaygroundClick()">
+                        <i class="fa fa-play"></i> playground
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template id="resultImageTemplate">
+            <div class="panel">
+                <div class="name">{{name}}</div>
+                <div class="image">
+                    <canvas ref="canvasElement"></canvas>
+                </div>
+                <code-display v-if="code" v-bind:code="code" v-bind:runinplayground="runinplayground"></code-display>
+            </div>
+        </template>
+        <div id="app">
+            <div class="message error-message" v-if="errorMessage">{{errorMessage}}</div>
+            <div class="message success-message" v-if="imagesAreEqual">Images are equal</div>
+            <div class="title">{{title}}</div>
+            <result-image 
+                v-bind:name="'Regular'"
+                v-bind:code="regularCodeString"
+                v-bind:runfinite="true">
+            </result-image><result-image
+                v-bind:name="'Infinite'"
+                v-bind:code="infiniteCodeString"
+                v-bind:runinfinite="true"
+                v-bind:issmallwidth="isSmallWidth"
+                v-bind:runinplayground="true">
+            </result-image><result-image
+                v-bind:name="'Difference'"
+                v-if="hasDifference"
+                v-bind:imagedata="result.diffImageData"></result-image><div class="panel" v-if="commonCodeString">
+                    <div class="name">Code</div><code-display v-bind:code="commonCodeString" v-bind:runinplayground="true"></code-display>
+                </div>
+        </div>
+        <script src="test-case.js"></script>
+    </body>
+</html>

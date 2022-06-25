@@ -30,7 +30,8 @@ export class CanvasContextMock{
             "measureText",
             "fillText",
             "strokeText",
-            "quadraticCurveTo"
+            "quadraticCurveTo",
+            "bezierCurveTo"
         ];
         const setters: string[] = [
             "fillStyle",
