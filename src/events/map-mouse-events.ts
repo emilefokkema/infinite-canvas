@@ -18,6 +18,7 @@ export function mapMouseEvents(
                 if(mouseAnchorIdentifier !== undefined){
                     return;
                 }
+                rectangle.measure();
                 const {x, y} = rectangle.getCSSPosition(ev.clientX, ev.clientY);
                 if(ev.button === 1){
                     if(!config.rotationEnabled){

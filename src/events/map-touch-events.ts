@@ -16,6 +16,7 @@ export function mapTouchEvents(
                 console.log("touchstart event was not cancelable");
                 return true;
             }
+            rectangle.measure();
             for(let i = 0; i <  touches.length; i++){
                 const touch: Touch = touches[i];
                 const identifier: number = touch.identifier;

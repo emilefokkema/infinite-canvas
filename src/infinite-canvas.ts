@@ -67,7 +67,6 @@ export class InfiniteCanvas implements InfiniteCanvasDeclaration{
 			transformer.transformationStart,
 			transformer.transformationChange,
 			transformer.transformationEnd);
-		transformer.transformationStart.addListener(() => this.rectangle.measure());
 		if(config && config.units === InfiniteCanvasUnits.CSS){
 			this.canvasResizeObserver.addListener(this.canvasResizeListener);
 		}
