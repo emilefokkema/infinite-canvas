@@ -1,6 +1,6 @@
 {
   "name": "ef-infinite-canvas",
-  "version": "0.5.3-alpha",
+  "version": "0.5.4-alpha",
   "description": "An infinite version of the html canvas",
   "main": "dist/infinite-canvas.js",
   "types": "dist/types/infinite-canvas-declaration.d.ts",
