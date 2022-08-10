@@ -3,3 +3,5 @@ dist/*
 .idea/*
 .vscode/*
 devtools/temp
+test/e2e/server/content/infinite-canvas.js
+test/e2e/server/content/test-case/rhino.jpg
