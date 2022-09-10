@@ -1,0 +1,13 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+#canvas{
+    position: absolute;
+    width: 400px;
+    height: 400px;
+}
+#belowCanvas{
+    width: 100px;
+    height: 2000px;
+}

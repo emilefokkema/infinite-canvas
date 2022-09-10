@@ -21,7 +21,7 @@ var context = infiniteCanvas.getContext("2d");
 Include `InfiniteCanvas` in your web page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.0-alpha/dist/infinite-canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.4-alpha/dist/infinite-canvas.js"></script>
 ```
 
 or install it using npm:
@@ -41,10 +41,10 @@ Testing `InfiniteCanvas` happens on two levels. One level is the `jest` tests th
 ```
 npm run test
 ```
-The other level of testing happens by running
+The other level of testing happens by (first running `npm run build` and then) running
 ```
-npm run dev
+npm run test-e2e
 ```
-which will start a server that serves a page on which code snippets are executed against both a regular `canvas` and against an `InfiniteCanvas`. The resulting images are then tested for equality.
+which will start a server that serves pages in which `InfiniteCanvas` is used, and which will then run `jest` tests that use [Puppeteer](https://pptr.dev/) to manipulate those pages and [`jest-image-snapshot`](https://github.com/americanexpress/jest-image-snapshot#readme) to compare screenshots.
 
 *Even though not much has happened in this repository lately, I have not forgotten about it. Quite to the contrary, there are a lot more features I'm planning to add in the not-too-distant future.*
