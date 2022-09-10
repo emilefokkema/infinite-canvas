@@ -8,7 +8,7 @@ export function mapTouchEvents(
     rectangle: CanvasRectangle,
     config: InfiniteCanvasConfig){
         canvasElement.addEventListener("touchstart", (ev: TouchEvent) => {
-            const touches: TouchList = ev.touches;
+            const touches: TouchList = ev.targetTouches;
             if(touches.length === 1 && !config.greedyGestureHandling){
                 return true;
             }

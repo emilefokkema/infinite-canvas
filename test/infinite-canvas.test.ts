@@ -99,7 +99,7 @@ describe("an infinite canvas", () => {
 							drawCallbackSpy.mockClear();
 							const touch1 = {identifier: 0, clientX:0, clientY: 0};
 							const touch2 = {identifier: 1, clientX:10, clientY: 0};
-							touchStartListener({touches: [touch1, touch2], preventDefault(){}, cancelable: true});
+							touchStartListener({targetTouches: [touch1, touch2], preventDefault(){}, cancelable: true});
 							touch2.clientY = 10;
 							touchMoveListener({changedTouches: [touch2]});
 						});
