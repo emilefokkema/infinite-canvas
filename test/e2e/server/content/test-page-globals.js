@@ -1,6 +1,5 @@
-import { waitForNextWheelEvent, waitForNextDebouncedScrollEvent, getConfig, TestCanvas} from './test-page-utils.js';
+import { waitForNextDebouncedScrollEvent, getConfig, TestCanvas} from './test-page-utils.js';
 
-window.waitForNextWheelEvent = waitForNextWheelEvent;
 window.waitForNextDebouncedScrollEvent = waitForNextDebouncedScrollEvent;
 window.testCanvas = undefined;
 window.createTestCanvas = function(canvasElement){

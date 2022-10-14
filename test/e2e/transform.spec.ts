@@ -3,13 +3,13 @@ import puppeteer from 'puppeteer';
 import {TouchCollection, Touch} from "./server/touch-collection";
 import { compareToSnapshot } from './compare-to-snapshot';
 
+declare const __DELTAY_DISTORTION__: number;
+
 describe('when transforming', () => {
     let page: TransformTestPage;
-    let deltaYDistortion: number;
 
     beforeAll(async () => {
         page = await TransformTestPage.create();
-        deltaYDistortion = await page.measureDeltaYDistortion();
     });
 
     afterAll(async () => {
@@ -43,7 +43,7 @@ describe('when transforming', () => {
         const keyboard: puppeteer.Keyboard = page.getKeyboard();
         await mouse.move(100, 100);
         await keyboard.down('ControlLeft');
-        await page.whenDebouncedDrawnAfter(() => mouse.wheel({deltaX: 0, deltaY: -75 / deltaYDistortion}), 300);
+        await page.whenDebouncedDrawnAfter(() => mouse.wheel({deltaX: 0, deltaY: -75 / __DELTAY_DISTORTION__}), 300);
         await compareToSnapshot(page);
         expect(await page.getScrollY()).toEqual(0);
         await keyboard.up('ControlLeft');
@@ -63,7 +63,7 @@ describe('when transforming', () => {
         page = await page.recreate({greedyGestureHandling: true});
         const mouse: puppeteer.Mouse = page.getMouse();
         await mouse.move(100, 100);
-        await page.whenDebouncedDrawnAfter(() => mouse.wheel({deltaX: 0, deltaY: -75 / deltaYDistortion}), 300);
+        await page.whenDebouncedDrawnAfter(() => mouse.wheel({deltaX: 0, deltaY: -75 / __DELTAY_DISTORTION__}), 300);
         await compareToSnapshot(page);
         expect(await page.getScrollY()).toEqual(0);
     });

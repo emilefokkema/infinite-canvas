@@ -99,15 +99,7 @@ function notDebounce(event, interval){
         };
     })
 }
-export function waitForNextWheelEvent(){
-    let wheelEvent = new EventEmitterEvent(document, 'wheel', false);
-    wheelEvent = new TransformedEvent(wheelEvent, (listener) => (ev) => {
-        ev.preventDefault();
-        const {deltaY} = ev;
-        listener(deltaY);
-    });
-    return new AsyncResult(getNext(wheelEvent));
-}
+
 export function waitForNextDebouncedScrollEvent(interval){
     let scrollEvent = new EventEmitterEvent(window, 'scroll');
     scrollEvent = debounce(scrollEvent, interval);

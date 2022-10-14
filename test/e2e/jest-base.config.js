@@ -1,4 +1,4 @@
-module.exports = function(snapshotSuffix){
+module.exports = function(snapshotSuffix, deltaYDistortion){
     return {
         transform: {
           '^.+\\.tsx?$': 'ts-jest',
@@ -12,7 +12,8 @@ module.exports = function(snapshotSuffix){
             {
                 testRegex: '^(?:(?!test-case\\.spec\\.ts$).)*\\.spec\\.ts$',
                 globals: {
-                    __SNAPSHOT_SUFFIX__: snapshotSuffix
+                    __SNAPSHOT_SUFFIX__: snapshotSuffix,
+                    __DELTAY_DISTORTION__: deltaYDistortion
                 }
             },
             {
@@ -20,7 +21,8 @@ module.exports = function(snapshotSuffix){
                 testRegex: 'test-case\\.spec\\.ts$',
                 globals: {
                     __TEST_CASE_MOD__: 0,
-                    __SNAPSHOT_SUFFIX__: snapshotSuffix
+                    __SNAPSHOT_SUFFIX__: snapshotSuffix,
+                    __DELTAY_DISTORTION__: deltaYDistortion
                 }
             },
             {
@@ -28,7 +30,8 @@ module.exports = function(snapshotSuffix){
                 testRegex: 'test-case\\.spec\\.ts$',
                 globals: {
                     __TEST_CASE_MOD__: 1,
-                    __SNAPSHOT_SUFFIX__: snapshotSuffix
+                    __SNAPSHOT_SUFFIX__: snapshotSuffix,
+                    __DELTAY_DISTORTION__: deltaYDistortion
                 }
             },
             {
@@ -36,7 +39,8 @@ module.exports = function(snapshotSuffix){
                 testRegex: 'test-case\\.spec\\.ts$',
                 globals: {
                     __TEST_CASE_MOD__: 2,
-                    __SNAPSHOT_SUFFIX__: snapshotSuffix
+                    __SNAPSHOT_SUFFIX__: snapshotSuffix,
+                    __DELTAY_DISTORTION__: deltaYDistortion
                 }
             }
         ]

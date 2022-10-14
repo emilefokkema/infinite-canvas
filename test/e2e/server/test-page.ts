@@ -73,18 +73,6 @@ export abstract class TestPageImpl<
     public close(): Promise<void>{
         return this.browser.close();
     }
-
-    /*
-    * The `deltaY` property of a WheelEvent is multiplied by the value of what is known as `devicePixelRatio` on
-    * the window object, and this cannot be emulated away using the devtools protocol. See
-    * https://bugs.chromium.org/p/chromium/issues/detail?id=1207308
-    * */
-    public async measureDeltaYDistortion(): Promise<number>{
-        await this.page.mouse.move(100, 100);
-        const originalDeltaY: number = 100;
-        const distortedDeltaY: number = await this.getResultAfter(`waitForNextWheelEvent()`, () => this.page.mouse.wheel({deltaY: originalDeltaY}));
-        return distortedDeltaY / originalDeltaY;
-    }
     public whenDrawnAfter(fn: () => Promise<void>): Promise<void>{
         return this.getResultAfter(`testCanvas.waitForDrawing()`, fn);
     }
