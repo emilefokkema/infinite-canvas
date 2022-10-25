@@ -1,4 +1,4 @@
-import { TestPage } from './server/test-page';
+import { TestPage } from "e2e-test-page";
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 expect.extend({ toMatchImageSnapshot });

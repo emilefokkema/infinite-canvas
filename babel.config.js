@@ -10,4 +10,12 @@ module.exports = {
     ],
     '@babel/preset-typescript'
   ],
+  plugins: [
+    ["module-resolver", {
+      "root": ["."],
+      "alias": {
+        "e2e-test-page": "./test/e2e/test-page/index.ts"
+      }
+    }]
+  ]
 }

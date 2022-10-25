@@ -1,14 +1,43 @@
-import { TransformTestPage } from "./server/transform-test-page";
-import { TouchCollection, Touch as TouchCollectionTouch } from "./server/touch-collection";
 import { compareToSnapshot } from './compare-to-snapshot';
+import { TestPage, EventListenerProxy, DrawEvent, InfiniteCanvasProxy, getResultAfter, TouchCollection, Touch as TouchCollectionTouch } from "e2e-test-page";
+
+function initializeInfiniteCanvas(page: TestPage,  greedyGestureHandling?: boolean, rotationEnabled?: boolean): Promise<InfiniteCanvasProxy>{
+    return page.initializeInfiniteCanvas({
+        styleWidth: '400px',
+        styleHeight: '400px',
+        canvasWidth: 400,
+        canvasHeight: 400,
+        spaceBelowCanvas: 2000,
+        greedyGestureHandling,
+        rotationEnabled,
+        drawing: (ctx: any) => {
+            ctx.beginPath();
+            ctx.moveToInfinityInDirection(-1, 0);
+            ctx.lineTo(100, 100);
+            ctx.lineToInfinityInDirection(1, 0);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveToInfinityInDirection(0, -1);
+            ctx.lineTo(100, 100);
+            ctx.lineToInfinityInDirection(0, 1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(200, 100, 25, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    });
+}
 
 describe('when a touch exists on the page outside of infinite canvas that has greedy gesture handling NOT enabled', () => {
-    let page: TransformTestPage;
+    let page: TestPage;
     let firstTouch: TouchCollectionTouch;
     let touchCollection: TouchCollection;
+    let drawn: EventListenerProxy<DrawEvent>;
 
     beforeAll(async () => {
-        page = await TransformTestPage.create();
+        page = await TestPage.create();
+        const infCanvas = await initializeInfiniteCanvas(page);
+        drawn = await infCanvas.addDrawEventListener();
         touchCollection = await page.getTouchCollection();
         firstTouch = await touchCollection.start(350, 600);
     });
@@ -18,7 +47,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
 
         beforeAll(async () => {
             secondTouch = await touchCollection.start(100, 100);
-            await page.whenNotDrawnAfter(() => secondTouch.move(100, 200), 300);
+            await getResultAfter(() => secondTouch.move(100, 200), () => drawn.ensureNoNext(300));
             await secondTouch.move(100, 200);
         });
 
@@ -30,7 +59,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
 
             beforeAll(async () => {
                 await firstTouch.end();
-                await page.whenNotDrawnAfter(() => secondTouch.move(200, 200), 300)
+                await getResultAfter(() => secondTouch.move(200, 200), () => drawn.ensureNoNext(300))
             });
 
             it('should look like this', async () => {
@@ -43,7 +72,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
                 beforeAll(async () => {
                     await secondTouch.end();
                     thirdTouch = await touchCollection.start(200, 200);
-                    await page.whenNotDrawnAfter(() => thirdTouch.move(100, 200), 300);
+                    await getResultAfter(() => thirdTouch.move(100, 200), () => drawn.ensureNoNext(300));
                 });
 
                 it('should look like this', async () => {
