@@ -18,8 +18,7 @@
     "build": "node build.js",
     "build:types": "npx tsc --project ts-config-types.json",
     "update-snapshot": "jest --updateSnapshot",
-    "dev": "node build-utils/run-build-config.js --config=devtools/build-config.js --serve=devtools/temp --watch",
-    "install-gitpod-puppeteer-deps": "sudo apt install libatk1.0-0 -y && sudo apt install libatk-bridge2.0-0 -y && sudo apt install libcups2 -y && sudo apt install libdrm2 -y && sudo apt install libxkbcommon0 -y && sudo apt install libxcomposite1 -y && sudo apt install libxdamage1 -y && sudo apt install libxfixes3 -y && sudo apt install libxrandr2 -y && sudo apt install libgbm1 -y"
+    "dev": "node build-utils/run-build-config.js --config=devtools/build-config.js --serve=devtools/temp --watch"
   },
   "keywords": [
     "canvas",
