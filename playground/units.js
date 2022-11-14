@@ -1,1 +1,0 @@
-export default {CSS: 0, CANVAS: 1};

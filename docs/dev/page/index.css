@@ -1,0 +1,53 @@
+body{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.dev-bar-content{
+    background-color: #1e1e1e;
+    color: rgb(240, 240, 240);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Cantarell, sans-serif;
+}
+#dev-bar{
+    display: none;
+    padding: 3px;
+}
+.container.dev #dev-bar{
+    display: flex;
+    flex-direction: row;
+}
+#dev-bar .dev-bar-left{
+    order: 0;
+    flex-grow: 1;
+}
+#dev-bar .dev-bar-right{
+    order: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+#embed{
+    height: 100%;
+}
+.dev-bar-item{
+    display: inline-block;
+}
+.container .header{
+    order: 0;
+}
+.container .body{
+    order: 1;
+    flex-grow: 1;
+}
+iframe{
+    border: none;
+    height: 100%;
+    width: 100%;
+}
