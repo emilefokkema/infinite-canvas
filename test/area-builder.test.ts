@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { InfiniteCanvasAreaBuilder } from "../src/areas/infinite-canvas-area-builder";
 import { Area } from "../src/areas/area";
 import { empty } from "../src/areas/empty";

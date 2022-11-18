@@ -53,7 +53,7 @@ export class AttachedEventListener<TEventMap, TType extends keyof TEventMap> imp
       }));
    }
    public ensureNoNext(interval: number): AsyncResult{
-      return new AsyncResult(new Promise((res, rej) => {
+      return new AsyncResult(new Promise<void>((res, rej) => {
          const listener = (e: TEventMap[TType]) => {
              rej(new Error(`received unexpected event ${JSON.stringify(e)}`));
              this.dispatcher.removeListener(listener);

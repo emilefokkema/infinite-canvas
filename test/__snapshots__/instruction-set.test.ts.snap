@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`an instruction set that begins drawing a path and then fills it and then clears part of the drawing should have recorded a clearRect 1`] = `
-Array [
+[
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
@@ -16,8 +16,8 @@ Array [
 `;
 
 exports[`an instruction set that changes state and draws a rectangle and changes state and draws another rectangle should have recorded everything in the right order 1`] = `
-Array [
-  "context.fillStyle = \\"#f00\\"",
+[
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -28,7 +28,7 @@ Array [
   "context.closePath()",
   "context.moveTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(2,0)",
   "context.lineTo(3,0)",
@@ -41,11 +41,11 @@ Array [
 ]
 `;
 
-exports[`an instruction set that changes state and draws a rectangle and then clears a rectangle should no longer have recorded the first rectangle 1`] = `Array []`;
+exports[`an instruction set that changes state and draws a rectangle and then clears a rectangle should no longer have recorded the first rectangle 1`] = `[]`;
 
 exports[`an instruction set that changes state and draws a rectangle and then partially clears that rectangle should end up with a rectangle followed by a clearRect 1`] = `
-Array [
-  "context.fillStyle = \\"#f00\\"",
+[
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",

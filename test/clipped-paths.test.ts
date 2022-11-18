@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { ClippedPaths } from "../src/instructions/clipped-paths";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logInstruction } from "./log-instruction";

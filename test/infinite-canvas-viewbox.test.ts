@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import {InfiniteCanvasViewBox} from "../src/infinite-canvas-viewbox"
 import {InfiniteContext} from "../src/infinite-context/infinite-context";
 import {ViewBox} from "../src/interfaces/viewbox";

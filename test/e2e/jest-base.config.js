@@ -1,8 +1,5 @@
 module.exports = function(snapshotSuffix, deltaYDistortion){
     return {
-        transform: {
-          '^.+\\.tsx?$': 'ts-jest',
-        },
         moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
         globalSetup: './setup.js',
         globalTeardown: './teardown.js',
@@ -14,6 +11,12 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                 globals: {
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
+                },
+                transform: {
+                    '^.+\\.tsx?$': 'ts-jest',
+                },
+                moduleNameMapper: {
+                    'e2e-test-page': '<rootDir>/test-page/index.ts'
                 }
             },
             {
@@ -23,7 +26,10 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __TEST_CASE_MOD__: 0,
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
-                }
+                },
+                transform: {
+                    '^.+\\.tsx?$': 'ts-jest',
+                },
             },
             {
                 displayName: '2/3',
@@ -32,7 +38,10 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __TEST_CASE_MOD__: 1,
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
-                }
+                },
+                transform: {
+                    '^.+\\.tsx?$': 'ts-jest',
+                },
             },
             {
                 displayName: '3/3',
@@ -41,7 +50,10 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __TEST_CASE_MOD__: 2,
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
-                }
+                },
+                transform: {
+                    '^.+\\.tsx?$': 'ts-jest',
+                },
             }
         ]
       };

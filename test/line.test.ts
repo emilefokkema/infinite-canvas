@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
+
+
 import { Line } from "../src/areas/line/line";
 import { l, p } from "./builders";
 import { expectAreasToBeEqual } from "./expectations";
