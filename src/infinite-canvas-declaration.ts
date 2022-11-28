@@ -6,14 +6,19 @@ import {InfiniteCanvasAddEventListenerOptions} from "./custom-events/infinite-ca
 import {InfiniteCanvasEventListener} from "./custom-events/infinite-canvas-event-listener";
 
 
-export declare class InfiniteCanvas implements InfiniteCanvasConfig{
-    constructor(canvas: HTMLCanvasElement, config?: Partial<InfiniteCanvasConfig>);
-    rotationEnabled: boolean;
-    units: InfiniteCanvasUnits;
-    greedyGestureHandling: boolean;
+export interface InfiniteCanvas extends InfiniteCanvasConfig{
     getContext(): InfiniteCanvasRenderingContext2D;
     addEventListener<K extends keyof InfiniteCanvasEventMap>(type: K, listener: InfiniteCanvasEventListener<K>, options?: InfiniteCanvasAddEventListenerOptions): void;
     removeEventListener<K extends keyof InfiniteCanvasEventMap>(type: K, listener: InfiniteCanvasEventListener<K>): void;
-    static CANVAS_UNITS: InfiniteCanvasUnits;
-    static CSS_UNITS: InfiniteCanvasUnits;
 }
+
+export interface InfiniteCanvasCtr {
+    new(canvas: HTMLCanvasElement, config?: Partial<InfiniteCanvasConfig>): InfiniteCanvas;
+    prototype: InfiniteCanvas;
+    CANVAS_UNITS: InfiniteCanvasUnits;
+    CSS_UNITS: InfiniteCanvasUnits;
+};
+
+declare var InfiniteCanvas: InfiniteCanvasCtr;
+
+export default InfiniteCanvas;

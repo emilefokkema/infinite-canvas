@@ -15,6 +15,10 @@ module.exports = {
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ]
     },
+    externalsType: 'self',
+    externals: {
+        'infinite-canvas': 'InfiniteCanvas'
+    },
     output: {
         filename: 'test-page-lib.js',
         path: path.resolve(__dirname, './test/e2e/server/content/test-page/'),

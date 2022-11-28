@@ -6,7 +6,11 @@
       "target": "es5",
       "jsx": "react",
       "allowJs": true,
-      "esModuleInterop":true
+      "esModuleInterop":true,
+      "baseUrl": ".",
+      "paths": {
+          "infinite-canvas": ["src/infinite-canvas-declaration.ts"]
+      }
     },
     "include": ["test/e2e/test-page/**/*"]
   }

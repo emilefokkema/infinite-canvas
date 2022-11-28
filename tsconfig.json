@@ -9,7 +9,8 @@
     "esModuleInterop":true,
     "baseUrl": ".",
     "paths": {
-      "e2e-test-page": ["test/e2e/test-page/index.ts"]
+      "e2e-test-page": ["test/e2e/test-page/index.ts"],
+      "infinite-canvas": ["src/infinite-canvas-declaration.ts"]
     }
   }
 }

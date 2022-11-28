@@ -1,10 +1,8 @@
 import { WithFunctionsAsStrings } from "../utils";
 import { InfiniteCanvasE2EInitialization } from "../shared/configuration";
 import { InfiniteCanvasOnE2ETestPage } from "./interfaces";
-import { InfiniteCanvas as InfiniteCanvasClass } from "../../../../src/infinite-canvas-declaration";
+import InfiniteCanvas from "infinite-canvas";
 import { TestCanvas } from './test-canvas';
-
-declare const InfiniteCanvas: typeof InfiniteCanvasClass;
 
 export function initializeInfiniteCanvas(config: WithFunctionsAsStrings<InfiniteCanvasE2EInitialization>): InfiniteCanvasOnE2ETestPage{
     const {

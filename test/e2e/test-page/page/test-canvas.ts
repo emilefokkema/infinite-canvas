@@ -2,7 +2,7 @@ import { InfiniteCanvasOnE2ETestPage, EventListenerOnE2ETestPage } from "./inter
 import { EventMap } from '../shared/infinite-canvas-event-map';
 import { WithFunctionsAsStrings } from "../utils";
 import { EventListenerConfiguration } from "../shared/configuration";
-import { InfiniteCanvas } from "src/infinite-canvas-declaration";
+import { InfiniteCanvas } from "../../../../src/infinite-canvas-declaration";
 import { AttachedEventListener } from './attached-event-listener';
 
 export class TestCanvas implements InfiniteCanvasOnE2ETestPage{
