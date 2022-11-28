@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
+
+
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Point } from "../src/geometry/point";

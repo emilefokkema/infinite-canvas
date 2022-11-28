@@ -5,8 +5,9 @@ module.exports = function(destination, forProduction){
             rules: [
             {
                 test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/
+                loader: 'ts-loader',
+                exclude: /node_modules/,
+                options: {configFile: 'ts-config.build.json'}
             }
             ]
         },

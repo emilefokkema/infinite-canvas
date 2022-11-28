@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { ConvexPolygon } from "../src/areas/polygons/convex-polygon";
 import { HalfPlane } from "../src/areas/polygons/half-plane";
 import { Point } from "../src/geometry/point";

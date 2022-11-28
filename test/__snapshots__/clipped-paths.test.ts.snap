@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`a clipped paths and another one containing one more clipped path and another one and then the other is recreated, starting from the first then the recreation should contain the difference 1`] = `
-Array [
+[
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",
@@ -10,14 +10,14 @@ Array [
   "context.lineTo(0,1)",
   "context.clip()",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(1,1)",
   "context.clip()",
 ]
 `;
 
 exports[`a clipped paths and another one containing one more clipped path and another one, still based on the same path and then the other is recreated, starting from the first then the recreation should contain the difference 1`] = `
-Array [
+[
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",
@@ -31,7 +31,7 @@ Array [
 `;
 
 exports[`a clipped paths and another one containing one more clipped path and then the other is recreated, starting from the first then the recreation should contain the difference 1`] = `
-Array [
+[
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",

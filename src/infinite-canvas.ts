@@ -21,9 +21,9 @@ import {EventDispatcher} from "./custom-events/event-dispatcher";
 import {InfiniteCanvasDrawEvent} from "./custom-events/infinite-canvas-draw-event";
 import {EventDispatcherCollection} from "./custom-events/event-dispatcher-collection";
 import {representTransformation} from "./transformer/represent-transformation";
-import {InfiniteCanvas as InfiniteCanvasDeclaration} from './infinite-canvas-declaration'
+import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from './infinite-canvas-declaration'
 
-export class InfiniteCanvas implements InfiniteCanvasDeclaration{
+class InfiniteCanvas implements InfiniteCanvasInterface{
 	private context: InfiniteCanvasRenderingContext2D;
 	private viewBox: ViewBox;
 	private config: InfiniteCanvasConfig;
@@ -115,3 +115,7 @@ export class InfiniteCanvas implements InfiniteCanvasDeclaration{
 	public static CANVAS_UNITS: InfiniteCanvasUnits = InfiniteCanvasUnits.CANVAS;
 	public static CSS_UNITS: InfiniteCanvasUnits = InfiniteCanvasUnits.CSS;
 }
+
+const ctr: InfiniteCanvasCtr = InfiniteCanvas;
+
+export {ctr as InfiniteCanvas};

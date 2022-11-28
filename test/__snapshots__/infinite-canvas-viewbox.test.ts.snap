@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line back from infinity to a point and then strokes should draw the right line back to the point 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -16,7 +16,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line back and fills should draw a path that ends coming from the correct direction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -32,16 +32,16 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite height but located at negative infinity horizontally should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite height but located at negative infinity horizontally should do nothing 1`] = `[]`;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite height but located at positive infinity horizontally should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite height but located at positive infinity horizontally should do nothing 1`] = `[]`;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite width but located at negative infinity vertically should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite width but located at negative infinity vertically should do nothing 1`] = `[]`;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite width but located at positive infinity vertically should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite width but located at positive infinity vertically should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with finite width, infinite height and no top should clear a rect extending to the top and bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -61,10 +61,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with infinite height but located infinitely far down should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with infinite height but located infinitely far down should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with infinite width, infinite height and no left should clear a rect extending to the left and right and bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -85,7 +85,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with infinite width, infinite height and no top should clear a rect extending to the top and bottom and right of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -106,7 +106,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with infinite width, negative infinite height and no bottom should clear a rect extending to the top and bottom and right of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -127,7 +127,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with negative infinite height should clear a rectangle extending to the top of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -148,7 +148,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with negative infinite width should clear a rectangle extending to the left side of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -169,7 +169,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with negative infinite width, infinite height and no right should clear a rect extending to the left and right and bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -190,7 +190,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with positive infinite height should clear a rectangle extending to the bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -211,7 +211,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with positive infinite width and positive infinite height should clear a rect extending to the right and to the bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -232,7 +232,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears a rect with positive infinite width should clear a rectangle extending to the right side of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -253,7 +253,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears the entire plane differently should clear everything 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -261,7 +261,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills and then clears the entire plane should clear everything 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -269,7 +269,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then draws a line to a third point at infinity (not in the same half plane) and then fills should draw the correct path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -286,7 +286,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then fills should create a path that covers the correct section of the view box 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -300,10 +300,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then fills the path and clears a rect not overlapping the drawn area should not add a clearRect 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then fills the path and clears a rect not overlapping the drawn area should not add a clearRect 1`] = `[]`;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to another point at infinity and then fills the path and clears a rect overlapping the drawn area should add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -322,7 +322,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then draws a line to the opposite point at infinity and strokes should still have drawn only a ray 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -335,7 +335,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the path should draw a line to the right border of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -347,10 +347,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears a rect not overlapping the ray should not have added a clearRect 1`] = `Array []`;
+exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears a rect not overlapping the ray should not have added a clearRect 1`] = `[]`;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears a rect overlapping the entire ray should forget about the drawn path and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -358,7 +358,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears a rect overlapping the ray should have added a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -375,7 +375,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears a rect overlapping the ray should have added a clearRect 2`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -392,7 +392,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears an infinite rectangle partially overlapping the ray and then the viewbox transformation scales should clear a rectangle extending to the edge of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -409,7 +409,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears an infinite rectangle partially overlapping the ray and then the viewbox transformation translates should clear a rectangle extending to the edge of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -426,7 +426,7 @@ Array [
 `;
 
 exports[`an infinite canvas context draws a line to infinity and then strokes the ray and clears an infinite rectangle partially overlapping the ray should clear a rectangle extending to the edge of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -443,11 +443,11 @@ Array [
 `;
 
 exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it and then reduces the path's area, clips again and fills a rect and then reduces the path's area again and fills it should have recreated the path and filled it 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -464,19 +464,19 @@ Array [
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(10,10)",
   "context.lineTo(10,90)",
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.lineTo(70,30)",
   "context.clip()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(100,0)",
@@ -486,29 +486,29 @@ Array [
   "context.closePath()",
   "context.moveTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(10,10)",
   "context.lineTo(10,90)",
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.lineTo(70,30)",
   "context.clip()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineTo(50,90)",
-  "context.fillStyle = \\"#ff0\\"",
+  "context.fillStyle = "#ff0"",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it and then reduces the path's area, clips again and fills a rect should have added a filled rectangle after the clip 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -525,19 +525,19 @@ Array [
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(10,10)",
   "context.lineTo(10,90)",
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.lineTo(70,30)",
   "context.clip()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(100,0)",
@@ -551,11 +551,11 @@ Array [
 `;
 
 exports[`an infinite canvas context fills a rect, begins a path, clips it and then fills it should have added an instruction to clip 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -572,19 +572,19 @@ Array [
   "context.lineTo(90,90)",
   "context.lineTo(90,10)",
   "context.clip()",
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context saves, changes state, begins drawing a path and then fills a rect, restores to the previous state and then fills the path should end up with an equal number of saves and restores 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.save()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(10,10)",
@@ -611,11 +611,11 @@ Array [
 `;
 
 exports[`an infinite canvas context saves, changes state, begins drawing a path and then restores to the previous state, fills a rect and then fills the path should end up with an equal number of saves and restores 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(10,10)",
@@ -628,7 +628,7 @@ Array [
   "context.fill()",
   "context.lineWidth = 1",
   "context.save()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(10,0)",
@@ -644,7 +644,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that adds a drawing that depends on the transformation and then draws using a non-identity transformation should have set the transformed version of the state 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -664,7 +664,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that alters its state and draws a rectangle and then clears a rectangle containing the drawing should have cleared a rectangle and nothing else 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -672,13 +672,13 @@ Array [
 `;
 
 exports[`an infinite canvas context that alters its state and draws a rectangle should have called the context methods 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineWidth = 1",
-  "context.strokeStyle = \\"#f00\\"",
+  "context.strokeStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(2,1)",
@@ -692,7 +692,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line back to the first point at infinity and then strokes should add a moveTo 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -706,10 +706,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then adds a line back to the original point at infinity and then fills should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then adds a line back to the original point at infinity and then fills should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then adds a new subpath that is closable and closes it and then strokes should close the second subpath but not the first 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -728,7 +728,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then closes the path and strokes should have stroked but not closed the path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -742,12 +742,12 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then fills should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then fills should do nothing 1`] = `[]`;
 
-exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then transforms and adds a line back to the original point at infinity and then fills should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then adds a line to the point at infinity opposite the starting point and then transforms and adds a line back to the original point at infinity and then fills should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then strokes and then adds a line to another finite point and then strokes should have created two paths 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -771,7 +771,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different finite point and then strokes should begin with a moveTo and a lineTo 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -786,7 +786,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different point at infinity and then adds a line to a finite point and then strokes should have drawn the correct path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -803,7 +803,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different point at infinity and then adds a line to yet a different point at infinity and then strokes should draw the correct path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -823,7 +823,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different point at infinity and then strokes should begin a path with a move to and then draw a line around a corner of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -840,7 +840,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to a different point at infinity and then strokes the path using a line dash should draw a path whose length is a multiple of the line dash period 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -864,7 +864,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then adds a line to the opposite point at infinity and then strokes should have added a moveTo 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -878,7 +878,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then strokes and then lines to a different finite point and then strokes should have created two paths 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -899,7 +899,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then strokes should have added a moveTo 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -912,7 +912,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to a finite point and then strokes the line using a line dash should draw a line whose length is a multiple of the line dash period 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -928,7 +928,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to another point at infinity and then adds a line to a finite point and then fills should have drawn the right path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -943,7 +943,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to another point at infinity and then adds a line to a third point at infinity that is not in the same half plane and then fills should draw a path around the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -957,10 +957,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to another point at infinity and then fills should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that begins a path and moves to infinity and then adds a line to another point at infinity and then fills should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context that begins a path and then adds a rect that has no area and then adds a line to a finite point and strokes it should have drawn a ray from the position of the rect without area 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -973,12 +973,12 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then builds it and fills it and then clears a smaller area than the one that was closed and adds another instruction and then clears an area containing all previous instructions and then draws something else should have cleared a rectangle once more 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.lineWidth = 1",
-  "context.strokeStyle = \\"#f00\\"",
+  "context.strokeStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",
@@ -992,7 +992,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then builds it and fills it and then clears a smaller area than the one that was closed and adds another instruction and then clears an area containing all previous instructions should have cleared a rectangle once 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1000,7 +1000,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then builds it and fills it and then clears a smaller area than the one that was closed and adds another instruction should still have executed the instructions in the completed area and should have added a clear rect instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1015,7 +1015,7 @@ Array [
   "context.transform(1,0,0,1,0,0)",
   "context.clearRect(0,0,2,2)",
   "context.restore()",
-  "context.strokeStyle = \\"#f00\\"",
+  "context.strokeStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(2,0)",
@@ -1023,10 +1023,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that begins path and then builds it and fills it and then clears an area that is outside the drawn area should not have done anything 1`] = `Array []`;
+exports[`an infinite canvas context that begins path and then builds it and fills it and then clears an area that is outside the drawn area should not have done anything 1`] = `[]`;
 
 exports[`an infinite canvas context that begins path and then builds it and fills it should have executed the new instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1041,11 +1041,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then changes state and fills a rect and then adds a rect to the path and fills it should do that using the same changed state 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -1056,10 +1056,10 @@ Array [
   "context.closePath()",
   "context.moveTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.lineWidth = 1",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,2)",
   "context.lineTo(2,2)",
   "context.lineTo(2,4)",
@@ -1073,11 +1073,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then changes state and fills a rect should have remembered the state change 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -1092,11 +1092,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that begins path and then changes state, begins a new path and fills it should have remembered the state change 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(2,0)",
@@ -1111,7 +1111,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that clips and then draws an image and then clears an area covering the clipped area but not the image should forget about the image and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1119,14 +1119,14 @@ Array [
 `;
 
 exports[`an infinite canvas context that clips and then puts image data and then clears an area covering the clipped area but not the image should not forget about the image and add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.setTransform(1,0,0,1,0,0)",
   "context.translate(0,0)",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.imageSmoothingEnabled = false",
   "context.fillRect(0,0,200,200)",
   "context.restore()",
@@ -1138,7 +1138,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects and then removes the second filled rectangle by clearing a rect and then removes the first filled rectangle by clearing a rect should still contain two clipping instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1174,7 +1174,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects and then removes the second filled rectangle by clearing a rect should still contain two clipping instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1221,7 +1221,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that clips with a rect, fills a rect, clips with another rect and then fills two rects should contain two clipping instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1277,7 +1277,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then fills using the linear gradient and then clears the drawing and then fills the path again should create a linear gradient again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1288,14 +1288,14 @@ Array [
   "context.lineTo(2,1)",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
-  "context.fillStyle = \\"[linear-gradient-1]\\"",
+  "context.fillStyle = "[linear-gradient-1]"",
   "context.lineWidth = 1",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then fills using the linear gradient and then clears the drawing should no longer create a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1303,7 +1303,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then fills using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1314,14 +1314,14 @@ Array [
   "context.lineTo(2,1)",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
-  "context.fillStyle = \\"[linear-gradient-0]\\"",
+  "context.fillStyle = "[linear-gradient-0]"",
   "context.lineWidth = 1",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then strokes using the linear gradient and then clears the drawing and then strokes the path again should create a linear gradient again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1333,13 +1333,13 @@ Array [
   "context.lineWidth = 1",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
-  "context.strokeStyle = \\"[linear-gradient-1]\\"",
+  "context.strokeStyle = "[linear-gradient-1]"",
   "context.stroke()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then strokes using the linear gradient and then clears the drawing should no longer create a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1347,7 +1347,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then creates a path and then strokes using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1359,13 +1359,13 @@ Array [
   "context.lineWidth = 1",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
-  "context.strokeStyle = \\"[linear-gradient-0]\\"",
+  "context.strokeStyle = "[linear-gradient-0]"",
   "context.stroke()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient and then fills again using the same linear gradient and then clears both drawings with the linear gradient should not have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1383,7 +1383,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient and then fills again using the same linear gradient and then clears one drawing with the linear gradient and then clears the other drawing with the linear gradient and then draws again using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1399,7 +1399,7 @@ Array [
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-3]",
-  "context.fillStyle = \\"[linear-gradient-3]\\"",
+  "context.fillStyle = "[linear-gradient-3]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1413,7 +1413,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient and then fills again using the same linear gradient and then clears one drawing with the linear gradient and then clears the other drawing with the linear gradient should not have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1431,7 +1431,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient and then fills again using the same linear gradient and then clears one drawing with the linear gradient should still have created only one linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1447,7 +1447,7 @@ Array [
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-2]",
-  "context.fillStyle = \\"[linear-gradient-2]\\"",
+  "context.fillStyle = "[linear-gradient-2]"",
   "context.beginPath()",
   "context.moveTo(50,0)",
   "context.lineTo(60,0)",
@@ -1461,7 +1461,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient and then fills again using the same linear gradient should still have created only one linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1477,7 +1477,7 @@ Array [
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
-  "context.fillStyle = \\"[linear-gradient-1]\\"",
+  "context.fillStyle = "[linear-gradient-1]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1500,7 +1500,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then fills using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1516,7 +1516,7 @@ Array [
   "context.fill()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
-  "context.fillStyle = \\"[linear-gradient-0]\\"",
+  "context.fillStyle = "[linear-gradient-0]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1530,7 +1530,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient and then strokes again using the same linear gradient and then clears both drawings with the linear gradient should not have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1548,7 +1548,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient and then strokes again using the same linear gradient and then clears one drawing with the linear gradient and then clears the other drawing with the linear gradient and then draws again using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1564,7 +1564,7 @@ Array [
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-3]",
-  "context.strokeStyle = \\"[linear-gradient-3]\\"",
+  "context.strokeStyle = "[linear-gradient-3]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1578,7 +1578,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient and then strokes again using the same linear gradient and then clears one drawing with the linear gradient and then clears the other drawing with the linear gradient should not have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1596,7 +1596,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient and then strokes again using the same linear gradient and then clears one drawing with the linear gradient should still have created only one linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1612,7 +1612,7 @@ Array [
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-2]",
-  "context.strokeStyle = \\"[linear-gradient-2]\\"",
+  "context.strokeStyle = "[linear-gradient-2]"",
   "context.beginPath()",
   "context.moveTo(50,0)",
   "context.lineTo(60,0)",
@@ -1626,7 +1626,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient and then strokes again using the same linear gradient should still have created only one linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1642,7 +1642,7 @@ Array [
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-1]",
-  "context.strokeStyle = \\"[linear-gradient-1]\\"",
+  "context.strokeStyle = "[linear-gradient-1]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1665,7 +1665,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient and then strokes using the linear gradient should have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1681,7 +1681,7 @@ Array [
   "context.stroke()",
   "context.createLinearGradient(10,0,10,30)",
   "=> [linear-gradient-0]",
-  "context.strokeStyle = \\"[linear-gradient-0]\\"",
+  "context.strokeStyle = "[linear-gradient-0]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1695,7 +1695,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient should not have created a linear gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1713,7 +1713,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a linear gradient and then draws without using the linear gradient should not have created a linear gradient 2`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1731,11 +1731,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a pattern and then uses it to fill a rect should wrap the fill command in a transform 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(1,0)",
@@ -1752,7 +1752,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then fills using the radial gradient and then clears the drawing and then fills the path again should create a radial gradient again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1763,14 +1763,14 @@ Array [
   "context.lineTo(2,1)",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
-  "context.fillStyle = \\"[radial-gradient-1]\\"",
+  "context.fillStyle = "[radial-gradient-1]"",
   "context.lineWidth = 1",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then fills using the radial gradient and then clears the drawing should no longer create a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1778,7 +1778,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then fills using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1789,14 +1789,14 @@ Array [
   "context.lineTo(2,1)",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
-  "context.fillStyle = \\"[radial-gradient-0]\\"",
+  "context.fillStyle = "[radial-gradient-0]"",
   "context.lineWidth = 1",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then strokes using the radial gradient and then clears the drawing and then strokes the path again should create a radial gradient again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1808,13 +1808,13 @@ Array [
   "context.lineWidth = 1",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
-  "context.strokeStyle = \\"[radial-gradient-1]\\"",
+  "context.strokeStyle = "[radial-gradient-1]"",
   "context.stroke()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then strokes using the radial gradient and then clears the drawing should no longer create a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1822,7 +1822,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then creates a path and then strokes using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1834,13 +1834,13 @@ Array [
   "context.lineWidth = 1",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
-  "context.strokeStyle = \\"[radial-gradient-0]\\"",
+  "context.strokeStyle = "[radial-gradient-0]"",
   "context.stroke()",
 ]
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient and then fills again using the same radial gradient and then clears both drawings with the radial gradient should not have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1858,7 +1858,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient and then fills again using the same radial gradient and then clears one drawing with the radial gradient and then clears the other drawing with the radial gradient and then draws again using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1874,7 +1874,7 @@ Array [
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-3]",
-  "context.fillStyle = \\"[radial-gradient-3]\\"",
+  "context.fillStyle = "[radial-gradient-3]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1888,7 +1888,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient and then fills again using the same radial gradient and then clears one drawing with the radial gradient and then clears the other drawing with the radial gradient should not have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1906,7 +1906,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient and then fills again using the same radial gradient and then clears one drawing with the radial gradient should still have created only one radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1922,7 +1922,7 @@ Array [
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-2]",
-  "context.fillStyle = \\"[radial-gradient-2]\\"",
+  "context.fillStyle = "[radial-gradient-2]"",
   "context.beginPath()",
   "context.moveTo(50,0)",
   "context.lineTo(60,0)",
@@ -1936,7 +1936,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient and then fills again using the same radial gradient should still have created only one radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1952,7 +1952,7 @@ Array [
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
-  "context.fillStyle = \\"[radial-gradient-1]\\"",
+  "context.fillStyle = "[radial-gradient-1]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -1975,7 +1975,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then fills using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -1991,7 +1991,7 @@ Array [
   "context.fill()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
-  "context.fillStyle = \\"[radial-gradient-0]\\"",
+  "context.fillStyle = "[radial-gradient-0]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -2005,7 +2005,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient and then strokes again using the same radial gradient and then clears both drawings with the radial gradient should not have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2023,7 +2023,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient and then strokes again using the same radial gradient and then clears one drawing with the radial gradient and then clears the other drawing with the radial gradient and then draws again using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2039,7 +2039,7 @@ Array [
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-3]",
-  "context.strokeStyle = \\"[radial-gradient-3]\\"",
+  "context.strokeStyle = "[radial-gradient-3]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -2053,7 +2053,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient and then strokes again using the same radial gradient and then clears one drawing with the radial gradient and then clears the other drawing with the radial gradient should not have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2071,7 +2071,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient and then strokes again using the same radial gradient and then clears one drawing with the radial gradient should still have created only one radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2087,7 +2087,7 @@ Array [
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-2]",
-  "context.strokeStyle = \\"[radial-gradient-2]\\"",
+  "context.strokeStyle = "[radial-gradient-2]"",
   "context.beginPath()",
   "context.moveTo(50,0)",
   "context.lineTo(60,0)",
@@ -2101,7 +2101,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient and then strokes again using the same radial gradient should still have created only one radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2117,7 +2117,7 @@ Array [
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-1]",
-  "context.strokeStyle = \\"[radial-gradient-1]\\"",
+  "context.strokeStyle = "[radial-gradient-1]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -2140,7 +2140,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient and then strokes using the radial gradient should have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2156,7 +2156,7 @@ Array [
   "context.stroke()",
   "context.createRadialGradient(0,0,1,5,5,5)",
   "=> [radial-gradient-0]",
-  "context.strokeStyle = \\"[radial-gradient-0]\\"",
+  "context.strokeStyle = "[radial-gradient-0]"",
   "context.beginPath()",
   "context.moveTo(30,0)",
   "context.lineTo(40,0)",
@@ -2170,7 +2170,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient should not have created a radial gradient 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2188,7 +2188,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a radial gradient and then draws without using the radial gradient should not have created a radial gradient 2`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2206,7 +2206,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a rect that extends to infinity and strokes it and then changes the line width and strokes the rectangle again should have taken a different line width into account this time 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2235,7 +2235,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a rect that extends to infinity and strokes it should have taken the current line width into account 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2253,11 +2253,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a rectangular path, fills another rectangle and then fills the created path should have filled both rectangles 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(50,50)",
@@ -2283,12 +2283,12 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates a rectangular path, strokes another rectangle and then strokes the created path should have stroked both rectangles 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.lineWidth = 1",
-  "context.strokeStyle = \\"#f00\\"",
+  "context.strokeStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(50,50)",
   "context.lineTo(100,50)",
@@ -2313,14 +2313,14 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed and then part of the drawing is cleared should have added a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.setTransform(1,0,0,1,0,0)",
   "context.translate(10,10)",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.imageSmoothingEnabled = false",
   "context.fillRect(0,0,10,10)",
   "context.restore()",
@@ -2332,7 +2332,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed and then the entire drawing is cleared should have forgotten everything 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2340,8 +2340,8 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates image data and then puts it on the context and then the bitmap is ready and then drawing is executed should have filled a rect using a pattern created from the bitmap 1`] = `
-Array [
-  "context.createPattern({\\"height\\":10,\\"width\\":10},\\"no-repeat\\")",
+[
+  "context.createPattern({"height":10,"width":10},"no-repeat")",
   "=> [pattern-0]",
   "context.restore()",
   "context.save()",
@@ -2349,7 +2349,7 @@ Array [
   "context.save()",
   "context.setTransform(1,0,0,1,0,0)",
   "context.translate(10,10)",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.imageSmoothingEnabled = false",
   "context.fillRect(0,0,10,10)",
   "context.restore()",
@@ -2357,8 +2357,8 @@ Array [
 `;
 
 exports[`an infinite canvas context that creates image data and then puts part of it on the context and then the bitmap is ready and then drawing is executed should have filled a rect using a pattern created from the bitmap 1`] = `
-Array [
-  "context.createPattern({\\"height\\":8,\\"width\\":8},\\"no-repeat\\")",
+[
+  "context.createPattern({"height":8,"width":8},"no-repeat")",
   "=> [pattern-0]",
   "context.restore()",
   "context.save()",
@@ -2366,7 +2366,7 @@ Array [
   "context.save()",
   "context.setTransform(1,0,0,1,0,0)",
   "context.translate(10,10)",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.imageSmoothingEnabled = false",
   "context.fillRect(0,0,8,8)",
   "context.restore()",
@@ -2374,12 +2374,12 @@ Array [
 `;
 
 exports[`an infinite canvas context that does this should have done this 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.setTransform(1,0,0,1,10,10)",
   "context.beginPath()",
@@ -2406,17 +2406,17 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a bezier curve and then clear a rect that fully covers the bezier curve should no longer draw a bezier curve 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
 ]
 `;
 
-exports[`an infinite canvas context that draws a bezier curve and then clears a rect that does not overlap the bezier curve should not do anything else 1`] = `Array []`;
+exports[`an infinite canvas context that draws a bezier curve and then clears a rect that does not overlap the bezier curve should not do anything else 1`] = `[]`;
 
 exports[`an infinite canvas context that draws a bezier curve and then clears a rect that partially covers the bezier curve should add a clearRect command 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2433,7 +2433,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a bezier curve should draw a bezier curve 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2449,7 +2449,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a bezier curve should draw a bezier curve 2`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2462,7 +2462,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a line and then draws a line to infinity in a different direction and fills the path should have filled the right shape 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2477,7 +2477,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a line and then draws a line to infinity in the opposite direction and fills the path should not have drawn more lines than necessary 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2491,7 +2491,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a line and then draws a line to infinity in the same direction and fills the path should not have drawn more lines than necessary 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2505,7 +2505,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a line without calling 'moveTo' should draw a line 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2518,11 +2518,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a path, fills it and then adds to the path and then strokes the path should have executed the last path modification only once 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(30,30)",
   "context.lineTo(30,100)",
@@ -2541,7 +2541,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a path, transforms and then strokes should have kept that order 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2560,7 +2560,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a quadratic curve and then clears a rect that covers the quadratic curve should no longer draw a quadratic curve 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2568,7 +2568,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a quadratic curve and then clears a rect that does not cover the quadratic curve should still draw a quadratic curve 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2585,7 +2585,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a quadratic curve should draw a quadratic curve 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2601,7 +2601,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a quadratic curve should draw a quadratic curve 2`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2614,7 +2614,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a square by translating and then fully clears the drawn square should not have added a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2622,7 +2622,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a square by translating and then partly clears the drawn square should have added a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2645,7 +2645,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws a square by translating should have called transform before each move 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2663,10 +2663,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that draws a triangular path and then clears a rect outside the triangle should not have added a clearRect 1`] = `Array []`;
+exports[`an infinite canvas context that draws a triangular path and then clears a rect outside the triangle should not have added a clearRect 1`] = `[]`;
 
 exports[`an infinite canvas context that draws an arc should draw an arc 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2679,7 +2679,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that draws an ellipse should draw an ellipse 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2692,7 +2692,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect and adds a clearRect that partially covers it and then adds a clearRect with negative width and height that covers the previous clearRect entirely should end up with only one clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2714,7 +2714,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with finite width and negative infinite height should fill a rect that extends to outside of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2733,7 +2733,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with finite width and positive infinite height should fill a rect that extends to outside of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2752,7 +2752,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with negative infinite width and a finite height should fill a rect that extends to outside of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2770,7 +2770,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with only a right edge should fill a rect that fills the left half of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2788,7 +2788,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with only a top edge should fill a rect that fills the bottom half of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2806,7 +2806,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect with positive infinite width and a finite height should fill a rect that extends to outside of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2823,10 +2823,10 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that fills a rect without area should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that fills a rect without area should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context that fills a rect without bottom edge with negative infinite height and a finite width should fill a rect that extends to the top and bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2844,7 +2844,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect without left edge with positive infinite width and a finite height should fill a rect that extends to the left and right of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2862,7 +2862,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect without right edge with negative infinite width and a finite height should fill a rect that extends to the left and right of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2880,7 +2880,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect without top edge with positive infinite height and a finite width should fill a rect that extends to the top and bottom of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2898,7 +2898,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rect, begins a new path, translates and then clears a rect should add a clearRect with the right arguments 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2921,7 +2921,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rectangle, clears part of it and then clears a bigger part of it should end up with only one clear rect instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2943,11 +2943,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rectangle, creates a path inside it, clears a rectangle inside the first rectangle and then fills the created path should have executed everything 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -2958,7 +2958,7 @@ Array [
   "context.closePath()",
   "context.moveTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
   "context.clearRect(0,0,75,75)",
@@ -2974,7 +2974,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills a rectangle, fills a smaller rectangle inside it and clears a rectangle containing the small one but not the big one should forget all about the second rectangle 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -2996,7 +2996,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that fills the entire plane should fill the entire viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3011,7 +3011,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that is translated and then adds a rectangular path and fills it and then clears a rectangle partly covering the place where the rectangle was drawn should have added an instruction to clear a rect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3034,7 +3034,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that is translated and then draws a rectangle and then clears a rectangle partly covering the place where the rectangle was drawn should have added an instruction to clear a rect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3057,7 +3057,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that is translated and then draws a rectangle should have called setTransform on the context 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3076,7 +3076,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that is translated and then the viewbox is transformed and it draws a rectangle should have called setTransform on the context with the right transformation 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3095,7 +3095,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path consisting of two subpaths and the fills it using a fill rule should take the fill rule into account 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3115,12 +3115,12 @@ Array [
   "context.closePath()",
   "context.moveTo(30,30)",
   "context.lineWidth = 1",
-  "context.fill(\\"evenodd\\")",
+  "context.fill("evenodd")",
 ]
 `;
 
 exports[`an infinite canvas context that makes a path extending to infinity and fills it and then strokes it should take the line width into account for the stroked path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3147,7 +3147,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path with zero area and strokes it and then clears an area overlapping but not covering the path should have added a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3164,7 +3164,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path, fills a rect, fills the path, begins a new path and then clears a rect containing the first drawn path should forget the first drawn path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3182,11 +3182,11 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path, fills it and then fills an overlapping rect and then fills the path again should not have forgotten the previous path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(2,0)",
@@ -3195,7 +3195,7 @@ Array [
   "context.lineTo(0,0)",
   "context.lineWidth = 1",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(3,1)",
@@ -3205,7 +3205,7 @@ Array [
   "context.closePath()",
   "context.moveTo(1,1)",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -3213,18 +3213,18 @@ Array [
   "context.lineTo(2,2)",
   "context.lineTo(0,2)",
   "context.lineTo(0,0)",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineWidth = 1",
   "context.fill()",
 ]
 `;
 
 exports[`an infinite canvas context that makes a path, fills it and then fills an overlapping rect should draw the two rectangles in the right order 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(0,0)",
   "context.lineTo(2,0)",
@@ -3233,7 +3233,7 @@ Array [
   "context.lineTo(0,0)",
   "context.lineWidth = 1",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(3,1)",
@@ -3247,7 +3247,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path, fills it, clears it completely with a clearRect, expands it and strokes it should no longer fill the path 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3262,7 +3262,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a path, saves state, clips, fills a rect and then strokes the path should set the clipped path before stroking 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3306,7 +3306,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that makes a rect, strokes it and then strokes text should set the line width twice 1`] = `
-Array [
+[
   "context.save()",
   "context.restore()",
   "context.restore()",
@@ -3325,13 +3325,13 @@ Array [
   "context.lineWidth = 1",
   "context.save()",
   "context.transform(2,0,0,2,0,0)",
-  "context.strokeText(\\"text\\",10,10)",
+  "context.strokeText("text",10,10)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that saves state, begins a path, restores state and fills a rect should end up with an equal number of saves and restores 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3349,7 +3349,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap and then makes a new rectangular path partly overlapping the clipped area and fills it should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3376,7 +3376,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap and then once more fills a rect partly overlapping the clipped area should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3405,7 +3405,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3414,7 +3414,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area and then clears a rect containing the first overlap should still contain one clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3443,7 +3443,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area and then clears a rect containing the second overlap should still contain one clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3472,7 +3472,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then fills another rect partly overlapping the clipped area should still contain only one clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3510,7 +3510,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and begins a path outside the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3528,7 +3528,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and begins a path outside the clipped area and fills it should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3567,7 +3567,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and fills a rect outside the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3585,7 +3585,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area and then restores state and fills a rect outside the clipped area should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3624,7 +3624,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then fills a rect partly overlapping the clipped area should contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3653,7 +3653,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap and then fills a rect partly overlapping the clipped area should contain the clipping instruction again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3682,7 +3682,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap and then once again fills the path should contain the clipping instruction again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3709,7 +3709,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3718,7 +3718,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and begins a path outside the clipped area and fills it and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3736,7 +3736,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and begins a path outside the clipped area and fills it should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3773,7 +3773,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and fills a rect outside the clipped area and then clears a rect that contains that partial overlap should forget about the filled rect inside the clipped area, not contain a clipping instruction and not add a clearRect 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3791,7 +3791,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it and then restores state and fills a rect outside the clipped area should still contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3828,7 +3828,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves state, makes a rect and clips it and then makes a new rectangular path partly overlapping the clipped area and fills it should contain the clipping instruction 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3855,7 +3855,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves, begins a path, begins another path, fills it, restores and then fills a rect should end up with an equal number of saves and restores 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3879,7 +3879,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that saves, creates a path, fills two rects, restores and strokes should have the same number of saves and restores 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3931,7 +3931,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that sets a line width, makes a rect, strokes it and then strokes text should set the line width twice 1`] = `
-Array [
+[
   "context.save()",
   "context.lineWidth = 2",
   "context.restore()",
@@ -3952,13 +3952,13 @@ Array [
   "context.lineWidth = 2",
   "context.save()",
   "context.transform(2,0,0,2,0,0)",
-  "context.strokeText(\\"text\\",10,10)",
+  "context.strokeText("text",10,10)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that sets a nonzero line dash and fills a rect and then sets a pattern as fill style and fills another rect and then sets the fill style to something other than a pattern and fills a third rect and then clears the rect that was filled with a pattern should set the line dash one fewer time 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -3986,7 +3986,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that sets a nonzero line dash and fills a rect and then sets a pattern as fill style and fills another rect and then sets the fill style to something other than a pattern and fills a third rect should set the correct line dash again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4001,7 +4001,7 @@ Array [
   "context.closePath()",
   "context.moveTo(2,2)",
   "context.fill()",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.setLineDash([1,1])",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -4016,7 +4016,7 @@ Array [
   "context.transform(2,0,0,2,0,0)",
   "context.fill()",
   "context.restore()",
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.setLineDash([2,2])",
   "context.lineWidth = 2",
   "context.beginPath()",
@@ -4032,7 +4032,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that sets a nonzero line dash and fills a rect and then sets a pattern as fill style and fills another rect should set the correct line dash again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4047,7 +4047,7 @@ Array [
   "context.closePath()",
   "context.moveTo(2,2)",
   "context.fill()",
-  "context.fillStyle = \\"[pattern-0]\\"",
+  "context.fillStyle = "[pattern-0]"",
   "context.setLineDash([1,1])",
   "context.lineWidth = 1",
   "context.beginPath()",
@@ -4066,7 +4066,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that sets a nonzero line dash and fills a rect should set the correct line dash 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4085,7 +4085,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that strokes a path using a line dash should draw a path whose length is a multiple of the line dash period 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4106,7 +4106,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that strokes a rect that extends to infinity and then changes the line width and strokes another rect that extends to infinity should have taken a different line width into account for the second rectangle 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4134,7 +4134,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that strokes a rect that extends to infinity should have taken the current line width into account 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4151,12 +4151,12 @@ Array [
 ]
 `;
 
-exports[`an infinite canvas context that strokes a rect without area should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that strokes a rect without area should do nothing 1`] = `[]`;
 
-exports[`an infinite canvas context that strokes the entire plane should do nothing 1`] = `Array []`;
+exports[`an infinite canvas context that strokes the entire plane should do nothing 1`] = `[]`;
 
 exports[`an infinite canvas context that takes text and fills it and clears it should forget the instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4164,7 +4164,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that takes text and fills it should contain the instruction to transform and fill text 1`] = `
-Array [
+[
   "context.save()",
   "context.restore()",
   "context.restore()",
@@ -4172,13 +4172,13 @@ Array [
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
-  "context.fillText(\\"Some text\\",100,100)",
+  "context.fillText("Some text",100,100)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that takes text and strokes it and clears it should forget the instructions 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4186,7 +4186,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that takes text and strokes it should contain the instruction to transform and stroke text 1`] = `
-Array [
+[
   "context.save()",
   "context.restore()",
   "context.restore()",
@@ -4194,13 +4194,13 @@ Array [
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
-  "context.strokeText(\\"Some text\\",100,100)",
+  "context.strokeText("Some text",100,100)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that transforms, begins a path, draws line from a point to infinity, rotates, draws a line to infinity and strokes should 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4216,7 +4216,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that translates and draws this shape using a line dash should make sure the length of the drawn path is a multiple of the line dash period 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4238,7 +4238,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that translates and then draws a line to inifinity should draw a line to the right border of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4252,7 +4252,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that translates and then rotates and then draws a line to inifinity should draw a line to the right border of the viewbox 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4266,7 +4266,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that translates, begins a path, moves to infinity, and then lines to a point and then lines to a different point and then strokes should move to and line to the correct points 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4282,7 +4282,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that translates, begins a path, moves to infinity, and then lines to a point and then strokes should move to and line to the correct points 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4296,7 +4296,7 @@ Array [
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using five arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4304,19 +4304,19 @@ Array [
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using five arguments should call the context using five arguments 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
-  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10,40,40)",
+  "context.drawImage({"width":100,"height":100},10,10,40,40)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using nine arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4324,19 +4324,19 @@ Array [
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using nine arguments should call the context using nine arguments 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
-  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10,80,80,10,10,40,40)",
+  "context.drawImage({"width":100,"height":100},10,10,80,80,10,10,40,40)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using three arguments and then clears the rectangle where the image was drawn should no longer draw the image 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4344,27 +4344,27 @@ Array [
 `;
 
 exports[`an infinite canvas context that uses an image and draws it using three arguments should call the context using three arguments 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
-  "context.drawImage({\\"width\\":100,\\"height\\":100},10,10)",
+  "context.drawImage({"width":100,"height":100},10,10)",
   "context.restore()",
 ]
 `;
 
 exports[`an infinite canvas context that uses shadow styles and then transforms should transform the shadow offsets together 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 0.5",
   "context.shadowOffsetX = -5",
   "context.shadowOffsetY = 5",
-  "context.shadowColor = \\"#000\\"",
+  "context.shadowColor = "#000"",
   "context.beginPath()",
   "context.moveTo(-5,25)",
   "context.lineTo(-5,75)",
@@ -4378,15 +4378,15 @@ Array [
 `;
 
 exports[`an infinite canvas context that uses shadow styles should use shadow styles 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.shadowOffsetX = 10",
   "context.shadowOffsetY = 10",
-  "context.shadowColor = \\"#000\\"",
+  "context.shadowColor = "#000"",
   "context.beginPath()",
   "context.moveTo(30,30)",
   "context.lineTo(130,30)",
@@ -4400,7 +4400,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation and that uses canvas units and then draws a square and then rotates and then resizes the canvas to exacerbate the distortion and then draws again and then rotates again should have applied an initial transformation that makes the drawing appear with the same distortion, but rotated 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4428,7 +4428,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation and that uses canvas units and then draws a square and then rotates and then resizes the canvas to exacerbate the distortion and then draws again should have applied an initial transformation that makes the drawing appear more distorted 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4456,7 +4456,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation and that uses canvas units and then draws a square and then rotates should have applied an initial transformation that makes the square appear with the same distortion, only rotated 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4475,7 +4475,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation and that uses canvas units and then draws a square should not have applied an initial transformation 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4493,7 +4493,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation that uses CSS units and then draws a square and then rotates should have applied the same initial transformation 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4512,7 +4512,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose canvas has a non-identity screen transformation that uses CSS units and then draws a square should have applied an initial transformation that is the inverse of the screen transformation 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,300,300)",
@@ -4531,11 +4531,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and then draws something should have modified the context correctly 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -4550,11 +4550,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then changes the state and clears part of the drawing and draws something else should have drawn using the state from before the clearing 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4565,7 +4565,7 @@ Array [
   "context.closePath()",
   "context.moveTo(1,1)",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.save()",
   "context.transform(1,0,0,1,0,0)",
   "context.clearRect(2,0,4,4)",
@@ -4583,11 +4583,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then clears an area containing that instruction and which then draws something else should have cleared a rect only once more and should not have executed the old instruction again 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4602,11 +4602,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then clears an area containing that instruction and which then draws something else without changing the state should have cleared a rect only once more and should still use the old state 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4621,7 +4621,7 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then clears an area containing that instruction should have cleared a rectangle 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
@@ -4629,11 +4629,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then draws something else and which then clears the first part and part of the second should have remembered the state for the second part 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(4,1)",
@@ -4652,11 +4652,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then draws something else and which then clears the first part should have remembered the state for the second part 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(4,1)",
@@ -4671,11 +4671,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and which then draws something else should not have altered the state 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4699,11 +4699,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and who changes state, draws something, changes state back and draws something again and who then clears a rect containing the second drawing should only have set the remaining state 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4727,11 +4727,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something and who changes state, draws something, changes state back and draws something again should have set a new state three times 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",
@@ -4742,7 +4742,7 @@ Array [
   "context.closePath()",
   "context.moveTo(1,1)",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(5,1)",
   "context.lineTo(7,1)",
@@ -4752,7 +4752,7 @@ Array [
   "context.closePath()",
   "context.moveTo(5,1)",
   "context.fill()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.beginPath()",
   "context.moveTo(9,1)",
   "context.lineTo(11,1)",
@@ -4766,11 +4766,11 @@ Array [
 `;
 
 exports[`an infinite canvas context whose state is changed and who draws something should have modified the context correctly 1`] = `
-Array [
+[
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(1,1)",

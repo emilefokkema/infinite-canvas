@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
+
+
 import { InfiniteCanvasStateInstance } from "../src/state/infinite-canvas-state-instance";
 import { logInstruction } from "./log-instruction";
 import { Instruction } from "../src/instructions/instruction";
