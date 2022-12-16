@@ -10,7 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "e2e-test-page": ["test/e2e/test-page/index.ts"],
-      "infinite-canvas": ["src/infinite-canvas-declaration.ts"]
+      "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
     }
   }
 }

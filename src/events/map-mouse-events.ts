@@ -1,12 +1,12 @@
 import { Transformer } from "../transformer/transformer"
-import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+import { Config } from "../api-surface/config";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export function mapMouseEvents(
         canvasElement: HTMLCanvasElement,
         transformer: Transformer,
         rectangle: CanvasRectangle,
-        config: InfiniteCanvasConfig): void{
+        config: Config): void{
             let mouseAnchorIdentifier: number;
             function releaseAnchor(): void{
                 if(mouseAnchorIdentifier !== undefined){

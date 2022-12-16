@@ -2,7 +2,7 @@
 
 Paths on `InfiniteCanvas` can extend into infinity.
 
-On a usual `<canvas>`, it is possible to add a line to the current sub-path by using the method [`lineTo(x, y)`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo), which adds a line that goes from the end point of the current sub-path to the point with coordinates `x` and `y`. But on an `InfiniteCanvas`, you have at your disposal the method [`lineToInfinityInDirection(x, y)`](/api_reference?id=linetoinfinityindirectionx-y), which adds a line that starts at the end point of the current sub-path and goes to infinity in the direction of `x` and `y`.
+On a usual `<canvas>`, it is possible to add a line to the current sub-path by using the method [`lineTo(x, y)`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo), which adds a line that goes from the end point of the current sub-path to the point with coordinates `x` and `y`. But on an `InfiniteCanvas`, you have at your disposal the method [`lineToInfinityInDirection(x, y)`](/api/interfaces/InfiniteCanvasRenderingContext2D?id=linetoinfinityindirection), which adds a line that starts at the end point of the current sub-path and goes to infinity in the direction of `x` and `y`.
 
 ## Path to infinity
 
@@ -45,7 +45,7 @@ ctx.stroke();
 
 ## Starting at infinity
 
-But you can also start a path at infinity, using the method [`moveToInfinityInDirection(x, y)`](/api_reference?id=movetoinfinityindirectionx-y).
+But you can also start a path at infinity, using the method [`moveToInfinityInDirection(x, y)`](/api/interfaces/InfiniteCanvasRenderingContext2D?id=movetoinfinityindirection).
 
 We start a path at infinity in the bottom-right direction, we add a line to the point (60, 60), then we add a line back to infinity in the bottom-left direction and we end by adding a line to (80, 120). Then we fill and stroke the path.
 
@@ -74,7 +74,7 @@ An interesting situation occurs when a sub-path starts at infinity and its end p
 
 ## Rectangles
 
-Contrary to the ordinary `<canvas>`'s [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), `InfiniteCanvas`'s [`InfiniteCanvasRenderingContext2D`](/api_reference?id=infinitecanvasrenderingcontext2d) supports `Infinity` (either positive or negative) as a value for either the `x`, `y`, `width` or `height` parameter in the methods [`strokeRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeRect), [`fillRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillRect) and [`clearRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect).
+Contrary to the ordinary `<canvas>`'s [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), `InfiniteCanvas`'s [`InfiniteCanvasRenderingContext2D`](/api/interfaces/InfiniteCanvasRenderingContext2D) supports `Infinity` (either positive or negative) as a value for either the `x`, `y`, `width` or `height` parameter in the methods [`strokeRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeRect), [`fillRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillRect) and [`clearRect()`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect).
 
 This means that you can clear the entire canvas by calling
 

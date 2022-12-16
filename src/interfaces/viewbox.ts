@@ -23,6 +23,7 @@ export interface ViewBox extends TransformableBox, CurrentState{
     beginPath(): void;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
+    createConicGradient(startAngle: number, x: number, y: number): CanvasGradient;
     clipPath(instruction: Instruction): void;
     addPathInstruction(pathInstruction: PathInstruction): void;
     closePath(): void;

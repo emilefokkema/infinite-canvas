@@ -62,7 +62,9 @@
       logo: 'logo.svg',
       themeColor: '#0069c2',
       loadSidebar: true,
-      subMaxLevel: 2,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
       vueComponents: {
         'infinite-canvas-embed': {
           template: document.getElementById('embedTemplate').innerHTML,

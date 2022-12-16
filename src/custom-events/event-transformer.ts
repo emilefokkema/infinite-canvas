@@ -1,19 +1,18 @@
 import { Event } from "./event";
-import { EventListener } from "./event-listener";
-import {InfiniteCanvasAddEventListenerOptions} from "./infinite-canvas-add-event-listener-options";
+import {AddEventListenerOptions} from "../api-surface/add-event-listener-options";
 
 interface ListenerWrapperRecord<TSourceEvent, TTargetEvent>{
-    original: EventListener<TTargetEvent>;
-    wrapper: EventListener<TSourceEvent>;
+    original: (ev: TTargetEvent) => void;
+    wrapper: (ev: TSourceEvent) => void;
 }
 export abstract class EventTransformer<TSourceEvent, TTargetEvent> implements Event<TTargetEvent>{
     private _wrappers: ListenerWrapperRecord<TSourceEvent, TTargetEvent>[] = [];
     protected constructor(private readonly sourceEvent: Event<TSourceEvent>) {
     }
-    public addListener(listener: EventListener<TTargetEvent>, options?: InfiniteCanvasAddEventListenerOptions): void{
+    public addListener(listener: (ev: TTargetEvent) => void, options?: AddEventListenerOptions): void{
         this.sourceEvent.addListener(this.wrapEventListener(listener, options), options);
     }
-    public removeListener(listener: EventListener<TTargetEvent>): void{
+    public removeListener(listener: (ev: TTargetEvent) => void): void{
         const index: number = this._wrappers.findIndex(r => r.original === listener);
         if(index === -1){
             return;
@@ -22,22 +21,22 @@ export abstract class EventTransformer<TSourceEvent, TTargetEvent> implements Ev
         this._wrappers.splice(index, 1);
     }
     protected abstract transformEvent(source: TSourceEvent): TTargetEvent;
-    private removeWrapper(wrapper: EventListener<TSourceEvent>): void{
+    private removeWrapper(wrapper: (ev: TSourceEvent) => void): void{
         const index: number = this._wrappers.findIndex(r => r.wrapper === wrapper);
         if(index === -1){
             return;
         }
         this._wrappers.splice(index, 1);
     }
-    private makeOnce(wrapper: EventListener<TSourceEvent>): EventListener<TSourceEvent>{
-        const result: EventListener<TSourceEvent> = (source: TSourceEvent) => {
+    private makeOnce(wrapper: (ev: TSourceEvent) => void): (ev: TSourceEvent) => void{
+        const result: (ev: TSourceEvent) => void = (source: TSourceEvent) => {
             this.removeWrapper(result);
             wrapper(source);
         };
         return result;
     }
-    private wrapEventListener(listener: EventListener<TTargetEvent>, options: InfiniteCanvasAddEventListenerOptions): EventListener<TSourceEvent>{
-        let wrapper: EventListener<TSourceEvent> = (source: TSourceEvent) => {
+    private wrapEventListener(listener: (ev: TTargetEvent) => void, options: AddEventListenerOptions): (ev: TSourceEvent) => void{
+        let wrapper: (ev: TSourceEvent) => void = (source: TSourceEvent) => {
             listener(this.transformEvent(source));
         };
         if(options && options.once){

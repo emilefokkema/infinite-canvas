@@ -1,5 +1,5 @@
 {
-  "include": ["src/infinite-canvas-declaration.ts"],
+  "include": ["src/api-surface/infinite-canvas.ts"],
   "exclude": ["node_modules", "test"],
   "compilerOptions": {
     "outDir": "./dist/types",

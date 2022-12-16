@@ -3,8 +3,8 @@
  */
 
 import { InfiniteCanvas } from "../src/infinite-canvas"
-import { InfiniteCanvas as InfiniteCanvasInterface } from '../src/infinite-canvas-declaration';
-import { InfiniteCanvasRenderingContext2D } from "../src/infinite-context/infinite-canvas-rendering-context-2d"
+import { InfiniteCanvas as InfiniteCanvasInterface } from '../src/api-surface/infinite-canvas';
+import { InfiniteCanvasRenderingContext2D } from "../src/api-surface/infinite-canvas-rendering-context-2d"
 import { CanvasContextMock } from "./canvas-context-mock";
 
 describe("an infinite canvas", () => {

@@ -7,8 +7,8 @@ import {CanvasMeasurementProvider} from "./canvas-measurement-provider";
 import {PathInfinityProvider} from "../interfaces/path-infinity-provider";
 import {InfiniteCanvasPathInfinityProvider} from "../infinite-canvas-path-infinity-provider";
 import {Instruction} from "../instructions/instruction";
-import {InfiniteCanvasConfig} from "../config/infinite-canvas-config";
-import {InfiniteCanvasUnits} from "../infinite-canvas-units";
+import {Config} from "../api-surface/config";
+import {Units} from "../api-surface/units";
 import {CanvasMeasurement} from "./canvas-measurement";
 import {RectangleMeasurement} from "./rectangle-measurement";
 import {CoordinateSystems} from "./coordinate-systems/coordinate-systems";
@@ -30,7 +30,7 @@ export class HTMLCanvasRectangle implements CanvasRectangle{
     public viewboxWidth: number;
     public viewboxHeight: number;
     public polygon: ConvexPolygon;
-    private unitsUsed: InfiniteCanvasUnits;
+    private unitsUsed: Units;
     private screenWidth: number;
     private screenHeight: number;
     private coordinateSystems: CoordinateSystems;
@@ -40,11 +40,11 @@ export class HTMLCanvasRectangle implements CanvasRectangle{
     }
     public get infiniteCanvasContextBase(): Transformation{return this.coordinateSystems.infiniteCanvasContextBase;}
     public get inverseInfiniteCanvasContextBase(): Transformation{return this.coordinateSystems.inverseInfiniteCanvasContextBase;}
-    constructor(private readonly measurementProvider: CanvasMeasurementProvider, private readonly config: Partial<InfiniteCanvasConfig>) {
-        this.unitsUsed = config.units === InfiniteCanvasUnits.CSS ? InfiniteCanvasUnits.CSS : InfiniteCanvasUnits.CANVAS;
+    constructor(private readonly measurementProvider: CanvasMeasurementProvider, private readonly config: Partial<Config>) {
+        this.unitsUsed = config.units === Units.CSS ? Units.CSS : Units.CANVAS;
         const measurement: RectangleMeasurement = createRectangleMeasurement(this.measurementProvider.measure());
         this.addMeasurement(measurement);
-        this.coordinateSystems = config.units === InfiniteCanvasUnits.CSS ?
+        this.coordinateSystems = config.units === Units.CSS ?
             CssCoordinateSystemStack.create(measurement) :
             CanvasCoordinateSystemStack.create(measurement);
     }
@@ -62,11 +62,11 @@ export class HTMLCanvasRectangle implements CanvasRectangle{
         this.polygon = measurement.polygon;
     }
     public measure(): void{
-        const newUnitsToUse: InfiniteCanvasUnits = this.config.units === InfiniteCanvasUnits.CSS ? InfiniteCanvasUnits.CSS : InfiniteCanvasUnits.CANVAS;
-        if(newUnitsToUse === InfiniteCanvasUnits.CANVAS && this.unitsUsed === InfiniteCanvasUnits.CSS){
+        const newUnitsToUse: Units = this.config.units === Units.CSS ? Units.CSS : Units.CANVAS;
+        if(newUnitsToUse === Units.CANVAS && this.unitsUsed === Units.CSS){
             this.coordinateSystems = convertToStackForCanvasUnits(this.coordinateSystems as CssCoordinateSystemStack);
         }
-        if(newUnitsToUse === InfiniteCanvasUnits.CSS && this.unitsUsed === InfiniteCanvasUnits.CANVAS){
+        if(newUnitsToUse === Units.CSS && this.unitsUsed === Units.CANVAS){
             this.coordinateSystems = convertToStackForCssUnits(this.coordinateSystems as CanvasCoordinateSystemStack);
         }
         this.unitsUsed = newUnitsToUse;

@@ -1,39 +1,39 @@
-import {InfiniteCanvasRenderingContext2D} from "./infinite-context/infinite-canvas-rendering-context-2d"
+import {InfiniteCanvasRenderingContext2D} from "./api-surface/infinite-canvas-rendering-context-2d"
 import {InfiniteContext} from "./infinite-context/infinite-context"
 import {ViewBox} from "./interfaces/viewbox";
 import {InfiniteCanvasViewBox} from "./infinite-canvas-viewbox";
 import {InfiniteCanvasTransformer} from "./transformer/infinite-canvas-transformer";
 import {InfiniteCanvasEvents} from "./events/infinite-canvas-events";
-import {InfiniteCanvasConfig} from "./config/infinite-canvas-config";
+import {Config} from "./api-surface/config";
 import {AnimationFrameDrawingIterationProvider} from "./animation-frame-drawing-iteration-provider";
-import {InfiniteCanvasEventMap} from "./custom-events/infinite-canvas-event-map";
-import {InfiniteCanvasAddEventListenerOptions} from "./custom-events/infinite-canvas-add-event-listener-options";
-import {InfiniteCanvasEventListener} from "./custom-events/infinite-canvas-event-listener";
+import {EventMap} from "./api-surface/event-map";
+import {AddEventListenerOptions} from "./api-surface/add-event-listener-options";
+import {EventListener} from "./api-surface/event-listener";
 import {DrawingIterationProviderWithCallback} from "./drawing-iteration-provider-with-callback";
 import {LockableDrawingIterationProvider} from "./lockable-drawing-iteration-provider";
 import {CanvasRectangle} from "./rectangle/canvas-rectangle";
 import {HTMLCanvasRectangle} from "./rectangle/html-canvas-rectangle";
 import {HtmlCanvasMeasurementProvider} from "./rectangle/html-canvas-measurement-provider";
-import {InfiniteCanvasUnits} from "./infinite-canvas-units";
+import {Units} from "./api-surface/units";
 import {CanvasResizeObserver} from "./canvas-resize-observer";
 import {HtmlCanvasResizeObserver} from "./html-canvas-resize-observer";
 import {EventDispatcher} from "./custom-events/event-dispatcher";
-import {InfiniteCanvasDrawEvent} from "./custom-events/infinite-canvas-draw-event";
+import {DrawEvent} from "./api-surface/draw-event";
 import {EventDispatcherCollection} from "./custom-events/event-dispatcher-collection";
 import {representTransformation} from "./transformer/represent-transformation";
-import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from './infinite-canvas-declaration'
+import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from './api-surface/infinite-canvas'
 
 class InfiniteCanvas implements InfiniteCanvasInterface{
 	private context: InfiniteCanvasRenderingContext2D;
 	private viewBox: ViewBox;
-	private config: InfiniteCanvasConfig;
+	private config: Config;
 	private eventDispatchers: EventDispatcherCollection;
 	private rectangle: CanvasRectangle;
 	private canvasResizeObserver: CanvasResizeObserver;
 	private canvasResizeListener: () => void;
-	constructor(private readonly canvas: HTMLCanvasElement, config?: InfiniteCanvasConfig){
-		const drawEventDispatcher: EventDispatcher<InfiniteCanvasDrawEvent> = new EventDispatcher();
-		this.config = {rotationEnabled: true, greedyGestureHandling: false, units: InfiniteCanvasUnits.CANVAS};
+	constructor(private readonly canvas: HTMLCanvasElement, config?: Config){
+		const drawEventDispatcher: EventDispatcher<DrawEvent> = new EventDispatcher();
+		this.config = {rotationEnabled: true, greedyGestureHandling: false, units: Units.CANVAS};
 		if(config){
 			Object.assign(this.config, config)
 		}
@@ -67,15 +67,15 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 			transformer.transformationStart,
 			transformer.transformationChange,
 			transformer.transformationEnd);
-		if(config && config.units === InfiniteCanvasUnits.CSS){
+		if(config && config.units === Units.CSS){
 			this.canvasResizeObserver.addListener(this.canvasResizeListener);
 		}
 	}
-	private setUnits(units: InfiniteCanvasUnits): void{
-		if(units === InfiniteCanvasUnits.CSS && this.config.units !== InfiniteCanvasUnits.CSS){
+	private setUnits(units: Units): void{
+		if(units === Units.CSS && this.config.units !== Units.CSS){
 			this.canvasResizeObserver.addListener(this.canvasResizeListener);
 		}
-		if(units !== InfiniteCanvasUnits.CSS && this.config.units === InfiniteCanvasUnits.CSS){
+		if(units !== Units.CSS && this.config.units === Units.CSS){
 			this.canvasResizeObserver.removeListener(this.canvasResizeListener);
 		}
 		this.config.units = units;
@@ -94,10 +94,10 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 	public set rotationEnabled(value: boolean){
 		this.config.rotationEnabled = value;
 	}
-	public get units(): InfiniteCanvasUnits{
+	public get units(): Units{
 		return this.config.units;
 	}
-	public set units(value: InfiniteCanvasUnits){
+	public set units(value: Units){
 		this.setUnits(value)
 	}
 	public get greedyGestureHandling(): boolean{
@@ -106,14 +106,14 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 	public set greedyGestureHandling(value: boolean){
 		this.config.greedyGestureHandling = value;
 	}
-	public addEventListener<K extends keyof InfiniteCanvasEventMap>(type: K, listener: InfiniteCanvasEventListener<K>, options?: InfiniteCanvasAddEventListenerOptions): void{
+	public addEventListener<K extends keyof EventMap>(type: K, listener: EventListener<K>, options?: AddEventListenerOptions): void{
 		this.eventDispatchers.addEventListener(type, listener, options);
 	}
-	public removeEventListener<K extends keyof InfiniteCanvasEventMap>(type: K, listener: InfiniteCanvasEventListener<K>): void{
+	public removeEventListener<K extends keyof EventMap>(type: K, listener: EventListener<K>): void{
 		this.eventDispatchers.removeEventListener(type, listener);
 	}
-	public static CANVAS_UNITS: InfiniteCanvasUnits = InfiniteCanvasUnits.CANVAS;
-	public static CSS_UNITS: InfiniteCanvasUnits = InfiniteCanvasUnits.CSS;
+	public static CANVAS_UNITS: Units = Units.CANVAS;
+	public static CSS_UNITS: Units = Units.CSS;
 }
 
 const ctr: InfiniteCanvasCtr = InfiniteCanvas;

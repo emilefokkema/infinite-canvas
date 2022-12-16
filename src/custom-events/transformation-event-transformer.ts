@@ -1,14 +1,14 @@
 import {EventTransformer} from "./event-transformer";
-import {InfiniteCanvasTransformationEvent} from "./infinite-canvas-transformation-event";
+import {TransformationEvent} from "../api-surface/transformation-event";
 import { Event } from "./event";
 import {CanvasRectangle} from "../rectangle/canvas-rectangle";
 import {representTransformation} from "../transformer/represent-transformation";
 
-export class TransformationEventTransformer extends EventTransformer<void, InfiniteCanvasTransformationEvent>{
+export class TransformationEventTransformer extends EventTransformer<void, TransformationEvent>{
     constructor(sourceEvent: Event<void>, private readonly rectangle: CanvasRectangle) {
         super(sourceEvent);
     }
-    protected transformEvent(): InfiniteCanvasTransformationEvent {
+    protected transformEvent(): TransformationEvent {
         return {
             transformation: representTransformation(this.rectangle.inverseInfiniteCanvasContextBase),
             inverseTransformation: representTransformation(this.rectangle.infiniteCanvasContextBase)
