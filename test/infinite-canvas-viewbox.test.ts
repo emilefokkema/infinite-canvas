@@ -8,11 +8,11 @@ import {ViewBox} from "../src/interfaces/viewbox";
 import {CanvasContextMock} from "./canvas-context-mock";
 import {Transformation} from "../src/transformation";
 import {DrawingLock} from "../src/drawing-lock";
-import {InfiniteCanvasRenderingContext2D} from "../src/infinite-context/infinite-canvas-rendering-context-2d";
+import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
 import {HTMLCanvasRectangle} from "../src/rectangle/html-canvas-rectangle";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
-import {InfiniteCanvasConfig} from "../src/config/infinite-canvas-config";
-import {InfiniteCanvasUnits} from "../src/infinite-canvas-units";
+import {Config} from "../src/api-surface/config";
+import {Units} from "../src/api-surface/units";
 
 describe("an infinite canvas context", () => {
 	let width: number;
@@ -26,7 +26,7 @@ describe("an infinite canvas context", () => {
 	let executeLatestDrawingInstruction: () => void;
 	let isTransforming: boolean;
 	let measurementProvider: MockCanvasMeasurementProvider;
-	let config: Partial<InfiniteCanvasConfig>;
+	let config: Partial<Config>;
 
 	beforeEach(() => {
 		config = {};
@@ -3465,7 +3465,7 @@ describe("an infinite canvas context", () => {
 		describe('and that uses canvas units', () => {
 
 			beforeEach(() => {
-				config.units = InfiniteCanvasUnits.CANVAS;
+				config.units = Units.CANVAS;
 			});
 
 			describe('and then draws a square', () => {
@@ -3536,7 +3536,7 @@ describe("an infinite canvas context", () => {
 		describe('that uses CSS units', () => {
 
 			beforeEach(() => {
-				config.units = InfiniteCanvasUnits.CSS;
+				config.units = Units.CSS;
 			});
 
 			describe('and then draws a square', () => {

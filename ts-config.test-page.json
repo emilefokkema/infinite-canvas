@@ -9,7 +9,7 @@
       "esModuleInterop":true,
       "baseUrl": ".",
       "paths": {
-          "infinite-canvas": ["src/infinite-canvas-declaration.ts"]
+          "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
       }
     },
     "include": ["test/e2e/test-page/**/*"]

@@ -4,7 +4,7 @@ import { InfiniteCanvasMovable } from "./infinite-canvas-movable";
 import { Gesture } from "./gesture";
 import { Rotate } from "./rotate";
 import { Zoom } from "./zoom";
-import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+import { Config } from "../api-surface/config";
 import { TransformableBox } from "../interfaces/transformable-box";
 import { Point } from "../geometry/point";
 import { AnchorSet } from "../events/anchor-set";
@@ -23,7 +23,7 @@ export class InfiniteCanvasTransformer implements Transformer{
     private _zoom: Zoom;
     private _transformationChangeMonitor: ChangeMonitor<Transformation>;
     public get isTransforming(): boolean{return this._transformationChangeMonitor.changing;}
-    constructor(private readonly viewBox: TransformableBox, private readonly config: Partial<InfiniteCanvasConfig>){
+    constructor(private readonly viewBox: TransformableBox, private readonly config: Partial<Config>){
         this.anchorSet = new AnchorSet();
         this._transformationChangeMonitor = new ChangeMonitor<Transformation>((transformation: Transformation) => this.viewBox.transformation = transformation, 100);
     }

@@ -1,12 +1,11 @@
-import { EventListener } from "./event-listener";
-import {InfiniteCanvasAddEventListenerOptions} from "./infinite-canvas-add-event-listener-options";
+import {AddEventListenerOptions} from "../api-surface/add-event-listener-options";
 import { Event } from "./event";
 
 export class EventDispatcher<TEvent> implements Event<TEvent>{
-    private listeners: EventListener<TEvent>[] = [];
-    private onceListeners: EventListener<TEvent>[] = [];
+    private listeners: ((ev: TEvent) => void)[] = [];
+    private onceListeners: ((ev: TEvent) => void)[] = [];
     public dispatchEvent(event: TEvent): void{
-        const onceListeners: EventListener<TEvent>[] = this.onceListeners;
+        const onceListeners: ((ev: TEvent) => void)[]  = this.onceListeners;
         this.onceListeners = [];
         for(const onceListener of onceListeners){
             this.notifyListener(onceListener, event);
@@ -15,14 +14,14 @@ export class EventDispatcher<TEvent> implements Event<TEvent>{
             this.notifyListener(listener, event);
         }
     }
-    public addListener(listener: EventListener<TEvent>, options?: InfiniteCanvasAddEventListenerOptions): void{
+    public addListener(listener: (ev: TEvent) => void, options?: AddEventListenerOptions): void{
         if(options && options.once){
             this.onceListeners.push(listener);
         }else{
             this.listeners.push(listener);
         }
     }
-    public removeListener(listener: EventListener<TEvent>): void{
+    public removeListener(listener: (ev: TEvent) => void): void{
         let index: number = this.listeners.indexOf(listener);
         if(index > -1){
             this.listeners.splice(index, 1);
@@ -32,7 +31,7 @@ export class EventDispatcher<TEvent> implements Event<TEvent>{
             this.onceListeners.splice(index, 1);
         }
     }
-    private notifyListener(listener: EventListener<TEvent>, event: TEvent): void{
+    private notifyListener(listener: (ev: TEvent) => void, event: TEvent): void{
         try {
             listener(event);
         } catch (error) {

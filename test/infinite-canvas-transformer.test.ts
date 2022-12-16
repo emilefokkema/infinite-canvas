@@ -6,7 +6,7 @@
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Point } from "../src/geometry/point";
-import { InfiniteCanvasConfig } from "../src/config/infinite-canvas-config";
+import { Config } from "../src/api-surface/config";
 import { TransformableBox } from "../src/interfaces/transformable-box";
 
 jest.useFakeTimers();
@@ -21,7 +21,7 @@ describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
     let viewBox: TransformableBox;
-    let config: Partial<InfiniteCanvasConfig>;
+    let config: Partial<Config>;
 
     beforeEach(() => {
         config = {};

@@ -3,7 +3,7 @@
 Simply include it in your html
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.6-alpha/dist/infinite-canvas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.7-alpha/dist/infinite-canvas.js"></script>
 ```
 
 or install it using npm:

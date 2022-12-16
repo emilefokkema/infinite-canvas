@@ -16,6 +16,7 @@ import { Position } from "./geometry/position"
 import {rectangleHasArea} from "./geometry/rectangle-has-area";
 import {rectangleIsPlane} from "./geometry/rectangle-is-plane";
 import {CanvasRectangle} from "./rectangle/canvas-rectangle";
+import { InfiniteCanvasConicGradient } from "./styles/infinite-canvas-conic-gradient";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
@@ -113,14 +114,13 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this.instructionSet.clearArea(x, y, width, height);
 	}
 	public createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient{
-		let result: InfiniteCanvasLinearGradient;
-		result = new InfiniteCanvasLinearGradient(this.context, x0, y0, x1, y1);
-		return result;
+		return new InfiniteCanvasLinearGradient(this.context, x0, y0, x1, y1);
 	}
 	public createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient{
-		let result: InfiniteCanvasRadialGradient;
-		result = new InfiniteCanvasRadialGradient(this.context, x0, y0, r0, x1, y1, r1);
-		return result;
+		return new InfiniteCanvasRadialGradient(this.context, x0, y0, r0, x1, y1, r1);
+	}
+	public createConicGradient(startAngle: number, x: number, y: number): CanvasGradient {
+		return new InfiniteCanvasConicGradient(this.context, startAngle, x, y);
 	}
 	public createPattern(image: CanvasImageSource, repetition: string): CanvasPattern{
 		let result: InfiniteCanvasPattern;

@@ -1,7 +1,6 @@
-import {EventListener} from "./event-listener";
-import {InfiniteCanvasAddEventListenerOptions} from "./infinite-canvas-add-event-listener-options";
+import {AddEventListenerOptions} from "../api-surface/add-event-listener-options";
 
 export interface Event<TEvent> {
-    addListener(listener: EventListener<TEvent>, options?: InfiniteCanvasAddEventListenerOptions): void;
-    removeListener(listener: EventListener<TEvent>): void;
+    addListener(listener: (ev: TEvent) => void, options?: AddEventListenerOptions): void;
+    removeListener(listener: (ev: TEvent) => void): void;
 }

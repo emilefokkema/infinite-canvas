@@ -1,12 +1,12 @@
 import { Transformer } from "../transformer/transformer"
-import { InfiniteCanvasConfig } from "../config/infinite-canvas-config";
+import { Config } from "../api-surface/config";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export function mapTouchEvents(
     canvasElement: HTMLCanvasElement,
     transformer: Transformer,
     rectangle: CanvasRectangle,
-    config: InfiniteCanvasConfig){
+    config: Config){
         canvasElement.addEventListener("touchstart", (ev: TouchEvent) => {
             const touches: TouchList = ev.targetTouches;
             if(touches.length === 1 && !config.greedyGestureHandling){

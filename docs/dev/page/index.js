@@ -2,7 +2,7 @@ import createDepTrees from './dep-trees.js'
 
 console.log('hello from stackblitz page')
 
-const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.6-alpha/dist/infinite-canvas.js';
+const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.7-alpha/dist/infinite-canvas.js';
 
 const stateType = {
     initializing: 0,

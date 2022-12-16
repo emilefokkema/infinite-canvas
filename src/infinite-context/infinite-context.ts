@@ -1,4 +1,4 @@
-import { InfiniteCanvasRenderingContext2D } from "./infinite-canvas-rendering-context-2d"
+import { InfiniteCanvasRenderingContext2D } from "../api-surface/infinite-canvas-rendering-context-2d"
 import { InfiniteCanvasState } from "./infinite-canvas-state"
 import { InfiniteCanvasTransform } from "./infinite-canvas-transform"
 import { InfiniteCanvasCompositing } from "./infinite-canvas-compositing"
@@ -51,6 +51,9 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 		this.canvasTextDrawingStyles = new InfiniteCanvasTextDrawingStyles(viewBox);
 		this.canvasPath = new InfiniteCanvasPath(viewBox);
 	}
+	public getContextAttributes(): CanvasRenderingContext2DSettings {
+		return this.canvas.getContext('2d').getContextAttributes();
+	}
 	public save():void{
 		this.canvasState.save();
 	}
@@ -81,7 +84,7 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public set globalAlpha(value: number){
 		this.canvasCompositing.globalAlpha = value;
 	}
-    public set globalCompositeOperation(value: string){
+    public set globalCompositeOperation(value: GlobalCompositeOperation){
     	this.canvasCompositing.globalCompositeOperation = value;
     }
     public set imageSmoothingEnabled(value: boolean){
@@ -105,6 +108,9 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
     public createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient{
     	return this.canvasStrokeStyles.createRadialGradient(x0, y0, r0, x1, y1, r1);
     }
+	public createConicGradient(startAngle: number, x: number, y: number): CanvasGradient {
+		return this.canvasStrokeStyles.createConicGradient(startAngle, x, y);
+	}
     public set shadowBlur(value: number){
     	this.canvasShadowStyles.shadowBlur = value;
     }

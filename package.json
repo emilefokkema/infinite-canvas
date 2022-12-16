@@ -1,9 +1,9 @@
 {
   "name": "ef-infinite-canvas",
-  "version": "0.5.6-alpha",
+  "version": "0.5.7-alpha",
   "description": "An infinite version of the html canvas",
   "main": "dist/infinite-canvas.js",
-  "types": "dist/types/infinite-canvas-declaration.d.ts",
+  "types": "dist/types/infinite-canvas.d.ts",
   "private": false,
   "files": [
     "dist/**/*"
@@ -19,7 +19,8 @@
     "build": "webpack --config=./webpack-build.config.js",
     "build:types": "npx tsc --project ts-config-types.json",
     "update-snapshot": "jest --updateSnapshot",
-    "dev": "node ./docs/dev/start.js"
+    "dev": "node ./docs/dev/start.js",
+    "typedoc": "typedoc"
   },
   "keywords": [
     "canvas",
@@ -51,7 +52,9 @@
     "puppeteer": "^19.2.2",
     "ts-jest": "^29.0.3",
     "ts-loader": "^9.4.1",
-    "typescript": "^4.3.5",
+    "typedoc": "^0.23.21",
+    "typedoc-plugin-markdown": "^3.14.0",
+    "typescript": "4.6.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^5.0.0",
     "ws": "^8.10.0"

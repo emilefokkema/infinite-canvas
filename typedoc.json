@@ -1,0 +1,10 @@
+{
+    "entryPoints": ["./src/api-surface/infinite-canvas.ts"],
+    "entryPointStrategy" : "expand",
+    "tsconfig": "./ts-config-types.json",
+    "out": "docs/api",
+    "publicPath": "api/",
+    "excludeExternals": true,
+    "hideInPageTOC": true,
+    "readme": "none"
+}
