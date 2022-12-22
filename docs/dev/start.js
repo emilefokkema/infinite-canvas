@@ -147,6 +147,14 @@ function startServer(compilation){
     const webSocketServer = new WebSocketServer.Server({ noServer: true });
     const app = express();
     const static = express.static(contentDir, {maxAge: 3600000});
+    const infiniteCanvasStatic = express.static(contentDir, {maxAge: 0});
+    app.use(/^(?!\/api)/, (req, res, next) => {
+        if(req.path === '/dev/page/infinite-canvas.js'){
+            infiniteCanvasStatic(req, res, () => {});
+        }else{
+            next();
+        }
+    });
     app.use(/^(?!\/api)/, static)
     app.use('/api', createApiRouter());
     const server = http.createServer(app);
