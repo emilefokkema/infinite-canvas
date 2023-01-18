@@ -3,3 +3,4 @@
 * [Getting started](getting-started.md)
 * [API Reference](api/)
 * [Infinity](infinity.md)
+* [Events](events.md)

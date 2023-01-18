@@ -12,7 +12,7 @@ export interface CanvasRectangle extends Transformable, ViewboxInfinityProvider 
     readonly infiniteCanvasContextBase: Transformation;
     readonly inverseInfiniteCanvasContextBase: Transformation;
     measure(): void;
-    getCSSPosition(screenX: number, screenY: number): Point;
+    getCSSPosition(clientX: number, clientY: number): Point;
     getTransformationInstruction(toTransformation: Transformation): Instruction;
     applyInitialTransformation(context: CanvasRenderingContext2D): void;
     getViewboxFromState(state: InfiniteCanvasState, margin: number): ConvexPolygon;

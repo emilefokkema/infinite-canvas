@@ -1,4 +1,10 @@
 {
-    "files": ["index.html", "index.js", "style.css"],
-    "title": "line to infinity"
+   "files": {
+      "index.html": "index.html",
+      "index.js": "index.js",
+      "style.css": "../docs-example.css",
+      "overlay.css": "../overlay.css",
+      "overlay.js": "../overlay.js"
+   },
+   "title": "line to infinity"
 }

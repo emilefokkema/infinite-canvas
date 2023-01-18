@@ -8,6 +8,10 @@ This interface contains properties that determine the behavior of the [InfiniteC
 
 - [`Config`](api/interfaces/Config.md)
 
+- [`InfiniteCanvasEventHandlers`](api/interfaces/InfiniteCanvasEventHandlers.md)
+
+- [`Transformed`](api/interfaces/Transformed.md)
+
   ↳ **`InfiniteCanvas`**
 
 ## Properties
@@ -28,7 +32,197 @@ false
 
 #### Defined in
 
-[config.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/config.ts#L18)
+[config.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L18)
+
+___
+
+### inverseTransformation
+
+• `Readonly` **inverseTransformation**: [`TransformationRepresentation`](api/interfaces/TransformationRepresentation.md)
+
+The inverse of [transformation](api/interfaces/InfiniteCanvas.md#transformation)
+
+#### Inherited from
+
+[Transformed](api/interfaces/Transformed.md).[inverseTransformation](api/interfaces/Transformed.md#inversetransformation)
+
+#### Defined in
+
+[transformed.ts:11](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/transformed.ts#L11)
+
+___
+
+### ondraw
+
+• **ondraw**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: [`TransformationEvent`](api/interfaces/TransformationEvent.md)) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | [`TransformationEvent`](api/interfaces/TransformationEvent.md) |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[ondraw](api/interfaces/InfiniteCanvasEventHandlers.md#ondraw)
+
+#### Defined in
+
+[infinite-canvas.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L12)
+
+___
+
+### ontouchignored
+
+• **ontouchignored**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: `Event`) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | `Event` |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[ontouchignored](api/interfaces/InfiniteCanvasEventHandlers.md#ontouchignored)
+
+#### Defined in
+
+[infinite-canvas.ts:14](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L14)
+
+___
+
+### ontransformationchange
+
+• **ontransformationchange**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: [`TransformationEvent`](api/interfaces/TransformationEvent.md)) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | [`TransformationEvent`](api/interfaces/TransformationEvent.md) |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[ontransformationchange](api/interfaces/InfiniteCanvasEventHandlers.md#ontransformationchange)
+
+#### Defined in
+
+[infinite-canvas.ts:10](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L10)
+
+___
+
+### ontransformationend
+
+• **ontransformationend**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: [`TransformationEvent`](api/interfaces/TransformationEvent.md)) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | [`TransformationEvent`](api/interfaces/TransformationEvent.md) |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[ontransformationend](api/interfaces/InfiniteCanvasEventHandlers.md#ontransformationend)
+
+#### Defined in
+
+[infinite-canvas.ts:11](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L11)
+
+___
+
+### ontransformationstart
+
+• **ontransformationstart**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: [`TransformationEvent`](api/interfaces/TransformationEvent.md)) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | [`TransformationEvent`](api/interfaces/TransformationEvent.md) |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[ontransformationstart](api/interfaces/InfiniteCanvasEventHandlers.md#ontransformationstart)
+
+#### Defined in
+
+[infinite-canvas.ts:9](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L9)
+
+___
+
+### onwheelignored
+
+• **onwheelignored**: (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `event`: `Event`) => `any`
+
+#### Type declaration
+
+▸ (`this`, `event`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `this` | [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md) |
+| `event` | `Event` |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[onwheelignored](api/interfaces/InfiniteCanvasEventHandlers.md#onwheelignored)
+
+#### Defined in
+
+[infinite-canvas.ts:13](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L13)
 
 ___
 
@@ -48,7 +242,23 @@ true
 
 #### Defined in
 
-[config.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/config.ts#L12)
+[config.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L12)
+
+___
+
+### transformation
+
+• `Readonly` **transformation**: [`TransformationRepresentation`](api/interfaces/TransformationRepresentation.md)
+
+The transformation that, when applied to a point `(x, y)` in the CSS-pixel-base coordinate system of the `<canvas>` (which has its origin at the top-left corner of the canvas), returns the corresponding point in the [InfiniteCanvas](api/interfaces/InfiniteCanvas.md)'s coordinate system
+
+#### Inherited from
+
+[Transformed](api/interfaces/Transformed.md).[transformation](api/interfaces/Transformed.md#transformation)
+
+#### Defined in
+
+[transformed.ts:7](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/transformed.ts#L7)
 
 ___
 
@@ -68,23 +278,13 @@ Determines the units to use when drawing on an [InfiniteCanvas](api/interfaces/I
 
 #### Defined in
 
-[config.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/config.ts#L24)
+[config.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L24)
 
 ## Methods
 
 ### addEventListener
 
 ▸ **addEventListener**<`K`\>(`type`, `listener`, `options?`): `void`
-
-Adds an event listener to an [InfiniteCanvas](api/interfaces/InfiniteCanvas.md)
-
-**`Example`**
-
-```js
-infCanvas.addEventListener('draw', () => {
-    console.log('drawn!')
-})
-```
 
 #### Type parameters
 
@@ -94,19 +294,45 @@ infCanvas.addEventListener('draw', () => {
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `K` | The type of event to listen to |
-| `listener` | [`EventListener`](api/README.md#eventlistener)<`K`\> | The listener to add |
-| `options?` | [`AddEventListenerOptions`](api/interfaces/AddEventListenerOptions.md) | An optional options object |
+| Name | Type |
+| :------ | :------ |
+| `type` | `K` |
+| `listener` | (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `ev`: [`EventMap`](api/interfaces/EventMap.md)[`K`]) => `any` |
+| `options?` | `boolean` \| `AddEventListenerOptions` |
 
 #### Returns
 
 `void`
 
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[addEventListener](api/interfaces/InfiniteCanvasEventHandlers.md#addeventlistener)
+
 #### Defined in
 
-[infinite-canvas.ts:28](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L28)
+[infinite-canvas.ts:15](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L15)
+
+▸ **addEventListener**(`type`, `listener`, `options?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | `string` |
+| `listener` | `EventListenerOrEventListenerObject` |
+| `options?` | `boolean` \| `AddEventListenerOptions` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[addEventListener](api/interfaces/InfiniteCanvasEventHandlers.md#addeventlistener)
+
+#### Defined in
+
+[infinite-canvas.ts:16](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L16)
 
 ___
 
@@ -128,15 +354,13 @@ This methods return the [InfiniteCanvasRenderingContext2D](api/interfaces/Infini
 
 #### Defined in
 
-[infinite-canvas.ts:14](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L14)
+[infinite-canvas.ts:27](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L27)
 
 ___
 
 ### removeEventListener
 
-▸ **removeEventListener**<`K`\>(`type`, `listener`): `void`
-
-Removes an event listener
+▸ **removeEventListener**<`K`\>(`type`, `listener`, `options?`): `void`
 
 #### Type parameters
 
@@ -146,15 +370,42 @@ Removes an event listener
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `type` | `K` | The type of event that the listener to remove is listening to |
-| `listener` | [`EventListener`](api/README.md#eventlistener)<`K`\> | The listener to remove |
+| Name | Type |
+| :------ | :------ |
+| `type` | `K` |
+| `listener` | (`this`: [`InfiniteCanvas`](api/interfaces/InfiniteCanvas.md), `ev`: [`EventMap`](api/interfaces/EventMap.md)[`K`]) => `any` |
+| `options?` | `boolean` \| `EventListenerOptions` |
 
 #### Returns
 
 `void`
 
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[removeEventListener](api/interfaces/InfiniteCanvasEventHandlers.md#removeeventlistener)
+
 #### Defined in
 
-[infinite-canvas.ts:34](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L34)
+[infinite-canvas.ts:17](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L17)
+
+▸ **removeEventListener**(`type`, `listener`, `options?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | `string` |
+| `listener` | `EventListenerOrEventListenerObject` |
+| `options?` | `boolean` \| `EventListenerOptions` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[InfiniteCanvasEventHandlers](api/interfaces/InfiniteCanvasEventHandlers.md).[removeEventListener](api/interfaces/InfiniteCanvasEventHandlers.md#removeeventlistener)
+
+#### Defined in
+
+[infinite-canvas.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L18)

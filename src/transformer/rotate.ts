@@ -1,25 +1,32 @@
-import { Movable } from "./movable";
 import { MoveSubscription } from "./move-subscription";
 import { Transformation } from "../transformation";
-import { TransformableBox } from "../interfaces/transformable-box";
-import {Transformable} from "../transformable";
+import { Anchor } from "./anchor";
+import { TransformerContext } from "./transformer-context";
+import { Gesture } from "./gesture";
 
-export class Rotate{
+export class Rotate implements Gesture{
     private point: MoveSubscription;
     private angularVelocity: number;
     private initialTransformation: Transformation;
-    constructor(movable: Movable, private readonly transformable: Transformable){
-        this.initialTransformation = transformable.transformation;
+    constructor(anchor: Anchor, private readonly context: TransformerContext){
+        this.initialTransformation = context.transformation;
         this.angularVelocity = Math.PI / 100;
-        this.point = movable.onMoved(() => {
+        this.point = anchor.onMoved(() => {
             this.setTransformation();
-        });
+        }, false);
     }
     private setTransformation(): void{
-        this.transformable.transformation = this.initialTransformation.before(Transformation.rotation(
+        this.context.transformation = this.initialTransformation.before(Transformation.rotation(
             this.point.initial.x,
             this.point.initial.y,
             (this.point.initial.x - this.point.current.x) * this.angularVelocity));
+    }
+    public withAnchor(anchor: Anchor): Gesture{
+        return this;
+    }
+    public withoutAnchor(anchor: Anchor): Gesture{
+        this.point.cancel();
+        return undefined;
     }
     public end(): void{
         this.point.cancel();

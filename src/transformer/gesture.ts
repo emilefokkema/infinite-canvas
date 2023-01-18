@@ -1,6 +1,6 @@
-import { Movable } from "./movable";
+import { Anchor } from "./anchor";
 
 export interface Gesture{
-    withMovable(movable: Movable): Gesture;
-    withoutMovable(movable: Movable): Gesture;
+    withAnchor(anchor: Anchor): Gesture;
+    withoutAnchor(anchor: Anchor): Gesture;
 }

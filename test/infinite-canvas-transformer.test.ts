@@ -8,6 +8,8 @@ import { Transformation } from "../src/transformation";
 import { Point } from "../src/geometry/point";
 import { Config } from "../src/api-surface/config";
 import { TransformableBox } from "../src/interfaces/transformable-box";
+import { Anchor } from "../src/transformer/anchor";
+import { InfiniteCanvasAnchor } from "../src/transformer/infinite-canvas-anchor";
 
 jest.useFakeTimers();
 
@@ -15,6 +17,10 @@ function expectPointToBeTransformedTo(point: Point, transformation: Transformati
 	const actualTransformedPoint: Point = transformation.apply(point);
 	expect(actualTransformedPoint.x).toBeCloseTo(expectedPoint.x);
 	expect(actualTransformedPoint.y).toBeCloseTo(expectedPoint.y);
+}
+
+function createAnchor(x: number, y: number): Anchor{
+    return new InfiniteCanvasAnchor(new Point(x, y));
 }
 
 describe("an infinite canvas transformer", () => {
@@ -36,17 +42,15 @@ describe("an infinite canvas transformer", () => {
     });
 
     describe("that has rotation enabled and creates two anchors and moves them", () => {
-        let anchor1Identifier: number;
-        let anchor2Identifier: number;
 
         beforeEach(() => {
-            anchor1Identifier = 1;
-            anchor2Identifier = 2;
             config.rotationEnabled = true;
-            transformer.createAnchorByExternalIdentifier(anchor1Identifier, 1, 0);
-            transformer.createAnchorByExternalIdentifier(anchor2Identifier, 2, 0);
-            transformer.moveAnchorByExternalIdentifier(anchor1Identifier, 0, 0);
-            transformer.moveAnchorByExternalIdentifier(anchor2Identifier, 0, 2);
+            const anchor1: Anchor = createAnchor(1, 0);
+            transformer.addAnchor(anchor1);
+            const anchor2: Anchor = createAnchor(2, 0);
+            transformer.addAnchor(anchor2);
+            anchor1.moveTo(0, 0);
+            anchor2.moveTo(0, 2);
         });
 
         it.each([
@@ -60,11 +64,12 @@ describe("an infinite canvas transformer", () => {
     });
 
     describe("that creates a rotation anchor and moves it", () => {
-        let anchorIdentifier: number;
+        let anchor: Anchor;
 
         beforeEach(() => {
-            anchorIdentifier = transformer.createRotationAnchor(1, 1);
-            transformer.moveAnchorByIdentifier(anchorIdentifier, -24, 1);
+            anchor = createAnchor(1, 1);
+            transformer.addRotationAnchor(anchor);
+            anchor.moveTo(-24, 1);
         });
 
         it.each([
@@ -95,17 +100,17 @@ describe("an infinite canvas transformer", () => {
     });
 
     describe("that creates an anchor", () => {
-        let anchorIdentifier: number;
+        let anchor: Anchor;
 
         beforeEach(() => {
-            anchorIdentifier = 1;
-            transformer.createAnchorByExternalIdentifier(anchorIdentifier, 1, 1);
+            anchor = createAnchor(1, 1);
+            transformer.addAnchor(anchor);
         });
 
         describe("and then moves it", () => {
 
             beforeEach(() => {
-                transformer.moveAnchorByExternalIdentifier(anchorIdentifier, 2, 2);
+                anchor.moveTo(2, 2);
             });
 
             it("should have resulted in a transformation that translates", () => {
@@ -113,16 +118,18 @@ describe("an infinite canvas transformer", () => {
             });
 
             describe("and then releases it and creates another", () => {
+                let newAnchor: Anchor;
 
                 beforeEach(() => {
-                    transformer.releaseAnchorByExternalIdentifier(anchorIdentifier);
-                    transformer.createAnchorByExternalIdentifier(anchorIdentifier, 2, 2);
+                    transformer.releaseAnchor(anchor);
+                    newAnchor = createAnchor(2, 2);
+                    transformer.addAnchor(newAnchor);
                 });
 
                 describe("and moves that one", () => {
                     
                     beforeEach(() => {
-                        transformer.moveAnchorByExternalIdentifier(anchorIdentifier, 3, 2);
+                        newAnchor.moveTo(3, 2);
                     });
 
                     it("should have resulted in a transformation that translates", () => {
@@ -132,12 +139,12 @@ describe("an infinite canvas transformer", () => {
             });
 
             describe("and creates another anchor and moves it", () => {
-                let secondAnchorIdentifier: number;
+                let secondAnchor: Anchor;
 
                 beforeEach(() => {
-                    secondAnchorIdentifier = 2;
-                    transformer.createAnchorByExternalIdentifier(secondAnchorIdentifier, 2, 1);
-                    transformer.moveAnchorByExternalIdentifier(secondAnchorIdentifier, 2, 0);
+                    secondAnchor = createAnchor(2, 1);
+                    transformer.addAnchor(secondAnchor);
+                    secondAnchor.moveTo(2, 0);
                 });
 
                 it.each([
@@ -152,7 +159,7 @@ describe("an infinite canvas transformer", () => {
                 describe("and then moves the first anchor", () => {
 
                     beforeEach(() => {
-                        transformer.moveAnchorByExternalIdentifier(anchorIdentifier, 2, 3);
+                        anchor.moveTo(2, 3);
                     });
 
                     it.each([
@@ -167,8 +174,8 @@ describe("an infinite canvas transformer", () => {
                     describe("and the releases the first anchor and moves the second", () => {
 
                         beforeEach(() => {
-                            transformer.releaseAnchorByExternalIdentifier(anchorIdentifier);
-                            transformer.moveAnchorByExternalIdentifier(secondAnchorIdentifier, 2, 1);
+                            transformer.releaseAnchor(anchor);
+                            secondAnchor.moveTo(2, 1);
                         });
 
                         it.each([
@@ -184,8 +191,8 @@ describe("an infinite canvas transformer", () => {
                     describe("and the releases the second anchor and moves the first", () => {
 
                         beforeEach(() => {
-                            transformer.releaseAnchorByExternalIdentifier(secondAnchorIdentifier);
-                            transformer.moveAnchorByExternalIdentifier(anchorIdentifier, 2, 4);
+                            transformer.releaseAnchor(secondAnchor);
+                            anchor.moveTo(2, 4);
                         });
 
                         it.each([

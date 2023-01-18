@@ -1,16 +1,18 @@
 import { Transformation } from "../transformation";
 import { TransformerContext } from "./transformer-context";
-import { Movable } from "./movable";
 import { TwoAnchorGesture } from "./two-anchor-gesture";
+import { Anchor } from "./anchor";
 
 export class TranslateRotateZoom extends TwoAnchorGesture{
     constructor(
-        movable1: Movable,
-        movable2: Movable,
+        anchor1: Anchor,
+        anchor2: Anchor,
         context: TransformerContext
     ){
-        super(movable1, movable2, context);
+        super(anchor1, anchor2, context);
     }
+    protected fixesFirstAnchorOnInfiniteCanvas(): boolean{return true;}
+    protected fixesSecondAnchorOnInfiniteCanvas(): boolean{return true;}
     protected setTransformation(): void{
         this.context.transformation = this.initialTransformation.before(Transformation.translateRotateZoom(
             this.point1.initial.x,

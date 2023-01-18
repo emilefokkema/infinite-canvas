@@ -1,12 +1,13 @@
-import {launch, Browser, Page, Mouse, Keyboard, CDPSession } from 'puppeteer';
+import {launch, Browser, Page, Mouse, Keyboard, CDPSession, ConsoleMessage } from 'puppeteer';
 import { evaluateOnPage } from './utils';
 import { TouchCollection } from './touch-collection';
 import { WindowEventMap } from './shared/window-event-map';
-import { EventListenerConfiguration, InfiniteCanvasE2EInitialization } from './shared/configuration';
+import { EventListenerConfiguration, FullInfiniteCanvasE2EInitialization, CanvasElementInitialization } from './shared/configuration';
 import { TestPageLib as TestPageLibInterface } from './page/interfaces'
-import { EventListenerProxy, InfiniteCanvasProxy, EventListenerProvider } from './proxies';
+import { EventListenerProxy, InfiniteCanvasProxy, EventListenerProvider, CanvasElementProxy } from './proxies';
 import { EventListenerProxyImpl } from './event-listener-proxy-impl';
 import { InfiniteCanvasProxyImpl } from './infinite-canvas-proxy-impl';
+import { CanvasElementProxyImpl } from './canvas-element-proxy-impl';
 
 declare const TestPageLib: TestPageLibInterface;
 
@@ -35,7 +36,9 @@ export class TestPage implements EventListenerProvider<WindowEventMap>{
         const session: CDPSession = await this.page.target().createCDPSession();
         return new TouchCollection(session);
     }
-
+    public setDragInterception(enabled: boolean): Promise<void>{
+        return (<any>this.page).setDragInterception(enabled);
+    }
     public getMouse(): Mouse {
         return this.page.mouse;
     }
@@ -58,11 +61,26 @@ export class TestPage implements EventListenerProvider<WindowEventMap>{
     public resize(width: number, height: number): Promise<void>{
         return setViewport(this.page, width, height);
     }
-    public async initializeInfiniteCanvas(initialization: InfiniteCanvasE2EInitialization): Promise<InfiniteCanvasProxy>{
+    public async initializeInfiniteCanvas(initialization: FullInfiniteCanvasE2EInitialization): Promise<InfiniteCanvasProxy>{
         const handleOnTestPage = await evaluateOnPage(this.page, (initialization) => TestPageLib.initializeInfiniteCanvas(initialization), initialization);
         return new InfiniteCanvasProxyImpl(handleOnTestPage);
     }
-
+    public async addStyleSheet(cssText: string): Promise<void>{
+        await evaluateOnPage(this.page, (cssText) => TestPageLib.addStyleSheet(cssText), cssText);
+    }
+    public waitForConsoleMessage(predicate: (message: ConsoleMessage) => boolean): Promise<void>{
+        return new Promise((res) => {
+            this.page.on('console', (m) => {
+                if(predicate(m)){
+                    res();
+                }
+            })
+        })
+    }
+    public async initializeCanvasElement(initialization: CanvasElementInitialization): Promise<CanvasElementProxy>{
+        const handleOnTestPage = await evaluateOnPage(this.page, (initialization) => TestPageLib.initializeCanvas(initialization), initialization);
+        return new CanvasElementProxyImpl(handleOnTestPage);
+    }
     public close(): Promise<void>{
         return this.browser.close();
     }

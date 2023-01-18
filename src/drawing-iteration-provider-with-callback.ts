@@ -1,19 +1,17 @@
 import { DrawingIterationProvider } from "./interfaces/drawing-iteration-provider";
+import {EventSource} from "./event-utils/event-source";
+import {EventDispatcher} from "./event-utils/event-dispatcher";
 
 export class DrawingIterationProviderWithCallback implements DrawingIterationProvider{
-    private _drawCallback: () => void = () => {};
+    private _drawHappened: EventDispatcher<void> = new EventDispatcher();
+    public get drawHappened(): EventSource<void>{return this._drawHappened;}
     constructor(private readonly drawingIterationProvider: DrawingIterationProvider){
 
     }
     public provideDrawingIteration(draw: () => void): void{
         this.drawingIterationProvider.provideDrawingIteration(() => {
             draw();
-            if(this._drawCallback){
-                this._drawCallback();
-            }
+            this._drawHappened.dispatch();
         });
-    }
-    public onDraw(callback: () => void): void{
-        this._drawCallback = callback;
     }
 }

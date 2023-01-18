@@ -1,9 +1,8 @@
 import { Gesture } from "./gesture";
 import { Transformable } from "../transformable";
-import { Movable } from "./movable";
+import { Anchor } from "./anchor";
 
 export interface TransformerContext extends Transformable{
-    getGestureForOneMovable(movable: Movable): Gesture;
-    getGestureForTwoMovables(movable1: Movable, movable2: Movable): Gesture;
-    readonly isTransforming: boolean;
+    getGestureForOneAnchor(anchor: Anchor): Gesture;
+    getGestureForTwoAnchors(anchor1: Anchor, anchor2: Anchor): Gesture;
 }

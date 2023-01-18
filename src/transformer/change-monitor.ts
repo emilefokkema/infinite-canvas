@@ -1,5 +1,5 @@
-import {EventDispatcher} from "../custom-events/event-dispatcher";
-import { Event } from "../custom-events/event";
+import {EventDispatcher} from "../event-utils/event-dispatcher";
+import {EventSource} from "../event-utils/event-source";
 
 export class ChangeMonitor<TValue>{
     private currentTimeout: any;
@@ -13,9 +13,9 @@ export class ChangeMonitor<TValue>{
         this._subsequentChange = new EventDispatcher<void>();
         this._changeEnd = new EventDispatcher<void>();
     }
-    public get firstChange(): Event<void>{return this._firstChange;}
-    public get subsequentChange(): Event<void>{return this._subsequentChange;}
-    public get changeEnd(): Event<void>{return this._changeEnd;}
+    public get firstChange(): EventSource<void>{return this._firstChange;}
+    public get subsequentChange(): EventSource<void>{return this._subsequentChange;}
+    public get changeEnd(): EventSource<void>{return this._changeEnd;}
     public get changing(): boolean{return this._changing;}
     private refreshTimeout(): void{
         if(this.currentTimeout !== undefined){
@@ -24,17 +24,16 @@ export class ChangeMonitor<TValue>{
         this.currentTimeout = setTimeout(() => {
             this._changing = false;
             this.currentTimeout = undefined;
-            this._changeEnd.dispatchEvent();
+            this._changeEnd.dispatch();
         }, this.timeoutInMs);
     }
     public setValue(value: TValue): void{
         this.setNewValue(value);
-        if(this._changing){
-            this._subsequentChange.dispatchEvent();
-        }else{
+        if(!this._changing){
             this._changing = true;
-            this._firstChange.dispatchEvent();
+            this._firstChange.dispatch();
         }
+        this._subsequentChange.dispatch();
         this.refreshTimeout();
     }
 }

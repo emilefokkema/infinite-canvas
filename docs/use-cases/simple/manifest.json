@@ -1,4 +1,8 @@
 {
-    "files": ["index.html", "index.js", "style.css"],
-    "title": "Using InfiniteCanvas"
+   "files": {
+      "index.html": "index.html",
+      "index.js": "index.js",
+      "style.css": "style.css"
+   },
+   "title": "Using InfiniteCanvas"
 }
