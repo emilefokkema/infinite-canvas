@@ -22,6 +22,8 @@
 
 ▸ (`this`, `event`): `any`
 
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [draw](api/interfaces/EventMap.md#draw) event
+
 ##### Parameters
 
 | Name | Type |
@@ -35,7 +37,7 @@
 
 #### Defined in
 
-[infinite-canvas.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L12)
+[infinite-canvas.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L24)
 
 ___
 
@@ -47,6 +49,8 @@ ___
 
 ▸ (`this`, `event`): `any`
 
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [touchignored](api/interfaces/EventMap.md#touchignored) event
+
 ##### Parameters
 
 | Name | Type |
@@ -60,7 +64,7 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:14](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L14)
+[infinite-canvas.ts:32](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L32)
 
 ___
 
@@ -72,6 +76,8 @@ ___
 
 ▸ (`this`, `event`): `any`
 
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [transformationchange](api/interfaces/EventMap.md#transformationchange) event
+
 ##### Parameters
 
 | Name | Type |
@@ -85,7 +91,7 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:10](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L10)
+[infinite-canvas.ts:16](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L16)
 
 ___
 
@@ -97,6 +103,8 @@ ___
 
 ▸ (`this`, `event`): `any`
 
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [transformationend](api/interfaces/EventMap.md#transformationend) event
+
 ##### Parameters
 
 | Name | Type |
@@ -110,7 +118,7 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:11](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L11)
+[infinite-canvas.ts:20](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L20)
 
 ___
 
@@ -122,6 +130,8 @@ ___
 
 ▸ (`this`, `event`): `any`
 
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [transformationstart](api/interfaces/EventMap.md#transformationstart) event
+
 ##### Parameters
 
 | Name | Type |
@@ -135,7 +145,7 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:9](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L9)
+[infinite-canvas.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L12)
 
 ___
 
@@ -146,6 +156,8 @@ ___
 #### Type declaration
 
 ▸ (`this`, `event`): `any`
+
+The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the [wheelignored](api/interfaces/EventMap.md#wheelignored) event
 
 ##### Parameters
 
@@ -160,13 +172,15 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:13](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L13)
+[infinite-canvas.ts:28](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L28)
 
 ## Methods
 
 ### addEventListener
 
 ▸ **addEventListener**<`K`\>(`type`, `listener`, `options?`): `void`
+
+See [`addEventListener`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
 
 #### Type parameters
 
@@ -192,7 +206,7 @@ DocumentAndElementEventHandlers.addEventListener
 
 #### Defined in
 
-[infinite-canvas.ts:15](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L15)
+[infinite-canvas.ts:36](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L36)
 
 ▸ **addEventListener**(`type`, `listener`, `options?`): `void`
 
@@ -214,13 +228,15 @@ DocumentAndElementEventHandlers.addEventListener
 
 #### Defined in
 
-[infinite-canvas.ts:16](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L16)
+[infinite-canvas.ts:37](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L37)
 
 ___
 
 ### removeEventListener
 
 ▸ **removeEventListener**<`K`\>(`type`, `listener`, `options?`): `void`
+
+See [`removeEventListener`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener)
 
 #### Type parameters
 
@@ -246,7 +262,7 @@ DocumentAndElementEventHandlers.removeEventListener
 
 #### Defined in
 
-[infinite-canvas.ts:17](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L17)
+[infinite-canvas.ts:41](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L41)
 
 ▸ **removeEventListener**(`type`, `listener`, `options?`): `void`
 
@@ -268,4 +284,4 @@ DocumentAndElementEventHandlers.removeEventListener
 
 #### Defined in
 
-[infinite-canvas.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L18)
+[infinite-canvas.ts:42](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L42)

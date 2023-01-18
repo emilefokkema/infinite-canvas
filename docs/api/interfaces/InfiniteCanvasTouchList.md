@@ -34,4 +34,4 @@ TouchList.item
 
 #### Defined in
 
-[infinite-canvas-touch-list.ts:4](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas-touch-list.ts#L4)
+[infinite-canvas-touch-list.ts:4](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas-touch-list.ts#L4)

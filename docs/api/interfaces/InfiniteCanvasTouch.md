@@ -14,9 +14,11 @@
 
 • **infiniteCanvasX**: `number`
 
+the x coordinate of the point on [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) where the touch is
+
 #### Defined in
 
-[infinite-canvas-touch.ts:2](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas-touch.ts#L2)
+[infinite-canvas-touch.ts:5](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas-touch.ts#L5)
 
 ___
 
@@ -24,6 +26,8 @@ ___
 
 • **infiniteCanvasY**: `number`
 
+the y coordinate of the point on [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) where the touch is
+
 #### Defined in
 
-[infinite-canvas-touch.ts:3](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas-touch.ts#L3)
+[infinite-canvas-touch.ts:9](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas-touch.ts#L9)

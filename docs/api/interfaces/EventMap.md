@@ -18,7 +18,7 @@ Emitted when the [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) has drawn it
 
 #### Defined in
 
-[event-map.ts:22](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L22)
+[event-map.ts:22](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L22)
 
 ___
 
@@ -32,7 +32,7 @@ HTMLElementEventMap.mousedown
 
 #### Defined in
 
-[event-map.ts:25](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L25)
+[event-map.ts:31](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L31)
 
 ___
 
@@ -46,7 +46,7 @@ HTMLElementEventMap.pointerdown
 
 #### Defined in
 
-[event-map.ts:26](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L26)
+[event-map.ts:32](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L32)
 
 ___
 
@@ -60,7 +60,7 @@ HTMLElementEventMap.touchcancel
 
 #### Defined in
 
-[event-map.ts:31](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L31)
+[event-map.ts:37](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L37)
 
 ___
 
@@ -74,7 +74,7 @@ HTMLElementEventMap.touchend
 
 #### Defined in
 
-[event-map.ts:30](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L30)
+[event-map.ts:36](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L36)
 
 ___
 
@@ -82,9 +82,11 @@ ___
 
 • **touchignored**: `Event`
 
+Emitted when [greedyGestureHandling](api/interfaces/Config.md#greedygesturehandling) is `false` and the user uses one one finger
+
 #### Defined in
 
-[event-map.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L24)
+[event-map.ts:30](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L30)
 
 ___
 
@@ -98,7 +100,7 @@ HTMLElementEventMap.touchmove
 
 #### Defined in
 
-[event-map.ts:29](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L29)
+[event-map.ts:35](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L35)
 
 ___
 
@@ -112,7 +114,7 @@ HTMLElementEventMap.touchstart
 
 #### Defined in
 
-[event-map.ts:28](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L28)
+[event-map.ts:34](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L34)
 
 ___
 
@@ -124,7 +126,7 @@ Emitted when [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) transforms (for 
 
 #### Defined in
 
-[event-map.ts:14](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L14)
+[event-map.ts:14](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L14)
 
 ___
 
@@ -136,7 +138,7 @@ Emitted when [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) has finished tra
 
 #### Defined in
 
-[event-map.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L18)
+[event-map.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L18)
 
 ___
 
@@ -148,7 +150,7 @@ Emitted when [InfiniteCanvas](api/interfaces/InfiniteCanvas.md) begins transform
 
 #### Defined in
 
-[event-map.ts:10](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L10)
+[event-map.ts:10](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L10)
 
 ___
 
@@ -162,7 +164,7 @@ HTMLElementEventMap.wheel
 
 #### Defined in
 
-[event-map.ts:27](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L27)
+[event-map.ts:33](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L33)
 
 ___
 
@@ -170,6 +172,8 @@ ___
 
 • **wheelignored**: `Event`
 
+Emitted when [greedyGestureHandling](api/interfaces/Config.md#greedygesturehandling) is `false` and the user 'scrolls' (uses the mouse wheel) without using the Ctrl key
+
 #### Defined in
 
-[event-map.ts:23](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/event-map.ts#L23)
+[event-map.ts:26](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/event-map.ts#L26)

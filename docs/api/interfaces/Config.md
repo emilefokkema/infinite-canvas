@@ -24,7 +24,7 @@ false
 
 #### Defined in
 
-[config.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L18)
+[config.ts:18](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/config.ts#L18)
 
 ___
 
@@ -40,7 +40,7 @@ true
 
 #### Defined in
 
-[config.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L12)
+[config.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/config.ts#L12)
 
 ___
 
@@ -56,4 +56,4 @@ Determines the units to use when drawing on an [InfiniteCanvas](api/interfaces/I
 
 #### Defined in
 
-[config.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/config.ts#L24)
+[config.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/config.ts#L24)

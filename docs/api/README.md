@@ -31,4 +31,4 @@ ef-infinite-canvas
 
 #### Defined in
 
-[infinite-canvas.ts:49](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/infinite-canvas.ts#L49)
+[infinite-canvas.ts:73](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L73)

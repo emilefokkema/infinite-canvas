@@ -24,7 +24,7 @@ The inverse of [transformation](api/interfaces/DrawEvent.md#transformation)
 
 #### Defined in
 
-[transformed.ts:11](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/transformed.ts#L11)
+[transformed.ts:11](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformed.ts#L11)
 
 ___
 
@@ -40,4 +40,4 @@ The transformation that, when applied to a point `(x, y)` in the CSS-pixel-base 
 
 #### Defined in
 
-[transformed.ts:7](https://github.com/emilefokkema/infinite-canvas/blob/4a1afe1/src/api-surface/transformed.ts#L7)
+[transformed.ts:7](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformed.ts#L7)
