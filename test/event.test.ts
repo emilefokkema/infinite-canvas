@@ -13,7 +13,6 @@ import {
     acceptEventListenerObjects,
     EventSourceThatAcceptsEventListenerObjects
 } from "../src/event-utils/accept-event-listener-objects";
-import { zip } from "../src/event-utils/zip";
 import { withLatestFrom } from "../src/event-utils/with-latest-from";
 import { concatMap } from "../src/event-utils/concat-map";
 import { sequence } from "../src/event-utils/sequence";
@@ -254,66 +253,6 @@ describe('an event source', () => {
                         });
                     });
                 });
-            });
-        });
-    });
-
-    describe('that is zipped with another', () => {
-        let firstSourceMapListener: jest.Mock;
-        let mappedFirstEventSource: EventSource<number>;
-        let otherEventSource: EventDispatcher<string>;
-        let mappedOtherEventSource: EventSource<string>;
-        let otherSourceMapListener: jest.Mock;
-        let combinedEventSource: EventSource<[number, string]>;
-        let latestEmittedValue: [number, string];
-        let combinedSourceListener: (values: [number, string]) => void;
-
-        beforeEach(() => {
-            firstSourceMapListener = jest.fn();
-            otherSourceMapListener = jest.fn();
-            mappedFirstEventSource = map(eventSource, (e) => {
-                firstSourceMapListener();
-                return e;
-            })
-            otherEventSource = new EventDispatcher();
-            mappedOtherEventSource = map(otherEventSource, (e) => {
-                otherSourceMapListener();
-                return e;
-            })
-            combinedEventSource = zip(mappedFirstEventSource, mappedOtherEventSource);
-            combinedSourceListener = values => {latestEmittedValue = values;};
-            combinedEventSource.addListener(combinedSourceListener);
-        });
-
-        it('should emit zipped values', () => {
-            eventSource.dispatch(3);
-            expect(latestEmittedValue).toBeUndefined();
-            eventSource.dispatch(4);
-            expect(latestEmittedValue).toBeUndefined();
-            otherEventSource.dispatch('a');
-            expect(latestEmittedValue).toEqual([3, 'a'])
-            otherEventSource.dispatch('b');
-            expect(latestEmittedValue).toEqual([4, 'b'])
-            otherEventSource.dispatch('c');
-            expect(latestEmittedValue).toEqual([4, 'b']);
-            eventSource.dispatch(5);
-            expect(latestEmittedValue).toEqual([5, 'c']);
-
-            expect(firstSourceMapListener).toHaveBeenCalledTimes(3);
-            expect(otherSourceMapListener).toHaveBeenCalledTimes(3);
-        });
-
-        describe('and when it is unsubscribed from', () => {
-
-            beforeEach(() => {
-                firstSourceMapListener.mockClear();
-                otherSourceMapListener.mockClear();
-                combinedEventSource.removeListener(combinedSourceListener);
-            });
-
-            it('should clean up properly', () => {
-                eventSource.dispatch(6);
-                expect(firstSourceMapListener).not.toHaveBeenCalled();
             });
         });
     });
