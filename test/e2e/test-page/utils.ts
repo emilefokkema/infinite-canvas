@@ -32,11 +32,11 @@ function convertFunctionsToStrings<T>(input: T): WithFunctionsAsStrings<T>{
     return result;
 }
 
-export function evaluate<T, TArgs extends unknown[], TResult>(
+export function evaluate<T, TArgs extends unknown[], TResult, THandleType extends JSHandle<unknown> = JSHandle<TResult>>(
     evalable: JSEvalable<T>,
     fn: (arg1: T, ...convertedArgs: ArgsWithFunctionsAsStrings<TArgs>) => TResult,
-    ...args: TArgs): Promise<JSHandle<TResult>>{
-        return evalable.evaluateHandle(fn, ...args.map(a => convertFunctionsToStrings(a)));
+    ...args: TArgs): Promise<THandleType>{
+        return evalable.evaluateHandle<THandleType>(fn, ...args.map(a => convertFunctionsToStrings(a)));
 }
 
 export function evaluateOnPage<TArgs extends unknown[], TResult>(

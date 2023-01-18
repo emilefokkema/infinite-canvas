@@ -12,24 +12,34 @@ import { AsyncResult } from './async-result';
 
 export class AttachedEventListener<TEventMap, TType extends keyof TEventMap> implements EventListenerOnE2ETestPage<TEventMap[TType]>{
    private preventDefault: (ev: TEventMap[TType]) => boolean;
+   private preventNativeDefault: (ev: TEventMap[TType]) => boolean;
+   private stopPropagation: (ev: TEventMap[TType]) => boolean;
    private shape: TEventMap[TType];
    private dispatcher: Dispatcher<TEventMap[TType]> = new Dispatcher();
    constructor(private readonly target: EventTarget<TEventMap>, config: WithFunctionsAsStrings<EventListenerConfiguration<TEventMap, TType>>){
-      const {type, preventDefault, shape, debounceInterval} = config;
-      let source: EventSource<TEventMap[TType]> = new TypedEventSource(target, <TType>type);
+      const {type, preventDefault, preventNativeDefault, stopPropagation, shape, debounceInterval, capture} = config;
+      let source: EventSource<TEventMap[TType]> = new TypedEventSource(target, <TType>type, !!capture);
       if(debounceInterval !== undefined){
          source = debounce(source, debounceInterval);
       }
       source.addListener((e) => this.handleEvent(e));
       this.preventDefault = preventDefault ? eval(preventDefault) : undefined;
+      this.preventNativeDefault = preventNativeDefault ? eval(preventNativeDefault) : undefined;
+      this.stopPropagation = stopPropagation ? eval(stopPropagation) : undefined;
       this.shape = <TEventMap[TType]>shape;
    }
    private handleEvent(ev: TEventMap[TType]): void{
-      if(this.preventDefault && this.preventDefault(ev)){
-          (<any>ev).preventDefault();
+      const preventDefault = !!this.preventDefault && this.preventDefault(ev);
+      const preventNativeDefault = !!this.preventNativeDefault && this.preventNativeDefault(ev);
+      const stopPropagation = !!this.stopPropagation && this.stopPropagation(ev);
+      if(preventDefault){
+         (<any>ev).preventDefault(preventNativeDefault)
+      }
+      if(stopPropagation){
+         (<any>ev).stopPropagation();
       }
       if(this.dispatcher.listeners.length === 0){
-          return;
+         return;
       }
       const eventShape = getShapeFromObject(this.shape, ev);
       this.dispatcher.dispatch(<TEventMap[TType]><unknown>eventShape);

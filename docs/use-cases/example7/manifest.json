@@ -1,4 +1,8 @@
 {
-    "files": ["index.html", "index.js", "style.css"],
-    "title": "example 7"
+   "files": {
+      "index.html": "index.html",
+      "index.js": "index.js",
+      "style.css": "style.css"
+   },
+   "title": "example 7"
 }

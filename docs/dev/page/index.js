@@ -2,7 +2,7 @@ import createDepTrees from './dep-trees.js'
 
 console.log('hello from stackblitz page')
 
-const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.5.7-alpha/dist/infinite-canvas.js';
+const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.0-alpha/dist/infinite-canvas.js';
 
 const stateType = {
     initializing: 0,
@@ -72,13 +72,13 @@ async function getJsonFromFile(path){
 }
 
 async function getFilesForUseCase(useCaseName){
-    const useCaseDirPath = `../../use-cases/${useCaseName}`;
-    const manifest = await getJsonFromFile(`${useCaseDirPath}/manifest.json`);
+    const useCaseDirPath = new URL(`../../use-cases/${useCaseName}/`, location.href);
+    const manifest = await getJsonFromFile(new URL('manifest.json', useCaseDirPath).toString());
     const result = {files: {}, title: manifest.title};
-    await Promise.all(manifest.files.map(fileName => addFileToResult(fileName)));
+    await Promise.all(Object.keys(manifest.files).map(fileName => addFileToResult(fileName, manifest.files[fileName])))
     return result;
-    async function addFileToResult(fileName){
-        const path = `${useCaseDirPath}/${fileName}`;
+    async function addFileToResult(fileName, relativePath){
+        const path = new URL(relativePath, useCaseDirPath).toString();
         let text = await getTextFromFile(path);
         result.files[fileName] = text;
     }
@@ -382,7 +382,7 @@ class EmbeddedProject{
         };
         if(!watching){
             projectConfig.dependencies = {
-                "ef-infinite-canvas": "^0.5.6-alpha"
+                "ef-infinite-canvas": "^0.6.0-alpha"
             };
         }
         const openOptions = this.getOpenOptions(type, files);

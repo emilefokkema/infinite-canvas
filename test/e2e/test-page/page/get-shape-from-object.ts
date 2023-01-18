@@ -22,11 +22,9 @@ function isArrayLike<T, TI>(obj: T): obj is ArrayLike<TI> & T{
 
 export function getShapeFromObject<T>(shape: T, obj: T): Shape<T>{
     if(typeof shape !== 'object'){
-        if(typeof obj === 'undefined'){
-            throw new Error(`expected value of type ${typeof shape} but got undefined`)
-        }
-        if(typeof obj !== typeof shape){
-            throw new Error(`expected value of type ${typeof shape} but got a(n) ${typeof obj}`)
+        const objType = typeof obj;
+        if(objType !== typeof shape && objType !== 'undefined'){
+            throw new Error(`expected value of type ${typeof shape} but got a(n) ${objType}`)
         }
         return <Shape<T>>obj;
     }

@@ -12,7 +12,7 @@ This value indicates that the [InfiniteCanvas](api/interfaces/InfiniteCanvas.md)
 
 #### Defined in
 
-[units.ts:9](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/units.ts#L9)
+[units.ts:9](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/units.ts#L9)
 
 ___
 
@@ -24,4 +24,4 @@ This value indicates that the [InfiniteCanvas](api/interfaces/InfiniteCanvas.md)
 
 #### Defined in
 
-[units.ts:5](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/units.ts#L5)
+[units.ts:5](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/units.ts#L5)

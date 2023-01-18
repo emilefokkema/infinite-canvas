@@ -54,6 +54,19 @@ describe('when transforming', () => {
        await getResultAfter(() => mouse.move(200, 200), () => drawn.ensureNoNext(500));
     });
 
+    it('should stop panning when mouse leaves canvas', async () => {
+        page = await page.recreate();
+        const infCanvas = await initializeInfiniteCanvas(page);
+        const drawn = await infCanvas.addDrawEventListener();
+        const mouse: puppeteer.Mouse = page.getMouse();
+        await mouse.move(300, 50);
+        await mouse.down({button: 'left'});
+        await getResultAfter(() => mouse.move(350, 50), () => drawn.getNext());
+        await getResultAfter(() => mouse.move(450, 50), () => drawn.ensureNoNext(500));
+        await getResultAfter(() => mouse.move(300, 50), () => drawn.ensureNoNext(500));
+        await mouse.up({button: 'left'});
+    });
+
     it('should rotate', async () => {
         page = await page.recreate();
         const infCanvas = await initializeInfiniteCanvas(page);
@@ -151,6 +164,8 @@ describe('when transforming', () => {
         await getResultAfter(() => touch1.move(100, 0), () => drawn.getNext());
         await compareToSnapshot(page);
         await touch1.end();
+        await getResultAfter(() => touch2.move(150, 200), () => drawn.getNext());
+        await compareToSnapshot(page);
         await touch2.end();
     });
 
@@ -164,6 +179,8 @@ describe('when transforming', () => {
         await getResultAfter(() => touch2.move(200, 200), () => drawn.getNext());
         await compareToSnapshot(page);
         await touch1.end();
+        await getResultAfter(() => touch2.move(100, 200), () => drawn.getNext());
+        await compareToSnapshot(page);
         await touch2.end();
     })
 });

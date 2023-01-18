@@ -14,7 +14,7 @@ See "a" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:8](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L8)
+[transformation-representation.ts:8](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L8)
 
 ___
 
@@ -26,7 +26,7 @@ See "b" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L12)
+[transformation-representation.ts:12](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L12)
 
 ___
 
@@ -38,7 +38,7 @@ See "c" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:16](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L16)
+[transformation-representation.ts:16](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L16)
 
 ___
 
@@ -50,7 +50,7 @@ See "d" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:20](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L20)
+[transformation-representation.ts:20](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L20)
 
 ___
 
@@ -62,7 +62,7 @@ See "e" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L24)
+[transformation-representation.ts:24](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L24)
 
 ___
 
@@ -74,4 +74,4 @@ See "f" on [this](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderi
 
 #### Defined in
 
-[transformation-representation.ts:28](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/transformation-representation.ts#L28)
+[transformation-representation.ts:28](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/transformation-representation.ts#L28)

@@ -19,7 +19,7 @@ Creates a new instance of an [InfiniteCanvas](api/interfaces/InfiniteCanvas.md)
 
 #### Defined in
 
-[infinite-canvas.ts:44](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L44)
+[infinite-canvas.ts:61](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L61)
 
 ## Properties
 
@@ -31,7 +31,7 @@ Static property with a value of [CANVAS](api/enums/Units.md#canvas)
 
 #### Defined in
 
-[infinite-canvas.ts:49](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L49)
+[infinite-canvas.ts:66](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L66)
 
 ___
 
@@ -43,7 +43,7 @@ Static property with a value of [CSS](api/enums/Units.md#css)
 
 #### Defined in
 
-[infinite-canvas.ts:53](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L53)
+[infinite-canvas.ts:70](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L70)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[infinite-canvas.ts:45](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas.ts#L45)
+[infinite-canvas.ts:62](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas.ts#L62)

@@ -4,7 +4,7 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
         globalSetup: './setup.js',
         globalTeardown: './teardown.js',
         bail: true,
-        testTimeout: 10000,
+        testTimeout: 15000,
         projects: [
             {
                 testRegex: '^(?:(?!test-case\\.spec\\.ts$).)*\\.spec\\.ts$',

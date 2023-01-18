@@ -6,40 +6,53 @@ import { InfiniteCanvas } from "../src/infinite-canvas"
 import { InfiniteCanvas as InfiniteCanvasInterface } from '../src/api-surface/infinite-canvas';
 import { InfiniteCanvasRenderingContext2D } from "../src/api-surface/infinite-canvas-rendering-context-2d"
 import { CanvasContextMock } from "./canvas-context-mock";
+import { EventMap } from "../src/api-surface/event-map";
 
 describe("an infinite canvas", () => {
 	let infiniteCanvas: InfiniteCanvasInterface;
-	let canvas: any;
-	let canvasContextMock: CanvasContextMock;
-	let mouseDownListener: (ev: any) => any;
-	let mouseMoveListener: (ev: any) => any;
-	let touchStartListener: (ev: any) => any;
-	let touchMoveListener: (ev: any) => any;
+	let canvas: HTMLCanvasElement;
 	let boundingClientRectWidth: number;
 	let boundingClientRectHeight: number;
+	let canvasContextMock: CanvasContextMock;
+
+	function createMouseEvent(type: string, init: MouseEventInit): MouseEvent{
+		const result = new MouseEvent(type, init);
+		Object.defineProperty(result, 'offsetX', {value: result.clientX});
+		Object.defineProperty(result, 'offsetY', {value: result.clientY});
+		return result;
+	}
+
+	function createPointerEvent(type: string, init: PointerEventInit): PointerEvent{
+		const result = new MouseEvent(type, init);
+		Object.defineProperty(result, 'offsetX', {value: result.clientX});
+		Object.defineProperty(result, 'offsetY', {value: result.clientY});
+		Object.defineProperty(result, 'pointerId', {value: init.pointerId})
+		return <PointerEvent>result;
+	}
 
 	beforeEach(() => {
 		boundingClientRectWidth = 100;
 		boundingClientRectHeight = 100;
-		jest.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {cb(0);return 0;});
 		canvasContextMock = new CanvasContextMock();
-		canvas = {
-			width:100,
-			height: 100,
-			getBoundingClientRect(){return {left: 0, top: 0, width: boundingClientRectWidth, height: boundingClientRectHeight};},
-			getContext(): any{return canvasContextMock.mock;},
-			addEventListener(type: string, listener: (this: HTMLCanvasElement, ev: any) => any): void{
-				if(type === "mousedown"){
-					mouseDownListener = listener;
-				}else if(type === "mousemove"){
-					mouseMoveListener = listener;
-				}else if(type === 'touchstart'){
-					touchStartListener = listener;
-				}else if(type === 'touchmove'){
-					touchMoveListener = listener;
-				}
-			}
-		};
+		jest.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {cb(0);return 0;});
+		canvas = document.createElement('canvas');
+		canvas.width = 100;
+		canvas.height = 100;
+		document.body.appendChild(canvas);
+		jest.spyOn(canvas, 'getBoundingClientRect').mockImplementation(() => {
+			return {
+				width: boundingClientRectWidth,
+				height: boundingClientRectHeight,
+				x: 0,
+				y: 0,
+				left: 0,
+				top: 0,
+				right: boundingClientRectWidth,
+				bottom: boundingClientRectHeight,
+				toJSON(){}
+			};
+		})
+		jest.spyOn(canvas, 'getContext').mockImplementation(() => canvasContextMock.mock)
 		infiniteCanvas = new InfiniteCanvas(canvas);
 	});
 
@@ -61,6 +74,512 @@ describe("an infinite canvas", () => {
 		it("should not return a different context on another call", () => {
 			const resultOfOtherCall: InfiniteCanvasRenderingContext2D = infiniteCanvas.getContext();
 			expect(resultOfOtherCall).toBe(context);
+		});
+	});
+
+	describe("that registers one event listener for both 'mouseup' capturing (using property from AddEventListenerOptions) and 'mouseup' bubbling", () => {
+		let mouseupListener: jest.Mock;
+
+		beforeEach(() => {
+			mouseupListener = jest.fn();
+			infiniteCanvas.addEventListener('mouseup', mouseupListener);
+			infiniteCanvas.addEventListener('mouseup', mouseupListener, {capture: true});
+		});
+
+		it("should notify the listener twice with the same event when a mouseup captures and bubbles", () => {
+			const mouseup = createMouseEvent('mouseup', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(mouseup);
+
+			expect(mouseupListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = mouseupListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+	});
+
+	describe("that registers one event listener for both 'mouseup' capturing and 'mouseup' bubbling", () => {
+		let mouseupListener: jest.Mock;
+
+		beforeEach(() => {
+			mouseupListener = jest.fn();
+			infiniteCanvas.addEventListener('mouseup', mouseupListener);
+			infiniteCanvas.addEventListener('mouseup', mouseupListener, true);
+		});
+
+		it("should notify the listener twice with the same event when a mouseup captures and bubbles", () => {
+			const mouseup = createMouseEvent('mouseup', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(mouseup);
+
+			expect(mouseupListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = mouseupListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+	});
+	
+	describe("that registers one event listener for both 'mousedown' capturing and 'mousedown' bubbling", () => {
+		let mousedownListener: jest.Mock;
+
+		beforeEach(() => {
+			mousedownListener = jest.fn();
+			infiniteCanvas.addEventListener('mousedown', mousedownListener);
+			infiniteCanvas.addEventListener('mousedown', mousedownListener, true);
+		});
+
+		it("should notify the listener twice with the same event when a mousedown captures and bubbles", () => {
+			const pointerdown = createPointerEvent('pointerdown', {clientX: 20, clientY: 20, pointerId: 0})
+			const mousedown = createMouseEvent('mousedown', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(pointerdown);
+			canvas.dispatchEvent(mousedown);
+
+			expect(mousedownListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = mousedownListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+	});
+
+	describe("that registers two 'click' capturing listeners and one 'click' bubbling listener", () => {
+		let otherCaptureClickListener: jest.Mock;
+		let bubbleClickListener: jest.Mock;
+
+		beforeEach(() => {
+			otherCaptureClickListener = jest.fn();
+			bubbleClickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', e => {
+				e.stopImmediatePropagation();
+			}, true);
+			infiniteCanvas.addEventListener('click', otherCaptureClickListener, true);
+			infiniteCanvas.addEventListener('click', bubbleClickListener);
+		});
+
+		it("should not notify either the other capturing listener or the bubbling listener", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click)
+
+			expect(otherCaptureClickListener).not.toHaveBeenCalled();
+			expect(bubbleClickListener).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("that registers a 'click' listener that stops immediate propagation of the native event", () => {
+		let secondCanvasListener: jest.Mock;
+
+		beforeEach(() => {
+			secondCanvasListener = jest.fn();
+			infiniteCanvas.addEventListener('click', e => e.stopImmediatePropagation())
+			canvas.addEventListener('click', secondCanvasListener);
+		});
+
+		it("should stop immediate propagation of the native event", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20, cancelable: true});
+			canvas.dispatchEvent(click)
+			expect(secondCanvasListener).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("that registers a 'click' listener that prevents default", () => {
+		let infiniteCanvasEvent: EventMap['click'];
+
+		beforeEach(() => {
+			infiniteCanvas.addEventListener('click', e => {
+				e.preventDefault();
+				infiniteCanvasEvent = e;
+			});
+		});
+
+		it("should prevent default on a native click event", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20, cancelable: true});
+			canvas.dispatchEvent(click)
+			expect(click.defaultPrevented).toBe(true);
+			expect(infiniteCanvasEvent).toBeTruthy();
+			expect(infiniteCanvasEvent.cancelable).toBe(true);
+			expect(infiniteCanvasEvent.defaultPrevented).toBe(true);
+		});
+	});
+
+	describe("that registers two 'click' bubbling listeners, the first of which stops immediate propagation", () => {
+		let clickListener: jest.Mock;
+
+		beforeEach(() => {
+			clickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', ev => {
+				ev.stopImmediatePropagation()
+			});
+			infiniteCanvas.addEventListener('click', clickListener);
+		});
+
+		it("should not notify the listener when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(clickListener).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("that registers two 'click' capturing listeners, the first of which stops immediate propagation", () => {
+		let clickListener: jest.Mock;
+
+		beforeEach(() => {
+			clickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', ev => {
+				ev.stopImmediatePropagation()
+			}, true);
+			infiniteCanvas.addEventListener('click', clickListener, true);
+		});
+
+		it("should not notify the listener when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(clickListener).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("that registers a capturing 'click' listener that stops propagation", () => {
+		let bubblingClickListener: jest.Mock;
+
+		beforeEach(() => {
+			bubblingClickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', ev => {ev.stopPropagation()}, true);
+			infiniteCanvas.addEventListener('click', bubblingClickListener);
+		});
+
+		it("should not notify the listener when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(bubblingClickListener).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("that registers one listener object  for capturing 'click' and another for bubbling 'click'", () => {
+		let captureClickListener: jest.Mock;
+		let captureClickListenerObject: EventListenerObject;
+		let bubbleClickListener: jest.Mock;
+		let bubbleClickListenerObject: EventListenerObject;
+		let capturingListenerThisArg: any;
+		let bubblingListenerThisArg: any;
+
+		beforeEach(() => {
+			captureClickListener = jest.fn();
+			bubbleClickListener = jest.fn();
+			captureClickListenerObject = {
+				handleEvent(evt: Event): void {
+					capturingListenerThisArg = this;
+					captureClickListener(evt);
+				}
+			};
+			bubbleClickListenerObject = {
+				handleEvent(evt: Event): void {
+					bubblingListenerThisArg = this;
+					bubbleClickListener(evt);
+				}
+			};
+			infiniteCanvas.addEventListener('click', captureClickListenerObject, true);
+			infiniteCanvas.addEventListener('click', bubbleClickListenerObject);
+		});
+
+		it("should notify the listeners with the same event when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(captureClickListener).toHaveBeenCalledTimes(1);
+			expect(bubbleClickListener).toHaveBeenCalledTimes(1);
+			const [[firstCallArg]] = captureClickListener.mock.calls;
+			const [[secondCallArg]] = bubbleClickListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+			expect(capturingListenerThisArg).toBe(captureClickListenerObject);
+			expect(bubblingListenerThisArg).toBe(bubbleClickListenerObject);
+		});
+
+		describe("and then the capturing listener is removed", () => {
+
+			beforeEach(() => {
+				infiniteCanvas.removeEventListener('click', captureClickListenerObject, true);
+				bubbleClickListener.mockClear();
+				captureClickListener.mockClear();
+			});
+
+			it("should notify only the bubbling listener when a click captures and bubbles", () => {
+				const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+				canvas.dispatchEvent(click);
+
+				expect(captureClickListener).toHaveBeenCalledTimes(0);
+				expect(bubbleClickListener).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
+
+	describe("that prevents default for mousedown", () => {
+		let defaultPrevented: boolean;
+		let nativeDefaultPrevented: boolean;
+
+		beforeEach(() => {
+			infiniteCanvas.addEventListener('mousedown', ev => ev.preventDefault(), true);
+			infiniteCanvas.addEventListener('mousedown', ev => {
+				defaultPrevented = ev.defaultPrevented;
+				nativeDefaultPrevented = ev.nativeDefaultPrevented;
+			});
+			const mouseDown = createMouseEvent('mousedown', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(mouseDown);
+		});
+
+		it("should have the right values for 'defaultPrevented' and 'nativeDefaultPrevented' in the event", () => {
+			expect(defaultPrevented).toBe(true);
+			expect(nativeDefaultPrevented).toBe(false);
+		});
+	});
+
+	describe("that registers one listener for capturing 'click' and another for bubbling 'click'", () => {
+		let captureClickListener: jest.Mock;
+		let bubbleClickListener: jest.Mock;
+
+		beforeEach(() => {
+			captureClickListener = jest.fn();
+			bubbleClickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', captureClickListener, true);
+			infiniteCanvas.addEventListener('click', bubbleClickListener);
+		});
+
+		it("should notify the listeners with the same event when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(captureClickListener).toHaveBeenCalledTimes(1);
+			expect(bubbleClickListener).toHaveBeenCalledTimes(1);
+			const [[firstCallArg]] = captureClickListener.mock.calls;
+			const [[secondCallArg]] = bubbleClickListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+
+		describe("and then the capturing listener is removed", () => {
+
+			beforeEach(() => {
+				infiniteCanvas.removeEventListener('click', captureClickListener, true);
+				bubbleClickListener.mockClear();
+				captureClickListener.mockClear();
+			});
+
+			it("should notify only the bubbling listener when a click captures and bubbles", () => {
+				const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+				canvas.dispatchEvent(click);
+
+				expect(captureClickListener).toHaveBeenCalledTimes(0);
+				expect(bubbleClickListener).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("and then the capturing listener is removed using the property from EventListenerOptions", () => {
+
+			beforeEach(() => {
+				infiniteCanvas.removeEventListener('click', captureClickListener, {capture: true});
+				bubbleClickListener.mockClear();
+				captureClickListener.mockClear();
+			});
+
+			it("should notify only the bubbling listener when a click captures and bubbles", () => {
+				const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+				canvas.dispatchEvent(click);
+
+				expect(captureClickListener).toHaveBeenCalledTimes(0);
+				expect(bubbleClickListener).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
+
+	describe("that registers one event listener for both 'click' capturing and 'click' bubbling", () => {
+		let clickListener: jest.Mock;
+
+		beforeEach(() => {
+			clickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', clickListener);
+			infiniteCanvas.addEventListener('click', clickListener, true);
+		});
+
+		it("should notify the listener twice with the same event when a click captures and bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(clickListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = clickListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+
+		describe("and then the listener is removed from the capturing phase", () => {
+
+			beforeEach(() => {
+				infiniteCanvas.removeEventListener('click', clickListener, true);
+			});
+
+			it("should notify the listener once when a click captures and bubbles", () => {
+				const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+				canvas.dispatchEvent(click);
+
+				expect(clickListener).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
+
+	describe("that registers a bubbling listener for 'click'", () => {
+		let thisArg: any;
+
+		beforeEach(() => {
+			infiniteCanvas.addEventListener('click', function(ev){
+				thisArg = this;
+			});
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+		});
+
+		it("should have notified the listener with a this that is the infinite canvas", () => {
+			expect(thisArg).toBe(infiniteCanvas);
+		});
+	});
+
+	describe("that registers a capturing listener for 'click'", () => {
+		let thisArg: any;
+
+		beforeEach(() => {
+			infiniteCanvas.addEventListener('click', function(ev){
+				thisArg = this;
+			}, true);
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+		});
+
+		it("should have notified the listener with a this that is the infinite canvas", () => {
+			expect(thisArg).toBe(infiniteCanvas);
+		});
+	});
+	
+	describe("that registers the same event listener for 'click' twice", () => {
+		let clickListener: jest.Mock;
+
+		beforeEach(() => {
+			clickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', clickListener);
+			infiniteCanvas.addEventListener('click', clickListener);
+		});
+
+		it("should notify the listener only once when a click bubbles", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(clickListener).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe("that registers two listeners for click", () => {
+		let firstClickListener: jest.Mock;
+		let secondClickListener: jest.Mock;
+
+		beforeEach(() => {
+			firstClickListener = jest.fn();
+			secondClickListener = jest.fn();
+			infiniteCanvas.addEventListener('click', firstClickListener);
+			infiniteCanvas.addEventListener('click', secondClickListener);
+		});
+
+		it("should notify the listeners with the same event", () => {
+			const click = createMouseEvent('click', {clientX: 20, clientY: 20});
+			canvas.dispatchEvent(click);
+
+			expect(firstClickListener).toHaveBeenCalledTimes(1);
+			expect(secondClickListener).toHaveBeenCalledTimes(1);
+			const [[firstListenerArg]] = firstClickListener.mock.calls;
+			const [[secondListenerArg]] = secondClickListener.mock.calls;
+			expect(firstListenerArg).toBe(secondListenerArg);
+		});
+	});
+
+	describe('that registers an event listener for transformationstart via an event listener property', () => {
+		let transformationStartListener: jest.Mock;
+
+		beforeEach(() => {
+			transformationStartListener = jest.fn();
+			infiniteCanvas.ontransformationstart = transformationStartListener;
+		});
+
+		it('should notify the listener', () => {
+			const pointerdown = createPointerEvent('pointerdown', {clientX: 20, clientY: 20, button: 0, pointerId: 0});
+			const mousedown = createMouseEvent('mousedown', {clientX: 20, clientY: 20, button: 0});
+			const pointermove = createPointerEvent('pointermove', {clientX: 30, clientY: 20, pointerId: 0})
+			const mousemove = createMouseEvent('mousemove', {clientX: 30, clientY: 20});
+			canvas.dispatchEvent(pointerdown);
+			canvas.dispatchEvent(mousedown);
+			canvas.dispatchEvent(pointermove);
+			canvas.dispatchEvent(mousemove);
+
+			expect(transformationStartListener).toHaveBeenCalledTimes(1);
+		});
+
+		describe('and then removes the listener via the event listener property', () => {
+
+			beforeEach(() => {
+				infiniteCanvas.ontransformationstart = null;
+				transformationStartListener.mockReset();
+			});
+
+			it('should no longer notify the listener', () => {
+				const pointerdown = createPointerEvent('pointerdown', {clientX: 20, clientY: 20, button: 0, pointerId: 0});
+				const mousedown = createMouseEvent('mousedown', {clientX: 20, clientY: 20, button: 0});
+				const pointermove = createPointerEvent('pointermove', {clientX: 30, clientY: 20, pointerId: 0})
+				const mousemove = createMouseEvent('mousemove', {clientX: 30, clientY: 20});
+				canvas.dispatchEvent(pointerdown);
+				canvas.dispatchEvent(mousedown);
+				canvas.dispatchEvent(pointermove);
+				canvas.dispatchEvent(mousemove);
+	
+				expect(transformationStartListener).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("that registers one event listener for both 'transformationStart' capturing and 'transformationStart' bubbling", () => {
+		let transformationStartListener: jest.Mock;
+
+		beforeEach(() => {
+			transformationStartListener = jest.fn();
+			infiniteCanvas.addEventListener('transformationstart', transformationStartListener, true);
+			infiniteCanvas.addEventListener('transformationstart', transformationStartListener);
+		});
+
+		it("should notify the listener twice with the same event when a transformationStart captures and bubbles", () => {
+			const pointerdown = createPointerEvent('pointerdown', {clientX: 20, clientY: 20, button: 0, pointerId: 0});
+			const mousedown = createMouseEvent('mousedown', {clientX: 20, clientY: 20, button: 0});
+			const pointermove = createPointerEvent('pointermove', {clientX: 30, clientY: 20, pointerId: 0})
+			const mousemove = createMouseEvent('mousemove', {clientX: 30, clientY: 20});
+			canvas.dispatchEvent(pointerdown);
+			canvas.dispatchEvent(mousedown);
+			canvas.dispatchEvent(pointermove);
+			canvas.dispatchEvent(mousemove);
+
+			expect(transformationStartListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = transformationStartListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
+		});
+	});
+
+	describe("that registers one event listener for both 'draw' capturing and 'draw' bubbling", () => {
+		let drawListener: jest.Mock;
+
+		beforeEach(() => {
+			drawListener = jest.fn();
+			infiniteCanvas.addEventListener('draw', drawListener, true);
+			infiniteCanvas.addEventListener('draw', drawListener);
+		});
+
+		it("should notify the listener twice with the same event when a draw captures and bubbles", () => {
+			const pointerdown = createPointerEvent('pointerdown', {clientX: 20, clientY: 20, button: 0, pointerId: 0})
+			const mousedown = createMouseEvent('mousedown', {clientX: 20, clientY: 20, button: 0});
+			const pointermove = createPointerEvent('pointermove', {clientX: 30, clientY: 20, pointerId: 0})
+			const mousemove = createMouseEvent('mousemove', {clientX: 30, clientY: 20});
+			canvas.dispatchEvent(pointerdown);
+			canvas.dispatchEvent(mousedown);
+			canvas.dispatchEvent(pointermove);
+			canvas.dispatchEvent(mousemove);
+
+			expect(drawListener).toHaveBeenCalledTimes(2);
+			const [[firstCallArg], [secondCallArg]] = drawListener.mock.calls;
+			expect(firstCallArg).toBe(secondCallArg);
 		});
 	});
 
@@ -102,11 +621,21 @@ describe("an infinite canvas", () => {
 
 						beforeEach(() => {
 							drawCallbackSpy.mockClear();
-							const touch1 = {identifier: 0, clientX:0, clientY: 0};
-							const touch2 = {identifier: 1, clientX:10, clientY: 0};
-							touchStartListener({targetTouches: [touch1, touch2], preventDefault(){}, cancelable: true});
-							touch2.clientY = 10;
-							touchMoveListener({changedTouches: [touch2]});
+							const touch1 = {identifier: 0, clientX:0, clientY: 0, target: canvas} as unknown as Touch;
+							const touch2 = {identifier: 1, clientX:10, clientY: 0, target: canvas} as unknown as Touch;
+							const pointerdown1 = createPointerEvent('pointerdown', {clientX:0, clientY: 0, pointerId: 0});
+							const touchStart1 = new TouchEvent('touchstart', {changedTouches: [touch1], targetTouches: [touch1], cancelable: true})
+							canvas.dispatchEvent(pointerdown1);
+							canvas.dispatchEvent(touchStart1);
+							const pointerdown2 = createPointerEvent('pointerdown', {clientX:10, clientY: 0, pointerId: 1});
+							const touchStart2 = new TouchEvent('touchstart', {changedTouches: [touch2], targetTouches: [touch1, touch2], cancelable: true})
+							canvas.dispatchEvent(pointerdown2);
+							canvas.dispatchEvent(touchStart2);
+							const pointer2move = createPointerEvent('pointermove', {clientX:10, clientY: 10, pointerId: 1})
+							const touch2Changed = {identifier: 1, clientX:10, clientY: 10, target: canvas} as unknown as Touch;
+							const touchMove = new TouchEvent('touchmove', {changedTouches: [touch2Changed]});
+							canvas.dispatchEvent(pointer2move);
+							canvas.dispatchEvent(touchMove);
 						});
 
 						it('should have drawn using this inverse transformation', () => {
@@ -124,8 +653,14 @@ describe("an infinite canvas", () => {
 							drawCallbackSpy.mockClear();
 							const originalX = 10;
 							const subsequentX = originalX + 25; // A horizontal difference of 25 leads to a rotation of 45 degrees, cf src/transformer/rotate.ts
-							mouseDownListener({clientX: originalX, clientY: 10, preventDefault(){}, button: 1});
-							mouseMoveListener({clientX: subsequentX, clientY: 10, preventDefault(){}, button: 1})
+							const pointerdown = createPointerEvent('pointerdown', {clientX: originalX, clientY:10, button: 1, pointerId: 0})
+							const mousedown = createMouseEvent('mousedown', {clientX: originalX, clientY:10, button: 1});
+							const pointermove = createPointerEvent('pointermove', {clientX: subsequentX, clientY: 10, button: 1, pointerId: 0})
+							const mousemove = createMouseEvent('mousemove', {clientX: subsequentX, clientY: 10, button: 1});
+							canvas.dispatchEvent(pointerdown)
+							canvas.dispatchEvent(mousedown);
+							canvas.dispatchEvent(pointermove);
+							canvas.dispatchEvent(mousemove);
 						});
 	
 						it('should have drawn using an inverse transformation that corresponds to a scaling followed by a rotation', () => {
@@ -156,8 +691,14 @@ describe("an infinite canvas", () => {
 			describe("and then pans the canvas", () => {
 
 				beforeEach(() => {
-					mouseDownListener({clientX: 10, clientY: 10, preventDefault(){}});
-					mouseMoveListener({clientX: 20, clientY: 10, preventDefault(){}})
+					const pointerdown = createPointerEvent('pointerdown', {clientX: 10, clientY:10, button: 0, pointerId: 0});
+					const mousedown = createMouseEvent('mousedown', {clientX: 10, clientY:10, button: 0});
+					const pointermove = createPointerEvent('pointermove', {clientX: 20, clientY: 10, button: 0, pointerId: 0})
+					const mousemove = createMouseEvent('mousemove', {clientX: 20, clientY: 10, button: 0});
+					canvas.dispatchEvent(pointerdown);
+					canvas.dispatchEvent(mousedown);
+					canvas.dispatchEvent(pointermove);
+					canvas.dispatchEvent(mousemove);
 				});
 
 				it("should have called the listener", () => {

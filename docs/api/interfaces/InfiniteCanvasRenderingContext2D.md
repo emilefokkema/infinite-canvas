@@ -35,7 +35,7 @@ Modifies the current sub-path by adding a ray that starts at the sub-path's last
 
 #### Defined in
 
-[infinite-canvas-rendering-context-2d.ts:13](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas-rendering-context-2d.ts#L13)
+[infinite-canvas-rendering-context-2d.ts:13](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas-rendering-context-2d.ts#L13)
 
 ___
 
@@ -58,4 +58,4 @@ Begins a new sub-path at a 'point at infinity' that lies in the direction indica
 
 #### Defined in
 
-[infinite-canvas-rendering-context-2d.ts:19](https://github.com/emilefokkema/infinite-canvas/blob/c465771/src/api-surface/infinite-canvas-rendering-context-2d.ts#L19)
+[infinite-canvas-rendering-context-2d.ts:19](https://github.com/emilefokkema/infinite-canvas/blob/65104bb/src/api-surface/infinite-canvas-rendering-context-2d.ts#L19)

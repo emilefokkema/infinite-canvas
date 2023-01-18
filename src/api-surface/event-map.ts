@@ -1,25 +1,45 @@
 import { DrawEvent } from "./draw-event";
+import { InfiniteCanvasEventWithDefaultBehavior } from "./infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasTouchEvent } from "./infinite-canvas-touch-event";
 import { TransformationEvent } from "./transformation-event";
 
-export interface EventMap{
-    /** 
-     * Emitted when the {@link InfiniteCanvas} has drawn its content on the underlying `<canvas>`
-     */
-    "draw": DrawEvent,
-    /**
-     * Emitted when {@link InfiniteCanvas} begins transforming (for example when the user begins to pan)
-     */
-    "transformationStart": TransformationEvent,
+export interface EventMap extends HTMLElementEventMap {
+	/**
+	 * Emitted when {@link InfiniteCanvas} begins transforming (for example when the user begins to pan)
+	 */
+    transformationstart: TransformationEvent,
     /**
      * Emitted when {@link InfiniteCanvas} transforms (for example when the user pans)
      */
-    "transformationChange": TransformationEvent,
+    transformationchange: TransformationEvent,
     /**
      * Emitted when {@link InfiniteCanvas} has finished transforming
      */
-    "transformationEnd": TransformationEvent
+    transformationend: TransformationEvent,
+    /** 
+     * Emitted when the {@link InfiniteCanvas} has drawn its content on the underlying `<canvas>`
+     */
+    draw: DrawEvent,
+    /**
+     * Emitted when {@link Config#greedyGestureHandling} is `false` and the user 'scrolls' (uses the mouse wheel) without using the Ctrl key
+     */
+    wheelignored: Event,
+    /**
+     * Emitted when {@link Config#greedyGestureHandling} is `false` and the user uses one one finger
+     */
+    touchignored: Event,
+    mousedown: MouseEvent & InfiniteCanvasEventWithDefaultBehavior,
+    pointerdown: PointerEvent & InfiniteCanvasEventWithDefaultBehavior,
+    wheel: WheelEvent & InfiniteCanvasEventWithDefaultBehavior
+    touchstart: InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior,
+    touchmove: InfiniteCanvasTouchEvent,
+    touchend: InfiniteCanvasTouchEvent,
+    touchcancel: InfiniteCanvasTouchEvent
 }
 
-export * from './draw-event'
-export * from './transformation-event'
-export * from './transformed'
+export * from "./draw-event";
+export * from './transformation-event';
+export * from './infinite-canvas-touch-event';
+export * from './transformed';
+export * from './infinite-canvas-event-with-default-behavior';
+export * from './infinite-canvas-touch-event';

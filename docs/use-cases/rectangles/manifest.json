@@ -1,4 +1,10 @@
 {
-    "files": ["index.html", "index.js", "style.css"],
-    "title": "rectangles"
+   "files": {
+      "index.html": "index.html",
+      "index.js": "index.js",
+      "style.css": "style.css",
+      "overlay.css": "../overlay.css",
+      "overlay.js": "../overlay.js"
+   },
+   "title": "rectangles"
 }
