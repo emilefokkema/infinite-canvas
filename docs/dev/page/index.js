@@ -210,6 +210,11 @@ function configureHeader(project, route, api){
                 props: {
                     projectstate: Object
                 },
+                methods: {
+                    reconnect(){
+                        project.connect();
+                    }
+                },
                 computed: {
                     message(){
                         if(!this.projectstate){
@@ -223,6 +228,9 @@ function configureHeader(project, route, api){
                             case stateType.switching: return 'switching...'
                             default: return 'state';
                         }
+                    },
+                    canReconnect(){
+                        return this.projectstate && this.projectstate.type === stateType.disconnected;
                     }
                 }
             },
@@ -314,6 +322,14 @@ class EmbeddedProject{
         })
         this.stateDispatcher.setState({type: stateType.watching})
     }
+    connect(){
+        this.stateDispatcher.setState({type: stateType.waitForCompilation})
+        getInfiniteCanvasCompilation(
+            (script) => this.addInfiniteCanvas(script),
+            () => {
+                this.stateDispatcher.setState({type: stateType.disconnected})
+            })
+    }
     initialize(projectId, type){
         this.projectId = projectId;
         const watching = type === pageType.dev;
@@ -321,11 +337,7 @@ class EmbeddedProject{
         this.stateDispatcher.setState({type: stateType.initializing})
         this.embedPromise = this.embedProject(projectId, type);
         if(watching){
-            getInfiniteCanvasCompilation(
-                (script) => this.addInfiniteCanvas(script),
-                () => {
-                    this.stateDispatcher.setState({type: stateType.disconnected})
-                })
+            this.connect()
         }
     }
     applyFsDiff(diff){
