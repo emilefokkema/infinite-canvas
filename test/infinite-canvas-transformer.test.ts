@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Point } from "../src/geometry/point";

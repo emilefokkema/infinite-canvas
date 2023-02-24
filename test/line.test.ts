@@ -1,14 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, beforeEach } from '@jest/globals';
 import { Line } from "../src/areas/line/line";
 import { l, p } from "./builders";
 import { expectAreasToBeEqual } from "./expectations";
 import { Point } from "../src/geometry/point";
 import { Area } from "../src/areas/area";
-import {ConvexPolygon} from "../src/areas/polygons/convex-polygon";
 
 describe("a line", () => {
     let line: Line;

@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import {describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import {InfiniteCanvasViewBox} from "../src/infinite-canvas-viewbox"
 import {InfiniteContext} from "../src/infinite-context/infinite-context";
 import {ViewBox} from "../src/interfaces/viewbox";
@@ -14,14 +15,33 @@ import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider"
 import {Config} from "../src/api-surface/config";
 import {Units} from "../src/api-surface/units";
 
+function setupGlobals(){
+	window.createImageBitmap = function(): Promise<ImageBitmap>{return undefined;};
+	(<any>window).ImageData = class {
+		public width: number;
+		public height: number;
+		public data: Uint8ClampedArray;
+		constructor(arrayOrWidth: Uint8ClampedArray | number, widthOrHeight: number, height?: number){
+			if(typeof arrayOrWidth === "number"){
+				this.width = arrayOrWidth;
+				this.height = widthOrHeight;
+			}else{
+				this.width = widthOrHeight;
+				this.height = height;
+				this.data = arrayOrWidth;
+			}
+		}
+	};
+}
+
 describe("an infinite canvas context", () => {
 	let width: number;
 	let height: number;
 	let infiniteContext: InfiniteCanvasRenderingContext2D;
 	let contextMock: CanvasContextMock;
 	let viewbox: ViewBox;
-	let getDrawingLockSpy: jest.Mock;
-	let releaseDrawingLockSpy: jest.SpyInstance;
+	let getDrawingLockSpy: jest.Mock<() => DrawingLock>;
+	let releaseDrawingLockSpy: jest.SpiedFunction<() => void>;
 	let latestDrawingInstruction: () => void;
 	let executeLatestDrawingInstruction: () => void;
 	let isTransforming: boolean;
@@ -29,6 +49,7 @@ describe("an infinite canvas context", () => {
 	let config: Partial<Config>;
 
 	beforeEach(() => {
+		setupGlobals();
 		config = {};
 		width = 200;
 		height = 200;
@@ -38,7 +59,7 @@ describe("an infinite canvas context", () => {
 		const drawingLock: DrawingLock = {release(){}};
 		releaseDrawingLockSpy = jest.spyOn(drawingLock, 'release');
 		const getDrawingLock: () => DrawingLock = () => drawingLock;
-		getDrawingLockSpy = jest.fn().mockReturnValue(drawingLock);
+		getDrawingLockSpy = jest.fn<() => DrawingLock>().mockReturnValue(drawingLock);
 
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
@@ -1422,7 +1443,7 @@ describe("an infinite canvas context", () => {
 		let width: number;
 		let height: number;
 		let returnImageBitmap: (bitmap: ImageBitmap) => void;
-		let createImageBitmapSpy: jest.SpyInstance;
+		let createImageBitmapSpy: jest.SpiedFunction<(typeof window)['createImageBitmap']>;
 		let imageData: ImageData;
 
 		beforeEach(() => {
@@ -1457,7 +1478,7 @@ describe("an infinite canvas context", () => {
 	
 			it("should have asked for an image bitmap", () => {
 				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
-				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0] as ImageData;
 				expect(imageData.width).toBe(width);
 				expect(imageData.height).toBe(height);
 				expect(imageData.data.length).toBe(4 * width * height);
@@ -1538,7 +1559,7 @@ describe("an infinite canvas context", () => {
 			it("should have asked for an image bitmap", () => {
 				expect(createImageBitmapSpy).toHaveBeenCalledTimes(1);
 				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
-				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0] as ImageData;
 				expect(imageData.width).toBe(dirtyWidth);
 				expect(imageData.height).toBe(dirtyHeight);
 				expect(imageData.data.length).toBe(4 * dirtyWidth * dirtyHeight);
@@ -1597,7 +1618,7 @@ describe("an infinite canvas context", () => {
 		let clipHeight: number;
 		let imageDataWidth: number;
 		let imageDataHeight: number;
-		let createImageBitmapSpy: jest.SpyInstance;
+		let createImageBitmapSpy: jest.SpiedFunction<(typeof window)['createImageBitmap']>;
 
 		beforeEach((done) => {
 			imageDataWidth = 100;

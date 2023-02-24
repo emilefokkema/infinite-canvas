@@ -1,3 +1,4 @@
+import {expect, describe, it, beforeAll, afterAll } from '@jest/globals';
 import { TestPage, InfiniteCanvasProxy, EventListenerProxy, TouchEventShape, getResultAfter, TouchCollection, Touch as TouchCollectionTouch } from "e2e-test-page";
 
 function initializeInfiniteCanvas(page: TestPage): Promise<InfiniteCanvasProxy>{

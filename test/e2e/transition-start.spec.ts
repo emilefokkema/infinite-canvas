@@ -1,3 +1,4 @@
+import {describe, it, beforeAll, afterAll } from '@jest/globals';
 import { EventListenerProxy, getResultAfter, InfiniteCanvasProxy, TestPage } from "e2e-test-page";
 
 function initializeInfiniteCanvas(page: TestPage): Promise<InfiniteCanvasProxy>{

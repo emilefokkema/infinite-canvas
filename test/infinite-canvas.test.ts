@@ -2,11 +2,12 @@
  * @jest-environment jsdom
  */
 
+import {describe, it, expect, beforeEach, jest } from '@jest/globals';
 import { InfiniteCanvas } from "../src/infinite-canvas"
 import { InfiniteCanvas as InfiniteCanvasInterface } from '../src/api-surface/infinite-canvas';
 import { InfiniteCanvasRenderingContext2D } from "../src/api-surface/infinite-canvas-rendering-context-2d"
 import { CanvasContextMock } from "./canvas-context-mock";
-import { EventMap } from "../src/api-surface/event-map";
+import { DrawEvent, EventMap } from "../src/api-surface/event-map";
 
 describe("an infinite canvas", () => {
 	let infiniteCanvas: InfiniteCanvasInterface;
@@ -584,7 +585,7 @@ describe("an infinite canvas", () => {
 	});
 
 	describe("that registers a listener to 'draw'", () => {
-		let drawCallbackSpy: jest.Mock;
+		let drawCallbackSpy: jest.Mock<(e: DrawEvent) => void>;
 
 		beforeEach(() => {
 			
@@ -710,8 +711,8 @@ describe("an infinite canvas", () => {
 		describe("with 'once'  true", () => {
 
 			beforeEach(() => {
-				infiniteCanvas.addEventListener("draw", () => {
-					drawCallbackSpy();
+				infiniteCanvas.addEventListener("draw", (e) => {
+					drawCallbackSpy(e);
 				}, {once: true});
 			});
 

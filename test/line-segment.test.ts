@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { LineSegment } from "../src/areas/line/line-segment";
 import { ls, p, r } from "./builders";
 import { empty } from "../src/areas/empty";

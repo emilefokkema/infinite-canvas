@@ -1,3 +1,4 @@
+import {describe, it, beforeAll, afterAll } from '@jest/globals';
 import { compareToSnapshot } from './compare-to-snapshot';
 import { TestPage, EventListenerProxy, DrawEvent, InfiniteCanvasProxy, getResultAfter, TouchCollection, Touch as TouchCollectionTouch } from "e2e-test-page";
 

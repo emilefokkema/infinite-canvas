@@ -1,3 +1,4 @@
+import {describe, it, beforeAll, afterAll } from '@jest/globals';
 import puppeteer from 'puppeteer';
 import { compareToSnapshot } from './compare-to-snapshot';
 import { TestPage, Units, InfiniteCanvasProxy, getResultAfter, TouchCollection, Touch } from 'e2e-test-page';

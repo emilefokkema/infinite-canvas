@@ -1,3 +1,4 @@
+import {describe, it, beforeAll, afterAll } from '@jest/globals';
 import { InfiniteCanvasProxy, TestPage } from "e2e-test-page"
 import { ensureDoesNotResolve } from './utils';
 

@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { InfiniteCanvasStateInstance } from "../src/state/infinite-canvas-state-instance";
 import { logInstruction } from "./log-instruction";
 import { Instruction } from "../src/instructions/instruction";

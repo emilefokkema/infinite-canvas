@@ -1,3 +1,4 @@
+import {expect } from '@jest/globals';
 import { HalfPlane } from "../src/areas/polygons/half-plane";
 import { ConvexPolygon } from "../src/areas/polygons/convex-polygon";
 import { LineSegment } from "../src/areas/line/line-segment";

@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { Transformation } from "../src/transformation"
 import { Point } from "../src/geometry/point"
 

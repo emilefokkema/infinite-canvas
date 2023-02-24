@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { Ray } from "../src/areas/line/ray";
 import { r, p, ls, l } from "./builders";
 import { Point } from "../src/geometry/point";

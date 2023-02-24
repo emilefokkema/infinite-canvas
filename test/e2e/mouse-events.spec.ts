@@ -1,3 +1,4 @@
+import {expect, describe, it, beforeAll, afterAll } from '@jest/globals';
 import puppeteer from 'puppeteer';
 import { TransformationRepresentation, TestPage, InfiniteCanvasProxy, MouseEventShape, EventListenerProxy, getResultAfter, DrawEvent, TransformationEvent, getNextInTurn, WheelEventShape } from 'e2e-test-page';
 
