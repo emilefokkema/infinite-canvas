@@ -18,8 +18,5 @@ class ShadowOffset extends InfiniteCanvasStateInstanceDimension<"shadowOffset">{
     protected valuesAreEqual(oldValue: Point, newValue: Point): boolean{
         return oldValue.x === newValue.x && oldValue.y == newValue.y;
     }
-    protected valuesAreEqualWhenTransformed(oldValue: Point, newValue: Point): boolean{
-        return oldValue.x === 0 && oldValue.y === 0 && newValue.x === 0 && newValue.y === 0;
-    }
 }
 export const shadowOffset: TypedStateInstanceDimension<Point> = new ShadowOffset("shadowOffset");

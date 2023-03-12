@@ -27,4 +27,3 @@ export class InfiniteCanvasTransformableScalarStateInstanceDimension extends Inf
 }
 export const lineWidth: TypedStateInstanceDimension<number> = new InfiniteCanvasTransformableScalarStateInstanceDimension("lineWidth");
 export const lineDashOffset: TypedStateInstanceDimension<number> = new InfiniteCanvasTransformableScalarStateInstanceDimension("lineDashOffset");
-export const shadowBlur: TypedStateInstanceDimension<number> = new InfiniteCanvasTransformableScalarStateInstanceDimension("shadowBlur");

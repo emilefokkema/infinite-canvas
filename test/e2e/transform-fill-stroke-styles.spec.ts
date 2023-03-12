@@ -48,12 +48,13 @@ describe('when using these particular fill and stroke styles', () => {
     it('should look like this when transformed', async () => {
         const drawn = await infCanvas.addDrawEventListener();
         const touchCollection = await page.getTouchCollection();
-        let firstTouch: Touch;
-        let secondTouch: Touch;
+        const firstTouch = await touchCollection.start(10, 10);
+        const secondTouch = await touchCollection.start(50, 50);
         await getResultAfter(async () => {
-            firstTouch = await touchCollection.start(10, 10);
-            secondTouch = await touchCollection.start(50, 50);
-            await secondTouch.move(100, 100);
+            await secondTouch.move(120, 120);
+        }, () => drawn.getNext());
+        await getResultAfter(async () => {
+            await firstTouch.move(-10, -10);
         }, () => drawn.getNext());
         await compareToSnapshot(page);
         await firstTouch.end();

@@ -2,7 +2,7 @@ import { ViewBox } from "../interfaces/viewbox";
 import { shadowColor } from "../state/dimensions/shadow-color";
 import { Point } from "../geometry/point";
 import { shadowOffset } from "../state/dimensions/shadow-offset";
-import { shadowBlur } from "../state/dimensions/infinite-canvas-transformable-scalar-state-instance-dimension";
+import { shadowBlur } from "../state/dimensions/shadow-blur";
 
 export class InfiniteCanvasShadowStyles implements CanvasShadowStyles{
     constructor(private readonly viewBox: ViewBox){}

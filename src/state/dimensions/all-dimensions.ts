@@ -1,7 +1,8 @@
 import { StateInstanceDimension } from "./state-instance-dimension";
 import { direction } from "./direction";
 import { font } from "./font";
-import { lineDashOffset, lineWidth, shadowBlur } from "./infinite-canvas-transformable-scalar-state-instance-dimension";
+import { lineDashOffset, lineWidth } from "./infinite-canvas-transformable-scalar-state-instance-dimension";
+import { shadowBlur } from './shadow-blur'
 import { lineDash } from "./line-dash";
 import { strokeStyle, fillStyle } from "./fill-stroke-style";
 import { textAlign } from "./text-align";
