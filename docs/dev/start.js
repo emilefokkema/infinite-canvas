@@ -98,7 +98,7 @@ async function getTestCaseProjects(){
         })
     });
     return fileNames.map(fileName => {
-        const withoutExtension = fileName.replace(/\.js$/g,'');
+        const withoutExtension = fileName.replace(/\.mjs$/g,'');
         return {
             id: `test-cases/${withoutExtension}`,
             title: withoutExtension
@@ -120,7 +120,7 @@ function createApiRouter(){
         res.send('use-cases/simple')
     });
     router.get('/test-case/:testCaseId', async (req, res) => {
-        const result = await readFileContent(path.resolve(testCaseDir, `${req.params.testCaseId}.js`));
+        const result = await readFileContent(path.resolve(testCaseDir, `${req.params.testCaseId}.mjs`));
         res.send(result)
     })
     return router;

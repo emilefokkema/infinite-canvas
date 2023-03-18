@@ -27,6 +27,8 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
                 },
+                globalSetup: './test-case-setup.js',
+                globalTeardown: './test-case-teardown.js',
                 transform: {
                     '^.+\\.tsx?$': 'ts-jest',
                 },
@@ -39,6 +41,8 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
                 },
+                globalSetup: './test-case-setup.js',
+                globalTeardown: './test-case-teardown.js',
                 transform: {
                     '^.+\\.tsx?$': 'ts-jest',
                 },
@@ -51,6 +55,8 @@ module.exports = function(snapshotSuffix, deltaYDistortion){
                     __SNAPSHOT_SUFFIX__: snapshotSuffix,
                     __DELTAY_DISTORTION__: deltaYDistortion
                 },
+                globalSetup: './test-case-setup.js',
+                globalTeardown: './test-case-teardown.js',
                 transform: {
                     '^.+\\.tsx?$': 'ts-jest',
                 },

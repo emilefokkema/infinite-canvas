@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-import path from 'path'
 import fs from 'fs';
 
 export class TestCasePage{
@@ -19,11 +18,10 @@ export class TestCasePage{
             }
         })
     }
-    public async loadTestCase(relativePath: string): Promise<void>{
+    public async loadTestCase(fullPath: string): Promise<void>{
         if(this.hasLoadedTestCase){
             await this.page.reload({waitUntil: 'domcontentloaded'});
         }
-        const fullPath = path.resolve(process.cwd(), relativePath);
         const content = (await fs.readFileSync(fullPath, {encoding: 'utf8'})).replace(/[`\\\$]/g,'\\$&');
         const frame = this.page.frames()[0];
         const toEvaluate = `URL.createObjectURL(new Blob([\`${content}\`],{type: 'text/javascript'}))`;
