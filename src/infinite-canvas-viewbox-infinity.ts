@@ -5,19 +5,19 @@ import {ConvexPolygon} from "./areas/polygons/convex-polygon";
 import { right, left, down, up } from "./geometry/points-at-infinity";
 import {CanvasRectangle} from "./rectangle/canvas-rectangle";
 import {InfiniteCanvasState} from "./state/infinite-canvas-state";
+import { DrawnStrokeProperties } from "./interfaces/drawn-stroke-properties";
 
 export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
     constructor(
         private readonly rectangle: CanvasRectangle,
         private readonly state: InfiniteCanvasState,
-        private readonly getLineDashPeriod: () => number,
-        private readonly getDrawnLineWidth: () => number) {
+        private readonly drawnStroke: DrawnStrokeProperties) {
     }
     public addPathAroundViewbox(context: CanvasRenderingContext2D): void{
-        this.rectangle.addPathAroundViewbox(context, this.getDrawnLineWidth());
+        this.rectangle.addPathAroundViewbox(context, this.drawnStroke.lineWidth);
     }
     private getTransformedViewbox(): ConvexPolygon{
-        const margin = this.getDrawnLineWidth() * this.rectangle.transformation.scale;
+        const margin = this.drawnStroke.lineWidth * this.rectangle.transformation.scale;
         const bitmapTransformationToTransformedInfiniteCanvasContext: Transformation = this.state.current.transformation.before(this.rectangle.getBitmapTransformationToInfiniteCanvasContext());
         return this.rectangle.polygon.expandByDistance(margin).transform(bitmapTransformationToTransformedInfiniteCanvasContext.inverse())
     }
@@ -84,7 +84,7 @@ export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
         this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(context, transformation, distanceCovered, toPoint, direction);
     }
     private ensureDistanceCoveredIsMultipleOfLineDashPeriod(context: CanvasRenderingContext2D, viewboxTransformation: Transformation, distanceSoFar: number, lastPoint: Point, directionOfExtraPoint: Point): void{
-        const lineDashPeriod: number = this.getLineDashPeriod();
+        const lineDashPeriod: number = this.drawnStroke.lineDashPeriod;
         if(lineDashPeriod === 0){
             return;
         }

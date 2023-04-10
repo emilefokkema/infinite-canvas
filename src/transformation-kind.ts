@@ -1,1 +1,1 @@
-export enum TransformationKind{Relative, Absolute}
+export enum TransformationKind{None, Relative, Absolute}

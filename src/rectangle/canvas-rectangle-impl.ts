@@ -5,8 +5,6 @@ import { ConvexPolygon } from "../areas/polygons/convex-polygon";
 import { Transformation } from "../transformation";
 import { Point } from "../geometry/point";
 import { TransformationRepresentation } from "../api-surface/transformation-representation";
-import { InfiniteCanvasPathInfinityProvider } from "../infinite-canvas-path-infinity-provider";
-import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
 import { CoordinatesSwitch } from "./coordinates-switch";
 import { CanvasMeasurement } from "./canvas-measurement";
 import { CoordinatesSwitchImpl } from "./coordinates-switch-impl";
@@ -46,9 +44,6 @@ export class CanvasRectangleImpl implements CanvasRectangle{
     public getCSSPosition(clientX: number, clientY: number): Point{
         const {left, top} = this.measurementProvider.measure();
         return new Point(clientX - left, clientY - top);
-    }
-    public getForPath(): PathInfinityProvider{
-        return new InfiniteCanvasPathInfinityProvider(this);
     }
     public measure(): void {
         const newUnitsToUse = this.config.units === Units.CSS ? Units.CSS : Units.CANVAS;

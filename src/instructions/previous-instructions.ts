@@ -6,11 +6,11 @@ import { StateChangingInstructionSetWithArea } from "../interfaces/state-changin
 import { StateAndInstruction } from "./state-and-instruction";
 import { ClearRectWithState } from "./clear-rect-with-state";
 import { Area } from "../areas/area";
-import { PartOfDrawing } from "../interfaces/part-of-drawing";
 import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { InfiniteCanvasPathInfinityProvider } from "../infinite-canvas-path-infinity-provider";
 
-export class PreviousInstructions extends StateChangingInstructionSequence<StateChangingInstructionSetWithArea> implements PartOfDrawing{
+export class PreviousInstructions extends StateChangingInstructionSequence<StateChangingInstructionSetWithArea> {
     constructor(initiallyWithState: StateAndInstruction, private readonly rectangle: CanvasRectangle){
         super(initiallyWithState);
     }
@@ -18,22 +18,20 @@ export class PreviousInstructions extends StateChangingInstructionSequence<State
         toInstructionSet.setInitialStateWithClippedPaths(fromState);
     }
     public hasDrawingAcrossBorderOf(area: Area): boolean{
-        return this.contains(i => i.hasDrawingAcrossBorderOf(area));
+        return this.contains(i => i.drawingArea.hasDrawingAcrossBorderOf(area));
     }
     public intersects(area: Area): boolean{
-        return this.contains(i => i.intersects(area));
+        return this.contains(i => i.drawingArea.intersects(area));
     }
     public addClearRect(area: Area, state: InfiniteCanvasState, x: number, y: number, width: number, height: number): void{
-        const infinity: ViewboxInfinity = this.rectangle.getForPath().getInfinity(state);
+        const infinityProvider = new InfiniteCanvasPathInfinityProvider(this.rectangle, {lineWidth: 0, lineDashPeriod: 0})
+        const infinity: ViewboxInfinity = infinityProvider.getInfinity(state);
         const clearRect: ClearRectWithState = ClearRectWithState.createClearRect(state, area, infinity, x, y, width, height, this.rectangle);
         clearRect.setInitialState(this.state);
         this.add(clearRect);
     }
     public clearContentsInsideArea(area: Area): void{
-        this.removeAll(i => i.isContainedBy(area));
-    }
-    public isContainedBy(area: Area): boolean {
-        return !this.contains(i => !i.isContainedBy(area));
+        this.removeAll(i => i.drawingArea.isContainedBy(area));
     }
     public static create(rectangle: CanvasRectangle): PreviousInstructions{
         return new PreviousInstructions(StateAndInstruction.create(defaultState, InfiniteCanvasStateInstance.setDefault, rectangle), rectangle);

@@ -79,6 +79,17 @@ describe("a rectangle", () => {
         });
     });
 
+    it.each([[ConvexPolygon.createRectangle(2, 2, 1, 1), p(p => p
+        .with(hp => hp.base(0, 0).normal(0, 1))
+        .with(hp => hp.base(0, 0).normal(1, 0))
+        .with(hp => hp.base(3, 3).normal(0, -1))
+        .with(hp => hp.base(3, 3).normal(-1, 0))
+        .with(hp => hp.base(1, 0).normal(-1, 1))
+        .with(hp => hp.base(0, 1).normal(1, -1)))]])('should be joined to other areas in the right way', (areaToJoin: Area, expectedResult: Area) => {
+            const result = rectangle.join(areaToJoin);
+            expectAreasToBeEqual(result, expectedResult)
+    })
+
     it.each([
         [new Point(0, 1), new Point(0, 1), new Point(0, 1)],
         [new Point(0, 1), new Point(0, -1), new Point(0, 0)],
@@ -328,6 +339,15 @@ describe("a convex polygon with one half plane", () => {
     ])("should contain infinity in the right directions", (direction: Point, expectedToContainInfinityInDirection: boolean) => {
         expect(convexPolygon.containsInfinityInDirection(direction)).toBe(expectedToContainInfinityInDirection);
     });
+
+    it.each([
+        [p(p => p.with(hp => hp.base(0, -1).normal(0, 1))), p(p => p.with(hp => hp.base(0, -2).normal(0, 1)))],
+        [p(p => p.with(hp => hp.base(0, -3).normal(0, 1))), p(p => p.with(hp => hp.base(0, -3).normal(0, 1)))],
+        [plane, plane],
+        [p(p => p.with(hp => hp.base(0, -3).normal(1, 0))), plane],
+    ])('should join to other areas in the right way', (areaToJoin: Area, expectedResult: Area) => {
+        expectAreasToBeEqual(convexPolygon.join(areaToJoin), expectedResult)
+    })
 });
 
 describe("a convex polygon with three half planes and two vertices", () => {
@@ -615,6 +635,16 @@ describe("a convex polygon with three half planes and two vertices", () => {
         expect(convexPolygon.intersectsConvexPolygon(otherConvexPolygon)).toBe(expectedToIntersect);
         expect(otherConvexPolygon.intersectsConvexPolygon(convexPolygon)).toBe(expectedToIntersect);
     });
+
+    it.each([
+        [p(p => p.with(hp => hp.base(2, -1).normal(1, -1)).with(hp => hp.base(2, -1).normal(-1, -1))), p(p => p.with(hp => hp.base(2, -1).normal(-1, -1)).with(hp => hp.base(0, -1).normal(0, -1)).with(hp => hp.base(-1, -1).normal(1, -1)))],
+        [p(p => p.with(hp => hp.base(0, -2).normal(1, -1)).with(hp => hp.base(0, -2).normal(-1, -2))), p(p => p.with(hp => hp.base(-1, -1).normal(1, -1)).with(hp => hp.base(0, -1).normal(0, -1)).with(hp => hp.base(1, -1).normal(-1, -2)))],
+        [p(p => p.with(hp => hp.base(3, -2).normal(-1, 0)).with(hp => hp.base(3, -2).normal(0, -1))), p(p => p.with(hp => hp.base(0, -1).normal(0, -1)).with(hp => hp.base(1, -1).normal(-1, -2)).with(hp => hp.base(3, -2).normal(-1, -1)))],
+        [p(p => p.with(hp => hp.base(0, 1).normal(0, 1))), plane]
+    ])('should join to other areas in the right way', (areaToJoin: Area, expectedResult: Area) => {
+        const result = convexPolygon.join(areaToJoin)
+        expectAreasToBeEqual(result, expectedResult)
+    })
 });
 
 describe("a convex polygon with three half planes and three vertices", () => {
@@ -656,6 +686,15 @@ describe("a convex polygon with only one half plane", () => {
             expectPolygonsToBeEqual(intersection, expectedIntersection);
         }
     });
+
+    it.each([
+        [p(p => p.with(hp => hp.base(0, 1).normal(0, 1))), p(p => p.with(hp => hp.base(0, 0).normal(0, 1)))],
+        [p(p => p.with(hp => hp.base(0, -1).normal(0, 1))), p(p => p.with(hp => hp.base(0, -1).normal(0, 1)))],
+        [p(p => p.with(hp => hp.base(0, -1).normal(1, 1))), plane]
+    ])('should join to other areas in the right way', (areaToJoin: Area, expectedResult: Area) => {
+        const result = convexPolygon.join(areaToJoin)
+        expectAreasToBeEqual(result, expectedResult)
+    })
 });
 
 describe("a convex polygon with two half planes and no vertices", () => {

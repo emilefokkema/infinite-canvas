@@ -6,7 +6,6 @@ import { defaultState } from "../src/state/default-state";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
-import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { Instruction } from "../src/instructions/instruction";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
 import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
@@ -27,7 +26,7 @@ describe("a clipped paths", () => {
 
         beforeEach(() => {
             currentState = defaultState;
-            clippedPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+            clippedPath = InstructionsWithPath.create(currentState, rectangle);
             clippedPath.moveTo(new Point(0, 0), currentState);
             clippedPath.lineTo(new Point(1, 0), currentState);
             clippedPath.lineTo(new Point(1, 1), currentState);
@@ -87,7 +86,7 @@ describe("a clipped paths", () => {
 
                 beforeEach(() => {
                     currentState = clippedPath.state;
-                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
                     currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
                     otherClippedPath.moveTo(new Point(1, 1), currentState);
                     otherClippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);

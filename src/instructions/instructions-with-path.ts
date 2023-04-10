@@ -1,6 +1,6 @@
 import { StateChangingInstructionSequence } from "./state-changing-instruction-sequence";
 import { StateAndInstruction } from "./state-and-instruction";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSetWithCurrentPath } from "../interfaces/state-changing-instruction-set-with-current-path";
 import { PathInstruction } from "../interfaces/path-instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
@@ -14,23 +14,21 @@ import {down, left, right, up} from "../geometry/points-at-infinity";
 import {rectangleHasArea} from "../geometry/rectangle-has-area";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { DrawnStrokeProperties } from "../interfaces/drawn-stroke-properties";
+import { InfiniteCanvasPathInfinityProvider } from "../infinite-canvas-path-infinity-provider";
+import { StateChangingInstructionSetWithPositiveArea } from "../interfaces/state-changing-instruction-set-with-positive-area";
+import { InstructionsWithPositiveDrawnArea } from "./instructions-with-positive-drawn-area";
 
-export class InstructionsWithPath extends StateChangingInstructionSequence<InstructionsWithSubpath> implements StateChangingInstructionSetWithAreaAndCurrentPath{
+export class InstructionsWithPath extends StateChangingInstructionSequence<InstructionsWithSubpath> implements StateChangingInstructionSetWithCurrentPath, DrawnStrokeProperties{
     private areaBuilder: InfiniteCanvasAreaBuilder = new InfiniteCanvasAreaBuilder();
-    private drawnArea: Area;
-    constructor(private _initiallyWithState: StateAndInstruction, private readonly rectangle: CanvasRectangle, private readonly pathInfinityProvider: PathInfinityProvider){
+    private pathInfinityProvider: PathInfinityProvider
+    public lineWidth: number = 0;
+    public lineDashPeriod: number = 0;
+    constructor(private _initiallyWithState: StateAndInstruction, private readonly rectangle: CanvasRectangle){
         super(_initiallyWithState);
+        this.pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, this)
     }
     private get area(): Area{return this.areaBuilder.area;}
-    private getCurrentlyDrawableArea(): Area{
-        if(!this.area){
-            return undefined;
-        }
-        if(!this.state.current.clippingRegion){
-            return this.area;
-        }
-        return this.state.current.clippingRegion.intersectWith(this.area);
-    }
     public containsFinitePoint(): boolean{
         for(const subpath of this.added){
             if(subpath.containsFinitePoint()){
@@ -56,23 +54,26 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         }
         return true;
     }
-    public fillPath(instruction: Instruction, state: InfiniteCanvasState): void{
-        this.drawPath(instruction, state);
+    public fillPath(instruction: Instruction, state: InfiniteCanvasState): StateChangingInstructionSetWithPositiveArea{
+        return this.drawPath(instruction, state, false);
     }
-    public strokePath(instruction: Instruction, state: InfiniteCanvasState): void{
-        this.pathInfinityProvider.addDrawnLineWidth(state.current.getMaximumLineWidth());
-        this.pathInfinityProvider.addLineDashPeriod(state.current.getLineDashPeriod());
-        this.drawPath(instruction, state);
+    public strokePath(instruction: Instruction, state: InfiniteCanvasState): StateChangingInstructionSetWithPositiveArea{
+        this.lineWidth = state.current.getMaximumLineWidth();
+        this.lineDashPeriod = state.current.getLineDashPeriod();
+        return this.drawPath(instruction, state, true);
     }
-    private drawPath(instruction: Instruction, state: InfiniteCanvasState): void{ 
+    private drawPath(instruction: Instruction, state: InfiniteCanvasState, withStroke: boolean): StateChangingInstructionSetWithPositiveArea{ 
         if(this.added.length === 0){
             return;
         }
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
-        const newlyDrawnArea: Area = this.getCurrentlyDrawableArea();
-        this.drawnArea = newlyDrawnArea;
+        let newlyDrawnArea: Area = this.area
+        if(newlyDrawnArea && withStroke){
+            newlyDrawnArea = newlyDrawnArea.expandByDistance(this.lineWidth / 2)
+        }
         const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction, this.rectangle);
         currentSubpath.addInstruction(toAdd);
+        return new InstructionsWithPositiveDrawnArea(this, newlyDrawnArea)
     }
     public clipPath(instruction: Instruction, state: InfiniteCanvasState): void{
         if(this.added.length === 0){
@@ -81,7 +82,7 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         const currentSubpath: InstructionsWithSubpath = this.added[this.added.length - 1];
         const toAdd: StateAndInstruction = StateAndInstruction.create(state, instruction, this.rectangle);
         currentSubpath.addInstruction(toAdd);
-        const clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath = this.recreatePath();
+        const clippedPath: StateChangingInstructionSetWithCurrentPath = this.recreatePath();
         this.addClippedPath(clippedPath);
     }
     public closePath(): void{
@@ -194,36 +195,20 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         const toAdd: StateAndInstruction = StateAndInstruction.create(state, pathInstruction.instruction, this.rectangle);
         currentSubpath.addPathInstruction(pathInstruction, toAdd, state);
     }
-
-    public hasDrawingAcrossBorderOf(area: Area): boolean{
-        if(area.contains(this.area)){
-            return false;
-        }
-        return this.area.intersects(area);
-    }
-    public isContainedBy(area: Area): boolean {
-        return area.contains(this.drawnArea);
-    }
-    public intersects(area: Area): boolean{
-        if(!this.area){
-            return false;
-        }
-        return this.area.intersects(area);
-    }
+    
     public getClippedArea(previouslyClipped?: Area): Area {
         return previouslyClipped ? this.area.intersectWith(previouslyClipped): this.area;
     }
-    public recreatePath(): StateChangingInstructionSetWithAreaAndCurrentPath{
-        const newInfinityProvider: PathInfinityProvider = this.rectangle.getForPath();
-        const result: InstructionsWithPath = new InstructionsWithPath(this._initiallyWithState.copy(), this.rectangle, newInfinityProvider);
+    public recreatePath(): StateChangingInstructionSetWithCurrentPath{
+        const result: InstructionsWithPath = new InstructionsWithPath(this._initiallyWithState.copy(), this.rectangle);
         for(const added of this.added){
-            result.add(added.copy(newInfinityProvider));
+            result.add(added.copy(result.pathInfinityProvider));
         }
         result.areaBuilder = this.areaBuilder.copy();
         result.setInitialState(result.stateOfFirstInstruction);
         return result;
     }
-    public static create(initialState: InfiniteCanvasState, rectangle: CanvasRectangle, pathInfinityProvider: PathInfinityProvider): InstructionsWithPath{
-        return new InstructionsWithPath(StateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}, rectangle), rectangle, pathInfinityProvider);
+    public static create(initialState: InfiniteCanvasState, rectangle: CanvasRectangle): InstructionsWithPath{
+        return new InstructionsWithPath(StateAndInstruction.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}, rectangle), rectangle);
     }
 }

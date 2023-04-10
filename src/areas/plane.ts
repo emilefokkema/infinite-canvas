@@ -16,6 +16,9 @@ class Plane implements Area{
     public expandToIncludeInfinityInDirection(direction: Point): Area{
         return this;
     }
+    public expandByDistance(distance: number): Area{
+        return this;
+    }
     public intersects(area: Area): boolean{
         return true;
     }
@@ -33,6 +36,9 @@ class Plane implements Area{
     }
     public intersectWith(area: Area): Area {
         return area;
+    }
+    public join(area: Area): Area{
+        return this;
     }
     public intersectWithRay(ray: Ray): Area{
         return ray;

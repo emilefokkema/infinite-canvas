@@ -2,6 +2,7 @@ import { Point } from "../../geometry/point";
 import { LineSegment } from "./line-segment";
 import { ConvexPolygon } from "../polygons/convex-polygon";
 import { HalfPlaneLineIntersection } from "../polygons/half-plane-line-intersection";
+import { HalfPlane } from '../polygons/half-plane'
 
 export abstract class SubsetOfLine{
     constructor(public base: Point, public direction: Point){}
@@ -13,6 +14,12 @@ export abstract class SubsetOfLine{
     }
     protected lineSegmentIsOnSameLine(other: LineSegment): boolean{
         return this.direction.cross(other.direction) === 0 && this.pointIsOnSameLine(other.point1)
+    }
+    protected expandLineByDistance(d: number): ConvexPolygon{
+        const perpDirection = this.direction.getPerpendicular();
+        const halfPlane1 = new HalfPlane(this.base, perpDirection).expandByDistance(d);
+        const halfPlane2 = new HalfPlane(this.base, perpDirection.scale(-1)).expandByDistance(d)
+        return new ConvexPolygon([halfPlane1, halfPlane2])
     }
     protected getPointsInSameDirection(point1: Point, point2: Point): {point1: Point, point2: Point}{
         if(this.comesBefore(point2, point1)){

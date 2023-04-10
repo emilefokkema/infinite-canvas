@@ -7,11 +7,14 @@ import { SubsetOfLine } from "./subset-of-line";
 import { empty } from "../empty";
 import { HalfPlaneLineIntersection } from "../polygons/half-plane-line-intersection";
 import { Line } from "./line";
-import { HalfPlane } from "../polygons/half-plane";
+import { HalfPlane } from '../polygons/half-plane'
 
 export class Ray extends SubsetOfLine implements Area{
     public intersectWith(area: Area): Area {
         return area.intersectWithRay(this);
+    }
+    public join(area: Area): Area{
+        return area.expandToIncludePoint(this.base).expandToIncludeInfinityInDirection(this.direction);
     }
     public intersectWithConvexPolygon(convexPolygon: ConvexPolygon): Area {
         if(!this.intersectsConvexPolygon(convexPolygon)){
@@ -110,6 +113,11 @@ export class Ray extends SubsetOfLine implements Area{
             return new Ray(point, this.direction);
         }
         return ConvexPolygon.createTriangleWithInfinityInDirection(this.base, point, this.direction);
+    }
+    public expandByDistance(distance: number): ConvexPolygon{
+        const expandedLine = this.expandLineByDistance(distance);
+        const expandedLimitingHalfPlane = new HalfPlane(this.base, this.direction).expandByDistance(distance);
+        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane]));
     }
     public expandToIncludeInfinityInDirection(direction: Point): Area{
         if(direction.inSameDirectionAs(this.direction)){

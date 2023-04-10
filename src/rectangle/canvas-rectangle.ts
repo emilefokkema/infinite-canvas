@@ -1,10 +1,9 @@
 import { TransformationRepresentation } from "../api-surface/transformation-representation";
 import { ConvexPolygon } from "../areas/polygons/convex-polygon";
 import { Point } from "../geometry/point";
-import { ViewboxInfinityProvider } from "../interfaces/viewbox-infinity-provider";
 import { Transformation } from "../transformation";
 
-export interface CanvasRectangle extends ViewboxInfinityProvider {
+export interface CanvasRectangle {
     viewboxWidth: number;
     viewboxHeight: number;
     polygon: ConvexPolygon;

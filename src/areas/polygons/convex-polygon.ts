@@ -29,6 +29,25 @@ export class ConvexPolygon implements Area{
     public intersectWith(area: Area): Area {
         return area.intersectWithConvexPolygon(this);
     }
+    public join(area: Area): Area{
+        if(this.contains(area)){
+            return this;
+        }
+        if(area.contains(this)){
+            return area;
+        }
+        let result: Area = area;
+        for(let vertex of this.vertices){
+            result = result.expandToIncludePoint(vertex.point)
+        }
+        for(let pointAtInfinityFromHalfPlane of this.getPointsAtInfinityFromHalfPlanes()){
+            if(!this.containsInfinityInDirection(pointAtInfinityFromHalfPlane)){
+                continue;
+            }
+            result = result.expandToIncludeInfinityInDirection(pointAtInfinityFromHalfPlane)
+        }
+        return result;
+    }
     public intersectWithRay(ray: Ray): Area{
         return ray.intersectWithConvexPolygon(this);
     }
@@ -249,6 +268,17 @@ export class ConvexPolygon implements Area{
                     result.push(planeThroughVertex);
                 }
             }
+        }
+        return result;
+    }
+    private getPointsAtInfinityFromHalfPlanes(): Point[]{
+        const result: Point[] = [];
+        for(let halfPlane of this.halfPlanes){
+            const normal = halfPlane.normalTowardInterior;
+            const perp = normal.getPerpendicular();
+            result.push(normal)
+            result.push(perp)
+            result.push(perp.scale(-1))
         }
         return result;
     }

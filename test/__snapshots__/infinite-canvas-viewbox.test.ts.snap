@@ -1110,6 +1110,14 @@ exports[`an infinite canvas context that begins path and then changes state, beg
 ]
 `;
 
+exports[`an infinite canvas context that clips and fills with shadow and then clears a rect should not have added a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
 exports[`an infinite canvas context that clips and then draws an image and then clears an area covering the clipped area but not the image should forget about the image and not add a clearRect 1`] = `
 [
   "context.restore()",

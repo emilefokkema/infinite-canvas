@@ -1,7 +1,7 @@
 import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
 import { Instruction } from "./instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSetWithCurrentPath } from "../interfaces/state-changing-instruction-set-with-current-path";
 import { Transformation } from "../transformation";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
@@ -19,7 +19,7 @@ export abstract class InstructionWithState implements StateChangingInstructionSe
     public get stateOfFirstInstruction(): InfiniteCanvasState{
         return this.state;
     }
-    public addClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): void{
+    public addClippedPath(clippedPath: StateChangingInstructionSetWithCurrentPath): void{
         this.state = this.state.withClippedPath(clippedPath);
     }
     public setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void{

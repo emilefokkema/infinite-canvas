@@ -3,7 +3,7 @@ import { Instruction } from "../instructions/instruction";
 import { ClippedPaths } from "../instructions/clipped-paths";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSetWithCurrentPath } from "../interfaces/state-changing-instruction-set-with-current-path";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
@@ -146,7 +146,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         };
     }
 
-    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasStateInstance{
+    public withClippedPath(clippedPath: StateChangingInstructionSetWithCurrentPath): InfiniteCanvasStateInstance{
         const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.getClippedArea(), clippedPath);
         return this.changeProperty("clippedPaths", newClippedPaths);
     }

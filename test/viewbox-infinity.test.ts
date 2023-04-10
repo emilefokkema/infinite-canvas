@@ -10,7 +10,8 @@ import {CanvasContextMock} from "./canvas-context-mock";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
 import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
-import { ViewboxInfinityProvider } from "../src/interfaces/viewbox-infinity-provider";
+import { InfiniteCanvasPathInfinityProvider } from '../src/infinite-canvas-path-infinity-provider';
+import { DrawnStrokeProperties } from '../src/interfaces/drawn-stroke-properties';
 
 function recordPoints(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void, transformation: Transformation): Point[]{
     const contextMock: any = new CanvasContextMock();
@@ -40,14 +41,17 @@ function getInfinitiesFromDirectionFromPointToDirection(infinity: ViewboxInfinit
 }
 describe("a viewbox infinity for an untransformed context", () => {
     let infinity: ViewboxInfinity;
-    let infinityProvider: ViewboxInfinityProvider;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
+    let drawnStrokeProperties: DrawnStrokeProperties;
 
     beforeEach(() => {
+        drawnStrokeProperties = {
+            lineWidth: 0,
+            lineDashPeriod: 0
+        };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        infinityProvider = rectangle;
-        pathInfinityProvider = infinityProvider.getForPath();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.identity));
     });
 
@@ -94,14 +98,17 @@ describe("a viewbox infinity for an untransformed context", () => {
 
 describe("a viewbox infinity for a translated context", () => {
     let infinity: ViewboxInfinity;
-    let infinityProvider: ViewboxInfinityProvider;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
+    let drawnStrokeProperties: DrawnStrokeProperties;
 
     beforeEach(() => {
+        drawnStrokeProperties = {
+            lineWidth: 0,
+            lineDashPeriod: 0
+        };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        infinityProvider = rectangle;
-        pathInfinityProvider = infinityProvider.getForPath();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0, 0, 1, 5, 5)));
     });
 
@@ -116,14 +123,17 @@ describe("a viewbox infinity for a translated context", () => {
 
 describe("a viewbox infinity for skewed context", () => {
     let infinity: ViewboxInfinity;
-    let infinityProvider: ViewboxInfinityProvider;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
+    let drawnStrokeProperties: DrawnStrokeProperties;
 
     beforeEach(() => {
+        drawnStrokeProperties = {
+            lineWidth: 0,
+            lineDashPeriod: 0
+        };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        infinityProvider = rectangle;
-        pathInfinityProvider = infinityProvider.getForPath();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0.2, 0, 1, 0, 0)));
     });
 
@@ -139,14 +149,17 @@ describe("a viewbox infinity for skewed context", () => {
 
 describe("a viewbox infinity for a scaled context", () => {
     let infinity: ViewboxInfinity;
-    let infinityProvider: ViewboxInfinityProvider;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
+    let drawnStrokeProperties: DrawnStrokeProperties;
 
     beforeEach(() => {
+        drawnStrokeProperties = {
+            lineWidth: 0,
+            lineDashPeriod: 0
+        };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        infinityProvider = rectangle;
-        pathInfinityProvider = infinityProvider.getForPath();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.scale(2)));
     });
 

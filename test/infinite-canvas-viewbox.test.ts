@@ -3722,4 +3722,24 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe('that clips and fills with shadow and then clears a rect', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(20, 20, 200, 200)
+			infiniteContext.clip();
+			infiniteContext.shadowBlur = 2;
+			infiniteContext.shadowOffsetX = 60;
+			infiniteContext.shadowOffsetY = 60;
+			infiniteContext.shadowColor = '#000';
+			infiniteContext.fillRect(180, 180, 20, 20);
+			contextMock.clear();
+			infiniteContext.clearRect(10, 10, 220, 220)
+		})
+
+		it("should not have added a clearRect", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
 })
