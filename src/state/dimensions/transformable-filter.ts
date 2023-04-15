@@ -1,10 +1,11 @@
+import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { CssLengthConverter } from "../../css-length-converter";
 import { Point } from "../../geometry/point";
 import { Transformation } from "../../transformation";
 
 interface TransformableFilterPart{
     stringRepresentation: string
-    toTransformedString(transformation: Transformation): string
+    toTransformedString(rectangle: CanvasRectangle): string
 }
 
 const numberPattern = '[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?'
@@ -38,8 +39,10 @@ class BlurFilter implements TransformableFilterPart{
         public readonly stringRepresentation: string,
         private readonly size: number){
     }
-    public toTransformedString(transformation: Transformation): string{
-        return `blur(${this.size * transformation.scale}px)`
+    public toTransformedString(rectangle: CanvasRectangle): string{
+        const blurTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.size, 0))
+        const transformedBlurRadius = blurTranslation.apply(Point.origin).mod();
+        return `blur(${transformedBlurRadius}px)`
     }
     public static tryCreate(stringRepresentation: string, cssLengthConverter: CssLengthConverter): BlurFilter{
         const match = stringRepresentation.match(new RegExp(blurPattern))
@@ -58,10 +61,12 @@ class DropShadowFilter implements TransformableFilterPart{
         private readonly blurRadius: number,
         private readonly color: string){
     }
-    public toTransformedString(transformation: Transformation): string{
-        const {x: transformedOffsetX, y: transformedOffsetY} = transformation.untranslated().apply(new Point(this.offsetX, this.offsetY))
+    public toTransformedString(rectangle: CanvasRectangle): string{
+        const bitmapTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.offsetX, this.offsetY));
+        const {x: transformedOffsetX, y: transformedOffsetY} = bitmapTranslation.apply(Point.origin);
         if(this.blurRadius !== null){
-            const transformedBlurRadius = this.blurRadius * transformation.scale;
+            const blurTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.blurRadius, 0))
+            const transformedBlurRadius = blurTranslation.apply(Point.origin).mod();
             if(this.color){
                 return `drop-shadow(${transformedOffsetX}px ${transformedOffsetY}px ${transformedBlurRadius}px ${this.color})`
             }
@@ -120,8 +125,8 @@ export class TransformableFilter{
     public toString(): string{
         return this.parts.map(p => p.stringRepresentation).join(' ');
     }
-    public toTransformedString(transformation: Transformation): string{
-        return this.parts.map(p => p.toTransformedString(transformation)).join(' ');
+    public toTransformedString(rectangle: CanvasRectangle): string{
+        return this.parts.map(p => p.toTransformedString(rectangle)).join(' ');
     }
     public static create(stringRepresentation: string, cssLengthConverter: CssLengthConverter): TransformableFilter | null{
         const partMatches = stringRepresentation.match(new RegExp(`${transformableFilterPropertyPattern}|((?!\\s|${transformableFilterPropertyPattern}).)+`,'g'));

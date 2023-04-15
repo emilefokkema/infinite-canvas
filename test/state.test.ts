@@ -10,7 +10,7 @@ import { InstructionsWithPath } from "../src/instructions/instructions-with-path
 import { Point } from "../src/geometry/point";
 import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
 
@@ -26,7 +26,7 @@ describe("a state with a clipped path", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
         currentPath = InstructionsWithPath.create(defaultState, rectangle, new FakePathInfinityProvider());
         currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
@@ -193,7 +193,7 @@ describe("a default state", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
     });
 

@@ -73,7 +73,7 @@ export class InfiniteCanvasInstructionSet{
         }
         const stateIsTransformable: boolean = this.state.current.isTransformable();
         if(!stateIsTransformable){
-            instruction = this.rectangle.transformRelatively(instruction);
+            instruction = this.transformRelatively(instruction);
         }
         this.state = this.state.currentlyTransformed(stateIsTransformable);
         const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPath = this.currentInstructionsWithPath.recreatePath();
@@ -84,10 +84,30 @@ export class InfiniteCanvasInstructionSet{
         this.onChange();
     }
 
+    private transformRelatively(instruction: Instruction): Instruction{
+        return (context, transformation) => {
+            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToTransformedInfiniteCanvasContext();
+            context.save();
+            context.transform(a, b, c, d, e, f);
+            instruction(context, transformation);
+            context.restore();
+        }
+    }
+
+    private transformAbsolutely(instruction: Instruction): Instruction{
+        return (context, transformation) => {
+            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToInfiniteCanvasContext();
+            context.save();
+            context.setTransform(a, b, c, d, e, f);
+            instruction(context, transformation);
+            context.restore();
+        }
+    }
+
     private drawRect(x: number, y: number, w: number, h: number, instruction: Instruction, drawPath: (path: StateChangingInstructionSetWithAreaAndCurrentPath, instruction: Instruction, state: InfiniteCanvasState) => void): void{
         const stateIsTransformable: boolean = this.state.current.isTransformable();
         if(!stateIsTransformable){
-            instruction = this.rectangle.transformRelatively(instruction);
+            instruction = this.transformRelatively(instruction);
         }
         const stateToDrawWith: InfiniteCanvasState = this.state.currentlyTransformed(this.state.current.isTransformable());
         const pathToDraw: StateChangingInstructionSetWithAreaAndCurrentPath = InstructionsWithPath.create(stateToDrawWith, this.rectangle, this.rectangle.getForPath());
@@ -99,10 +119,10 @@ export class InfiniteCanvasInstructionSet{
 
     public addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
         if(transformationKind === TransformationKind.Relative){
-			instruction = this.rectangle.transformRelatively(instruction);
+			instruction = this.transformRelatively(instruction);
 			area = area.transform(this.state.current.transformation);
 		}else if(transformationKind === TransformationKind.Absolute){
-			instruction = this.rectangle.transformAbsolutely(instruction);
+			instruction = this.transformAbsolutely(instruction);
         }
         let areaToDraw: Area = area;
         if(this.state.current.clippingRegion && takeClippingRegionIntoAccount){

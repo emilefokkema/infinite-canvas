@@ -1,3 +1,4 @@
+import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { Instruction } from "../../instructions/instruction";
 import { InfiniteCanvasStateInstanceDimension } from "./infinite-canvas-state-instance-dimension";
 import { TransformableFilter } from "./transformable-filter";
@@ -7,8 +8,8 @@ class Filter extends InfiniteCanvasStateInstanceDimension<'filter'>{
     protected valuesAreEqual(oldValue: TransformableFilter, newValue: TransformableFilter): boolean {
         return oldValue.stringRepresentation === newValue.stringRepresentation;
     }
-    protected changeToNewValue(newValue: TransformableFilter): Instruction {
-        return (ctx, transformation) => ctx.filter = newValue.toTransformedString(transformation);
+    protected changeToNewValue(newValue: TransformableFilter, rectangle: CanvasRectangle): Instruction {
+        return (ctx) => ctx.filter = newValue.toTransformedString(rectangle);
     }
 }
 

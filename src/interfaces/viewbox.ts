@@ -2,12 +2,12 @@ import { CurrentState } from "./current-state";
 import { Instruction } from "../instructions/instruction";
 import { PathInstruction } from "./path-instruction";
 import { DrawingLock } from "../drawing-lock";
-import { TransformationKind } from "../transformation-kind";
-import { TransformableBox } from "./transformable-box";
+import { TransformationKind } from "../transformation-kind";    
 import { Area } from "../areas/area";
 import { Position } from "../geometry/position"
+import { Transformable } from "../transformable";
 
-export interface ViewBox extends TransformableBox, CurrentState{
+export interface ViewBox extends Transformable, CurrentState{
     measureText(text: string): TextMetrics;
     fillPath(instruction: Instruction): void;
     strokePath(): void;

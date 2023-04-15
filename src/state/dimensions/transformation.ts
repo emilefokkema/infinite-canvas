@@ -9,7 +9,10 @@ class TransformationDimension extends InfiniteCanvasStateInstanceDimension<"tran
         return oldValue.equals(newValue);
     }
     protected changeToNewValue(newValue: Transformation, rectangle: CanvasRectangle): Instruction{
-        return rectangle.getTransformationInstruction(newValue);
+        return (ctx) => {
+            const {a, b, c, d, e, f} = rectangle.getTransformationForInstruction(newValue);
+            ctx.setTransform(a, b, c, d, e, f)
+        }
     }
 }
 export const transformation: TypedStateInstanceDimension<Transformation> = new TransformationDimension("transformation");

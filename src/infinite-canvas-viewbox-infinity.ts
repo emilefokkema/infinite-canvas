@@ -17,7 +17,9 @@ export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
         this.rectangle.addPathAroundViewbox(context, this.getDrawnLineWidth());
     }
     private getTransformedViewbox(): ConvexPolygon{
-        return this.rectangle.getViewboxFromState(this.state, this.getDrawnLineWidth());
+        const margin = this.getDrawnLineWidth() * this.rectangle.transformation.scale;
+        const bitmapTransformationToTransformedInfiniteCanvasContext: Transformation = this.state.current.transformation.before(this.rectangle.getBitmapTransformationToInfiniteCanvasContext());
+        return this.rectangle.polygon.expandByDistance(margin).transform(bitmapTransformationToTransformedInfiniteCanvasContext.inverse())
     }
     public clearRect(context: CanvasRenderingContext2D, transformation: Transformation, x: number, y: number, width: number, height: number): void{
         const transformedViewbox: ConvexPolygon = this.getTransformedViewbox();

@@ -10,7 +10,7 @@ import {CanvasContextMock} from "./canvas-context-mock";
 import {Transformation} from "../src/transformation";
 import {DrawingLock} from "../src/drawing-lock";
 import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
-import {HTMLCanvasRectangle} from "../src/rectangle/html-canvas-rectangle";
+import {CanvasRectangleImpl} from "../src/rectangle/canvas-rectangle-impl";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
 import {Config} from "../src/api-surface/config";
 import {Units} from "../src/api-surface/units";
@@ -72,7 +72,7 @@ describe("an infinite canvas context", () => {
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
 		viewbox = new InfiniteCanvasViewBox(
-			new HTMLCanvasRectangle(measurementProvider, config),
+			new CanvasRectangleImpl(measurementProvider, config),
 			context,
 			{
 				provideDrawingIteration(draw: () => void): void {
@@ -3489,6 +3489,122 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe('that has this screen transformation', () => {
+
+		beforeEach(() => {
+			measurementProvider.measurement = {
+				screenWidth: 400,
+				screenHeight: 400,
+				viewboxWidth: 300,
+				viewboxHeight: 150,
+				left: 0,
+				top: 0
+			};
+		});
+
+		describe('and that uses css units', () => {
+
+			beforeEach(() => {
+				config.units = Units.CSS;
+			});
+
+			describe('and that draws a square using a drop-shadow filter', () => {
+
+				beforeEach(() => {
+					infiniteContext.filter = 'drop-shadow(60px 60px)'
+					infiniteContext.fillRect(0, 0, 80, 80)
+				})
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the filter correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+
+			describe('and that draws a square using a shadow', () => {
+
+				beforeEach(() => {
+					infiniteContext.shadowColor = '#f00'
+					infiniteContext.shadowOffsetX = 60;
+					infiniteContext.shadowOffsetY = 60;
+					infiniteContext.fillRect(0, 0, 80, 80)
+				});
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the shadow offset correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+		})
+
+		describe('and that uses canvas units', () => {
+
+			beforeEach(() => {
+				config.units = Units.CANVAS;
+			});
+
+			describe('and that draws a square using a drop-shadow filter', () => {
+
+				beforeEach(() => {
+					infiniteContext.filter = 'drop-shadow(60px 60px)'
+					infiniteContext.fillRect(0, 0, 80, 80)
+				})
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the filter correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+
+			describe('and that draws a square using a shadow', () => {
+
+				beforeEach(() => {
+					infiniteContext.shadowColor = '#f00'
+					infiniteContext.shadowOffsetX = 60;
+					infiniteContext.shadowOffsetY = 60;
+					infiniteContext.fillRect(0, 0, 80, 80)
+				});
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the shadow offset correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+		})
+	})
 
 	describe("whose canvas has a non-identity screen transformation", () => {
 

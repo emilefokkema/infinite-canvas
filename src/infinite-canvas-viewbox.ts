@@ -33,7 +33,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
 	public get transformation(): Transformation{return this.canvasRectangle.transformation};
 	public set transformation(value: Transformation){
-		this.canvasRectangle.transformation = value;
+		this.canvasRectangle.setTransformation(value);
 		this.draw();
 	}
 	public getDrawingLock(): DrawingLock{
@@ -135,8 +135,16 @@ export class InfiniteCanvasViewBox implements ViewBox{
 			this.context.restore();
 			this.context.save();
 			this.context.clearRect(0, 0, this.width, this.height);
-			this.canvasRectangle.applyInitialTransformation(this.context);
+			this.setInitialTransformation();
 			this.instructionSet.execute(this.context, this.transformation);
 		});
+	}
+	private setInitialTransformation(): void{
+		const initialTransformation = this.canvasRectangle.getInitialTransformation();
+		if(initialTransformation.equals(Transformation.identity)){
+			return;
+		}
+		const {a, b, c, d, e, f} = initialTransformation;
+		this.context.setTransform(a, b, c, d, e, f);
 	}
 }

@@ -5,7 +5,7 @@ import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-styl
 import { StateAndInstruction } from "../src/instructions/state-and-instruction";
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a set of intructions that is only about state", () => {
@@ -15,7 +15,7 @@ describe("a set of intructions that is only about state", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
         initialState = state;
         instructionsWithState = StateAndInstruction.create(state, () => {}, rectangle);

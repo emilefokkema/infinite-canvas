@@ -9,7 +9,7 @@ import { Point } from "../src/geometry/point";
 import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { Instruction } from "../src/instructions/instruction";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a clipped paths", () => {
@@ -18,7 +18,7 @@ describe("a clipped paths", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
     });
 
     describe("and another one", () => {

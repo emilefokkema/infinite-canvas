@@ -4,7 +4,6 @@ import { Gesture } from "./gesture";
 import { Rotate } from "./rotate";
 import { Zoom } from "./zoom";
 import { Config } from "../api-surface/config";
-import { TransformableBox } from "../interfaces/transformable-box";
 import { Transformation } from "../transformation";
 import { Translate } from "./translate";
 import { TranslateZoom } from "./translate-zoom";
@@ -12,6 +11,7 @@ import { TranslateRotateZoom } from "./translate-rotate-zoom";
 import {ChangeMonitor} from "./change-monitor";
 import {EventSource} from "../event-utils/event-source";
 import { TransformerContext } from "./transformer-context";
+import { Transformable } from "../transformable";
 
 
 export class InfiniteCanvasTransformer implements Transformer, TransformerContext{
@@ -19,7 +19,7 @@ export class InfiniteCanvasTransformer implements Transformer, TransformerContex
     private _zoom: Zoom;
     private _transformationChangeMonitor: ChangeMonitor<Transformation>;
     public get isTransforming(): boolean{return this._transformationChangeMonitor.changing;}
-    constructor(private readonly viewBox: TransformableBox, private readonly config: Partial<Config>){
+    constructor(private readonly viewBox: Transformable, private readonly config: Partial<Config>){
         this._transformationChangeMonitor = new ChangeMonitor<Transformation>((transformation: Transformation) => this.viewBox.transformation = transformation, 100);
     }
     public get transformationStart(): EventSource<void>{return this._transformationChangeMonitor.firstChange;}
