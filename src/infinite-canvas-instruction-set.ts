@@ -21,7 +21,6 @@ export class InfiniteCanvasInstructionSet{
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPath;
     private previousInstructionsWithPath: PreviousInstructions;
     public state: InfiniteCanvasState;
-    private instructionToRestoreState: Instruction;
     constructor(private readonly onChange: () => void, private readonly rectangle: CanvasRectangle){
         this.previousInstructionsWithPath = PreviousInstructions.create(rectangle);
         this.state = this.previousInstructionsWithPath.state;
@@ -34,11 +33,9 @@ export class InfiniteCanvasInstructionSet{
     }
     public saveState(): void{
         this.state = this.state.saved();
-        this.setInstructionToRestoreState();
     }
     public restoreState(): void{
         this.state = this.state.restored();
-        this.setInstructionToRestoreState();
     }
     public allSubpathsAreClosable(): boolean{
         return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.allSubpathsAreClosable();
@@ -76,7 +73,7 @@ export class InfiniteCanvasInstructionSet{
         }
         const stateIsTransformable: boolean = this.state.current.isTransformable();
         if(!stateIsTransformable){
-            instruction = this.rectangle.transformRelatively(instruction);//transformInstructionRelatively(instruction);
+            instruction = this.rectangle.transformRelatively(instruction);
         }
         this.state = this.state.currentlyTransformed(stateIsTransformable);
         const recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPath = this.currentInstructionsWithPath.recreatePath();
@@ -84,7 +81,6 @@ export class InfiniteCanvasInstructionSet{
         this.previousInstructionsWithPath.add(this.currentInstructionsWithPath);
         recreatedPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
         this.currentInstructionsWithPath = recreatedPath;
-        this.setInstructionToRestoreState();
         this.onChange();
     }
 
@@ -128,7 +124,6 @@ export class InfiniteCanvasInstructionSet{
         }
         newInstructionsWithPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
         this.currentInstructionsWithPath = newInstructionsWithPath;
-        this.setInstructionToRestoreState();
     }
 
     private clipCurrentPath(instruction: Instruction): void{
@@ -137,11 +132,6 @@ export class InfiniteCanvasInstructionSet{
         }
         this.currentInstructionsWithPath.clipPath(instruction, this.state);
         this.state = this.currentInstructionsWithPath.state;
-    }
-
-    private setInstructionToRestoreState(): void{
-        const latestVisibleState: InfiniteCanvasState = this.previousInstructionsWithPath.state;
-        this.instructionToRestoreState = latestVisibleState.getInstructionToClearStack();
     }
 
     private drawBeforeCurrentPath(instruction: StateChangingInstructionSetWithArea): void{
@@ -219,8 +209,10 @@ export class InfiniteCanvasInstructionSet{
         if(this.previousInstructionsWithPath.length){
             this.previousInstructionsWithPath.execute(context, transformation);
         }
-        if(this.instructionToRestoreState){
-            this.instructionToRestoreState(context, transformation);
+        const latestVisibleState: InfiniteCanvasState = this.previousInstructionsWithPath.state;
+        const stackLength = latestVisibleState.stack.length;
+        for(let i = 0; i < stackLength; i++){
+            context.restore();
         }
     }
 }

@@ -875,6 +875,18 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe('that saves and fills a rect', () => {
+
+		beforeEach(() => {
+			infiniteContext.save();
+			infiniteContext.fillRect(10, 10, 20, 20)
+		});
+
+		it("should call restore() after drawing", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
 	describe("saves, changes state, begins drawing a path", () => {
 
 		beforeEach(() => {

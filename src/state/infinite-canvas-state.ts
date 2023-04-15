@@ -53,14 +53,6 @@ export class InfiniteCanvasState{
     public getInstructionToConvertToState(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
         return this.getInstructionToConvertToStateUsingConversion(new StateConversion(this), other, rectangle);
     }
-    public getInstructionToClearStack(): Instruction{
-        const length: number = this.stack.length;
-        return (context: CanvasRenderingContext2D) => {
-            for(let i: number = 0; i < length; i++){
-                context.restore();
-            }
-        };
-    }
     public getInstructionToConvertToStateWithClippedPath(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
         return this.getInstructionToConvertToStateUsingConversion(new StateConversionWithClippedPaths(this), other, rectangle);
     }

@@ -3330,6 +3330,26 @@ exports[`an infinite canvas context that makes a rect, strokes it and then strok
 ]
 `;
 
+exports[`an infinite canvas context that saves and fills a rect should call restore() after drawing 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.lineTo(10,10)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
 exports[`an infinite canvas context that saves state, begins a path, restores state and fills a rect should end up with an equal number of saves and restores 1`] = `
 [
   "context.restore()",
@@ -3409,7 +3429,6 @@ exports[`an infinite canvas context that saves state, makes a rect and clips it 
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.restore()",
 ]
 `;
 
@@ -3713,7 +3732,6 @@ exports[`an infinite canvas context that saves state, makes a rect and clips it 
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
-  "context.restore()",
 ]
 `;
 
