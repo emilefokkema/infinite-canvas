@@ -12,6 +12,7 @@ import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
 import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
+import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);
@@ -267,6 +268,12 @@ describe("a default state", () => {
                 fillStyle: '#000',                                      //same
                 lineWidth: 2,                                           //different
                 lineDash: [1,2],                                        //different
+                lineCap: 'butt',                                        //same
+                lineJoin: 'miter',                                      //same
+                miterLimit: 10,                                         //same
+                globalAlpha: 1,                                         //same
+                globalCompositeOperation: 'source-over',                //same
+                filter: TransformableFilter.none,                                         //same
                 strokeStyle: '#f00',                                    //different
                 lineDashOffset: 0,                                      //same
                 transformation: new Transformation(2, 0, 0, 2, 0, 0),   //different

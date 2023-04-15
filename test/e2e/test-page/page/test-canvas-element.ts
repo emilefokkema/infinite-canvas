@@ -19,7 +19,7 @@ export class TestCanvasElement implements CanvasElementOnE2eTestPage{
     public getCanvasElement(): HTMLCanvasElement{
         return this.canvasEl;
     }
-    public initializeInfiniteCanvas(config: WithFunctionsAsStrings<InfiniteCanvasE2EInitialization>): InfiniteCanvasOnE2ETestPage{
+    public initializeInfiniteCanvas(config: WithFunctionsAsStrings<InfiniteCanvasE2EInitialization>): Promise<InfiniteCanvasOnE2ETestPage>{
         const {
             greedyGestureHandling,
             rotationEnabled,
@@ -38,7 +38,16 @@ export class TestCanvasElement implements CanvasElementOnE2eTestPage{
         }
         const drawingFn = eval(drawing);
         const context = infCanvas.getContext();
+        const drawPromise = new Promise<void>((res) => {
+            const listener = () => {
+                infCanvas.removeEventListener('draw', listener)
+                res();
+            };
+            infCanvas.addEventListener('draw', listener);
+        });
         drawingFn(context);
-        return new TestCanvas(infCanvas);
+        return drawPromise.then(() => {
+            return new TestCanvas(infCanvas);
+        })
     }
 }

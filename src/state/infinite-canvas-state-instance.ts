@@ -7,11 +7,18 @@ import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { TransformableFilter } from "./dimensions/transformable-filter";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
     public readonly lineWidth: number;
     public readonly lineDash: number[];
+    public readonly lineCap: CanvasLineCap;
+    public readonly lineJoin: CanvasLineJoin;
+    public readonly miterLimit: number;
+    public readonly globalAlpha: number;
+    public readonly globalCompositeOperation: GlobalCompositeOperation;
+    public readonly filter: TransformableFilter;
     public readonly strokeStyle: string | CanvasGradient | CanvasPattern;
     public readonly lineDashOffset: number;
     public readonly transformation: Transformation;
@@ -29,7 +36,13 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     ){
         this.fillStyle = props.fillStyle;
         this.lineWidth = props.lineWidth;
+        this.lineCap = props.lineCap;
+        this.lineJoin = props.lineJoin;
         this.lineDash = props.lineDash;
+        this.miterLimit = props.miterLimit;
+        this.globalAlpha = props.globalAlpha;
+        this.globalCompositeOperation = props.globalCompositeOperation;
+        this.filter = props.filter;
         this.strokeStyle = props.strokeStyle;
         this.lineDashOffset = props.lineDashOffset;
         this.transformation = props.transformation;
@@ -47,6 +60,12 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         const {fillStyle,
             lineWidth,
             lineDash,
+            lineCap,
+            lineJoin,
+            miterLimit,
+            globalAlpha,
+            globalCompositeOperation,
+            filter,
             strokeStyle,
             lineDashOffset,
             transformation,
@@ -63,6 +82,12 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             fillStyle,
             lineWidth,
             lineDash,
+            lineCap,
+            lineJoin,
+            miterLimit,
+            globalAlpha,
+            globalCompositeOperation,
+            filter,
             strokeStyle,
             lineDashOffset,
             transformation,
@@ -122,6 +147,12 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         fillStyle: '#000',
         lineWidth: 1,
         lineDash: [],
+        lineCap: 'butt',
+        lineJoin: 'miter',
+        miterLimit: 10,
+        globalAlpha: 1,
+        globalCompositeOperation: 'source-over',
+        filter: TransformableFilter.none,
         strokeStyle: '#000',
         lineDashOffset: 0,
         transformation: Transformation.identity,

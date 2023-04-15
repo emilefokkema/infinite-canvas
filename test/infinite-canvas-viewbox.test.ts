@@ -14,6 +14,7 @@ import {HTMLCanvasRectangle} from "../src/rectangle/html-canvas-rectangle";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
 import {Config} from "../src/api-surface/config";
 import {Units} from "../src/api-surface/units";
+import { CssLengthConverterFactory } from "../src/css-length-converter-factory";
 
 function setupGlobals(){
 	window.createImageBitmap = function(): Promise<ImageBitmap>{return undefined;};
@@ -39,6 +40,7 @@ describe("an infinite canvas context", () => {
 	let height: number;
 	let infiniteContext: InfiniteCanvasRenderingContext2D;
 	let contextMock: CanvasContextMock;
+	let cssLengthConverterFactory: CssLengthConverterFactory;
 	let viewbox: ViewBox;
 	let getDrawingLockSpy: jest.Mock<() => DrawingLock>;
 	let releaseDrawingLockSpy: jest.SpiedFunction<() => void>;
@@ -60,7 +62,13 @@ describe("an infinite canvas context", () => {
 		releaseDrawingLockSpy = jest.spyOn(drawingLock, 'release');
 		const getDrawingLock: () => DrawingLock = () => drawingLock;
 		getDrawingLockSpy = jest.fn<() => DrawingLock>().mockReturnValue(drawingLock);
-
+		cssLengthConverterFactory = {
+			create: () => ({
+				getNumberOfPixels(value: number){
+					return value;
+				}
+			})
+		};
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
 		viewbox = new InfiniteCanvasViewBox(
@@ -73,7 +81,7 @@ describe("an infinite canvas context", () => {
 			},
 			getDrawingLockSpy,
 			() => isTransforming);
-		infiniteContext = new InfiniteContext(undefined, viewbox);
+		infiniteContext = new InfiniteContext(undefined, viewbox, cssLengthConverterFactory);
 	});
 
 	describe("whose state is changed", () => {

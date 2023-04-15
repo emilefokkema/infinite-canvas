@@ -14,7 +14,7 @@ export interface EventListenerSequenceOnE2ETestPage{
 }
 
 export interface CanvasElementOnE2eTestPage extends EventListenerProviderOnE2eTestPage<ElementEventMap>{
-    initializeInfiniteCanvas(initialization: WithFunctionsAsStrings<InfiniteCanvasE2EInitialization>): InfiniteCanvasOnE2ETestPage;
+    initializeInfiniteCanvas(initialization: WithFunctionsAsStrings<InfiniteCanvasE2EInitialization>): Promise<InfiniteCanvasOnE2ETestPage>;
     setAttribute(name: string, value: string): void;
 }
 
@@ -36,7 +36,7 @@ export interface InfiniteCanvasOnE2ETestPage extends EventListenerProviderOnE2eT
 
 export interface TestPageLib{
     addWindowEventListener<Type extends keyof WindowEventMap>(config: WithFunctionsAsStrings<EventListenerConfiguration<WindowEventMap, Type>>): EventListenerOnE2ETestPage<WindowEventMap[Type]>;
-    initializeInfiniteCanvas(initialization: WithFunctionsAsStrings<FullInfiniteCanvasE2EInitialization>): InfiniteCanvasOnE2ETestPage;
+    initializeInfiniteCanvas(initialization: WithFunctionsAsStrings<FullInfiniteCanvasE2EInitialization>): Promise<InfiniteCanvasOnE2ETestPage>;
     initializeCanvas(initialization: WithFunctionsAsStrings<CanvasElementInitialization>): CanvasElementOnE2eTestPage;
     addStyleSheet(cssText: string): void;
 }
