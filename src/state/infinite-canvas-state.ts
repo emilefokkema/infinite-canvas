@@ -2,7 +2,7 @@ import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
 import {StateConversion} from "./state-conversion";
 import {StateConversionWithClippedPaths} from "./state-conversion-with-clipped-paths";
 import { Instruction } from "../instructions/instruction";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class InfiniteCanvasState{
@@ -16,7 +16,7 @@ export class InfiniteCanvasState{
     public currentlyTransformed(transformed: boolean): InfiniteCanvasState{
         return this.withCurrentState(this.current.changeProperty("fillAndStrokeStylesTransformed", transformed));
     }
-    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasState{
+    public withClippedPath(clippedPath: InstructionsToClip): InfiniteCanvasState{
         return new InfiniteCanvasState(this.current.withClippedPath(clippedPath), this.stack);
     }
     public saved(): InfiniteCanvasState{
@@ -52,14 +52,6 @@ export class InfiniteCanvasState{
     }
     public getInstructionToConvertToState(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
         return this.getInstructionToConvertToStateUsingConversion(new StateConversion(this), other, rectangle);
-    }
-    public getInstructionToClearStack(): Instruction{
-        const length: number = this.stack.length;
-        return (context: CanvasRenderingContext2D) => {
-            for(let i: number = 0; i < length; i++){
-                context.restore();
-            }
-        };
     }
     public getInstructionToConvertToStateWithClippedPath(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
         return this.getInstructionToConvertToStateUsingConversion(new StateConversionWithClippedPaths(this), other, rectangle);

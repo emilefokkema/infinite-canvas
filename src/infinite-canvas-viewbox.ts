@@ -33,7 +33,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
 	public get transformation(): Transformation{return this.canvasRectangle.transformation};
 	public set transformation(value: Transformation){
-		this.canvasRectangle.transformation = value;
+		this.canvasRectangle.setTransformation(value);
 		this.draw();
 	}
 	public getDrawingLock(): DrawingLock{
@@ -63,8 +63,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		const bitmap: ImageBitmap = await createImageBitmap(imageData);
 		return this.context.createPattern(bitmap, 'no-repeat');
 	}
-	public addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
-		this.instructionSet.addDrawing(instruction, area, transformationKind, takeClippingRegionIntoAccount);
+	public addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean, tempStateFn?: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void{
+		this.instructionSet.addDrawing(instruction, area, transformationKind, takeClippingRegionIntoAccount, tempStateFn);
 	}
 	public addPathInstruction(pathInstruction: PathInstruction): void{
 		this.instructionSet.addPathInstruction(pathInstruction);
@@ -135,8 +135,16 @@ export class InfiniteCanvasViewBox implements ViewBox{
 			this.context.restore();
 			this.context.save();
 			this.context.clearRect(0, 0, this.width, this.height);
-			this.canvasRectangle.applyInitialTransformation(this.context);
+			this.setInitialTransformation();
 			this.instructionSet.execute(this.context, this.transformation);
 		});
+	}
+	private setInitialTransformation(): void{
+		const initialTransformation = this.canvasRectangle.getInitialTransformation();
+		if(initialTransformation.equals(Transformation.identity)){
+			return;
+		}
+		const {a, b, c, d, e, f} = initialTransformation;
+		this.context.setTransform(a, b, c, d, e, f);
 	}
 }

@@ -1,23 +1,18 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
 import { defaultState } from "../src/state/default-state";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../src/interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { StateChangingInstructionSetWithCurrentPath } from '../src/interfaces/state-changing-instruction-set-with-current-path';
 import { Point } from "../src/geometry/point";
-import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
-function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPath, state: InfiniteCanvasState): string[]{
-    instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
-    return logWithState(instructionsWithPath);
+function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithCurrentPath, state: InfiniteCanvasState): string[]{
+    const result = instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
+    return logWithState(result);
 }
 
 describe("a set of instructions that is also about a path", () => {
@@ -26,9 +21,9 @@ describe("a set of instructions that is also about a path", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
     });
 
     describe("that receives a change of state", () => {
@@ -75,7 +70,7 @@ describe("a set of instructions that is also about a path", () => {
     });
 
     describe("that describes a path that is drawn, altered and then recreated", () => {
-        let recreatedPath: StateChangingInstructionSetWithAreaAndCurrentPath;
+        let recreatedPath: StateChangingInstructionSetWithCurrentPath;
 
         beforeEach(() => {
             instructionsWithPath.moveTo(new Point(0, 0), currentState);
@@ -88,7 +83,7 @@ describe("a set of instructions that is also about a path", () => {
         });
 
         it("should have the same area", () => {
-            expect(recreatedPath.getClippedArea()).toEqual(instructionsWithPath.getClippedArea());
+            expect(recreatedPath.getInstructionsToClip().area).toEqual(instructionsWithPath.getInstructionsToClip().area);
         });
 
         describe("and then the recreated path changes state", () => {
@@ -110,9 +105,9 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
         instructionsWithPath.rect(0, 0, 1, 1, currentState);
         instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {
             context.fill();

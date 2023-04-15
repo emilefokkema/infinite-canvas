@@ -1,15 +1,11 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
 import { Transformation } from "../src/transformation";
 import { Point } from "../src/geometry/point";
 import { Config } from "../src/api-surface/config";
-import { TransformableBox } from "../src/interfaces/transformable-box";
 import { Anchor } from "../src/transformer/anchor";
 import { InfiniteCanvasAnchor } from "../src/transformer/infinite-canvas-anchor";
+import { Transformable } from '../src/transformable';
 
 jest.useFakeTimers();
 
@@ -26,15 +22,13 @@ function createAnchor(x: number, y: number): Anchor{
 describe("an infinite canvas transformer", () => {
     let transformer: InfiniteCanvasTransformer;
     let currentTransformation: Transformation;
-    let viewBox: TransformableBox;
+    let viewBox: Transformable;
     let config: Partial<Config>;
 
     beforeEach(() => {
         config = {};
         currentTransformation = Transformation.identity;
         viewBox = {
-            width: 16,
-            height: 8,
             get transformation(): Transformation{return currentTransformation;},
             set transformation(value: Transformation){currentTransformation = value;}
         };

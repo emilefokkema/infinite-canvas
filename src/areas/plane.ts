@@ -7,6 +7,9 @@ import { Ray } from "./line/ray";
 import { Line } from "./line/line";
 
 class Plane implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public expandToIncludePoint(point: Point): Area {
         return this;
     }
@@ -14,6 +17,9 @@ class Plane implements Area{
         return this;
     }
     public expandToIncludeInfinityInDirection(direction: Point): Area{
+        return this;
+    }
+    public expandByDistance(distance: number): Area{
         return this;
     }
     public intersects(area: Area): boolean{
@@ -33,6 +39,9 @@ class Plane implements Area{
     }
     public intersectWith(area: Area): Area {
         return area;
+    }
+    public join(area: Area): Area{
+        return this;
     }
     public intersectWithRay(ray: Ray): Area{
         return ray;

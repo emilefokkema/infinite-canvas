@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { HalfPlane } from "../src/areas/polygons/half-plane";
 import { Point } from "../src/geometry/point";
 import { PolygonVertex } from "../src/areas/polygons/polygon-vertex";

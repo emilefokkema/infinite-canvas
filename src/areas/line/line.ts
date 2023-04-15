@@ -10,8 +10,14 @@ import { HalfPlaneLineIntersection } from "../polygons/half-plane-line-intersect
 import { HalfPlane } from "../polygons/half-plane";
 
 export class Line extends SubsetOfLine implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public intersectWith(area: Area): Area {
         return area.intersectWithLine(this);
+    }
+    public join(area: Area): Area{
+        return area.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1))
     }
     public intersectWithConvexPolygon(convexPolygon: ConvexPolygon): Area {
         if(!this.intersectsConvexPolygon(convexPolygon)){
@@ -95,7 +101,10 @@ export class Line extends SubsetOfLine implements Area{
         if(this.pointIsOnSameLine(point)){
             return this;
         }
-        return ConvexPolygon.createFromHalfPlane(HalfPlane.throughPointsAndContainingPoint(this.base, this.base.plus(this.direction), point));
+        return ConvexPolygon.createTriangleWithInfinityInDirection(this.base, point, this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1))
+    }
+    public expandByDistance(distance: number): ConvexPolygon{
+        return this.expandLineByDistance(distance);
     }
     public expandToIncludeInfinityInDirection(direction: Point): Area{
         const cross: number = direction.cross(this.direction);

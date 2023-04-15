@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+import {describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {EventDispatcher} from "../src/event-utils/event-dispatcher";
 import {EventSource} from "../src/event-utils/event-source";
 import {share} from "../src/event-utils/share";

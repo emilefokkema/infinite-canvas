@@ -1,22 +1,22 @@
+import { TransformationRepresentation } from "../api-surface/transformation-representation";
 import { ConvexPolygon } from "../areas/polygons/convex-polygon";
 import { Point } from "../geometry/point";
-import { Instruction } from "../instructions/instruction";
-import { ViewboxInfinityProvider } from "../interfaces/viewbox-infinity-provider";
-import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { Transformable } from "../transformable";
 import { Transformation } from "../transformation";
 
-export interface CanvasRectangle extends Transformable, ViewboxInfinityProvider {
+export interface CanvasRectangle {
     viewboxWidth: number;
     viewboxHeight: number;
+    polygon: ConvexPolygon;
     readonly infiniteCanvasContextBase: Transformation;
     readonly inverseInfiniteCanvasContextBase: Transformation;
+    readonly transformation: Transformation;
+    setTransformation(transformation: TransformationRepresentation): void;
     measure(): void;
     getCSSPosition(clientX: number, clientY: number): Point;
-    getTransformationInstruction(toTransformation: Transformation): Instruction;
-    applyInitialTransformation(context: CanvasRenderingContext2D): void;
-    getViewboxFromState(state: InfiniteCanvasState, margin: number): ConvexPolygon;
-    transformRelatively(instruction: Instruction): Instruction;
-    transformAbsolutely(instruction: Instruction): Instruction;
+    getTransformationForInstruction(toTransformation: TransformationRepresentation): Transformation;
+    translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;
+    getInitialTransformation(): Transformation;
+    getBitmapTransformationToInfiniteCanvasContext(): Transformation;
+    getBitmapTransformationToTransformedInfiniteCanvasContext(): Transformation;
     addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void;
 }

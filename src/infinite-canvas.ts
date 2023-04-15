@@ -9,7 +9,7 @@ import { EventMap } from './api-surface/event-map';
 import {DrawingIterationProviderWithCallback} from "./drawing-iteration-provider-with-callback";
 import {LockableDrawingIterationProvider} from "./lockable-drawing-iteration-provider";
 import {CanvasRectangle} from "./rectangle/canvas-rectangle";
-import {HTMLCanvasRectangle} from "./rectangle/html-canvas-rectangle";
+import {CanvasRectangleImpl} from "./rectangle/canvas-rectangle-impl";
 import {HtmlCanvasMeasurementProvider} from "./rectangle/html-canvas-measurement-provider";
 import {Units} from "./api-surface/units";
 import {CanvasResizeObserver} from "./canvas-resize-observer";
@@ -23,6 +23,8 @@ import { TransformationEvent } from "./api-surface/transformation-event";
 import { DrawEvent } from "./api-surface/draw-event";
 import { InfiniteCanvasEventWithDefaultBehavior } from "./api-surface/infinite-canvas-event-with-default-behavior";
 import { InfiniteCanvasTouchEvent } from "./api-surface/infinite-canvas-touch-event";
+import { CssLengthConverterImpl } from "./css-length-converter-impl";
+import { CssLengthConverterFactory } from "./css-length-converter-factory";
 
 class InfiniteCanvas implements InfiniteCanvasInterface{
 	private context: InfiniteCanvasRenderingContext2D;
@@ -32,6 +34,7 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 	private canvasResizeObserver: CanvasResizeObserver;
 	private canvasResizeListener: () => void;
 	private readonly eventCollection: EventCollection<EventMap>;
+    private readonly cssLengthConverterFactory: CssLengthConverterFactory;
 	constructor(private readonly canvas: HTMLCanvasElement, config?: Config){
 		this.config = {rotationEnabled: true, greedyGestureHandling: false, units: Units.CANVAS};
 		if(config){
@@ -46,11 +49,15 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 		};
 		const drawingIterationProvider: DrawingIterationProviderWithCallback = new DrawingIterationProviderWithCallback(new AnimationFrameDrawingIterationProvider());
 		const lockableDrawingIterationProvider: LockableDrawingIterationProvider = new LockableDrawingIterationProvider(drawingIterationProvider);
-		this.rectangle = new HTMLCanvasRectangle(new HtmlCanvasMeasurementProvider(canvas), this.config);
+		this.rectangle = new CanvasRectangleImpl(new HtmlCanvasMeasurementProvider(canvas), this.config);
 		let transformer: InfiniteCanvasTransformer;
+        const context = canvas.getContext("2d");
+        this.cssLengthConverterFactory = {
+            create: () => new CssLengthConverterImpl(context)
+        };
 		this.viewBox = new InfiniteCanvasViewBox(
 			this.rectangle,
-			canvas.getContext("2d"),
+			context,
 			lockableDrawingIterationProvider,
 			() => lockableDrawingIterationProvider.getLock(),
 			() => transformer.isTransforming);
@@ -73,7 +80,7 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 	}
 	public getContext(): InfiniteCanvasRenderingContext2D{
 		if(!this.context){
-			this.context = new InfiniteContext(this.canvas, this.viewBox);
+			this.context = new InfiniteContext(this.canvas, this.viewBox, this.cssLengthConverterFactory);
 		}
 		return this.context;
 	}

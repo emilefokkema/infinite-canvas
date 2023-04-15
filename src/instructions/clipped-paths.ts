@@ -1,16 +1,14 @@
-import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
+import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { Area } from "../areas/area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
-import { instructionSequence } from "../instruction-utils";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class ClippedPaths {
-    constructor(public area: Area, public latestClippedPath: StateChangingInstructionSet, public readonly previouslyClippedPaths?: ClippedPaths){}
-    public withClippedPath(latestClippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): ClippedPaths{
-        const newArea: Area = latestClippedPath.getClippedArea(this.area);
+    constructor(public area: Area, public latestClippedPath: InstructionsToClip, public readonly previouslyClippedPaths?: ClippedPaths){}
+    public withClippedPath(latestClippedPath: InstructionsToClip): ClippedPaths{
+        const newArea: Area = latestClippedPath.area.intersectWith(this.area);
         return new ClippedPaths(newArea, latestClippedPath, this);
     }
     public get initialState(): InfiniteCanvasState{

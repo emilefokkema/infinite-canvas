@@ -7,8 +7,14 @@ import { Ray } from "./line/ray";
 import { Line } from "./line/line";
 
 class Empty implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public intersectWith(area: Area): Area {
         return this;
+    }
+    public join(area: Area): Area{
+        return area;
     }
     public intersectWithConvexPolygon(convexPolygon: ConvexPolygon): Area {
         return this;
@@ -57,6 +63,9 @@ class Empty implements Area{
     }
     public intersectsLine(line: Line): boolean{
         return false;
+    }
+    public expandByDistance(distance: number): Area{
+        return this;
     }
     public expandToIncludePoint(point: Point): Area {
         return this;

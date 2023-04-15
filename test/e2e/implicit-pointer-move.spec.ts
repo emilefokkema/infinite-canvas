@@ -1,3 +1,4 @@
+import {expect, describe, it, beforeAll, afterAll } from '@jest/globals';
 import { 
     TestPage,
     InfiniteCanvasProxy,

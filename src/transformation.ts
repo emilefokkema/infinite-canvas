@@ -1,7 +1,12 @@
+import { TransformationRepresentation } from "./api-surface/transformation-representation";
 import { Point } from "./geometry/point"
 import { PointAtInfinity } from "./geometry/point-at-infinity";
 
-export class Transformation{
+function stringifyNumber(value: number): string{
+	return value.toFixed(10).replace(/\.?0+$/,'');
+}
+
+export class Transformation implements TransformationRepresentation{
 	public scale: number;
 	constructor(
 		public a: number,
@@ -161,5 +166,15 @@ export class Transformation{
 			const e: number = (d1x * h - d2x * i - g * ddy) / det;
 			const f: number = (d1y * h - d2y * i + g * ddx) / det;
 			return new Transformation(a, b, c, d, e, f);
+	}
+	public static create(representation: TransformationRepresentation): Transformation{
+		if(representation instanceof Transformation){
+			return representation;
+		}
+		const {a, b, c, d, e, f} = representation;
+		return new Transformation(a, b, c, d, e, f);
+	}
+	public toString(): string{
+		return `x: (${stringifyNumber(this.a)}, ${stringifyNumber(this.b)}), y: (${stringifyNumber(this.c)}, ${stringifyNumber(this.d)}), d: (${stringifyNumber(this.e)}, ${stringifyNumber(this.f)})`
 	}
 }

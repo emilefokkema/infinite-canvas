@@ -10,7 +10,9 @@
     "baseUrl": ".",
     "paths": {
       "e2e-test-page": ["test/e2e/test-page/index.ts"],
-      "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
-    }
+      "infinite-canvas": ["src/api-surface/infinite-canvas.ts"],
+      "puppeteer": ["node_modules/@types/puppeteer"]
+    },
+    "moduleResolution": "node"
   }
 }

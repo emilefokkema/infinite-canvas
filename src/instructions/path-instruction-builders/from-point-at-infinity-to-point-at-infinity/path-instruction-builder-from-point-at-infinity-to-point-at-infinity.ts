@@ -6,7 +6,7 @@ import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-in
 import { FromPointAtInfinityToPointAtInfinity } from "./from-point-at-infinity-to-point-at-infinity";
 import { FromPointAtInfinityToPoint } from "../from-point-at-infinity-to-point/from-point-at-infinity-to-point";
 import { InstructionUsingInfinity } from "../../instruction-using-infinity";
-import { instructionSequence } from "../../../instruction-utils";
+import { sequence } from "../../../instruction-utils";
 
 export class PathInstructionBuilderFromPointAtInfinityToPointAtInfinity extends InfiniteCanvasPathInstructionBuilder<FromPointAtInfinityToPointAtInfinity> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: FromPointAtInfinityToPointAtInfinity) {
@@ -16,7 +16,7 @@ export class PathInstructionBuilderFromPointAtInfinityToPointAtInfinity extends 
         if(shape.initialPosition.direction.cross(shape.currentPosition.direction) === 0){
             return this.moveToInfinityFromPointInDirection(shape.firstFinitePoint, shape.initialPosition.direction);
         }
-        return instructionSequence(
+        return sequence(
             this.moveToInfinityFromPointInDirection(shape.lastFinitePoint, shape.currentPosition.direction),
             this.lineToInfinityFromInfinityFromPoint(shape.lastFinitePoint, shape.currentPosition.direction, shape.initialPosition.direction),
             this.lineFromInfinityFromPointToInfinityFromPoint(shape.lastFinitePoint, shape.firstFinitePoint, shape.initialPosition.direction));
@@ -25,7 +25,7 @@ export class PathInstructionBuilderFromPointAtInfinityToPointAtInfinity extends 
         if(isPointAtInfinity(position)){
             return this.lineToInfinityFromInfinityFromPoint(shape.lastFinitePoint, shape.currentPosition.direction, position.direction);
         }
-        return instructionSequence(
+        return sequence(
             this.lineFromInfinityFromPointToInfinityFromPoint(shape.lastFinitePoint, position, shape.currentPosition.direction),
             this.lineFromInfinityFromPointToPoint(position, shape.currentPosition.direction));
     }

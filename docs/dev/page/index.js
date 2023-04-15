@@ -2,7 +2,7 @@ import createDepTrees from './dep-trees.js'
 
 console.log('hello from stackblitz page')
 
-const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.0-alpha/dist/infinite-canvas.js';
+const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.1/dist/infinite-canvas.js';
 
 const stateType = {
     initializing: 0,
@@ -210,6 +210,11 @@ function configureHeader(project, route, api){
                 props: {
                     projectstate: Object
                 },
+                methods: {
+                    reconnect(){
+                        project.connect();
+                    }
+                },
                 computed: {
                     message(){
                         if(!this.projectstate){
@@ -223,6 +228,9 @@ function configureHeader(project, route, api){
                             case stateType.switching: return 'switching...'
                             default: return 'state';
                         }
+                    },
+                    canReconnect(){
+                        return this.projectstate && this.projectstate.type === stateType.disconnected;
                     }
                 }
             },
@@ -314,6 +322,14 @@ class EmbeddedProject{
         })
         this.stateDispatcher.setState({type: stateType.watching})
     }
+    connect(){
+        this.stateDispatcher.setState({type: stateType.waitForCompilation})
+        getInfiniteCanvasCompilation(
+            (script) => this.addInfiniteCanvas(script),
+            () => {
+                this.stateDispatcher.setState({type: stateType.disconnected})
+            })
+    }
     initialize(projectId, type){
         this.projectId = projectId;
         const watching = type === pageType.dev;
@@ -321,11 +337,7 @@ class EmbeddedProject{
         this.stateDispatcher.setState({type: stateType.initializing})
         this.embedPromise = this.embedProject(projectId, type);
         if(watching){
-            getInfiniteCanvasCompilation(
-                (script) => this.addInfiniteCanvas(script),
-                () => {
-                    this.stateDispatcher.setState({type: stateType.disconnected})
-                })
+            this.connect()
         }
     }
     applyFsDiff(diff){
@@ -382,7 +394,7 @@ class EmbeddedProject{
         };
         if(!watching){
             projectConfig.dependencies = {
-                "ef-infinite-canvas": "^0.6.0-alpha"
+                "ef-infinite-canvas": "^0.6.1"
             };
         }
         const openOptions = this.getOpenOptions(type, files);

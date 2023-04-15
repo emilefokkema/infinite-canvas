@@ -1,28 +1,24 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { logWithState } from "./log-with-state";
 import { defaultState } from "../src/state/default-state";
 import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
-import { StateAndInstruction } from "../src/instructions/state-and-instruction";
+import { ExecutableInstructionWithState } from '../src/instructions/executable-instruction-with-state';
 import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a set of intructions that is only about state", () => {
-    let instructionsWithState: StateAndInstruction;
+    let instructionsWithState: ExecutableInstructionWithState;
     let state: InfiniteCanvasState;
     let initialState: InfiniteCanvasState;
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
         initialState = state;
-        instructionsWithState = StateAndInstruction.create(state, () => {}, rectangle);
+        instructionsWithState = ExecutableInstructionWithState.create(state, () => {}, rectangle);
     });
 
     describe("that receives a change", () => {

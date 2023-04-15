@@ -3,6 +3,7 @@
     <head>
         <title>InfiniteCanvas in Stackblitz</title>
         <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
         <script src="https://unpkg.com/@stackblitz/sdk@1/bundles/sdk.umd.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/acorn@8.8.1/dist/acorn.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/astring@1.8.3"></script>
@@ -11,7 +12,7 @@
     </head>
     <body>
         <template id="projectStateTemplate">
-            <div>{{message}}</div>
+            <div class="state-container"><span>{{message}}</span><button v-on:click="reconnect" v-if="canReconnect"><i class="fa-solid fa-rotate-right"></i></button></div>
         </template>
         <template id="projectSelectorTemplate">
             <div>

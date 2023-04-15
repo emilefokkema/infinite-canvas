@@ -1,8 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
-
+import {describe, it, expect, beforeEach } from '@jest/globals';
 import { InfiniteCanvasStateInstance } from "../src/state/infinite-canvas-state-instance";
 import { logInstruction } from "./log-instruction";
 import { Instruction } from "../src/instructions/instruction";
@@ -12,10 +8,10 @@ import { defaultState } from "../src/state/default-state";
 import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
-import { FakePathInfinityProvider } from "./fake-path-infinity-provider";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { HTMLCanvasRectangle } from "../src/rectangle/html-canvas-rectangle";
+import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
+import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);
@@ -29,9 +25,9 @@ describe("a state with a clipped path", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {})
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        currentPath = InstructionsWithPath.create(defaultState, rectangle, new FakePathInfinityProvider());
+        currentPath = InstructionsWithPath.create(defaultState, rectangle);
         currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
         currentPath.rect(0, 0, 3, 3, currentState);
         currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
@@ -126,7 +122,7 @@ describe("a state with a clipped path", () => {
 
         beforeEach(()=> {
             currentState = currentState.saved();
-            addedClippedPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+            addedClippedPath = InstructionsWithPath.create(currentState, rectangle);
             addedClippedPath.moveTo(new Point(1, 1), currentState);
             addedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
             currentState = addedClippedPath.state;
@@ -139,7 +135,7 @@ describe("a state with a clipped path", () => {
             beforeEach(() => {
                 currentState = currentState.restored();
                 currentState = currentState.saved();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
                 differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
@@ -156,7 +152,7 @@ describe("a state with a clipped path", () => {
 
             beforeEach(() => {
                 currentState = currentState.restored();
-                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle, new FakePathInfinityProvider());
+                const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
                 differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
@@ -196,7 +192,7 @@ describe("a default state", () => {
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new HTMLCanvasRectangle(new MockCanvasMeasurementProvider(200, 200), {});
+        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
         state = defaultState;
     });
 
@@ -271,10 +267,18 @@ describe("a default state", () => {
                 fillStyle: '#000',                                      //same
                 lineWidth: 2,                                           //different
                 lineDash: [1,2],                                        //different
+                lineCap: 'butt',                                        //same
+                lineJoin: 'miter',                                      //same
+                miterLimit: 10,                                         //same
+                globalAlpha: 1,                                         //same
+                globalCompositeOperation: 'source-over',                //same
+                filter: TransformableFilter.none,                                         //same
                 strokeStyle: '#f00',                                    //different
                 lineDashOffset: 0,                                      //same
                 transformation: new Transformation(2, 0, 0, 2, 0, 0),   //different
                 direction: "inherit",                                   //same
+                imageSmoothingEnabled: true,                            //same
+                imageSmoothingQuality: 'low',                           //same
                 font: "12px sans-serif",                                //different
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same

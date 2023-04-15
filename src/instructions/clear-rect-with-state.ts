@@ -1,4 +1,4 @@
-import { StateAndInstruction } from "./state-and-instruction";
+import { ExecutableInstructionWithState } from "./executable-instruction-with-state";
 import { StateChangingInstructionSetWithArea } from "../interfaces/state-changing-instruction-set-with-area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
@@ -6,19 +6,14 @@ import { Area } from "../areas/area";
 import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
 import { Transformation } from "../transformation";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { DrawingArea } from "../areas/drawing-area";
+import { NegativeDrawingArea } from "../areas/negative-drawing-area";
 
-export class ClearRectWithState extends StateAndInstruction implements StateChangingInstructionSetWithArea{
-    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, instruction: Instruction, stateConversion: Instruction, public area: Area, rectangle: CanvasRectangle){
+export class ClearRectWithState extends ExecutableInstructionWithState implements StateChangingInstructionSetWithArea{
+    public drawingArea: DrawingArea;
+    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, instruction: Instruction, stateConversion: Instruction, private readonly area: Area, rectangle: CanvasRectangle){
         super(initialState, state, instruction, stateConversion, rectangle);
-    }
-    public hasDrawingAcrossBorderOf(area: Area): boolean{
-        return false;
-    }
-    public intersects(area: Area): boolean{
-        return this.area.intersects(area);
-    }
-    public isContainedBy(area: Area): boolean {
-        return area.contains(this.area);
+        this.drawingArea = new NegativeDrawingArea(area)
     }
     public static createClearRect(initialState: InfiniteCanvasState, area: Area, infinity: ViewboxInfinity, x: number, y: number, width: number, height: number, rectangle: CanvasRectangle): ClearRectWithState{
         return new ClearRectWithState(initialState, initialState, (context: CanvasRenderingContext2D, transformation: Transformation) => {

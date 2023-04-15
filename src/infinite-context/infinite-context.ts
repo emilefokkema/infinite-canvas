@@ -16,6 +16,7 @@ import { InfiniteCanvasPathDrawingStyles } from "./infinite-canvas-path-drawing-
 import { InfiniteCanvasTextDrawingStyles } from "./infinite-canvas-text-drawing-styles"
 import { InfiniteCanvasPath } from "./infinite-canvas-path"
 import { ViewBox } from "../interfaces/viewbox"
+import { CssLengthConverterFactory } from "../css-length-converter-factory"
 
 export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasState: InfiniteCanvasState;
@@ -34,13 +35,14 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	private canvasPathDrawingStyles: InfiniteCanvasPathDrawingStyles;
 	private canvasTextDrawingStyles: InfiniteCanvasTextDrawingStyles;
 	private canvasPath: InfiniteCanvasPath;
-	constructor(public readonly canvas: HTMLCanvasElement, viewBox: ViewBox){
+	constructor(public readonly canvas: HTMLCanvasElement, viewBox: ViewBox, cssLengthConverterFactory: CssLengthConverterFactory){
 		this.canvasState = new InfiniteCanvasState(viewBox);
 		this.canvasTransform = new InfiniteCanvasTransform(viewBox);
-		this.canvasCompositing = new InfiniteCanvasCompositing();
+		this.canvasCompositing = new InfiniteCanvasCompositing(viewBox);
+		this.canvasImageSmoothing = new InfiniteCanvasImageSmoothing(viewBox)
 		this.canvasStrokeStyles = new InfiniteCanvasFillStrokeStyles(viewBox);
 		this.canvasShadowStyles = new InfiniteCanvasShadowStyles(viewBox);
-		this.canvasFilters = new InfinitCanvasFilters();
+		this.canvasFilters = new InfinitCanvasFilters(viewBox, cssLengthConverterFactory);
 		this.canvasRect = new InfiniteCanvasRect(viewBox);
 		this.canvasDrawPath = new InfiniteCanvasDrawPath(viewBox);
 		this.canvasUserInterface = new InfiniteCanvasUserInterface();

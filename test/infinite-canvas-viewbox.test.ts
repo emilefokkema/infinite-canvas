@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import {describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import {InfiniteCanvasViewBox} from "../src/infinite-canvas-viewbox"
 import {InfiniteContext} from "../src/infinite-context/infinite-context";
 import {ViewBox} from "../src/interfaces/viewbox";
@@ -9,19 +10,40 @@ import {CanvasContextMock} from "./canvas-context-mock";
 import {Transformation} from "../src/transformation";
 import {DrawingLock} from "../src/drawing-lock";
 import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
-import {HTMLCanvasRectangle} from "../src/rectangle/html-canvas-rectangle";
+import {CanvasRectangleImpl} from "../src/rectangle/canvas-rectangle-impl";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
 import {Config} from "../src/api-surface/config";
 import {Units} from "../src/api-surface/units";
+import { CssLengthConverterFactory } from "../src/css-length-converter-factory";
+
+function setupGlobals(){
+	window.createImageBitmap = function(): Promise<ImageBitmap>{return undefined;};
+	(<any>window).ImageData = class {
+		public width: number;
+		public height: number;
+		public data: Uint8ClampedArray;
+		constructor(arrayOrWidth: Uint8ClampedArray | number, widthOrHeight: number, height?: number){
+			if(typeof arrayOrWidth === "number"){
+				this.width = arrayOrWidth;
+				this.height = widthOrHeight;
+			}else{
+				this.width = widthOrHeight;
+				this.height = height;
+				this.data = arrayOrWidth;
+			}
+		}
+	};
+}
 
 describe("an infinite canvas context", () => {
 	let width: number;
 	let height: number;
 	let infiniteContext: InfiniteCanvasRenderingContext2D;
 	let contextMock: CanvasContextMock;
+	let cssLengthConverterFactory: CssLengthConverterFactory;
 	let viewbox: ViewBox;
-	let getDrawingLockSpy: jest.Mock;
-	let releaseDrawingLockSpy: jest.SpyInstance;
+	let getDrawingLockSpy: jest.Mock<() => DrawingLock>;
+	let releaseDrawingLockSpy: jest.SpiedFunction<() => void>;
 	let latestDrawingInstruction: () => void;
 	let executeLatestDrawingInstruction: () => void;
 	let isTransforming: boolean;
@@ -29,6 +51,7 @@ describe("an infinite canvas context", () => {
 	let config: Partial<Config>;
 
 	beforeEach(() => {
+		setupGlobals();
 		config = {};
 		width = 200;
 		height = 200;
@@ -38,12 +61,18 @@ describe("an infinite canvas context", () => {
 		const drawingLock: DrawingLock = {release(){}};
 		releaseDrawingLockSpy = jest.spyOn(drawingLock, 'release');
 		const getDrawingLock: () => DrawingLock = () => drawingLock;
-		getDrawingLockSpy = jest.fn().mockReturnValue(drawingLock);
-
+		getDrawingLockSpy = jest.fn<() => DrawingLock>().mockReturnValue(drawingLock);
+		cssLengthConverterFactory = {
+			create: () => ({
+				getNumberOfPixels(value: number){
+					return value;
+				}
+			})
+		};
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
 		viewbox = new InfiniteCanvasViewBox(
-			new HTMLCanvasRectangle(measurementProvider, config),
+			new CanvasRectangleImpl(measurementProvider, config),
 			context,
 			{
 				provideDrawingIteration(draw: () => void): void {
@@ -52,7 +81,7 @@ describe("an infinite canvas context", () => {
 			},
 			getDrawingLockSpy,
 			() => isTransforming);
-		infiniteContext = new InfiniteContext(undefined, viewbox);
+		infiniteContext = new InfiniteContext(undefined, viewbox, cssLengthConverterFactory);
 	});
 
 	describe("whose state is changed", () => {
@@ -846,6 +875,18 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe('that saves and fills a rect', () => {
+
+		beforeEach(() => {
+			infiniteContext.save();
+			infiniteContext.fillRect(10, 10, 20, 20)
+		});
+
+		it("should call restore() after drawing", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
 	describe("saves, changes state, begins drawing a path", () => {
 
 		beforeEach(() => {
@@ -1422,7 +1463,7 @@ describe("an infinite canvas context", () => {
 		let width: number;
 		let height: number;
 		let returnImageBitmap: (bitmap: ImageBitmap) => void;
-		let createImageBitmapSpy: jest.SpyInstance;
+		let createImageBitmapSpy: jest.SpiedFunction<(typeof window)['createImageBitmap']>;
 		let imageData: ImageData;
 
 		beforeEach(() => {
@@ -1457,7 +1498,7 @@ describe("an infinite canvas context", () => {
 	
 			it("should have asked for an image bitmap", () => {
 				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
-				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0] as ImageData;
 				expect(imageData.width).toBe(width);
 				expect(imageData.height).toBe(height);
 				expect(imageData.data.length).toBe(4 * width * height);
@@ -1538,7 +1579,7 @@ describe("an infinite canvas context", () => {
 			it("should have asked for an image bitmap", () => {
 				expect(createImageBitmapSpy).toHaveBeenCalledTimes(1);
 				const createImageBitmapLatestArgs = createImageBitmapSpy.mock.calls[0];
-				const imageData: ImageData = createImageBitmapLatestArgs[0];
+				const imageData: ImageData = createImageBitmapLatestArgs[0] as ImageData;
 				expect(imageData.width).toBe(dirtyWidth);
 				expect(imageData.height).toBe(dirtyHeight);
 				expect(imageData.data.length).toBe(4 * dirtyWidth * dirtyHeight);
@@ -1597,7 +1638,7 @@ describe("an infinite canvas context", () => {
 		let clipHeight: number;
 		let imageDataWidth: number;
 		let imageDataHeight: number;
-		let createImageBitmapSpy: jest.SpyInstance;
+		let createImageBitmapSpy: jest.SpiedFunction<(typeof window)['createImageBitmap']>;
 
 		beforeEach((done) => {
 			imageDataWidth = 100;
@@ -3449,6 +3490,122 @@ describe("an infinite canvas context", () => {
 		});
 	});
 
+	describe('that has this screen transformation', () => {
+
+		beforeEach(() => {
+			measurementProvider.measurement = {
+				screenWidth: 400,
+				screenHeight: 400,
+				viewboxWidth: 300,
+				viewboxHeight: 150,
+				left: 0,
+				top: 0
+			};
+		});
+
+		describe('and that uses css units', () => {
+
+			beforeEach(() => {
+				config.units = Units.CSS;
+			});
+
+			describe('and that draws a square using a drop-shadow filter', () => {
+
+				beforeEach(() => {
+					infiniteContext.filter = 'drop-shadow(60px 60px)'
+					infiniteContext.fillRect(0, 0, 80, 80)
+				})
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the filter correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+
+			describe('and that draws a square using a shadow', () => {
+
+				beforeEach(() => {
+					infiniteContext.shadowColor = '#f00'
+					infiniteContext.shadowOffsetX = 60;
+					infiniteContext.shadowOffsetY = 60;
+					infiniteContext.fillRect(0, 0, 80, 80)
+				});
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the shadow offset correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+		})
+
+		describe('and that uses canvas units', () => {
+
+			beforeEach(() => {
+				config.units = Units.CANVAS;
+			});
+
+			describe('and that draws a square using a drop-shadow filter', () => {
+
+				beforeEach(() => {
+					infiniteContext.filter = 'drop-shadow(60px 60px)'
+					infiniteContext.fillRect(0, 0, 80, 80)
+				})
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the filter correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+
+			describe('and that draws a square using a shadow', () => {
+
+				beforeEach(() => {
+					infiniteContext.shadowColor = '#f00'
+					infiniteContext.shadowOffsetX = 60;
+					infiniteContext.shadowOffsetY = 60;
+					infiniteContext.fillRect(0, 0, 80, 80)
+				});
+
+				describe('and that transforms in this way', () => {
+
+					beforeEach(() => {
+						const transformation = new Transformation(0, -1, 1, 0, 0, 200);
+						contextMock.clear();
+						viewbox.transformation = transformation;
+					})
+
+					it('should set the shadow offset correctly', () => {
+						expect(contextMock.getLog()).toMatchSnapshot();
+					})
+				})
+			})
+		})
+	})
+
 	describe("whose canvas has a non-identity screen transformation", () => {
 
 		beforeEach(() => {
@@ -3565,4 +3722,24 @@ describe("an infinite canvas context", () => {
 			});
 		});
 	});
+
+	describe('that clips and fills with shadow and then clears a rect', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(20, 20, 200, 200)
+			infiniteContext.clip();
+			infiniteContext.shadowBlur = 2;
+			infiniteContext.shadowOffsetX = 60;
+			infiniteContext.shadowOffsetY = 60;
+			infiniteContext.shadowColor = '#000';
+			infiniteContext.fillRect(180, 180, 20, 20);
+			contextMock.clear();
+			infiniteContext.clearRect(10, 10, 220, 220)
+		})
+
+		it("should not have added a clearRect", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
 })

@@ -1,6 +1,7 @@
 node_modules/*
 .idea/*
 .vscode/*
+!.vscode/launch.json
 devtools/temp
 test/e2e/server/content/infinite-canvas.js
 test/e2e/server/content/test-case/rhino.jpg

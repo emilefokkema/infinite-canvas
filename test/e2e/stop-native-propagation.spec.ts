@@ -1,3 +1,4 @@
+import {describe, it, beforeAll, afterAll } from '@jest/globals';
 import puppeteer from 'puppeteer';
 import { TestPage, CanvasElementProxy, InfiniteCanvasProxy, getResultAfter } from 'e2e-test-page';
 

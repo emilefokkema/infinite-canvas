@@ -8,6 +8,7 @@ import { Line } from "./line/line";
 export interface Area{
     intersectWith(area: Area): Area;
     intersectWithConvexPolygon(convexPolygon: ConvexPolygon): Area;
+    join(area: Area): Area;
     intersectWithLineSegment(lineSegment: LineSegment): Area;
     intersectWithRay(ray: Ray): Area;
     intersectWithLine(line: Line): Area;
@@ -21,7 +22,9 @@ export interface Area{
     intersectsRay(ray: Ray): boolean;
     intersectsLine(line: Line): boolean;
     intersects(other: Area): boolean;
+    expandByDistance(distance: number): Area;
     expandToIncludePoint(point: Point): Area;
     expandToIncludeInfinityInDirection(direction: Point): Area;
     transform(transformation: Transformation): Area;
+    getVertices(): Point[]
 }

@@ -1,7 +1,4 @@
-/**
- * @jest-environment jsdom
- */
-
+import {describe, it, beforeEach } from '@jest/globals';
 import { InfiniteCanvasAreaBuilder } from "../src/areas/infinite-canvas-area-builder";
 import { Area } from "../src/areas/area";
 import { empty } from "../src/areas/empty";

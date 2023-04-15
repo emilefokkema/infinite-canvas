@@ -3,19 +3,28 @@ import { Instruction } from "../instructions/instruction";
 import { ClippedPaths } from "../instructions/clipped-paths";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
-import { StateChangingInstructionSetWithAreaAndCurrentPath } from "../interfaces/state-changing-instruction-set-with-area-and-current-path";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { TransformableFilter } from "./dimensions/transformable-filter";
+import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
     public readonly lineWidth: number;
     public readonly lineDash: number[];
+    public readonly lineCap: CanvasLineCap;
+    public readonly lineJoin: CanvasLineJoin;
+    public readonly miterLimit: number;
+    public readonly globalAlpha: number;
+    public readonly globalCompositeOperation: GlobalCompositeOperation;
+    public readonly filter: TransformableFilter;
     public readonly strokeStyle: string | CanvasGradient | CanvasPattern;
     public readonly lineDashOffset: number;
     public readonly transformation: Transformation;
     public readonly direction: CanvasDirection;
+    public readonly imageSmoothingEnabled: boolean;
+    public readonly imageSmoothingQuality: ImageSmoothingQuality;
     public readonly font: string;
     public readonly textAlign: CanvasTextAlign;
     public readonly textBaseline: CanvasTextBaseline;
@@ -29,11 +38,19 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     ){
         this.fillStyle = props.fillStyle;
         this.lineWidth = props.lineWidth;
+        this.lineCap = props.lineCap;
+        this.lineJoin = props.lineJoin;
         this.lineDash = props.lineDash;
+        this.miterLimit = props.miterLimit;
+        this.globalAlpha = props.globalAlpha;
+        this.globalCompositeOperation = props.globalCompositeOperation;
+        this.filter = props.filter;
         this.strokeStyle = props.strokeStyle;
         this.lineDashOffset = props.lineDashOffset;
         this.transformation = props.transformation;
         this.direction = props.direction;
+        this.imageSmoothingEnabled = props.imageSmoothingEnabled;
+        this.imageSmoothingQuality = props.imageSmoothingQuality;
         this.font = props.font;
         this.textAlign = props.textAlign;
         this.textBaseline = props.textBaseline;
@@ -47,10 +64,18 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         const {fillStyle,
             lineWidth,
             lineDash,
+            lineCap,
+            lineJoin,
+            miterLimit,
+            globalAlpha,
+            globalCompositeOperation,
+            filter,
             strokeStyle,
             lineDashOffset,
             transformation,
             direction,
+            imageSmoothingEnabled,
+            imageSmoothingQuality,
             font,
             textAlign,
             textBaseline,
@@ -63,10 +88,18 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             fillStyle,
             lineWidth,
             lineDash,
+            lineCap,
+            lineJoin,
+            miterLimit,
+            globalAlpha,
+            globalCompositeOperation,
+            filter,
             strokeStyle,
             lineDashOffset,
             transformation,
             direction,
+            imageSmoothingEnabled,
+            imageSmoothingQuality,
             font,
             textAlign,
             textBaseline,
@@ -103,6 +136,17 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         }
         return true;
     }
+    public getShadowOffsets(): Point[]{
+        const result: Point[] = [];
+        const filterShadowOffset = this.filter.getShadowOffset();
+        if(filterShadowOffset !== null){
+            result.push(filterShadowOffset)
+        }
+        if(!this.shadowOffset.equals(Point.origin)){
+            result.push(this.shadowOffset)
+        }
+        return result;
+    }
 
     public getInstructionToConvertToState(other: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction{
         const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other, rectangle));
@@ -113,8 +157,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         };
     }
 
-    public withClippedPath(clippedPath: StateChangingInstructionSetWithAreaAndCurrentPath): InfiniteCanvasStateInstance{
-        const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.getClippedArea(), clippedPath);
+    public withClippedPath(clippedPath: InstructionsToClip): InfiniteCanvasStateInstance{
+        const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.area, clippedPath);
         return this.changeProperty("clippedPaths", newClippedPaths);
     }
 
@@ -122,10 +166,18 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         fillStyle: '#000',
         lineWidth: 1,
         lineDash: [],
+        lineCap: 'butt',
+        lineJoin: 'miter',
+        miterLimit: 10,
+        globalAlpha: 1,
+        globalCompositeOperation: 'source-over',
+        filter: TransformableFilter.none,
         strokeStyle: '#000',
         lineDashOffset: 0,
         transformation: Transformation.identity,
         direction: "inherit",
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'low',
         font: "10px sans-serif",
         textAlign: "start",
         textBaseline: "alphabetic",

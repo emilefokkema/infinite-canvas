@@ -35,6 +35,7 @@ export class CanvasContextMock{
         ];
         const setters: string[] = [
             "fillStyle",
+            "filter",
             "strokeStyle",
             "lineWidth",
             "lineDashOffset",
@@ -81,11 +82,17 @@ export class CanvasContextMock{
             });
         }
     }
-    private logMethod(methodName: string, ...args: any){
-        this.logs.push(`context.${methodName}(${args.map((x: any) => JSON.stringify(x)).join(',')})`);
+    private logMethod(methodName: string, ...args: any[]){
+        this.logs.push(`context.${methodName}(${args.map((x: any) => this.serializeValue(x)).join(',')})`);
     }
     private logSetter(propertyName: string, value: any){
-        this.logs.push(`context.${propertyName} = ${JSON.stringify(value)}`)
+        this.logs.push(`context.${propertyName} = ${this.serializeValue(value)}`)
+    }
+    private serializeValue(value: any): string{
+        if(typeof value === 'number'){
+            return value.toFixed(8).replace(/\.?0+$/,'');
+        }
+        return JSON.stringify(value);
     }
     public clear(){
         this.logs = [];

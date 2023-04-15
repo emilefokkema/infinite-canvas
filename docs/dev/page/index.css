@@ -51,3 +51,11 @@ iframe{
     height: 100%;
     width: 100%;
 }
+.state-container button{
+    margin-left: 5px;
+    background-color: #1e1e1e;
+    color: rgb(240, 240, 240);
+    border: 1px solid rgb(240, 240, 240);
+    cursor: pointer;
+    border-radius: 2px;
+}

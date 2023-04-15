@@ -7,10 +7,17 @@ import { HalfPlaneLineIntersection } from "../polygons/half-plane-line-intersect
 import { SubsetOfLine } from "./subset-of-line";
 import { Ray } from "./ray";
 import { Line } from "./line";
+import { HalfPlane } from '../polygons/half-plane';
 
 export class LineSegment extends SubsetOfLine implements Area{
     constructor(public point1: Point, public point2: Point){
         super(point1, point2.minus(point1));
+    }
+    public getVertices(): Point[]{
+        return [this.point1, this.point2]
+    }
+    public join(area: Area): Area{
+        return area.expandToIncludePoint(this.point1).expandToIncludePoint(this.point2)
     }
     public intersectWith(area: Area): Area {
         return area.intersectWithLineSegment(this);
@@ -103,6 +110,12 @@ export class LineSegment extends SubsetOfLine implements Area{
     }
     public intersects(other: Area): boolean {
         return other.intersectsLineSegment(this);
+    }
+    public expandByDistance(distance: number): ConvexPolygon{
+        const expandedLine = this.expandLineByDistance(distance);
+        const expandedLimitingHalfPlane1 = new HalfPlane(this.base, this.direction).expandByDistance(distance);
+        const expandedLimitingHalfPlane2 = new HalfPlane(this.point2, this.direction.scale(-1)).expandByDistance(distance);
+        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane1, expandedLimitingHalfPlane2]));
     }
     public expandToIncludePoint(point: Point): Area {
         if(this.containsPoint(point)){
