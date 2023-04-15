@@ -17,6 +17,8 @@ export interface StateInstanceProperties {
     lineDashOffset: number;
     transformation: Transformation;
     direction: CanvasDirection;
+    imageSmoothingEnabled: boolean;
+    imageSmoothingQuality: ImageSmoothingQuality;
     font: string;
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;

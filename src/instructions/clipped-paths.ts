@@ -4,7 +4,6 @@ import { Area } from "../areas/area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
 import { Transformation } from "../transformation";
-import { instructionSequence } from "../instruction-utils";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class ClippedPaths {

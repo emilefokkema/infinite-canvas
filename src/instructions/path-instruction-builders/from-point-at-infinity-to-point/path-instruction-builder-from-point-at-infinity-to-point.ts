@@ -6,7 +6,7 @@ import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-in
 import { FromPointAtInfinityToPoint } from "./from-point-at-infinity-to-point";
 import { FromPointAtInfinityToPointAtInfinity } from "../from-point-at-infinity-to-point-at-infinity/from-point-at-infinity-to-point-at-infinity";
 import { InstructionUsingInfinity } from "../../instruction-using-infinity";
-import { instructionSequence } from "../../../instruction-utils";
+import { sequence } from "../../../instruction-utils";
 
 export class PathInstructionBuilderFromPointAtInfinityToPoint extends InfiniteCanvasPathInstructionBuilder<FromPointAtInfinityToPoint> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: FromPointAtInfinityToPoint) {
@@ -18,7 +18,7 @@ export class PathInstructionBuilderFromPointAtInfinityToPoint extends InfiniteCa
             return moveToInfinityFromCurrentPosition;
         }
         const lineToInfinityFromFirstFinitePoint: InstructionUsingInfinity = this.lineFromInfinityFromPointToInfinityFromPoint(shape.currentPosition, shape.firstFinitePoint, shape.initialPosition.direction);
-        return instructionSequence(moveToInfinityFromCurrentPosition, lineToInfinityFromFirstFinitePoint);
+        return sequence(moveToInfinityFromCurrentPosition, lineToInfinityFromFirstFinitePoint);
     }
     protected getInstructionToExtendShapeWithLineTo(shape: FromPointAtInfinityToPoint, position: Position): InstructionUsingInfinity{
         if(isPointAtInfinity(position)){

@@ -23,6 +23,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly lineDashOffset: number;
     public readonly transformation: Transformation;
     public readonly direction: CanvasDirection;
+    public readonly imageSmoothingEnabled: boolean;
+    public readonly imageSmoothingQuality: ImageSmoothingQuality;
     public readonly font: string;
     public readonly textAlign: CanvasTextAlign;
     public readonly textBaseline: CanvasTextBaseline;
@@ -47,6 +49,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         this.lineDashOffset = props.lineDashOffset;
         this.transformation = props.transformation;
         this.direction = props.direction;
+        this.imageSmoothingEnabled = props.imageSmoothingEnabled;
+        this.imageSmoothingQuality = props.imageSmoothingQuality;
         this.font = props.font;
         this.textAlign = props.textAlign;
         this.textBaseline = props.textBaseline;
@@ -70,6 +74,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             lineDashOffset,
             transformation,
             direction,
+            imageSmoothingEnabled,
+            imageSmoothingQuality,
             font,
             textAlign,
             textBaseline,
@@ -92,6 +98,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             lineDashOffset,
             transformation,
             direction,
+            imageSmoothingEnabled,
+            imageSmoothingQuality,
             font,
             textAlign,
             textBaseline,
@@ -157,6 +165,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         lineDashOffset: 0,
         transformation: Transformation.identity,
         direction: "inherit",
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'low',
         font: "10px sans-serif",
         textAlign: "start",
         textBaseline: "alphabetic",

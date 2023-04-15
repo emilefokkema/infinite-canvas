@@ -6,6 +6,7 @@ import { TransformationKind } from "../transformation-kind";
 import { Area } from "../areas/area";
 import { Position } from "../geometry/position"
 import { Transformable } from "../transformable";
+import { InfiniteCanvasStateInstance } from "../state/infinite-canvas-state-instance";
 
 export interface ViewBox extends Transformable, CurrentState{
     measureText(text: string): TextMetrics;
@@ -14,7 +15,12 @@ export interface ViewBox extends Transformable, CurrentState{
     currentPathCanBeFilled(): boolean;
     fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void;
     strokeRect(x: number, y: number, w: number, h: number): void;
-    addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void;
+    addDrawing(
+        instruction: Instruction,
+        area: Area,
+        transformationKind: TransformationKind,
+        takeClippingRegionIntoAccount: boolean,
+        tempStateFn?: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void;
     createPatternFromImageData(imageData: ImageData): Promise<CanvasPattern>;
     createPattern(image: CanvasImageSource, repetition: string): CanvasPattern;
     getDrawingLock(): DrawingLock;

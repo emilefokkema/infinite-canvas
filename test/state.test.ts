@@ -278,6 +278,8 @@ describe("a default state", () => {
                 lineDashOffset: 0,                                      //same
                 transformation: new Transformation(2, 0, 0, 2, 0, 0),   //different
                 direction: "inherit",                                   //same
+                imageSmoothingEnabled: true,                            //same
+                imageSmoothingQuality: 'low',                           //same
                 font: "12px sans-serif",                                //different
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same

@@ -1,18 +1,7 @@
-import { Transformation } from "./transformation";
-import { InstructionUsingInfinity } from "./instructions/instruction-using-infinity";
-import { ViewboxInfinity } from "./interfaces/viewbox-infinity";
-
-export function combineInstructions(instructions: InstructionUsingInfinity[]): InstructionUsingInfinity{
-    return (context: CanvasRenderingContext2D, transformation: Transformation, infinity: ViewboxInfinity) => {
-        for(const instruction of instructions){
-            instruction(context, transformation, infinity);
+export function sequence<TArgs extends unknown[]>(...fns: ((...args: TArgs) => void)[]): (...args: TArgs) => void{
+    return (...args) => {
+        for(const fn of fns){
+            fn && fn(...args)
         }
-    };
-}
-export function instructionSequence(...instructions: InstructionUsingInfinity[]): InstructionUsingInfinity{
-    return (context: CanvasRenderingContext2D, transformation: Transformation, infinity: ViewboxInfinity) => {
-        for(const instruction of instructions){
-            instruction(context, transformation, infinity);
-        }
-    };
+    }
 }

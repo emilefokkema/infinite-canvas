@@ -1,7 +1,7 @@
 export default {
     code: function(ctx){
-        var width = 30;
-        var height = 30;
+        var width = 60;
+        var height = 60;
         var centerX = 5;
         var centerY = 5;
         var radiusSq = 25;
@@ -17,9 +17,14 @@ export default {
             }
         }
         var imageData = new ImageData(array, width);
-        ctx.translate(50, 30);
+        ctx.translate(80, 30);
+        ctx.filter = 'brightness(60%)'
+        ctx.globalAlpha = .5
+        ctx.shadowColor = '#00f'
+        ctx.shadowOffsetX = 20
+        ctx.shadowBlur = 4
         ctx.fillStyle = "#f00";
-        ctx.fillRect(0, 0, 10, 10);
+        ctx.fillRect(0, 0, 40, 40);
         ctx.putImageData(imageData, 20, 20);
     },
     title: "put image data"

@@ -16,6 +16,7 @@ import { rectangleIsPlane } from "./geometry/rectangle-is-plane";
 import { plane } from "./areas/plane";
 import { ConvexPolygon } from "./areas/polygons/convex-polygon";
 import { CanvasRectangle } from "./rectangle/canvas-rectangle";
+import { sequence } from "./instruction-utils";
 
 export class InfiniteCanvasInstructionSet{
     private currentInstructionsWithPath: StateChangingInstructionSetWithAreaAndCurrentPath;
@@ -84,21 +85,20 @@ export class InfiniteCanvasInstructionSet{
         this.onChange();
     }
 
-    private transformRelatively(instruction: Instruction): Instruction{
+    private useTempState(instruction: Instruction, tempStateInstruction: Instruction): Instruction{
         return (context, transformation) => {
-            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToTransformedInfiniteCanvasContext();
             context.save();
-            context.transform(a, b, c, d, e, f);
+            tempStateInstruction(context, transformation);
             instruction(context, transformation);
             context.restore();
         }
     }
 
-    private transformAbsolutely(instruction: Instruction): Instruction{
+    private transformRelatively(instruction: Instruction): Instruction{
         return (context, transformation) => {
-            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToInfiniteCanvasContext();
+            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToTransformedInfiniteCanvasContext();
             context.save();
-            context.setTransform(a, b, c, d, e, f);
+            context.transform(a, b, c, d, e, f);
             instruction(context, transformation);
             context.restore();
         }
@@ -117,20 +117,32 @@ export class InfiniteCanvasInstructionSet{
         this.onChange();
 	}
 
-    public addDrawing(instruction: Instruction, area: Area, transformationKind: TransformationKind, takeClippingRegionIntoAccount: boolean): void{
-        if(transformationKind === TransformationKind.Relative){
-			instruction = this.transformRelatively(instruction);
-			area = area.transform(this.state.current.transformation);
-		}else if(transformationKind === TransformationKind.Absolute){
-			instruction = this.transformAbsolutely(instruction);
-        }
-        let areaToDraw: Area = area;
-        if(this.state.current.clippingRegion && takeClippingRegionIntoAccount){
-            areaToDraw = area.intersectWith(this.state.current.clippingRegion);
-        }
-        const drawing: RectangularDrawing = RectangularDrawing.createDrawing(this.state.currentlyTransformed(false), instruction, areaToDraw, this.rectangle);
-        this.drawBeforeCurrentPath(drawing);
-        this.onChange();
+    public addDrawing(
+        instruction: Instruction,
+        area: Area,
+        transformationKind: TransformationKind,
+        takeClippingRegionIntoAccount: boolean,
+        tempStateFn: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void{
+            let tempStateInstruction = this.getTempStateFnFromTransformationKind(transformationKind)
+            const state = this.state.currentlyTransformed(false);
+            if(transformationKind === TransformationKind.Relative){
+                area = area.transform(this.state.current.transformation);
+            }
+            if(tempStateFn){
+                const tempState = state.withCurrentState(tempStateFn(state.current));
+                const stateChangeInstruction = takeClippingRegionIntoAccount
+                    ? state.getInstructionToConvertToStateWithClippedPath(tempState, this.rectangle)
+                    : state.getInstructionToConvertToState(tempState, this.rectangle);
+                tempStateInstruction = sequence(tempStateInstruction, stateChangeInstruction)
+            }
+            instruction = this.useTempState(instruction, tempStateInstruction)
+            let areaToDraw: Area = area;
+            if(state.current.clippingRegion && takeClippingRegionIntoAccount){
+                areaToDraw = area.intersectWith(state.current.clippingRegion);
+            }
+            const drawing: RectangularDrawing = RectangularDrawing.createDrawing(state, instruction, areaToDraw, this.rectangle);
+            this.drawBeforeCurrentPath(drawing);
+            this.onChange();
     }
 
     public clipPath(instruction: Instruction): void{
@@ -144,6 +156,19 @@ export class InfiniteCanvasInstructionSet{
         }
         newInstructionsWithPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
         this.currentInstructionsWithPath = newInstructionsWithPath;
+    }
+
+    private getTempStateFnFromTransformationKind(transformationKind: TransformationKind): Instruction{
+        if(transformationKind === TransformationKind.Relative){
+            return (context) => {
+                const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToTransformedInfiniteCanvasContext();
+                context.transform(a, b, c, d, e, f)
+            }
+        }
+        return (context) => {
+            const {a, b, c, d, e, f} = this.rectangle.getBitmapTransformationToInfiniteCanvasContext();
+            context.setTransform(a, b, c, d, e, f)
+        }
     }
 
     private clipCurrentPath(instruction: Instruction): void{
