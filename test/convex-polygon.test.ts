@@ -13,6 +13,25 @@ import { expectPolygonsToBeEqual, expectAreasToBeEqual } from "./expectations";
 import { Ray } from "../src/areas/line/ray";
 import { Line } from "../src/areas/line/line";
 
+describe('this convex polygon', () => {
+    let convexPolygon: ConvexPolygon;
+
+    beforeEach(() => {
+        convexPolygon = p(p => p
+            .with(hp => hp.base(327.64365191449684, 144.28111917043088).normal(0.07753202577717389, -0.0775320257772023))
+            .with(hp => hp.base(323.6436519144929, 140.28111917042767).normal(59.012810310875324, 59.01281031088212))
+            .with(hp => hp.base(397.6692725362536, 144.2811191704305).normal(-0.0775320257772023, -0.0775320257772023))
+            .with(hp => hp.base(401.66927253625676, 140.2811191704273).normal(19.012810310878535, 19.012810310878535))
+            .with(hp => hp.base(382.65646222537504, 81.26830885955233).normal(-39.01281031087656, 39.01281031088013))
+            .with(hp => hp.base(421.66927253625516, 120.2811191704289).normal(-39.012810310876944, -39.012810310876944)))
+    })
+
+    it('should expand to include this point without error', () => {
+        convexPolygon.expandToIncludePoint(new Point(283.6436519144929, 100.28111917042767))
+        expect(true).toBe(true)
+    })
+})
+
 describe("this other convex polygon", () => {
     let convexPolygon: ConvexPolygon;
 
@@ -89,25 +108,6 @@ describe("a rectangle", () => {
             const result = rectangle.join(areaToJoin);
             expectAreasToBeEqual(result, expectedResult)
     })
-
-    it.each([
-        [new Point(0, 1), new Point(0, 1), new Point(0, 1)],
-        [new Point(0, 1), new Point(0, -1), new Point(0, 0)],
-        [new Point(0, 1), new Point(-1, 0), new Point(0, 1)],
-        [new Point(0, 1), new Point(1, 0), new Point(1, 1)],
-        [new Point(0, 1), new Point(1, -1), new Point(1, 0)],
-        [new Point(0, 1), new Point(1, 1), new Point(0.5, 1.5)],
-        [new Point(0.5, 1.5), new Point(1, 1), new Point(0.5, 1.5)],
-        [new Point(1.5, 1.5), new Point(1, 1), new Point(1.5, 1.5)],
-        [new Point(0, 1), new Point(-1, -1), new Point(-0.5, 0.5)],
-        [new Point(1, 2), new Point(1, 1), new Point(1, 2)],
-        [new Point(1, 2), new Point(1, 0), new Point(1, 2)],
-        [new Point(1, 2), new Point(1, -1), new Point(2, 1)]
-    ])("should have the correct points in front in different directions", (point: Point, direction: Point, expectedPointInFront: Point) => {
-        const result: Point = rectangle.getPointInFrontInDirection(point, direction);
-        expect(result.x).toBeCloseTo(expectedPointInFront.x);
-        expect(result.y).toBeCloseTo(expectedPointInFront.y);
-    });
 
     it("should be transformed the right way", () => {
         const transformed: ConvexPolygon = rectangle.transform(new Transformation(1, 1, 0, 1, 0, 0));

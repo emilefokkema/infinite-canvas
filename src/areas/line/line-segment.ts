@@ -13,6 +13,9 @@ export class LineSegment extends SubsetOfLine implements Area{
     constructor(public point1: Point, public point2: Point){
         super(point1, point2.minus(point1));
     }
+    public getVertices(): Point[]{
+        return [this.point1, this.point2]
+    }
     public join(area: Area): Area{
         return area.expandToIncludePoint(this.point1).expandToIncludePoint(this.point2)
     }

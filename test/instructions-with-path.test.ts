@@ -11,8 +11,8 @@ import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 function drawAndLog(instructionsWithPath: StateChangingInstructionSetWithCurrentPath, state: InfiniteCanvasState): string[]{
-    instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
-    return logWithState(instructionsWithPath);
+    const result = instructionsWithPath.fillPath((context: CanvasRenderingContext2D) => {context.fill();}, state);
+    return logWithState(result);
 }
 
 describe("a set of instructions that is also about a path", () => {
@@ -83,7 +83,7 @@ describe("a set of instructions that is also about a path", () => {
         });
 
         it("should have the same area", () => {
-            expect(recreatedPath.getClippedArea()).toEqual(instructionsWithPath.getClippedArea());
+            expect(recreatedPath.getInstructionsToClip().area).toEqual(instructionsWithPath.getInstructionsToClip().area);
         });
 
         describe("and then the recreated path changes state", () => {

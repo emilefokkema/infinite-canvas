@@ -10,6 +10,9 @@ import { HalfPlaneLineIntersection } from "../polygons/half-plane-line-intersect
 import { HalfPlane } from "../polygons/half-plane";
 
 export class Line extends SubsetOfLine implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public intersectWith(area: Area): Area {
         return area.intersectWithLine(this);
     }

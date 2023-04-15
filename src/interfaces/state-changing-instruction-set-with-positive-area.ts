@@ -1,6 +1,6 @@
 import { PositivePartOfDrawing } from "./positive-part-of-drawing";
-import { StateChangingInstructionSet } from "./state-changing-instruction-set";
+import { ExecutableStateChangingInstructionSet } from "./executable-state-changing-instruction-set";
 
-export interface StateChangingInstructionSetWithPositiveArea extends StateChangingInstructionSet, PositivePartOfDrawing{
+export interface StateChangingInstructionSetWithPositiveArea extends ExecutableStateChangingInstructionSet, PositivePartOfDrawing{
 
 }

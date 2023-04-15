@@ -7,6 +7,9 @@ import { Ray } from "./line/ray";
 import { Line } from "./line/line";
 
 class Empty implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public intersectWith(area: Area): Area {
         return this;
     }

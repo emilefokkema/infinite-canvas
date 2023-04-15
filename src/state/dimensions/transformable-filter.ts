@@ -6,6 +6,7 @@ import { Transformation } from "../../transformation";
 interface TransformableFilterPart{
     stringRepresentation: string
     toTransformedString(rectangle: CanvasRectangle): string
+    getShadowOffset(): Point | null
 }
 
 const numberPattern = '[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?'
@@ -32,6 +33,9 @@ class TransformableFilterStringPart implements TransformableFilterPart{
     public toTransformedString(): string{
         return this.stringRepresentation;
     }
+    public getShadowOffset(): null {
+        return null;
+    }
 }
 
 class BlurFilter implements TransformableFilterPart{
@@ -43,6 +47,9 @@ class BlurFilter implements TransformableFilterPart{
         const blurTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.size, 0))
         const transformedBlurRadius = blurTranslation.apply(Point.origin).mod();
         return `blur(${transformedBlurRadius}px)`
+    }
+    public getShadowOffset(): null {
+        return null;
     }
     public static tryCreate(stringRepresentation: string, cssLengthConverter: CssLengthConverter): BlurFilter{
         const match = stringRepresentation.match(new RegExp(blurPattern))
@@ -76,6 +83,9 @@ class DropShadowFilter implements TransformableFilterPart{
             return `drop-shadow(${transformedOffsetX}px ${transformedOffsetY}px ${this.color})`
         }
         return `drop-shadow(${transformedOffsetX}px ${transformedOffsetY}px)`
+    }
+    public getShadowOffset(): Point {
+        return new Point(this.offsetX, this.offsetY)
     }
     public static tryCreate(stringRepresentation: string, cssLengthConverter: CssLengthConverter): DropShadowFilter{
         const match = stringRepresentation.match(new RegExp(dropShadowPattern))
@@ -127,6 +137,15 @@ export class TransformableFilter{
     }
     public toTransformedString(rectangle: CanvasRectangle): string{
         return this.parts.map(p => p.toTransformedString(rectangle)).join(' ');
+    }
+    public getShadowOffset(): Point | null{
+        for(const part of this.parts){
+            const offset = part.getShadowOffset();
+            if(offset !== null){
+                return offset;
+            }
+        }
+        return null;
     }
     public static create(stringRepresentation: string, cssLengthConverter: CssLengthConverter): TransformableFilter | null{
         const partMatches = stringRepresentation.match(new RegExp(`${transformableFilterPropertyPattern}|((?!\\s|${transformableFilterPropertyPattern}).)+`,'g'));

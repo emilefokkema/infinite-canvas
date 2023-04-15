@@ -1,5 +1,5 @@
 import { Instruction } from "../instructions/instruction";
 
-export interface InstructionSet{
+export interface ExecutableInstruction{
     execute: Instruction;
 }

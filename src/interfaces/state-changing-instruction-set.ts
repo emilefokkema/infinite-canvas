@@ -1,12 +1,10 @@
-import { InstructionSet } from "./instruction-set";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { StateChangingInstructionSetWithCurrentPath } from "./state-changing-instruction-set-with-current-path";
+import { InstructionsToClip } from "./instructions-to-clip";
+import { StateChange } from "./state-change";
 
-export interface StateChangingInstructionSet extends InstructionSet{
-    state: InfiniteCanvasState;
-    initialState: InfiniteCanvasState;
+export interface StateChangingInstructionSet extends StateChange{
     stateOfFirstInstruction: InfiniteCanvasState;
     setInitialState(previousState: InfiniteCanvasState): void;
     setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void;
-    addClippedPath(clippedPath: StateChangingInstructionSetWithCurrentPath): void;
+    addClippedPath(clippedPath: InstructionsToClip): void;
 }

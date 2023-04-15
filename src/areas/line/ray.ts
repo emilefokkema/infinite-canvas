@@ -10,6 +10,9 @@ import { Line } from "./line";
 import { HalfPlane } from '../polygons/half-plane'
 
 export class Ray extends SubsetOfLine implements Area{
+    public getVertices(): Point[]{
+        return [this.base]
+    }
     public intersectWith(area: Area): Area {
         return area.intersectWithRay(this);
     }

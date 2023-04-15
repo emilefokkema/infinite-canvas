@@ -2,27 +2,30 @@ import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
 import { InstructionWithState } from "./instruction-with-state";
 import { InstructionUsingInfinity } from "./instruction-using-infinity";
-import { Transformation } from "../transformation";
-import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
 import { CopyableInstructionSet } from "../interfaces/copyable-instruction-set";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
+import { ExecutableInstructionWithState } from "./executable-instruction-with-state";
 
 export class PathInstructionWithState extends InstructionWithState implements CopyableInstructionSet{
-    constructor(initialState: InfiniteCanvasState, private infinity: ViewboxInfinity, state: InfiniteCanvasState, private instruction: InstructionUsingInfinity, stateConversion: Instruction, rectangle: CanvasRectangle){
+    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, private instruction: InstructionUsingInfinity, stateConversion: Instruction, rectangle: CanvasRectangle){
         super(initialState, state, rectangle);
         this.stateConversion = stateConversion;
-    }
-    protected executeInstruction(context: CanvasRenderingContext2D, transformation: Transformation): void{
-        this.instruction(context, transformation, this.infinity);
     }
     public replaceInstruction(instruction: InstructionUsingInfinity): void{
         this.instruction = instruction;
     }
-    public copy(pathInfinityProvider: PathInfinityProvider): PathInstructionWithState{
-        return new PathInstructionWithState(this.initialState, pathInfinityProvider.getInfinity(this.state), this.state, this.instruction, this.stateConversion, this.rectangle);
+    public copy(): PathInstructionWithState {
+        return new PathInstructionWithState(this.initialState, this.state, this.instruction, this.stateConversion, this.rectangle);
     }
-    public static create(initialState: InfiniteCanvasState, infinity: ViewboxInfinity, initialInstruction: InstructionUsingInfinity, rectangle: CanvasRectangle): PathInstructionWithState{
-        return new PathInstructionWithState(initialState, infinity, initialState, initialInstruction, () => {}, rectangle);
+    public makeExecutable(infinityProvider: PathInfinityProvider): ExecutableStateChangingInstructionSet{
+        const infinity = infinityProvider.getInfinity(this.state);
+        const oldInstruction = this.instruction;
+        const newInstruction: Instruction = (ctx, transformation) => oldInstruction(ctx, transformation, infinity);
+        return new ExecutableInstructionWithState(this.initialState, this.state, newInstruction, this.stateConversion, this.rectangle);
+    }
+    public static create(initialState: InfiniteCanvasState, initialInstruction: InstructionUsingInfinity, rectangle: CanvasRectangle): PathInstructionWithState{
+        return new PathInstructionWithState(initialState, initialState, initialInstruction, () => {}, rectangle);
     }
 }

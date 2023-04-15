@@ -4317,9 +4317,9 @@ exports[`an infinite canvas context that transforms, begins a path, draws line f
   "context.setTransform(1,1,0,1,50,50)",
   "context.beginPath()",
   "context.moveTo(0,0)",
-  "context.lineTo(75.96269242,75.96269242)",
+  "context.lineTo(76.36145268,76.36145268)",
   "context.setTransform(0.92387953,1.30656296,-0.38268343,0.5411961,50,50)",
-  "context.lineTo(119.12102513,119.12102513)",
+  "context.lineTo(119.64203051,119.64203051)",
   "context.lineWidth = 1",
   "context.stroke()",
 ]

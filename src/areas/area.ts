@@ -26,4 +26,5 @@ export interface Area{
     expandToIncludePoint(point: Point): Area;
     expandToIncludeInfinityInDirection(direction: Point): Area;
     transform(transformation: Transformation): Area;
+    getVertices(): Point[]
 }

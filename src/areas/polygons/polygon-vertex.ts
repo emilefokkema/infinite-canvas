@@ -8,28 +8,6 @@ export class PolygonVertex{
         this.normal1 = halfPlane1.normalTowardInterior;
         this.normal2 = halfPlane2.normalTowardInterior;
     }
-    public isExpandableToContainPoint(point: Point): boolean{
-        return this.halfPlane1.interiorContainsPoint(point) || this.halfPlane2.interiorContainsPoint(point);
-    }
-    public isInSameHalfPlaneAs(point: Point): boolean{
-        return this.halfPlane1.containsPoint(point) || this.halfPlane2.containsPoint(point);
-    }
-    public getHalfPlaneContaining(point: Point): HalfPlane{
-        return this.halfPlane1.containsPoint(point) ? this.halfPlane1 : this.halfPlane2;
-    }
-    public expandToContainPoint(point: Point): {newHalfPlane: HalfPlane, newVertex: PolygonVertex}{
-        const halfPlaneToKeep: HalfPlane = this.halfPlane1.interiorContainsPoint(point) ? this.halfPlane1 : this.halfPlane2;
-        let directionOfNewHalfPlane: Point = point.minus(this.point).getPerpendicular();
-        if(!this.isContainedByHalfPlaneWithNormal(directionOfNewHalfPlane)){
-            directionOfNewHalfPlane = directionOfNewHalfPlane.scale(-1);
-        }
-        const newHalfPlane: HalfPlane = new HalfPlane(this.point, directionOfNewHalfPlane);
-        return {
-            newHalfPlane: newHalfPlane,
-            newVertex: new PolygonVertex(this.point, halfPlaneToKeep, newHalfPlane)
-        };
-
-    }
     public isContainedByHalfPlaneWithNormal(normal: Point): boolean{
         return normal.isInSmallerAngleBetweenPoints(this.normal1, this.normal2);
     }

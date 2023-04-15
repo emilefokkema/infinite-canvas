@@ -3,11 +3,11 @@ import { Instruction } from "../instructions/instruction";
 import { ClippedPaths } from "../instructions/clipped-paths";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
-import { StateChangingInstructionSetWithCurrentPath } from "../interfaces/state-changing-instruction-set-with-current-path";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 import { TransformableFilter } from "./dimensions/transformable-filter";
+import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -136,6 +136,17 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         }
         return true;
     }
+    public getShadowOffsets(): Point[]{
+        const result: Point[] = [];
+        const filterShadowOffset = this.filter.getShadowOffset();
+        if(filterShadowOffset !== null){
+            result.push(filterShadowOffset)
+        }
+        if(!this.shadowOffset.equals(Point.origin)){
+            result.push(this.shadowOffset)
+        }
+        return result;
+    }
 
     public getInstructionToConvertToState(other: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction{
         const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other, rectangle));
@@ -146,8 +157,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         };
     }
 
-    public withClippedPath(clippedPath: StateChangingInstructionSetWithCurrentPath): InfiniteCanvasStateInstance{
-        const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.getClippedArea(), clippedPath);
+    public withClippedPath(clippedPath: InstructionsToClip): InfiniteCanvasStateInstance{
+        const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.area, clippedPath);
         return this.changeProperty("clippedPaths", newClippedPaths);
     }
 

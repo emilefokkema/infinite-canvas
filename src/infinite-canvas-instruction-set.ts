@@ -15,7 +15,7 @@ import { rectangleIsPlane } from "./geometry/rectangle-is-plane";
 import { plane } from "./areas/plane";
 import { ConvexPolygon } from "./areas/polygons/convex-polygon";
 import { CanvasRectangle } from "./rectangle/canvas-rectangle";
-import { StateAndInstruction } from "./instructions/state-and-instruction";
+import { ExecutableInstructionWithState } from "./instructions/executable-instruction-with-state";
 import { InstructionsWithPositiveDrawnArea } from "./instructions/instructions-with-positive-drawn-area";
 import { DrawingInstruction } from "./drawing-instruction";
 
@@ -122,7 +122,7 @@ export class InfiniteCanvasInstructionSet{
             }
             this.incorporateDrawingInstruction(DrawingInstruction.create({
                 instruction,
-                build: (_, instruction) => new InstructionsWithPositiveDrawnArea(StateAndInstruction.create(state, instruction, this.rectangle), area),
+                build: (_, instruction) => new InstructionsWithPositiveDrawnArea(ExecutableInstructionWithState.create(state, instruction, this.rectangle), area),
                 transformationKind,
                 state,
                 tempState,

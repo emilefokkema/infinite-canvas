@@ -1,9 +1,9 @@
 import { PositiveDrawingArea } from "../areas/positive-drawing-area";
 import { Area } from "../areas/area";
-import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
+import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 import { PositiveDrawingAreaImpl } from "../areas/positive-drawing-area-impl";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { StateChangingInstructionSetWithCurrentPath } from "../interfaces/state-changing-instruction-set-with-current-path";
+import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { Transformation } from "../transformation";
 import { StateChangingInstructionSetWithPositiveArea } from "../interfaces/state-changing-instruction-set-with-positive-area";
 
@@ -12,8 +12,10 @@ export class InstructionsWithPositiveDrawnArea implements StateChangingInstructi
     public get state(): InfiniteCanvasState{return this.instructions.state;}
     public get initialState(): InfiniteCanvasState{return this.instructions.initialState;}
     public get stateOfFirstInstruction(): InfiniteCanvasState{return this.instructions.stateOfFirstInstruction;}
-    constructor(private readonly instructions: StateChangingInstructionSet, area: Area){
-        this.drawingArea = new PositiveDrawingAreaImpl(area)
+    constructor(
+        private readonly instructions: ExecutableStateChangingInstructionSet,
+        area: Area){
+            this.drawingArea = new PositiveDrawingAreaImpl(area)
     }
     public setArea(area: Area): void {
         this.drawingArea = new PositiveDrawingAreaImpl(area);
@@ -24,7 +26,7 @@ export class InstructionsWithPositiveDrawnArea implements StateChangingInstructi
     public setInitialStateWithClippedPaths(previousState: InfiniteCanvasState): void {
         this.instructions.setInitialStateWithClippedPaths(previousState)
     }
-    public addClippedPath(clippedPath: StateChangingInstructionSetWithCurrentPath): void {
+    public addClippedPath(clippedPath: InstructionsToClip): void {
         this.instructions.addClippedPath(clippedPath)
     }
     public execute(context: CanvasRenderingContext2D, transformation: Transformation): void{

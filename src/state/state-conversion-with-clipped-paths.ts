@@ -4,7 +4,7 @@ import {ClippedPaths} from "../instructions/clipped-paths";
 import {InfiniteCanvasState} from "./infinite-canvas-state";
 import {Transformation} from "../transformation";
 import { Instruction } from "../instructions/instruction";
-import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
+import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 import { rectangleHasArea } from "../geometry/rectangle-has-area";
 

@@ -7,6 +7,9 @@ import { Ray } from "./line/ray";
 import { Line } from "./line/line";
 
 class Plane implements Area{
+    public getVertices(): Point[]{
+        return []
+    }
     public expandToIncludePoint(point: Point): Area {
         return this;
     }
