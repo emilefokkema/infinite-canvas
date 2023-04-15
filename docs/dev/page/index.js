@@ -2,7 +2,7 @@ import createDepTrees from './dep-trees.js'
 
 console.log('hello from stackblitz page')
 
-const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.0-alpha/dist/infinite-canvas.js';
+const infCanvasUrl = 'https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.1/dist/infinite-canvas.js';
 
 const stateType = {
     initializing: 0,
@@ -394,7 +394,7 @@ class EmbeddedProject{
         };
         if(!watching){
             projectConfig.dependencies = {
-                "ef-infinite-canvas": "^0.6.0-alpha"
+                "ef-infinite-canvas": "^0.6.1"
             };
         }
         const openOptions = this.getOpenOptions(type, files);
