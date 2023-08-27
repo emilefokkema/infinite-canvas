@@ -1,0 +1,17 @@
+name: Update E2E snapshots
+
+on: 
+    workflow_dispatch
+
+jobs:
+    update:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js 16.x
+              uses: actions/setup-node@v3
+              with:
+                node-version: '16.x'
+                cache: 'npm'
+            - run: npm ci
+            - run: npm run test-e2e
