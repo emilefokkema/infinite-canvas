@@ -556,6 +556,8 @@ describe("an infinite canvas context", () => {
 			infiniteContext.moveTo(0, 0);
 			infiniteContext.beginPath();
 			infiniteContext.moveTo(0, 0);
+			infiniteContext.lineTo(2, 0);
+			infiniteContext.lineTo(2, 2);
 			infiniteContext.fill();
 			infiniteContext.restore();
 			contextMock.clear();
@@ -2005,7 +2007,7 @@ describe("an infinite canvas context", () => {
 			infiniteContext.rect(10, 10, 50, 50);
 			infiniteContext.save();
 			infiniteContext.clip();
-			infiniteContext.fillRect(-1, -1, 2, 2);
+			infiniteContext.fillRect(0, 0, 20, 20);
 			contextMock.clear();
 			infiniteContext.stroke();
 		});
@@ -3741,5 +3743,44 @@ describe("an infinite canvas context", () => {
 		it("should not have added a clearRect", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
+	})
+
+	describe('that clips and then fills a rect outside the clipped area', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.rect(30, 30,20, 20);
+			infiniteContext.clip();
+			infiniteContext.fillRect(10, 10, 10, 10);
+		})
+
+		it("should not have added a fillRect", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe('and then fills a rect inside the clipped area', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fillRect(35, 35, 10, 10);
+
+			})
+
+			it("should have added a fillRect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe('and then clears the entire area', () => {
+
+				beforeEach(() => {
+					contextMock.clear();
+					infiniteContext.clearRect(-Infinity, -Infinity, Infinity, Infinity);
+				})
+
+				it("should have cleared everything", () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				});
+			})
+		})
 	})
 })

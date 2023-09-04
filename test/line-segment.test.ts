@@ -87,3 +87,16 @@ describe("a line segment", () => {
         expectAreasToBeEqual(lineSegment.expandToIncludeInfinityInDirection(direction), expectedExpansion)
     });
 });
+
+describe('this particular line segment', () => {
+    let lineSegment: LineSegment;
+
+    beforeEach(() => {
+        lineSegment = ls(ls => ls.from(3.552713678800501e-15, 42.42640687119285).to(21.21320343559643, 63.63961030678927))
+    });
+
+    it('should result in the correct expansion by a distance', () => {
+        const result = lineSegment.expandByDistance(2.82842712474619)
+        expect(result).not.toBe(empty)
+    })
+})

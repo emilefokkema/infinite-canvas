@@ -1,17 +1,19 @@
 import { Instruction } from "../instructions/instruction";
 import { PathInstruction } from "./path-instruction";
-import { StateChangingInstructionSetWithCurrentPath } from "./state-changing-instruction-set-with-current-path";
+import { StateChangingInstructionSet } from './state-changing-instruction-set'
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Position } from "../geometry/position"
-import { StateChangingInstructionSetWithPositiveArea } from "./state-changing-instruction-set-with-positive-area";
 import { InstructionsToClip } from "./instructions-to-clip";
+import { DrawnPathProperties } from './drawn-path-properties'
+import { Area } from '../areas/area'
+import { ExecutableStateChangingInstructionSet } from "./executable-state-changing-instruction-set";
 
-export interface CurrentPath{
+export interface CurrentPath extends StateChangingInstructionSet{
+    area: Area
     allSubpathsAreClosable(): boolean;
     currentSubpathIsClosable(): boolean;
     containsFinitePoint(): boolean;
-    fillPath(instruction: Instruction, state: InfiniteCanvasState): StateChangingInstructionSetWithPositiveArea;
-    strokePath(instruction: Instruction, state: InfiniteCanvasState): StateChangingInstructionSetWithPositiveArea;
+    drawPath(instruction: Instruction, state: InfiniteCanvasState, drawnPathProperties: DrawnPathProperties): ExecutableStateChangingInstructionSet
     clipPath(instruction: Instruction, state: InfiniteCanvasState): void;
     addPathInstruction(pathInstruction: PathInstruction, state: InfiniteCanvasState): void;
     closePath(): void;
@@ -19,6 +21,6 @@ export interface CurrentPath{
     canAddLineTo(position: Position, state: InfiniteCanvasState): boolean;
     lineTo(position: Position, state: InfiniteCanvasState): void;
     rect(x: number, y: number, w: number, h: number, state: InfiniteCanvasState): void;
-    recreatePath(): StateChangingInstructionSetWithCurrentPath;
+    recreatePath(): CurrentPath;
     getInstructionsToClip(): InstructionsToClip;
 }

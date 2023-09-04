@@ -120,7 +120,7 @@ export class Ray extends SubsetOfLine implements Area{
     public expandByDistance(distance: number): ConvexPolygon{
         const expandedLine = this.expandLineByDistance(distance);
         const expandedLimitingHalfPlane = new HalfPlane(this.base, this.direction).expandByDistance(distance);
-        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane]));
+        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane])) as ConvexPolygon;
     }
     public expandToIncludeInfinityInDirection(direction: Point): Area{
         if(direction.inSameDirectionAs(this.direction)){

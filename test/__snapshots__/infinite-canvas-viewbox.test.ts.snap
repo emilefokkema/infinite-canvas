@@ -1126,6 +1126,43 @@ exports[`an infinite canvas context that clips and then draws an image and then 
 ]
 `;
 
+exports[`an infinite canvas context that clips and then fills a rect outside the clipped area and then fills a rect inside the clipped area and then clears the entire area should have cleared everything 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context that clips and then fills a rect outside the clipped area and then fills a rect inside the clipped area should have added a fillRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(50,30)",
+  "context.lineTo(50,50)",
+  "context.lineTo(30,50)",
+  "context.lineTo(30,30)",
+  "context.closePath()",
+  "context.moveTo(30,30)",
+  "context.clip()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(35,35)",
+  "context.lineTo(45,35)",
+  "context.lineTo(45,45)",
+  "context.lineTo(35,45)",
+  "context.lineTo(35,35)",
+  "context.closePath()",
+  "context.moveTo(35,35)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context that clips and then fills a rect outside the clipped area should not have added a fillRect 1`] = `[]`;
+
 exports[`an infinite canvas context that clips and then puts image data and then clears an area covering the clipped area but not the image should not forget about the image and add a clearRect 1`] = `
 [
   "context.restore()",
@@ -3372,13 +3409,13 @@ exports[`an infinite canvas context that makes a path, saves state, clips, fills
   "context.clip()",
   "context.lineWidth = 1",
   "context.beginPath()",
-  "context.moveTo(-1,-1)",
-  "context.lineTo(1,-1)",
-  "context.lineTo(1,1)",
-  "context.lineTo(-1,1)",
-  "context.lineTo(-1,-1)",
+  "context.moveTo(0,0)",
+  "context.lineTo(20,0)",
+  "context.lineTo(20,20)",
+  "context.lineTo(0,20)",
+  "context.lineTo(0,0)",
   "context.closePath()",
-  "context.moveTo(-1,-1)",
+  "context.moveTo(0,0)",
   "context.fill()",
   "context.restore()",
   "context.beginPath()",
@@ -3972,6 +4009,8 @@ exports[`an infinite canvas context that saves, begins a path, begins another pa
   "context.save()",
   "context.beginPath()",
   "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
   "context.lineWidth = 1",
   "context.fill()",
   "context.restore()",

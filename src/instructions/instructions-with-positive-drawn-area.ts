@@ -17,9 +17,6 @@ export class InstructionsWithPositiveDrawnArea implements StateChangingInstructi
         area: Area){
             this.drawingArea = new PositiveDrawingAreaImpl(area)
     }
-    public setArea(area: Area): void {
-        this.drawingArea = new PositiveDrawingAreaImpl(area);
-    }
     public setInitialState(previousState: InfiniteCanvasState): void {
         this.instructions.setInitialState(previousState)
     }

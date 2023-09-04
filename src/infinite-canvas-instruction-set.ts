@@ -2,13 +2,13 @@ import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import { Instruction } from "./instructions/instruction";
 import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { PreviousInstructions } from "./instructions/previous-instructions";
-import { StateChangingInstructionSetWithCurrentPath } from "./interfaces/state-changing-instruction-set-with-current-path";
-import { StateChangingInstructionSetWithPositiveArea } from "./interfaces/state-changing-instruction-set-with-positive-area";
+import { CurrentPath } from "./interfaces/current-path";
 import { InstructionsWithPath } from "./instructions/instructions-with-path";
 import { PathInstruction } from "./interfaces/path-instruction";
 import { TransformationKind } from "./transformation-kind";
 import { Transformation } from "./transformation";
 import { Area } from "./areas/area";
+import { empty } from "./areas/empty";
 import { Position } from "./geometry/position"
 import { rectangleHasArea } from "./geometry/rectangle-has-area";
 import { rectangleIsPlane } from "./geometry/rectangle-is-plane";
@@ -17,10 +17,11 @@ import { ConvexPolygon } from "./areas/polygons/convex-polygon";
 import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 import { ExecutableInstructionWithState } from "./instructions/executable-instruction-with-state";
 import { InstructionsWithPositiveDrawnArea } from "./instructions/instructions-with-positive-drawn-area";
-import { DrawingInstruction } from "./drawing-instruction";
+import { ExecutableStateChangingInstructionSet } from "./interfaces/executable-state-changing-instruction-set";
+import { DrawingInstruction } from './drawing-instruction'
 
 export class InfiniteCanvasInstructionSet{
-    private currentInstructionsWithPath: StateChangingInstructionSetWithCurrentPath;
+    private currentInstructionsWithPath: CurrentPath;
     private previousInstructionsWithPath: PreviousInstructions;
     public state: InfiniteCanvasState;
     constructor(private readonly onChange: () => void, private readonly rectangle: CanvasRectangle){
@@ -51,60 +52,38 @@ export class InfiniteCanvasInstructionSet{
         return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.currentSubpathIsClosable();
     }
     public fillPath(instruction: Instruction): void{
-        this.drawPath(instruction, (path: StateChangingInstructionSetWithCurrentPath, _instruction: Instruction, state: InfiniteCanvasState) => {
-            return path.fillPath(_instruction, state);
-        });
-    }
-    public strokePath(): void{
-        this.drawPath((context: CanvasRenderingContext2D) => {context.stroke();}, (path: StateChangingInstructionSetWithCurrentPath, _instruction: Instruction, state: InfiniteCanvasState) => {
-            return path.strokePath(_instruction, state);
-        });
-    }
-    public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
-        this.drawRect(x, y, w, h, instruction, (path: StateChangingInstructionSetWithCurrentPath, _instruction: Instruction, state: InfiniteCanvasState) => {
-            return path.fillPath(_instruction, state);
-        });
-    }
-
-    public strokeRect(x: number, y: number, w: number, h: number): void{
-        this.drawRect(x, y, w, h, (context: CanvasRenderingContext2D) => {context.stroke();}, (path: StateChangingInstructionSetWithCurrentPath, _instruction: Instruction, state: InfiniteCanvasState) => {
-            return path.strokePath(_instruction, state);
-        });
-    }
-    private drawPath(instruction: Instruction, drawPath: (path: StateChangingInstructionSetWithCurrentPath, instruction: Instruction, state: InfiniteCanvasState) => StateChangingInstructionSetWithPositiveArea): void{
         if(!this.currentInstructionsWithPath){
             return;
         }
-        const stateIsTransformable: boolean = this.state.current.isTransformable();
-        const transformationKind = stateIsTransformable ? TransformationKind.None : TransformationKind.Relative;
-        this.state = this.state.currentlyTransformed(stateIsTransformable);
-        this.incorporateDrawingInstruction(DrawingInstruction.create({
-            instruction,
-            build: (currentPath, instruction) => drawPath(currentPath, instruction, this.state),
-            transformationKind,
-            state: this.state,
-            takeClippingRegionIntoAccount: true
-        }))
-        this.onChange();
+        const drawingInstruction = DrawingInstruction.forFillingPath(instruction, this.state, () => this.currentInstructionsWithPath)
+        this.state = drawingInstruction.state;
+        this.incorporateDrawingInstruction(drawingInstruction)
+    }
+    public strokePath(): void{
+        if(!this.currentInstructionsWithPath){
+            return;
+        }
+        const drawingInstruction = DrawingInstruction.forStrokingPath((context) => {context.stroke();}, this.state, () => this.currentInstructionsWithPath)
+        this.state = drawingInstruction.state;
+        this.incorporateDrawingInstruction(drawingInstruction)
+    }
+    public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
+        const drawingInstruction = DrawingInstruction.forFillingPath(instruction, this.state, (state) => {
+            const result = InstructionsWithPath.create(state, this.rectangle);
+            result.rect(x, y, w, h, state);
+            return result;
+        })
+        this.incorporateDrawingInstruction(drawingInstruction);
     }
 
-    private drawRect(x: number, y: number, w: number, h: number, instruction: Instruction, drawPath: (path: StateChangingInstructionSetWithCurrentPath, instruction: Instruction, state: InfiniteCanvasState) => StateChangingInstructionSetWithPositiveArea): void{
-        const stateIsTransformable: boolean = this.state.current.isTransformable();
-        const transformationKind = stateIsTransformable ? TransformationKind.None : TransformationKind.Relative;
-        const stateToDrawWith: InfiniteCanvasState = this.state.currentlyTransformed(stateIsTransformable);
-        this.incorporateDrawingInstruction(DrawingInstruction.create({
-            instruction,
-            build: (_, instruction) => {
-                const pathToDraw = InstructionsWithPath.create(stateToDrawWith, this.rectangle);
-                pathToDraw.rect(x, y, w, h, stateToDrawWith);
-                return drawPath(pathToDraw, instruction, stateToDrawWith);
-            },
-            transformationKind,
-            state: stateToDrawWith,
-            takeClippingRegionIntoAccount: true
-        }));
-        this.onChange();
-	}
+    public strokeRect(x: number, y: number, w: number, h: number): void{
+        const drawingInstruction = DrawingInstruction.forStrokingPath((context) => {context.stroke();}, this.state, (state) => {
+            const result = InstructionsWithPath.create(state, this.rectangle);
+            result.rect(x, y, w, h, state);
+            return result;
+        })
+        this.incorporateDrawingInstruction(drawingInstruction);
+    }
 
     public addDrawing(
         instruction: Instruction,
@@ -120,35 +99,49 @@ export class InfiniteCanvasInstructionSet{
             if(tempStateFn){
                 tempState = state.withCurrentState(tempStateFn(state.current));
             }
-            this.incorporateDrawingInstruction(DrawingInstruction.create({
+            this.incorporateDrawingInstruction(new DrawingInstruction(
                 instruction,
-                build: (_, instruction) => new InstructionsWithPositiveDrawnArea(ExecutableInstructionWithState.create(state, instruction, this.rectangle), area),
+                area,
+                (instruction) => {
+                    return ExecutableInstructionWithState.create(state, instruction, this.rectangle)
+                },
+                takeClippingRegionIntoAccount,
                 transformationKind,
                 state,
-                tempState,
-                takeClippingRegionIntoAccount
-            }));
-            this.onChange();
+                tempState
+            ));
     }
 
     public clipPath(instruction: Instruction): void{
         this.clipCurrentPath(instruction);
     }
 
-    private incorporateDrawingInstruction(drawingInstruction: DrawingInstruction): void{
+    private incorporateDrawingInstruction(
+        instruction: DrawingInstruction
+    ): void{
+        const area = instruction.getDrawnArea();
+        if(area === empty){
+            return;
+        }
+        const modifiedInstruction = instruction.getModifiedInstruction(this.rectangle);
         if(this.currentInstructionsWithPath){
             const recreated = this.currentInstructionsWithPath.recreatePath();
-            this.addToPreviousInstructions(drawingInstruction);
+            this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
             recreated.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
             this.currentInstructionsWithPath = recreated;
         }else{
-            this.addToPreviousInstructions(drawingInstruction);
+            this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
             this.state = this.previousInstructionsWithPath.state;
         }
+        this.onChange();
     }
 
-    private addToPreviousInstructions(drawingInstruction: DrawingInstruction): void{
-        const newInstruction = drawingInstruction.build(this.currentInstructionsWithPath, this.rectangle);
+    private addToPreviousInstructions(
+        instruction: Instruction,
+        area: Area,
+        build: (instruction: Instruction) => ExecutableStateChangingInstructionSet
+    ): void{
+        const newInstruction = new InstructionsWithPositiveDrawnArea(build(instruction), area);
         newInstruction.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
         this.previousInstructionsWithPath.add(newInstruction);
     }

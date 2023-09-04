@@ -115,7 +115,7 @@ export class LineSegment extends SubsetOfLine implements Area{
         const expandedLine = this.expandLineByDistance(distance);
         const expandedLimitingHalfPlane1 = new HalfPlane(this.base, this.direction).expandByDistance(distance);
         const expandedLimitingHalfPlane2 = new HalfPlane(this.point2, this.direction.scale(-1)).expandByDistance(distance);
-        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane1, expandedLimitingHalfPlane2]));
+        return expandedLine.intersectWithConvexPolygon(new ConvexPolygon([expandedLimitingHalfPlane1, expandedLimitingHalfPlane2])) as ConvexPolygon;
     }
     public expandToIncludePoint(point: Point): Area {
         if(this.containsPoint(point)){

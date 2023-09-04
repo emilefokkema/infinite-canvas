@@ -4,7 +4,7 @@ import {Transformation} from "./transformation";
 import { right, left, down, up } from "./geometry/points-at-infinity";
 import {CanvasRectangle} from "./rectangle/canvas-rectangle";
 import {InfiniteCanvasState} from "./state/infinite-canvas-state";
-import { DrawnStrokeProperties } from "./interfaces/drawn-stroke-properties";
+import { DrawnPathProperties } from "./interfaces/drawn-path-properties";
 import { Area } from "./areas/area";
 import { getPointInFrontInDirection } from "./geometry/get-point-in-front-in-direction";
 
@@ -16,16 +16,16 @@ export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
     constructor(
         private readonly rectangle: CanvasRectangle,
         private readonly state: InfiniteCanvasState,
-        private readonly drawnStroke: DrawnStrokeProperties) {
+        private readonly drawnPathProperties: DrawnPathProperties) {
     }
     public addPathAroundViewbox(context: CanvasRenderingContext2D): void{
-        this.rectangle.addPathAroundViewbox(context, this.drawnStroke.lineWidth);
+        this.rectangle.addPathAroundViewbox(context, this.drawnPathProperties.lineWidth);
     }
     private getTransformedViewbox(): Area{
         const bitmapTransformationToTransformedInfiniteCanvasContext: Transformation = this.state.current.transformation.before(this.rectangle.getBitmapTransformationToInfiniteCanvasContext());
         let rectangle: Area = this.rectangle.polygon;
-        rectangle = rectangle.transform(bitmapTransformationToTransformedInfiniteCanvasContext.inverse()).expandByDistance(this.drawnStroke.lineWidth)
-        for(const shadowOffset of this.drawnStroke.shadowOffsets){
+        rectangle = rectangle.transform(bitmapTransformationToTransformedInfiniteCanvasContext.inverse()).expandByDistance(this.drawnPathProperties.lineWidth)
+        for(const shadowOffset of this.drawnPathProperties.shadowOffsets){
             const offsetRectangle = rectangle.transform(Transformation.translation(-shadowOffset.x, -shadowOffset.y));
             rectangle = rectangle.join(offsetRectangle)
         }
@@ -94,7 +94,7 @@ export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
         this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(context, transformation, distanceCovered, toPoint, direction);
     }
     private ensureDistanceCoveredIsMultipleOfLineDashPeriod(context: CanvasRenderingContext2D, viewboxTransformation: Transformation, distanceSoFar: number, lastPoint: Point, directionOfExtraPoint: Point): void{
-        const lineDashPeriod: number = this.drawnStroke.lineDashPeriod;
+        const lineDashPeriod: number = this.drawnPathProperties.lineDashPeriod;
         if(lineDashPeriod === 0){
             return;
         }

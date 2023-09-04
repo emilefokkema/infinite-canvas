@@ -11,7 +11,7 @@ import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
 import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 import { InfiniteCanvasPathInfinityProvider } from '../src/infinite-canvas-path-infinity-provider';
-import { DrawnStrokeProperties } from '../src/interfaces/drawn-stroke-properties';
+import { DrawnPathProperties } from '../src/interfaces/drawn-path-properties';
 
 function recordPoints(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void, transformation: Transformation): Point[]{
     const contextMock: any = new CanvasContextMock();
@@ -45,13 +45,13 @@ describe('a viewbox infinity for an untransformed context and with shadow offset
     let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        const drawnStrokeProperties: DrawnStrokeProperties = {
+        const drawnPathProperties: DrawnPathProperties = {
             lineWidth: 1,
             lineDashPeriod: 0,
             shadowOffsets: [new Point(-1, 1), new Point(1, 1)]
         };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        const pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
+        const pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.identity));
     })
 
@@ -77,16 +77,16 @@ describe("a viewbox infinity for an untransformed context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
-    let drawnStrokeProperties: DrawnStrokeProperties;
+    let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
-        drawnStrokeProperties = {
+        drawnPathProperties = {
             lineWidth: 0,
             lineDashPeriod: 0,
             shadowOffsets: []
         };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.identity));
     });
 
@@ -135,16 +135,16 @@ describe("a viewbox infinity for a translated context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
-    let drawnStrokeProperties: DrawnStrokeProperties;
+    let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
-        drawnStrokeProperties = {
+        drawnPathProperties = {
             lineWidth: 0,
             lineDashPeriod: 0,
             shadowOffsets: []
         };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0, 0, 1, 5, 5)));
     });
 
@@ -161,16 +161,16 @@ describe("a viewbox infinity for skewed context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
-    let drawnStrokeProperties: DrawnStrokeProperties;
+    let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
-        drawnStrokeProperties = {
+        drawnPathProperties = {
             lineWidth: 0,
             lineDashPeriod: 0,
             shadowOffsets: []
         };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0.2, 0, 1, 0, 0)));
     });
 
@@ -188,16 +188,16 @@ describe("a viewbox infinity for a scaled context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
     let rectangle: CanvasRectangle;
-    let drawnStrokeProperties: DrawnStrokeProperties;
+    let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
-        drawnStrokeProperties = {
+        drawnPathProperties = {
             lineWidth: 0,
             lineDashPeriod: 0,
             shadowOffsets: []
         };
         rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnStrokeProperties);
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.scale(2)));
     });
 
