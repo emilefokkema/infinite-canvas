@@ -2,7 +2,7 @@ import { Transformation } from "../transformation";
 import { Area } from "../areas/area";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
-import { ExecutableStateChangingInstructionSet } from "src/interfaces/executable-state-changing-instruction-set";
+import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 
 export class InstructionsToClipImpl implements InstructionsToClip{
     public get state(): InfiniteCanvasState{return this.instructions.state;}

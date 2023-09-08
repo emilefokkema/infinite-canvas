@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "composite": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "module": "ES2020"
+    },
+    "include": ["docs/.vitepress/**/*", "docs/**/*paths.ts", "examples/backend/**/*", "examples/shared/**/*"],
+    "exclude": ["docs/.vitepress/theme/**/*"]
+}

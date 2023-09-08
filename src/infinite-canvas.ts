@@ -708,4 +708,5 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 
 const ctr: InfiniteCanvasCtr = InfiniteCanvas;
 
-export {ctr as InfiniteCanvas};
+export { Units }
+export default ctr;

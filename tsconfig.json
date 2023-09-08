@@ -1,18 +1,19 @@
 {
+  "references": [
+    {"path": "./ts-config.build.json"},
+    {"path": "./ts-config-test-e2e.json"},
+    {"path": "./ts-config-e2e-test-page.json"},
+    {"path": "./ts-config-test.json"},
+    {"path": "./ts-config-examples-catalog.json"},
+    {"path": "./ts-config-examples-backend.json"},
+    {"path": "./ts-config-docs-config.json"},
+    {"path": "./ts-config-docs-app.json"}
+  ],
+  "files": [],
   "compilerOptions": {
-    "outDir": "./dist/",
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "react",
-    "allowJs": true,
-    "esModuleInterop":true,
-    "baseUrl": ".",
-    "paths": {
-      "e2e-test-page": ["test/e2e/test-page/index.ts"],
-      "infinite-canvas": ["src/api-surface/infinite-canvas.ts"],
-      "puppeteer": ["node_modules/@types/puppeteer"]
-    },
-    "moduleResolution": "node"
-  }
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "module": "ES2020"
+  },
 }

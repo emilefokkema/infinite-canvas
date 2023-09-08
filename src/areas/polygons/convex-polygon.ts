@@ -8,6 +8,7 @@ import { HalfPlaneLineIntersection } from "./half-plane-line-intersection";
 import { LineSegment } from "../line/line-segment";
 import { Ray } from "../line/ray";
 import { Line } from "../line/line";
+import { empty } from "../empty";
 
 export class ConvexPolygon implements Area{
     public readonly halfPlanes: HalfPlane[];
@@ -81,15 +82,18 @@ export class ConvexPolygon implements Area{
             }
         }
         for(let _halfPlane of this.halfPlanes){
-            if(this.hasAtMostOneVertex(_halfPlane) && (_halfPlane.isContainedByHalfPlane(complement) || complement.isContainedByHalfPlane(_halfPlane))){
+            const vertices = this.getVerticesOnHalfPlane(_halfPlane);
+            if(vertices.length <= 1 && (_halfPlane.isContainedByHalfPlane(complement) || complement.isContainedByHalfPlane(_halfPlane))){
                 return false;
             }
             const intersection: PolygonVertex = _halfPlane.getIntersectionWith(halfPlane);
-            const vertexAtIntersection: PolygonVertex = this.findVertex(intersection.point);
+            const vertexAtIntersection: PolygonVertex = vertices.find(v => v.point.equals(intersection.point));
             if(vertexAtIntersection){
                 if(!vertexAtIntersection.isContainedByHalfPlaneWithNormal(halfPlane.normalTowardInterior)){
                     return false;
                 }
+            }else if(vertices.length === 0){
+                return false;
             }else if(this.containsPoint(intersection.point)){
                 return false;
             }
@@ -176,7 +180,7 @@ export class ConvexPolygon implements Area{
     public transform(transformation: Transformation): ConvexPolygon{
         return new ConvexPolygon(this.halfPlanes.map(hp => hp.transform(transformation)));
     }
-    public intersectWithConvexPolygon(convexPolygon: ConvexPolygon): ConvexPolygon{
+    public intersectWithConvexPolygon(convexPolygon: ConvexPolygon): Area{
         if(convexPolygon.isContainedByConvexPolygon(this)){
             return convexPolygon;
         }
@@ -184,7 +188,7 @@ export class ConvexPolygon implements Area{
             return this;
         }
         if(this.isOutsideConvexPolygon(convexPolygon)){
-            return undefined;
+            return empty;
         }
         const allHalfPlanes: HalfPlane[] = ConvexPolygon.getHalfPlanesNotContainingAnyOther(this.halfPlanes.concat(convexPolygon.halfPlanes));
         const verticesGroupedByPoint: PolygonVertex[][] = ConvexPolygon.groupVerticesByPoint(ConvexPolygon.getVertices(allHalfPlanes));
@@ -239,6 +243,15 @@ export class ConvexPolygon implements Area{
             }
         }
         return false;
+    }
+    private getVerticesOnHalfPlane(halfPlane: HalfPlane): PolygonVertex[]{
+        const result: PolygonVertex[] = [];
+        for(let vertex of this.vertices){
+            if(vertex.halfPlane1 === halfPlane || vertex.halfPlane2 === halfPlane){
+                result.push(vertex);
+            }
+        }
+        return result;
     }
     private hasAtMostOneVertex(halfPlane: HalfPlane): boolean{
         let count: number = 0;

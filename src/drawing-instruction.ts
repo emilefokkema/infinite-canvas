@@ -1,34 +1,99 @@
-import { Area } from "./areas/area";
-import { DrawingInstructionDefinition } from "./drawing-instruction-definition";
-import { Point } from "./geometry/point";
-import { getTempStateFnFromTransformationKind, sequence, useTempState } from "./instruction-utils";
-import { Instruction } from "./instructions/instruction";
-import { StateChangingInstructionSetWithCurrentPath } from "./interfaces/state-changing-instruction-set-with-current-path";
-import { StateChangingInstructionSetWithPositiveArea } from "./interfaces/state-changing-instruction-set-with-positive-area";
-import { CanvasRectangle } from "./rectangle/canvas-rectangle";
-import { InfiniteCanvasState } from "./state/infinite-canvas-state";
-import { Transformation } from "./transformation";
-import { TransformationKind } from "./transformation-kind";
+import { Instruction } from "./instructions/instruction"
+import { ExecutableStateChangingInstructionSet } from './interfaces/executable-state-changing-instruction-set'
+import { InfiniteCanvasState } from "./state/infinite-canvas-state"
+import { TransformationKind } from "./transformation-kind"
+import { Area } from './areas/area'
+import { Point } from "./geometry/point"
+import { Transformation } from "./transformation"
+import { getTempStateFnFromTransformationKind, sequence, useTempState } from "./instruction-utils"
+import { CanvasRectangle } from "./rectangle/canvas-rectangle"
+import { DrawnPathProperties } from "./interfaces/drawn-path-properties"
+import { CurrentPath } from "./interfaces/current-path"
+
+function getAreaOfPath(path: CurrentPath, drawnPathProperties: DrawnPathProperties): Area{
+    let newlyDrawnArea: Area = path.area
+    if(newlyDrawnArea && drawnPathProperties.lineWidth > 0){
+        newlyDrawnArea = newlyDrawnArea.expandByDistance(drawnPathProperties.lineWidth / 2)
+    }
+    return newlyDrawnArea;
+}
+
+function getDrawnPathPropertiesWhenStroked(state: InfiniteCanvasState): DrawnPathProperties{
+    return {
+        lineWidth: state.current.getMaximumLineWidth(),
+        lineDashPeriod: state.current.getLineDashPeriod(),
+        shadowOffsets: state.current.getShadowOffsets()
+    };
+}
+
+function getDrawnPathPropertiesWhenFilled(state: InfiniteCanvasState): DrawnPathProperties{
+    return {
+        lineWidth: 0,
+        lineDashPeriod: 0,
+        shadowOffsets: state.current.getShadowOffsets()
+    };
+}
 
 export class DrawingInstruction{
     constructor(
         private readonly instruction: Instruction,
-        private readonly factory: (currentPath: StateChangingInstructionSetWithCurrentPath, instruction: Instruction) =>  StateChangingInstructionSetWithPositiveArea,
+        private readonly area: Area,
+        public readonly build: (instruction: Instruction) => ExecutableStateChangingInstructionSet,
         private readonly takeClippingRegionIntoAccount: boolean,
         private readonly transformationKind: TransformationKind,
-        private readonly state: InfiniteCanvasState,
-        private readonly tempState: InfiniteCanvasState
+        public readonly state: InfiniteCanvasState,
+        private readonly tempState?: InfiniteCanvasState
     ){
 
     }
-    public build(currentPath: StateChangingInstructionSetWithCurrentPath, rectangle: CanvasRectangle): StateChangingInstructionSetWithPositiveArea{
-        const instruction = this.getModifiedInstruction(rectangle);
-        const newInstruction = this.factory(currentPath, instruction);
-        newInstruction.setArea(this.changeAreaOfDrawing(newInstruction.drawingArea.area, this.tempState || this.state, this.takeClippingRegionIntoAccount))
-        return newInstruction;
+    public static forStrokingPath(
+        instruction: Instruction,
+        state: InfiniteCanvasState,
+        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+            return DrawingInstruction.forPath(instruction, state, getDrawnPathPropertiesWhenStroked, getPath);
     }
-    private getModifiedInstruction(rectangle: CanvasRectangle): Instruction{
-        let instruction = this.instruction;
+    public static forFillingPath(
+        instruction: Instruction,
+        state: InfiniteCanvasState,
+        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+            return DrawingInstruction.forPath(instruction, state, getDrawnPathPropertiesWhenFilled, getPath);
+    }
+    public static forPath(
+        instruction: Instruction,
+        state: InfiniteCanvasState,
+        getDrawnPathProperties: (state: InfiniteCanvasState) => DrawnPathProperties,
+        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+            const stateIsTransformable: boolean = state.current.isTransformable();
+            const transformationKind = stateIsTransformable ? TransformationKind.None : TransformationKind.Relative;
+            const stateToDrawWith: InfiniteCanvasState = state.currentlyTransformed(stateIsTransformable);
+            const drawnPathProperties = getDrawnPathProperties(stateToDrawWith);
+            const pathToDraw = getPath(stateToDrawWith);
+            const areaToDraw = getAreaOfPath(pathToDraw, drawnPathProperties);
+            return new DrawingInstruction(
+                instruction,
+                areaToDraw,
+                (instruction) => {
+                    const drawn = pathToDraw.drawPath(instruction, stateToDrawWith, drawnPathProperties)
+                    return drawn;
+                },
+                true,
+                transformationKind,
+                stateToDrawWith
+            )
+    }
+    public getDrawnArea(): Area{
+        let result = this.area;
+        const state = this.state;
+        if(state.current.shadowBlur !== 0 || !state.current.shadowOffset.equals(Point.origin)){
+            const shadowArea = result.expandByDistance(state.current.shadowBlur).transform(Transformation.translation(state.current.shadowOffset.x, state.current.shadowOffset.y))
+            result = result.join(shadowArea)
+        }
+        if(state.current.clippingRegion && this.takeClippingRegionIntoAccount){
+            result = result.intersectWith(state.current.clippingRegion);
+        }
+        return result;
+    }
+    public getModifiedInstruction(rectangle: CanvasRectangle): Instruction{
         let tempStateInstruction = getTempStateFnFromTransformationKind(this.transformationKind, rectangle)
         if(this.tempState){
             const stateChangeInstruction = this.takeClippingRegionIntoAccount
@@ -36,28 +101,7 @@ export class DrawingInstruction{
             : this.state.getInstructionToConvertToState(this.tempState, rectangle);
             tempStateInstruction = sequence(tempStateInstruction, stateChangeInstruction)
         }
-        instruction = useTempState(instruction, tempStateInstruction)
+        const instruction = useTempState(this.instruction, tempStateInstruction)
         return instruction;
-    }
-    private changeAreaOfDrawing(area: Area, state: InfiniteCanvasState, takeClippingRegionIntoAccount: boolean): Area{
-        let result = area;
-        if(state.current.shadowBlur !== 0 || !state.current.shadowOffset.equals(Point.origin)){
-            const shadowArea = result.expandByDistance(state.current.shadowBlur).transform(Transformation.translation(state.current.shadowOffset.x, state.current.shadowOffset.y))
-            result = result.join(shadowArea)
-        }
-        if(state.current.clippingRegion && takeClippingRegionIntoAccount){
-            result = result.intersectWith(state.current.clippingRegion);
-        }
-        return result;
-    }
-    public static create(definition: DrawingInstructionDefinition): DrawingInstruction{
-        return new DrawingInstruction(
-            definition.instruction,
-            definition.build,
-            definition.takeClippingRegionIntoAccount,
-            definition.transformationKind,
-            definition.state,
-            definition.tempState
-        )
     }
 }

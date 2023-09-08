@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "composite": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "module": "ES2020"
+    },
+    "include": ["examples/backend/**/*", "examples/shared/**/*"]
+}

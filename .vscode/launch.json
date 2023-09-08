@@ -8,15 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "Debug test",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/node_modules/.bin/jest",
-            "args": ["${fileBasenameNoExtension}", "--config","./test/jest.config.js"],
             "autoAttachChildProcesses": true,
-            "windows": {
-                "program": "${workspaceFolder}/node_modules/jest/bin/jest"
-            }
+            "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+            "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+            "args": ["run", "${relativeFile}", "--test-timeout=3600000", "--config", "vitest.config.ts"]
         }
     ]
 }

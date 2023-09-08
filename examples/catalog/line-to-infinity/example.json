@@ -1,0 +1,9 @@
+{
+  "title": "line to infinity",
+  "files": {
+    "index.html": "index.html",
+    "index.js": "index.js",
+    "index.css": "index.css",
+    "example-infinite-canvas.js": "../example-infinite-canvas.js"
+  }
+}

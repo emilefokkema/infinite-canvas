@@ -1,0 +1,12 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "composite": true,
+        "moduleResolution": "node",
+        "paths": {
+            "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
+        }
+    },
+    "include": ["examples/catalog/**/*", "examples/shared/**/*", "examples/catalog/**/*.vue", "src/api-surface/**/*"]
+}

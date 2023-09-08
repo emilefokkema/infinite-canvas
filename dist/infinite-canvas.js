@@ -1,1 +1,6153 @@
-!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.InfiniteCanvas=e():t.InfiniteCanvas=e()}(this,(()=>(()=>{var t={582:(t,e,n)=>{"use strict";n.r(e),n.d(e,{InfiniteCanvas:()=>Jr});var o=function(){function t(t){this.viewBox=t}return t.prototype.restore=function(){this.viewBox.restoreState()},t.prototype.save=function(){this.viewBox.saveState()},t}(),r=function(){function t(t,e){this.x=t,this.y=e}return t.prototype.mod=function(){return Math.sqrt(this.modSq())},t.prototype.modSq=function(){return this.x*this.x+this.y*this.y},t.prototype.minus=function(e){return new t(this.x-e.x,this.y-e.y)},t.prototype.plus=function(e){return new t(this.x+e.x,this.y+e.y)},t.prototype.dot=function(t){return this.x*t.x+this.y*t.y},t.prototype.cross=function(t){return this.x*t.y-this.y*t.x},t.prototype.equals=function(t){return this.x===t.x&&this.y===t.y},t.prototype.getPerpendicular=function(){return new t(-this.y,this.x)},t.prototype.scale=function(e){return new t(e*this.x,e*this.y)},t.prototype.projectOn=function(t){return t.scale(this.dot(t)/t.modSq())},t.prototype.matrix=function(e,n,o,r){return new t(e*this.x+n*this.y,o*this.x+r*this.y)},t.prototype.inSameDirectionAs=function(t){return 0===this.cross(t)&&this.dot(t)>=0},t.prototype.isInOppositeDirectionAs=function(t){return 0===this.cross(t)&&this.dot(t)<0},t.prototype.isOnSameSideOfOriginAs=function(t,e){return this.isInSmallerAngleBetweenPoints(t,e)||t.isInSmallerAngleBetweenPoints(this,e)||e.isInSmallerAngleBetweenPoints(this,t)},t.prototype.isInSmallerAngleBetweenPoints=function(t,e){var n=t.cross(e);return n>0?t.cross(this)>=0&&this.cross(e)>=0:n<0?t.cross(this)<=0&&this.cross(e)<=0:!(t.dot(e)>0)||0===this.cross(t)&&this.dot(t)>0},t.origin=new t(0,0),t}();function i(t){return t.toFixed(10).replace(/\.?0+$/,"")}var a,s=function(){function t(t,e,n,o,r,i){this.a=t,this.b=e,this.c=n,this.d=o,this.e=r,this.f=i,this.scale=Math.sqrt(t*o-e*n)}return t.prototype.getMaximumLineWidthScale=function(){var t=this.a+this.c,e=this.b+this.d,n=this.a-this.c,o=this.b-this.d;return Math.sqrt(Math.max(t*t+e*e,n*n+o*o))},t.prototype.getRotationAngle=function(){var t=this.a/this.scale,e=this.b/this.scale;if(0===t)return e>0?Math.PI/2:3*Math.PI/2;var n=Math.atan(e/t);return t>0?e>0?n:0===e?0:2*Math.PI+n:e>0?Math.PI+n:0===e?Math.PI:Math.PI+n},t.prototype.applyToPointAtInfinity=function(t){return{direction:this.untranslated().apply(t.direction)}},t.prototype.apply=function(t){return new r(this.a*t.x+this.c*t.y+this.e,this.b*t.x+this.d*t.y+this.f)},t.prototype.untranslated=function(){var e=this.apply(r.origin),n=e.x,o=e.y;return this.before(t.translation(-n,-o))},t.prototype.before=function(e){return new t(e.a*this.a+e.c*this.b,e.b*this.a+e.d*this.b,e.a*this.c+e.c*this.d,e.b*this.c+e.d*this.d,e.a*this.e+e.c*this.f+e.e,e.b*this.e+e.d*this.f+e.f)},t.prototype.equals=function(t){return this.a===t.a&&this.b===t.b&&this.c===t.c&&this.d===t.d&&this.e===t.e&&this.f===t.f},t.prototype.inverse=function(){var e=this.a*this.d-this.b*this.c;if(0==e)throw"error calculating inverse: zero determinant";return new t(this.d/e,-this.b/e,-this.c/e,this.a/e,(this.c*this.f-this.d*this.e)/e,(this.b*this.e-this.a*this.f)/e)},t.translation=function(e,n){return new t(1,0,0,1,e,n)},t.scale=function(e){return new t(e,0,0,e,0,0)},t.zoom=function(e,n,o,r,i){var a=1-o;return void 0!==r?new t(o,0,0,o,e*a+r,n*a+i):new t(o,0,0,o,e*a,n*a)},t.translateZoom=function(e,n,o,r,i,a,s,c){var u=o-e,p=r-n,f=u*u+p*p;if(0===f)throw new Error("divide by 0");var l=s-i,h=c-a,y=l*l+h*h,d=Math.sqrt(y/f);return t.zoom(e,n,d,i-e,a-n)},t.rotation=function(e,n,o){var r=Math.cos(o),i=Math.sin(o),a=1-r;return new t(r,i,-i,r,e*a+n*i,-e*i+n*a)},t.translateRotateZoom=function(e,n,o,r,i,a,s,c){var u=o-e,p=r-n,f=u*u+p*p;if(0===f)throw new Error("divide by 0");var l=s-i,h=c-a,y=e*r-n*o,d=o*u+r*p,v=e*u+n*p,g=(u*l+p*h)/f,m=(u*h-p*l)/f;return new t(g,m,-m,g,(i*d-s*v-y*h)/f,(a*d-c*v+y*l)/f)},t.create=function(e){return e instanceof t?e:new t(e.a,e.b,e.c,e.d,e.e,e.f)},t.prototype.toString=function(){return"x: (".concat(i(this.a),", ").concat(i(this.b),"), y: (").concat(i(this.c),", ").concat(i(this.d),"), d: (").concat(i(this.e),", ").concat(i(this.f),")")},t.identity=new t(1,0,0,1,0,0),t}(),c=function(){function t(t){this.propertyName=t}return t.prototype.changeInstanceValue=function(t,e){return this.valuesAreEqual(t[this.propertyName],e)?t:t.changeProperty(this.propertyName,e)},t.prototype.isEqualForInstances=function(t,e){return this.valuesAreEqual(t[this.propertyName],e[this.propertyName])},t.prototype.getInstructionToChange=function(t,e,n){return this.valuesAreEqual(t[this.propertyName],e[this.propertyName])?function(){}:this.changeToNewValue(e[this.propertyName],n)},t.prototype.valueIsTransformableForInstance=function(t){return!0},t}(),u=(a=function(t,e){return a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},a(t,e)},function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Class extends value "+String(e)+" is not a constructor or null");function n(){this.constructor=t}a(t,e),t.prototype=null===e?Object.create(e):(n.prototype=e.prototype,new n)}),p=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return u(e,t),e.prototype.valuesAreEqual=function(t,e){return t.equals(e)},e.prototype.changeToNewValue=function(t,e){return function(n){var o=e.getTransformationForInstruction(t),r=o.a,i=o.b,a=o.c,s=o.d,c=o.e,u=o.f;n.setTransform(r,i,a,s,c,u)}},e}(c))("transformation"),f=function(){function t(t){this.viewBox=t}return t.prototype.getTransform=function(){if(DOMMatrix){var t=this.viewBox.state.current.transformation;return new DOMMatrix([t.a,t.b,t.c,t.d,t.e,t.f])}},t.prototype.resetTransform=function(){this.viewBox.changeState((function(t){return p.changeInstanceValue(t,s.identity)}))},t.prototype.rotate=function(t){this.addTransformation(s.rotation(0,0,t))},t.prototype.scale=function(t,e){this.addTransformation(new s(t,0,0,e,0,0))},t.prototype.setTransform=function(t,e,n,o,r,i){var a,c,u,f,l,h;"number"==typeof t?(a=t,c=e,u=n,f=o,l=r,h=i):void 0!==t.a?(a=t.a,c=t.b,u=t.c,f=t.d,l=t.e,h=t.f):(a=t.m11,c=t.m12,u=t.m21,f=t.m22,l=t.m41,h=t.m42),this.viewBox.changeState((function(t){return p.changeInstanceValue(t,new s(a,c,u,f,l,h))}))},t.prototype.transform=function(t,e,n,o,r,i){this.addTransformation(new s(t,e,n,o,r,i))},t.prototype.translate=function(t,e){this.addTransformation(s.translation(t,e))},t.prototype.addTransformation=function(t){var e=this.viewBox.state.current.transformation,n=t.before(e);this.viewBox.changeState((function(t){return p.changeInstanceValue(t,n)}))},t}(),l=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),h=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return l(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){return e.globalAlpha=t}},e}(c))("globalAlpha"),y=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),d=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return y(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){return e.globalCompositeOperation=t}},e}(c))("globalCompositeOperation"),v=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"globalAlpha",{get:function(){return this.viewBox.state.current.globalAlpha},set:function(t){this.viewBox.changeState((function(e){return h.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"globalCompositeOperation",{get:function(){return this.viewBox.state.current.globalCompositeOperation},set:function(t){this.viewBox.changeState((function(e){return d.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t}(),g=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),m=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return g(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){e.imageSmoothingEnabled=t}},e}(c))("imageSmoothingEnabled"),b=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),P=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return b(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.imageSmoothingQuality=t}},e}(c))("imageSmoothingQuality"),w=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"imageSmoothingEnabled",{get:function(){return this.viewBox.state.current.imageSmoothingEnabled},set:function(t){this.viewBox.changeState((function(e){return m.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"imageSmoothingQuality",{get:function(){return this.viewBox.state.current.imageSmoothingQuality},set:function(t){this.viewBox.changeState((function(e){return P.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t}(),O=function(){},C=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),T=function(t){function e(e){var n=t.call(this)||this;return n.fillStrokeStyle=e,n}return C(e,t),e.prototype.setTransform=function(t){this.fillStrokeStyle.setTransform(t)},e.prototype.getInstructionToSetUntransformed=function(t){var e=this;return function(n){n[t]=e.fillStrokeStyle}},e.prototype.getInstructionToSetTransformed=function(t){var e=this;return function(n){n[t]=e.fillStrokeStyle}},e}(O),I=function(){function t(t){this.propName=t}return t.prototype.changeInstanceValue=function(t,e){return t.changeProperty(this.propName,e)},t.prototype.isEqualForInstances=function(t,e){return t[this.propName]===e[this.propName]},t.prototype.getInstructionToChange=function(t,e){var n=this,o=e[this.propName];return this.isEqualForInstances(t,e)?o instanceof O&&t.fillAndStrokeStylesTransformed!==e.fillAndStrokeStylesTransformed?e.fillAndStrokeStylesTransformed?o.getInstructionToSetTransformed(this.propName):o.getInstructionToSetUntransformed(this.propName):function(){}:o instanceof O?e.fillAndStrokeStylesTransformed?o.getInstructionToSetTransformed(this.propName):o.getInstructionToSetUntransformed(this.propName):function(t){t[n.propName]=e[n.propName]}},t.prototype.valueIsTransformableForInstance=function(t){return!(t[this.propName]instanceof T)},t}(),S=new I("fillStyle"),x=new I("strokeStyle"),_=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"fillStyle",{set:function(t){this.viewBox.changeState((function(e){return S.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"strokeStyle",{set:function(t){this.viewBox.changeState((function(e){return x.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t.prototype.createLinearGradient=function(t,e,n,o){return this.viewBox.createLinearGradient(t,e,n,o)},t.prototype.createPattern=function(t,e){return this.viewBox.createPattern(t,e)},t.prototype.createRadialGradient=function(t,e,n,o,r,i){return this.viewBox.createRadialGradient(t,e,n,o,r,i)},t.prototype.createConicGradient=function(t,e,n){return this.viewBox.createConicGradient(t,e,n)},t}(),j=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),B=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return j(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.shadowColor=t}},e}(c))("shadowColor"),A=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),E=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return A(e,t),e.prototype.changeToNewValue=function(t,e){return function(n){var o=s.translation(t.x,t.y),i=e.translateInfiniteCanvasContextTransformationToBitmapTransformation(o).apply(r.origin),a=i.x,c=i.y;n.shadowOffsetX=a,n.shadowOffsetY=c}},e.prototype.valuesAreEqual=function(t,e){return t.x===e.x&&t.y==e.y},e}(c))("shadowOffset"),L=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),D=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return L(e,t),e.prototype.changeToNewValue=function(t,e){return function(n){var o=s.translation(t,0),i=e.translateInfiniteCanvasContextTransformationToBitmapTransformation(o).apply(r.origin).mod();n.shadowBlur=i}},e.prototype.valuesAreEqual=function(t,e){return t===e},e}(c))("shadowBlur"),F=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"shadowBlur",{get:function(){return this.viewBox.state.current.shadowBlur},set:function(t){this.viewBox.changeState((function(e){return D.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowOffsetX",{get:function(){return this.viewBox.state.current.shadowOffset.x},set:function(t){var e=new r(t,this.viewBox.state.current.shadowOffset.y);this.viewBox.changeState((function(t){return E.changeInstanceValue(t,e)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowOffsetY",{get:function(){return this.viewBox.state.current.shadowOffset.y},set:function(t){var e=new r(this.viewBox.state.current.shadowOffset.x,t);this.viewBox.changeState((function(t){return E.changeInstanceValue(t,e)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowColor",{get:function(){return this.viewBox.state.current.shadowColor},set:function(t){this.viewBox.changeState((function(e){return B.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t}(),W="[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?",k="[+-]?(?:0*\\.)?0+(?:e[+-]?\\d+)?",R="(?:ch|em|ex|ic|rem|vh|vw|vmax|vmin|vb|vi|cqw|cqh|cqi|cqb|cqmin|cqmax|px|cm|mm|Q|in|pc|pt)",N="(?:".concat(k,"|").concat(W).concat(R,")"),V="blur\\((".concat(N,")\\)"),M="[^())\\s]+(?:\\([^)]*?\\))?",q="drop-shadow\\((".concat(N,")\\s+(").concat(N,")\\s*?(?:(?:(").concat(N,")\\s*?(").concat(M,")?)|(").concat(M,"))?\\)"),H="".concat(V,"|").concat(q);function G(t,e){var n=t.match(new RegExp("(?:(".concat(k,")|(").concat(W,")(").concat(R,"))")));return n[1]?0:e.getNumberOfPixels(Number.parseFloat(n[2]),n[3])}var X,Y=function(){function t(t){this.stringRepresentation=t}return t.prototype.toTransformedString=function(){return this.stringRepresentation},t.prototype.getShadowOffset=function(){return null},t}(),z=function(){function t(t,e){this.stringRepresentation=t,this.size=e}return t.prototype.toTransformedString=function(t){var e=t.translateInfiniteCanvasContextTransformationToBitmapTransformation(s.translation(this.size,0)).apply(r.origin).mod();return"blur(".concat(e,"px)")},t.prototype.getShadowOffset=function(){return null},t.tryCreate=function(e,n){var o=e.match(new RegExp(V));return null===o?null:new t(e,G(o[1],n))},t}(),U=function(){function t(t,e,n,o,r){this.stringRepresentation=t,this.offsetX=e,this.offsetY=n,this.blurRadius=o,this.color=r}return t.prototype.toTransformedString=function(t){var e=t.translateInfiniteCanvasContextTransformationToBitmapTransformation(s.translation(this.offsetX,this.offsetY)).apply(r.origin),n=e.x,o=e.y;if(null!==this.blurRadius){var i=t.translateInfiniteCanvasContextTransformationToBitmapTransformation(s.translation(this.blurRadius,0)).apply(r.origin).mod();return this.color?"drop-shadow(".concat(n,"px ").concat(o,"px ").concat(i,"px ").concat(this.color,")"):"drop-shadow(".concat(n,"px ").concat(o,"px ").concat(i,"px)")}return this.color?"drop-shadow(".concat(n,"px ").concat(o,"px ").concat(this.color,")"):"drop-shadow(".concat(n,"px ").concat(o,"px)")},t.prototype.getShadowOffset=function(){return new r(this.offsetX,this.offsetY)},t.tryCreate=function(e,n){var o=e.match(new RegExp(q));return null===o?null:o[5]?new t(e,G(o[1],n),G(o[2],n),null,o[5]):o[4]?new t(e,G(o[1],n),G(o[2],n),G(o[3],n),o[4]):o[3]?new t(e,G(o[1],n),G(o[2],n),G(o[3],n),null):new t(e,G(o[1],n),G(o[2],n),null,null)},t}(),K=function(){function t(t,e){this.stringRepresentation=t,this.parts=e}return t.prototype.toString=function(){return this.parts.map((function(t){return t.stringRepresentation})).join(" ")},t.prototype.toTransformedString=function(t){return this.parts.map((function(e){return e.toTransformedString(t)})).join(" ")},t.prototype.getShadowOffset=function(){for(var t=0,e=this.parts;t<e.length;t++){var n=e[t].getShadowOffset();if(null!==n)return n}return null},t.create=function(e,n){var o=this,r=e.match(new RegExp("".concat(H,"|((?!\\s|").concat(H,").)+"),"g"));return new t(e,r.map((function(t){return o.createPart(t,n)})))},t.createPart=function(t,e){var n=z.tryCreate(t,e);return null!==n||null!=(n=U.tryCreate(t,e))?n:new Y(t)},t.none=new t("none",[new Y("none")]),t}(),Q=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),J=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Q(e,t),e.prototype.valuesAreEqual=function(t,e){return t.stringRepresentation===e.stringRepresentation},e.prototype.changeToNewValue=function(t,e){return function(n){return n.filter=t.toTransformedString(e)}},e}(c))("filter"),Z=function(){function t(t,e){this.viewBox=t,this.cssLengthConverterFactory=e}return Object.defineProperty(t.prototype,"filter",{get:function(){return this.viewBox.state.current.filter.stringRepresentation},set:function(t){var e=K.create(t,this.cssLengthConverterFactory.create());this.viewBox.changeState((function(t){return J.changeInstanceValue(t,e)}))},enumerable:!1,configurable:!0}),t}(),$=function(){function t(t){this.viewBox=t}return t.prototype.clearRect=function(t,e,n,o){this.viewBox.clearArea(t,e,n,o)},t.prototype.fillRect=function(t,e,n,o){this.viewBox.fillRect(t,e,n,o,(function(t){return t.fill()}))},t.prototype.strokeRect=function(t,e,n,o){this.viewBox.strokeRect(t,e,n,o)},t}(),tt=function(){function t(t){this.viewBox=t}return t.prototype.isFillRule=function(t){return"evenodd"===t||"nonzero"===t},t.prototype.beginPath=function(){this.viewBox.beginPath()},t.prototype.clip=function(t,e){var n=this.isFillRule(t)?function(e){e.clip(t)}:function(t){t.clip()};this.viewBox.clipPath(n)},t.prototype.fill=function(t,e){if(t&&!this.isFillRule(t)||this.viewBox.currentPathCanBeFilled()){var n=this.isFillRule(t)?function(e){e.fill(t)}:function(t){t.fill()};this.viewBox.fillPath(n)}},t.prototype.isPointInPath=function(t,e,n,o){return!0},t.prototype.isPointInStroke=function(t,e,n){return!0},t.prototype.stroke=function(t){this.viewBox.strokePath()},t}(),et=function(){function t(){}return t.prototype.drawFocusIfNeeded=function(t,e){},t.prototype.scrollPathIntoView=function(t){},t}();!function(t){t[t.None=0]="None",t[t.Relative=1]="Relative",t[t.Absolute=2]="Absolute"}(X||(X={}));var nt=function(){function t(t,e,n){this.point=t,this.halfPlane1=e,this.halfPlane2=n,this.normal1=e.normalTowardInterior,this.normal2=n.normalTowardInterior}return t.prototype.isContainedByHalfPlaneWithNormal=function(t){return t.isInSmallerAngleBetweenPoints(this.normal1,this.normal2)},t.prototype.containsPoint=function(t){return this.halfPlane1.containsPoint(t)&&this.halfPlane2.containsPoint(t)},t.prototype.containsLineSegmentWithDirection=function(t){return this.containsPoint(this.point.plus(t))||this.containsPoint(this.point.minus(t))},t.prototype.isContainedByVertex=function(t){return this.isContainedByHalfPlaneWithNormal(t.normal1)&&this.isContainedByHalfPlaneWithNormal(t.normal2)},t}(),ot=function(){function t(t,e){this.base=t,this.normalTowardInterior=e,this.lengthOfNormal=e.mod()}return t.prototype.getDistanceFromEdge=function(t){return t.minus(this.base).dot(this.normalTowardInterior)/this.lengthOfNormal},t.prototype.transform=function(e){var n=e.apply(this.base),o=e.apply(this.base.plus(this.normalTowardInterior.getPerpendicular())),r=e.apply(this.base.plus(this.normalTowardInterior));return t.throughPointsAndContainingPoint(n,o,r)},t.prototype.complement=function(){return new t(this.base,this.normalTowardInterior.scale(-1))},t.prototype.expandByDistance=function(e){return new t(this.base.plus(this.normalTowardInterior.scale(-e/this.normalTowardInterior.mod())),this.normalTowardInterior)},t.prototype.expandToIncludePoint=function(e){return this.containsPoint(e)?this:new t(e,this.normalTowardInterior)},t.prototype.containsPoint=function(t){return this.getDistanceFromEdge(t)>=0},t.prototype.interiorContainsPoint=function(t){return this.getDistanceFromEdge(t)>0},t.prototype.containsInfinityInDirection=function(t){return t.dot(this.normalTowardInterior)>=0},t.prototype.isContainedByHalfPlane=function(t){return this.normalTowardInterior.inSameDirectionAs(t.normalTowardInterior)&&t.getDistanceFromEdge(this.base)>=0},t.prototype.intersectWithLine=function(t,e){return{point:(n=this.base,o=this.normalTowardInterior.getPerpendicular(),r=t,i=e,a=r.minus(n),s=i.cross(o),c=i.getPerpendicular().dot(a)/s,n.plus(o.scale(c))),halfPlane:this};var n,o,r,i,a,s,c},t.prototype.isParallelToLine=function(t,e){return 0===this.normalTowardInterior.getPerpendicular().cross(e)},t.prototype.getIntersectionWith=function(t){var e=this.intersectWithLine(t.base,t.normalTowardInterior.getPerpendicular());return new nt(e.point,this,t)},t.throughPointsAndContainingPoint=function(e,n,o){for(var r=0,i=t.withBorderPoints(e,n);r<i.length;r++){var a=i[r];if(a.containsPoint(o))return a}},t.withBorderPointAndInfinityInDirection=function(e,n){return t.withBorderPoints(e,e.plus(n))},t.withBorderPoints=function(e,n){var o=n.minus(e).getPerpendicular();return[new t(e,o),new t(e,o.scale(-1))]},t}(),rt=new(function(){function t(){}return t.prototype.getVertices=function(){return[]},t.prototype.expandToIncludePoint=function(t){return this},t.prototype.expandToIncludePolygon=function(t){return this},t.prototype.expandToIncludeInfinityInDirection=function(t){return this},t.prototype.expandByDistance=function(t){return this},t.prototype.intersects=function(t){return!0},t.prototype.expandToInclude=function(t){return this},t.prototype.transform=function(t){return this},t.prototype.intersectWithLineSegment=function(t){return t},t.prototype.contains=function(t){return!0},t.prototype.intersectWith=function(t){return t},t.prototype.join=function(t){return this},t.prototype.intersectWithRay=function(t){return t},t.prototype.intersectWithLine=function(t){return t},t.prototype.intersectWithConvexPolygon=function(t){return t},t.prototype.isContainedByRay=function(t){return!1},t.prototype.isContainedByLineSegment=function(t){return!1},t.prototype.isContainedByLine=function(t){return!1},t.prototype.isContainedByConvexPolygon=function(t){return!1},t.prototype.intersectsRay=function(t){return!0},t.prototype.intersectsLineSegment=function(t){return!0},t.prototype.intersectsLine=function(t){return!0},t.prototype.intersectsConvexPolygon=function(t){return!0},t}()),it=function(){function t(e,n){this.vertices=n,this.halfPlanes=e,this.vertices=this.vertices||t.getVertices(this.halfPlanes)}return t.prototype.findVertex=function(t){for(var e=0,n=this.vertices;e<n.length;e++){var o=n[e];if(o.point.equals(t))return o}},t.prototype.intersects=function(t){return t.intersectsConvexPolygon(this)},t.prototype.intersectWith=function(t){return t.intersectWithConvexPolygon(this)},t.prototype.join=function(t){if(this.contains(t))return this;if(t.contains(this))return t;for(var e=t,n=0,o=this.vertices;n<o.length;n++){var r=o[n];e=e.expandToIncludePoint(r.point)}for(var i=0,a=this.getPointsAtInfinityFromHalfPlanes();i<a.length;i++){var s=a[i];this.containsInfinityInDirection(s)&&(e=e.expandToIncludeInfinityInDirection(s))}return e},t.prototype.intersectWithRay=function(t){return t.intersectWithConvexPolygon(this)},t.prototype.intersectWithLine=function(t){return t.intersectWithConvexPolygon(this)},t.prototype.intersectWithLineSegment=function(t){return t.intersectWithConvexPolygon(this)},t.prototype.contains=function(t){return t.isContainedByConvexPolygon(this)},t.prototype.containsHalfPlane=function(t){for(var e=0,n=this.halfPlanes;e<n.length;e++){var o=n[e];if(!t.isContainedByHalfPlane(o))return!1}return!0},t.prototype.isContainedByHalfPlane=function(t){for(var e=0,n=this.vertices;e<n.length;e++){var o=n[e];if(!t.containsPoint(o.point))return!1}for(var r=t.complement(),i=0,a=this.halfPlanes;i<a.length;i++)if((u=a[i]).isContainedByHalfPlane(t))return!0;for(var s=0,c=this.halfPlanes;s<c.length;s++){var u=c[s];if(this.hasAtMostOneVertex(u)&&(u.isContainedByHalfPlane(r)||r.isContainedByHalfPlane(u)))return!1;var p=u.getIntersectionWith(t),f=this.findVertex(p.point);if(f){if(!f.isContainedByHalfPlaneWithNormal(t.normalTowardInterior))return!1}else if(this.containsPoint(p.point))return!1}return!this.containsHalfPlane(t)},t.prototype.getVertices=function(){return this.vertices.map((function(t){return t.point}))},t.prototype.expandToIncludePoint=function(e){if(this.containsPoint(e))return this;for(var n=new Set(this.halfPlanes),o=0,r=this.halfPlanes;o<r.length;o++){var i=r[o];if(this.hasAtMostOneVertex(i)&&!i.containsPoint(e)){var a=i.expandToIncludePoint(e);n.delete(i),n.add(a)}}for(var s=0,c=this.vertices;s<c.length;s++){var u=c[s],p=u.halfPlane1.containsPoint(e),f=u.halfPlane2.containsPoint(e);if((!p||!f)&&(p||n.delete(u.halfPlane1),f||n.delete(u.halfPlane2),p||f)){var l=e.minus(u.point).getPerpendicular();u.isContainedByHalfPlaneWithNormal(l)||(l=l.scale(-1)),a=new ot(e,l),n.add(a)}}var h=[];return n.forEach((function(t){return h.push(t)})),new t(t.getHalfPlanesNotContainingAnyOther(h))},t.prototype.expandToIncludeInfinityInDirection=function(e){if(this.containsInfinityInDirection(e))return this;var n=this.halfPlanes.filter((function(t){return t.containsInfinityInDirection(e)})).concat(this.getTangentPlanesThroughInfinityInDirection(e));return 0===(n=t.getHalfPlanesNotContainingAnyOther(n)).length?rt:new t(n)},t.prototype.getIntersectionsWithLine=function(t,e){for(var n=[],o=0,r=this.halfPlanes;o<r.length;o++){var i=r[o];if(!i.isParallelToLine(t,e)){var a=i.intersectWithLine(t,e),s=this.findVertex(a.point);s&&!s.containsLineSegmentWithDirection(e)||this.containsPoint(a.point)&&n.push(a)}}return n},t.prototype.expandByDistance=function(e){return new t(this.halfPlanes.map((function(t){return t.expandByDistance(e)})))},t.prototype.transform=function(e){return new t(this.halfPlanes.map((function(t){return t.transform(e)})))},t.prototype.intersectWithConvexPolygon=function(e){if(e.isContainedByConvexPolygon(this))return e;if(this.isContainedByConvexPolygon(e))return this;if(!this.isOutsideConvexPolygon(e)){var n=t.getHalfPlanesNotContainingAnyOther(this.halfPlanes.concat(e.halfPlanes)),o=t.groupVerticesByPoint(t.getVertices(n)).map((function(e){return t.getVerticesNotContainingAnyOther(e)})).reduce((function(t,e){return t.concat(e)}),[]);if(0===o.length)return new t(n);var r=t.getHalfPlanes(o);return new t(r)}},t.prototype.containsInfinityInDirection=function(t){for(var e=0,n=this.halfPlanes;e<n.length;e++)if(!n[e].containsInfinityInDirection(t))return!1;return!0},t.prototype.containsPoint=function(t){for(var e=0,n=this.halfPlanes;e<n.length;e++)if(!n[e].containsPoint(t))return!1;return!0},t.prototype.intersectsRay=function(t){return t.intersectsConvexPolygon(this)},t.prototype.intersectsLineSegment=function(t){return t.intersectsConvexPolygon(this)},t.prototype.intersectsLine=function(t){return t.intersectsConvexPolygon(this)},t.prototype.intersectsConvexPolygon=function(t){return!(!this.isContainedByConvexPolygon(t)&&!t.isContainedByConvexPolygon(this)&&this.isOutsideConvexPolygon(t))},t.prototype.isOutsideConvexPolygon=function(t){for(var e=0,n=t.halfPlanes;e<n.length;e++){var o=n[e];if(this.isContainedByHalfPlane(o.complement()))return!0}for(var r=0,i=this.halfPlanes;r<i.length;r++){var a=i[r];if(t.isContainedByHalfPlane(a.complement()))return!0}return!1},t.prototype.hasAtMostOneVertex=function(t){for(var e=0,n=0,o=this.vertices;n<o.length;n++){var r=o[n];if((r.halfPlane1===t||r.halfPlane2===t)&&++e>1)return!1}return!0},t.prototype.getTangentPlanesThroughInfinityInDirection=function(t){for(var e=[],n=0,o=this.vertices;n<o.length;n++)for(var r=o[n],i=0,a=ot.withBorderPointAndInfinityInDirection(r.point,t);i<a.length;i++){var s=a[i];this.isContainedByHalfPlane(s)&&e.push(s)}return e},t.prototype.getPointsAtInfinityFromHalfPlanes=function(){for(var t=[],e=0,n=this.halfPlanes;e<n.length;e++){var o=n[e].normalTowardInterior,r=o.getPerpendicular();t.push(o),t.push(r),t.push(r.scale(-1))}return t},t.prototype.isContainedByRay=function(t){return!1},t.prototype.isContainedByLineSegment=function(t){return!1},t.prototype.isContainedByLine=function(t){return!1},t.prototype.isContainedByConvexPolygon=function(t){for(var e=0,n=t.halfPlanes;e<n.length;e++){var o=n[e];if(!this.isContainedByHalfPlane(o))return!1}return!0},t.getHalfPlanes=function(t){for(var e=[],n=0,o=t;n<o.length;n++){var r=o[n];-1===e.indexOf(r.halfPlane1)&&e.push(r.halfPlane1),-1===e.indexOf(r.halfPlane2)&&e.push(r.halfPlane2)}return e},t.getVerticesNotContainingAnyOther=function(t){for(var e=[],n=0;n<t.length;n++){for(var o=!0,r=0;r<t.length;r++)if(n!==r&&t[r].isContainedByVertex(t[n])){o=!1;break}o&&e.push(t[n])}return e},t.getHalfPlanesNotContainingAnyOther=function(t){for(var e=[],n=0,o=t;n<o.length;n++){for(var r=o[n],i=!0,a=0,s=e;a<s.length;a++)if(s[a].isContainedByHalfPlane(r)){i=!1;break}i&&e.push(r)}return e},t.groupVerticesByPoint=function(t){for(var e=[],n=0,o=t;n<o.length;n++){for(var r=o[n],i=void 0,a=0,s=e;a<s.length;a++){var c=s[a];if(c[0].point.equals(r.point)){i=c;break}}i?i.push(r):e.push([r])}return e},t.getVertices=function(t){for(var e=[],n=0;n<t.length;n++)for(var o=n+1;o<t.length;o++)if(!t[n].complement().isContainedByHalfPlane(t[o])){for(var r=t[n].getIntersectionWith(t[o]),i=!0,a=0;a<t.length;a++)if(a!==n&&a!==o&&!t[a].containsPoint(r.point)){i=!1;break}i&&e.push(r)}return e},t.createTriangleWithInfinityInTwoDirections=function(e,n,o){var r=n.getPerpendicular(),i=o.getPerpendicular();return n.cross(o)<0?new t([new ot(e,r.scale(-1)),new ot(e,i)]):new t([new ot(e,r),new ot(e,i.scale(-1))])},t.createFromHalfPlane=function(e){return new t([e])},t.createTriangleWithInfinityInDirection=function(e,n,o){var r=n.minus(e).projectOn(o.getPerpendicular());return new t([new ot(e,r),new ot(n,r.scale(-1)),ot.throughPointsAndContainingPoint(e,n,e.plus(o))])},t.createTriangle=function(e,n,o){return new t([ot.throughPointsAndContainingPoint(e,n,o),ot.throughPointsAndContainingPoint(e,o,n),ot.throughPointsAndContainingPoint(n,o,e)])},t.createRectangle=function(e,n,o,i){var a=[];return Number.isFinite(e)&&(a.push(new ot(new r(e,0),new r(o>0?1:-1,0))),Number.isFinite(o)&&a.push(new ot(new r(e+o,0),new r(o>0?-1:1,0)))),Number.isFinite(n)&&(a.push(new ot(new r(0,n),new r(0,i>0?1:-1))),Number.isFinite(i)&&a.push(new ot(new r(0,n+i),new r(0,i>0?-1:1)))),new t(a)},t}(),at=function(){function t(t){this.viewBox=t}return t.prototype.fillText=function(t,e,n,o){var r=void 0===o?function(o){o.fillText(t,e,n)}:function(r){r.fillText(t,e,n,o)};this.viewBox.addDrawing(r,this.getDrawnRectangle(e,n,t),X.Relative,!0)},t.prototype.measureText=function(t){return this.viewBox.measureText(t)},t.prototype.strokeText=function(t,e,n,o){var r=void 0===o?function(o){o.strokeText(t,e,n)}:function(r){r.strokeText(t,e,n,o)};this.viewBox.addDrawing(r,this.getDrawnRectangle(e,n,t),X.Relative,!0)},t.prototype.getDrawnRectangle=function(t,e,n){var o,r=this.viewBox.measureText(n);o=void 0!==r.actualBoundingBoxRight?Math.abs(r.actualBoundingBoxRight-r.actualBoundingBoxLeft):r.width;var i=void 0!==r.actualBoundingBoxAscent?r.actualBoundingBoxAscent+r.actualBoundingBoxDescent:1,a=void 0!==r.actualBoundingBoxAscent?r.actualBoundingBoxAscent:0;return it.createRectangle(t,e-a,o,i)},t}(),st=function(){function t(t){this.viewBox=t}return t.prototype.drawImage=function(){var t,e,n,o,r,i,a,s,c,u=Array.prototype.slice.apply(arguments);arguments.length<=5?(t=u[0],i=u[1],a=u[2],s=u[3],c=u[4]):(t=u[0],e=u[1],n=u[2],o=u[3],r=u[4],i=u[5],a=u[6],s=u[7],c=u[8]);var p=this.getDrawnLength(t.width,e,o,s),f=this.getDrawnLength(t.height,n,r,c),l=it.createRectangle(i,a,p,f),h=this.getDrawImageInstruction(arguments.length,t,e,n,o,r,i,a,s,c);this.viewBox.addDrawing(h,l,X.Relative,!0)},t.prototype.getDrawImageInstruction=function(t,e,n,o,r,i,a,s,c,u){switch(t){case 3:return function(t){t.drawImage(e,a,s)};case 5:return function(t){t.drawImage(e,a,s,c,u)};case 9:return function(t){t.drawImage(e,n,o,r,i,a,s,c,u)};default:throw new TypeError("Failed to execute 'drawImage' on 'CanvasRenderingContext2D': Valid arities are: [3, 5, 9], but ".concat(t," arguments provided."))}},t.prototype.getDrawnLength=function(t,e,n,o){var r=this.getLength(t);return void 0!==o?o:void 0!==e?void 0!==n?n:r-e:r},t.prototype.getLength=function(t){return"number"==typeof t?t:t.baseVal.value},t}(),ct=function(){function t(t,e,n){this.area=t,this.latestClippedPath=e,this.previouslyClippedPaths=n}return t.prototype.withClippedPath=function(e){return new t(e.area.intersectWith(this.area),e,this)},Object.defineProperty(t.prototype,"initialState",{get:function(){return this.previouslyClippedPaths?this.previouslyClippedPaths.initialState:this.latestClippedPath.initialState},enumerable:!1,configurable:!0}),t.prototype.except=function(e){if(e!==this)return this.previouslyClippedPaths?new t(this.area,this.latestClippedPath,this.previouslyClippedPaths.except(e)):this},t.prototype.contains=function(t){return!!t&&(this===t||!!this.previouslyClippedPaths&&this.previouslyClippedPaths.contains(t))},t.prototype.getInstructionToRecreate=function(t){var e=this,n=function(t,n){e.latestClippedPath.execute(t,n)};if(this.previouslyClippedPaths){var o=this.previouslyClippedPaths.getInstructionToRecreate(t),r=this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState,t);return function(t,e){o(t,e),r(t,e),n(t,e)}}return n},t}(),ut=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),pt=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return ut(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.direction=t}},e}(c))("direction"),ft=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),lt=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return ft(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.font=t}},e}(c))("font"),ht=function(){function t(t){this.propertyName=t}return t.prototype.changeInstanceValue=function(t,e){return this.valuesAreEqual(t[this.propertyName],e)?t:t.changeProperty(this.propertyName,e)},t.prototype.isEqualForInstances=function(t,e){return this.valuesAreEqual(t[this.propertyName],e[this.propertyName])},t.prototype.valueIsTransformableForInstance=function(t){return!0},t.prototype.changeToNewValue=function(t,e){return e?this.changeToNewValueTransformed(t):this.changeToNewValueUntransformed(t)},t.prototype.getInstructionToChange=function(t,e){var n=t[this.propertyName],o=e[this.propertyName];return this.valuesAreEqual(n,o)&&(t.fillAndStrokeStylesTransformed===e.fillAndStrokeStylesTransformed||this.valuesAreEqualWhenTransformed(n,o))?function(){}:this.changeToNewValue(o,e.fillAndStrokeStylesTransformed)},t}(),yt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),dt=function(t){function e(e){return t.call(this,e)||this}return yt(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValueTransformed=function(t){var e=this;return function(n,o){n[e.propertyName]=t*o.scale}},e.prototype.changeToNewValueUntransformed=function(t){var e=this;return function(n){n[e.propertyName]=t}},e.prototype.valuesAreEqualWhenTransformed=function(t,e){return 0===t&&0===e},e}(ht),vt=new dt("lineWidth"),gt=new dt("lineDashOffset"),mt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),bt=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return mt(e,t),e.prototype.valuesAreEqual=function(t,e){if(t.length!==e.length)return!1;for(var n=0;n<t.length;n++)if(t[n]!==e[n])return!1;return!0},e.prototype.changeToNewValueTransformed=function(t){return function(e,n){e.setLineDash(t.map((function(t){return t*n.scale})))}},e.prototype.changeToNewValueUntransformed=function(t){return function(e){e.setLineDash(t)}},e.prototype.valuesAreEqualWhenTransformed=function(t,e){return 0===t.length&&0===e.length},e}(ht),Pt=new bt("lineDash"),wt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ot=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return wt(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.textAlign=t}},e}(c))("textAlign"),Ct=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Tt=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Ct(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t){return function(e){e.textBaseline=t}},e}(c))("textBaseline"),It=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),St=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return It(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){return e.lineCap=t}},e}(c))("lineCap"),xt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),_t=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return xt(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){return e.lineJoin=t}},e}(c))("lineJoin"),jt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Bt=new(function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return jt(e,t),e.prototype.valuesAreEqual=function(t,e){return t===e},e.prototype.changeToNewValue=function(t,e){return function(e){return e.miterLimit=t}},e}(c))("miterLimit"),At=[pt,m,P,S,gt,Pt,St,_t,Bt,h,d,J,vt,x,Ot,Tt,p,lt,E,D,B],Et=function(){function t(t){this.fillStyle=t.fillStyle,this.lineWidth=t.lineWidth,this.lineCap=t.lineCap,this.lineJoin=t.lineJoin,this.lineDash=t.lineDash,this.miterLimit=t.miterLimit,this.globalAlpha=t.globalAlpha,this.globalCompositeOperation=t.globalCompositeOperation,this.filter=t.filter,this.strokeStyle=t.strokeStyle,this.lineDashOffset=t.lineDashOffset,this.transformation=t.transformation,this.direction=t.direction,this.imageSmoothingEnabled=t.imageSmoothingEnabled,this.imageSmoothingQuality=t.imageSmoothingQuality,this.font=t.font,this.textAlign=t.textAlign,this.textBaseline=t.textBaseline,this.clippedPaths=t.clippedPaths,this.fillAndStrokeStylesTransformed=t.fillAndStrokeStylesTransformed,this.shadowOffset=t.shadowOffset,this.shadowColor=t.shadowColor,this.shadowBlur=t.shadowBlur}return t.prototype.changeProperty=function(e,n){var o=this,r={fillStyle:o.fillStyle,lineWidth:o.lineWidth,lineDash:o.lineDash,lineCap:o.lineCap,lineJoin:o.lineJoin,miterLimit:o.miterLimit,globalAlpha:o.globalAlpha,globalCompositeOperation:o.globalCompositeOperation,filter:o.filter,strokeStyle:o.strokeStyle,lineDashOffset:o.lineDashOffset,transformation:o.transformation,direction:o.direction,imageSmoothingEnabled:o.imageSmoothingEnabled,imageSmoothingQuality:o.imageSmoothingQuality,font:o.font,textAlign:o.textAlign,textBaseline:o.textBaseline,clippedPaths:o.clippedPaths,fillAndStrokeStylesTransformed:o.fillAndStrokeStylesTransformed,shadowOffset:o.shadowOffset,shadowColor:o.shadowColor,shadowBlur:o.shadowBlur};return r[e]=n,new t(r)},Object.defineProperty(t.prototype,"clippingRegion",{get:function(){return this.clippedPaths?this.clippedPaths.area:void 0},enumerable:!1,configurable:!0}),t.prototype.equals=function(t){for(var e=0,n=At;e<n.length;e++)if(!n[e].isEqualForInstances(this,t))return!1;return(!this.clippedPaths&&!t.clippedPaths||this.clippedPaths&&this.clippedPaths===t.clippedPaths)&&this.fillAndStrokeStylesTransformed===t.fillAndStrokeStylesTransformed},t.prototype.getMaximumLineWidth=function(){return this.lineWidth*this.transformation.getMaximumLineWidthScale()},t.prototype.getLineDashPeriod=function(){return this.lineDash.reduce((function(t,e){return t+e}),0)},t.prototype.isTransformable=function(){for(var t=0,e=At;t<e.length;t++)if(!e[t].valueIsTransformableForInstance(this))return!1;return!0},t.prototype.getShadowOffsets=function(){var t=[],e=this.filter.getShadowOffset();return null!==e&&t.push(e),this.shadowOffset.equals(r.origin)||t.push(this.shadowOffset),t},t.prototype.getInstructionToConvertToState=function(t,e){var n=this,o=At.map((function(o){return o.getInstructionToChange(n,t,e)}));return function(t,e){for(var n=0;n<o.length;n++)o[n](t,e)}},t.prototype.withClippedPath=function(t){var e=this.clippedPaths?this.clippedPaths.withClippedPath(t):new ct(t.area,t);return this.changeProperty("clippedPaths",e)},t.default=new t({fillStyle:"#000",lineWidth:1,lineDash:[],lineCap:"butt",lineJoin:"miter",miterLimit:10,globalAlpha:1,globalCompositeOperation:"source-over",filter:K.none,strokeStyle:"#000",lineDashOffset:0,transformation:s.identity,direction:"inherit",imageSmoothingEnabled:!0,imageSmoothingQuality:"low",font:"10px sans-serif",textAlign:"start",textBaseline:"alphabetic",clippedPaths:void 0,fillAndStrokeStylesTransformed:!1,shadowOffset:r.origin,shadowColor:"rgba(0, 0, 0, 0)",shadowBlur:0}),t.setDefault=function(){},t}(),Lt=function(){function t(t){this.viewBox=t}return t.prototype.createImageData=function(t,e){},t.prototype.getImageData=function(t,e,n,o){},t.prototype.putImageData=function(t,e,n,o,r,i,a){var s;t=function(t,e,n,o,r){e=void 0===e?0:e,n=void 0===n?0:n,o=void 0===o?t.width:o,r=void 0===r?t.height:r;for(var i=t.data,a=new Uint8ClampedArray(4*o*r),s=0;s<r;s++)for(var c=0;c<o;c++){var u=4*((n+s)*t.width+e+c),p=4*(s*o+c);a[p]=i[u],a[p+1]=i[u+1],a[p+2]=i[u+2],a[p+3]=i[u+3]}return new ImageData(a,o,r)}(t,o,r,i,a);var c=this.viewBox.getDrawingLock();this.viewBox.createPatternFromImageData(t).then((function(t){s=t,c.release()})),this.viewBox.addDrawing((function(o){o.translate(e,n),o.fillStyle=s,o.fillRect(0,0,t.width,t.height)}),it.createRectangle(e,n,t.width,t.height),X.Absolute,!1,(function(t){return t.changeProperty("shadowColor",Et.default.shadowColor).changeProperty("shadowOffset",Et.default.shadowOffset).changeProperty("shadowBlur",Et.default.shadowBlur).changeProperty("globalAlpha",Et.default.globalAlpha).changeProperty("globalCompositeOperation",Et.default.globalCompositeOperation).changeProperty("imageSmoothingEnabled",!1).changeProperty("filter",Et.default.filter)}))},t}(),Dt=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"lineCap",{get:function(){return this.viewBox.state.current.lineCap},set:function(t){this.viewBox.changeState((function(e){return St.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineDashOffset",{get:function(){return this.viewBox.state.current.lineDashOffset},set:function(t){this.viewBox.changeState((function(e){return gt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineJoin",{get:function(){return this.viewBox.state.current.lineJoin},set:function(t){this.viewBox.changeState((function(e){return _t.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineWidth",{get:function(){return this.viewBox.state.current.lineWidth},set:function(t){this.viewBox.changeState((function(e){return vt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"miterLimit",{get:function(){return this.viewBox.state.current.miterLimit},set:function(t){this.viewBox.changeState((function(e){return Bt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t.prototype.getLineDash=function(){return this.viewBox.state.current.lineDash},t.prototype.setLineDash=function(t){t.length%2==1&&(t=t.concat(t)),this.viewBox.changeState((function(e){return Pt.changeInstanceValue(e,t)}))},t}(),Ft=function(){function t(t){this.viewBox=t}return Object.defineProperty(t.prototype,"direction",{set:function(t){this.viewBox.changeState((function(e){return pt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"font",{set:function(t){this.viewBox.changeState((function(e){return lt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"textAlign",{set:function(t){this.viewBox.changeState((function(e){return Ot.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"textBaseline",{set:function(t){this.viewBox.changeState((function(e){return Tt.changeInstanceValue(e,t)}))},enumerable:!1,configurable:!0}),t}();function Wt(t){return void 0!==t.direction}var kt=function(){function t(){}return t.arc=function(t,e,n,o,i,a){return{instruction:function(s,c){var u=c.getRotationAngle(),p=c.apply(new r(t,e)),f=p.x,l=p.y;s.arc(f,l,n*c.scale,o+u,i+u,a)},changeArea:function(o){o.addPosition(new r(t-n,e-n)),o.addPosition(new r(t-n,e+n)),o.addPosition(new r(t+n,e-n)),o.addPosition(new r(t+n,e+n))},positionChange:new r(t,e).plus(s.rotation(0,0,i).apply(new r(n,0))),initialPoint:new r(t,e).plus(s.rotation(0,0,o).apply(new r(n,0)))}},t.arcTo=function(t,e,n,o,i){var a=new r(t,e),s=new r(n,o);return{instruction:function(t,e){var n=e.apply(a),o=e.apply(s);t.arcTo(n.x,n.y,o.x,o.y,i*e.scale)},changeArea:function(t){t.addPosition(a),t.addPosition(s)},positionChange:new r(n,o)}},t.ellipse=function(t,e,n,o,i,a,c,u){return{instruction:function(s,p){var f=p.apply(new r(t,e)),l=p.getRotationAngle();s.ellipse(f.x,f.y,n*p.scale,o*p.scale,i+l,a,c,u)},changeArea:function(i){i.addPosition(new r(t-n,e-o)),i.addPosition(new r(t-n,e+o)),i.addPosition(new r(t+n,e-o)),i.addPosition(new r(t+n,e+o))},positionChange:new r(t,e).plus(s.rotation(0,0,c).before(new s(n,0,0,o,0,0)).before(s.rotation(0,0,i)).apply(new r(1,0))),initialPoint:new r(t,e).plus(s.rotation(0,0,a).before(new s(n,0,0,o,0,0)).before(s.rotation(0,0,i)).apply(new r(1,0)))}},t.bezierCurveTo=function(t,e,n,o,i,a){return{instruction:function(s,c){var u=c.apply(new r(t,e)),p=c.apply(new r(n,o)),f=c.apply(new r(i,a));s.bezierCurveTo(u.x,u.y,p.x,p.y,f.x,f.y)},changeArea:function(s,c){Wt(c)||(s.addPosition(new r((c.x+t)/2,(c.y+e)/2)),s.addPosition(new r((t+n)/2,(e+o)/2)),s.addPosition(new r((n+i)/2,(o+a)/2)),s.addPosition(new r(i,a)))},positionChange:new r(i,a)}},t.quadraticCurveTo=function(t,e,n,o){return{instruction:function(i,a){var s=a.apply(new r(t,e)),c=a.apply(new r(n,o));i.quadraticCurveTo(s.x,s.y,c.x,c.y)},changeArea:function(i,a){Wt(a)||(i.addPosition(new r((a.x+t)/2,(a.y+e)/2)),i.addPosition(new r((t+n)/2,(e+o)/2)),i.addPosition(new r(n,o)))},positionChange:new r(n,o)}},t}(),Rt=function(){function t(t){this.viewBox=t}return t.prototype.arc=function(t,e,n,o,r,i){this.viewBox.addPathInstruction(kt.arc(t,e,n,o,r,i))},t.prototype.arcTo=function(t,e,n,o,r){this.viewBox.addPathInstruction(kt.arcTo(t,e,n,o,r))},t.prototype.closePath=function(){this.viewBox.closePath()},t.prototype.ellipse=function(t,e,n,o,r,i,a,s){this.viewBox.addPathInstruction(kt.ellipse(t,e,n,o,r,i,a,s))},t.prototype.lineTo=function(t,e){this.viewBox.lineTo(new r(t,e))},t.prototype.lineToInfinityInDirection=function(t,e){this.viewBox.lineTo({direction:new r(t,e)})},t.prototype.moveTo=function(t,e){this.viewBox.moveTo(new r(t,e))},t.prototype.moveToInfinityInDirection=function(t,e){this.viewBox.moveTo({direction:new r(t,e)})},t.prototype.quadraticCurveTo=function(t,e,n,o){this.viewBox.addPathInstruction(kt.quadraticCurveTo(t,e,n,o))},t.prototype.bezierCurveTo=function(t,e,n,o,r,i){this.viewBox.addPathInstruction(kt.bezierCurveTo(t,e,n,o,r,i))},t.prototype.rect=function(t,e,n,o){this.viewBox.rect(t,e,n,o)},t}(),Nt=function(){function t(t,e,n){this.canvas=t,this.canvasState=new o(e),this.canvasTransform=new f(e),this.canvasCompositing=new v(e),this.canvasImageSmoothing=new w(e),this.canvasStrokeStyles=new _(e),this.canvasShadowStyles=new F(e),this.canvasFilters=new Z(e,n),this.canvasRect=new $(e),this.canvasDrawPath=new tt(e),this.canvasUserInterface=new et,this.canvasText=new at(e),this.canvasDrawImage=new st(e),this.canvasImageData=new Lt(e),this.canvasPathDrawingStyles=new Dt(e),this.canvasTextDrawingStyles=new Ft(e),this.canvasPath=new Rt(e)}return t.prototype.getContextAttributes=function(){return this.canvas.getContext("2d").getContextAttributes()},t.prototype.save=function(){this.canvasState.save()},t.prototype.restore=function(){this.canvasState.restore()},t.prototype.getTransform=function(){return this.canvasTransform.getTransform()},t.prototype.resetTransform=function(){this.canvasTransform.resetTransform()},t.prototype.rotate=function(t){this.canvasTransform.rotate(t)},t.prototype.scale=function(t,e){this.canvasTransform.scale(t,e)},t.prototype.setTransform=function(t,e,n,o,r,i){this.canvasTransform.setTransform(t,e,n,o,r,i)},t.prototype.transform=function(t,e,n,o,r,i){this.canvasTransform.transform(t,e,n,o,r,i)},t.prototype.translate=function(t,e){this.canvasTransform.translate(t,e)},Object.defineProperty(t.prototype,"globalAlpha",{set:function(t){this.canvasCompositing.globalAlpha=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"globalCompositeOperation",{set:function(t){this.canvasCompositing.globalCompositeOperation=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"imageSmoothingEnabled",{set:function(t){this.canvasImageSmoothing.imageSmoothingEnabled=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"imageSmoothingQuality",{set:function(t){this.canvasImageSmoothing.imageSmoothingQuality=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"fillStyle",{set:function(t){this.canvasStrokeStyles.fillStyle=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"strokeStyle",{set:function(t){this.canvasStrokeStyles.strokeStyle=t},enumerable:!1,configurable:!0}),t.prototype.createLinearGradient=function(t,e,n,o){return this.canvasStrokeStyles.createLinearGradient(t,e,n,o)},t.prototype.createPattern=function(t,e){return this.canvasStrokeStyles.createPattern(t,e)},t.prototype.createRadialGradient=function(t,e,n,o,r,i){return this.canvasStrokeStyles.createRadialGradient(t,e,n,o,r,i)},t.prototype.createConicGradient=function(t,e,n){return this.canvasStrokeStyles.createConicGradient(t,e,n)},Object.defineProperty(t.prototype,"shadowBlur",{set:function(t){this.canvasShadowStyles.shadowBlur=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowColor",{set:function(t){this.canvasShadowStyles.shadowColor=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowOffsetX",{set:function(t){this.canvasShadowStyles.shadowOffsetX=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"shadowOffsetY",{set:function(t){this.canvasShadowStyles.shadowOffsetY=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"filter",{set:function(t){this.canvasFilters.filter=t},enumerable:!1,configurable:!0}),t.prototype.clearRect=function(t,e,n,o){this.canvasRect.clearRect(t,e,n,o)},t.prototype.fillRect=function(t,e,n,o){this.canvasRect.fillRect(t,e,n,o)},t.prototype.strokeRect=function(t,e,n,o){this.canvasRect.strokeRect(t,e,n,o)},t.prototype.beginPath=function(){this.canvasDrawPath.beginPath()},t.prototype.clip=function(t,e){this.canvasDrawPath.clip(t,e)},t.prototype.fill=function(t,e){this.canvasDrawPath.fill(t,e)},t.prototype.isPointInPath=function(t,e,n,o){return this.canvasDrawPath.isPointInPath(t,e,n,o)},t.prototype.isPointInStroke=function(t,e,n){return this.canvasDrawPath.isPointInStroke(t,e,n)},t.prototype.stroke=function(t){this.canvasDrawPath.stroke(t)},t.prototype.drawFocusIfNeeded=function(t,e){this.canvasUserInterface.drawFocusIfNeeded(t,e)},t.prototype.scrollPathIntoView=function(t){this.canvasUserInterface.scrollPathIntoView(t)},t.prototype.fillText=function(t,e,n,o){this.canvasText.fillText(t,e,n,o)},t.prototype.measureText=function(t){return this.canvasText.measureText(t)},t.prototype.strokeText=function(t,e,n,o){this.canvasText.strokeText(t,e,n,o)},t.prototype.drawImage=function(){this.canvasDrawImage.drawImage.apply(this.canvasDrawImage,arguments)},t.prototype.createImageData=function(t,e){return this.canvasImageData.createImageData(t,e)},t.prototype.getImageData=function(t,e,n,o){return this.canvasImageData.getImageData(t,e,n,o)},t.prototype.putImageData=function(t,e,n,o,r,i,a){this.canvasImageData.putImageData(t,e,n,o,r,i,a)},Object.defineProperty(t.prototype,"lineCap",{set:function(t){this.canvasPathDrawingStyles.lineCap=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineDashOffset",{set:function(t){this.canvasPathDrawingStyles.lineDashOffset=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineJoin",{set:function(t){this.canvasPathDrawingStyles.lineJoin=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"lineWidth",{set:function(t){this.canvasPathDrawingStyles.lineWidth=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"miterLimit",{set:function(t){this.canvasPathDrawingStyles.miterLimit=t},enumerable:!1,configurable:!0}),t.prototype.getLineDash=function(){return this.canvasPathDrawingStyles.getLineDash()},t.prototype.setLineDash=function(t){this.canvasPathDrawingStyles.setLineDash(t)},Object.defineProperty(t.prototype,"direction",{set:function(t){this.canvasTextDrawingStyles.direction=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"font",{set:function(t){this.canvasTextDrawingStyles.font=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"textAlign",{set:function(t){this.canvasTextDrawingStyles.textAlign=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"textBaseline",{set:function(t){this.canvasTextDrawingStyles.textBaseline=t},enumerable:!1,configurable:!0}),t.prototype.arc=function(t,e,n,o,r,i){this.canvasPath.arc(t,e,n,o,r,i)},t.prototype.arcTo=function(t,e,n,o,r){this.canvasPath.arcTo(t,e,n,o,r)},t.prototype.bezierCurveTo=function(t,e,n,o,r,i){this.canvasPath.bezierCurveTo(t,e,n,o,r,i)},t.prototype.closePath=function(){this.canvasPath.closePath()},t.prototype.ellipse=function(t,e,n,o,r,i,a,s){this.canvasPath.ellipse(t,e,n,o,r,i,a)},t.prototype.lineTo=function(t,e){this.canvasPath.lineTo(t,e)},t.prototype.lineToInfinityInDirection=function(t,e){this.canvasPath.lineToInfinityInDirection(t,e)},t.prototype.moveTo=function(t,e){this.canvasPath.moveTo(t,e)},t.prototype.moveToInfinityInDirection=function(t,e){this.canvasPath.moveToInfinityInDirection(t,e)},t.prototype.quadraticCurveTo=function(t,e,n,o){this.canvasPath.quadraticCurveTo(t,e,n,o)},t.prototype.rect=function(t,e,n,o){if(!Number.isFinite(t)&&!Number.isFinite(e))throw new Error("The starting coordinates provided (".concat(t," and ").concat(e,") do not determine a direction."));this.canvasPath.rect(t,e,n,o)},t}(),Vt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Mt=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.colorStops=[],e}return Vt(e,t),e.prototype.addColorStopsToGradient=function(t){for(var e=0,n=this.colorStops;e<n.length;e++){var o=n[e];t.addColorStop(o.offset,o.color)}},e.prototype.addColorStop=function(t,e){this.colorStops.push({offset:t,color:e})},e.prototype.getInstructionToSetTransformed=function(t){var e=this;return function(n,o){n[t]=e.createTransformedGradient(o)}},e.prototype.getInstructionToSetUntransformed=function(t){var e=this;return function(n){n[t]=e.createGradient()}},e}(O),qt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ht=function(t){function e(e,n,o,r,i){var a=t.call(this)||this;return a.context=e,a.x0=n,a.y0=o,a.x1=r,a.y1=i,a}return qt(e,t),e.prototype.createTransformedGradient=function(t){var e=t.apply(new r(this.x0,this.y0)),n=e.x,o=e.y,i=t.apply(new r(this.x1,this.y1)),a=i.x,s=i.y,c=this.context.createLinearGradient(n,o,a,s);return this.addColorStopsToGradient(c),c},e.prototype.createGradient=function(){var t=this.context.createLinearGradient(this.x0,this.y0,this.x1,this.y1);return this.addColorStopsToGradient(t),t},e}(Mt),Gt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Xt=function(t){function e(e,n,o,r,i,a,s){var c=t.call(this)||this;return c.context=e,c.x0=n,c.y0=o,c.r0=r,c.x1=i,c.y1=a,c.r1=s,c}return Gt(e,t),e.prototype.createTransformedGradient=function(t){var e=t.apply(new r(this.x0,this.y0)),n=e.x,o=e.y,i=t.apply(new r(this.x1,this.y1)),a=i.x,s=i.y,c=this.r0*t.scale,u=this.r1*t.scale,p=this.context.createRadialGradient(n,o,c,a,s,u);return this.addColorStopsToGradient(p),p},e.prototype.createGradient=function(){var t=this.context.createRadialGradient(this.x0,this.y0,this.r0,this.x1,this.y1,this.r1);return this.addColorStopsToGradient(t),t},e}(Mt),Yt=function(){function t(t){this.initiallyWithState=t,this.added=[]}return Object.defineProperty(t.prototype,"length",{get:function(){return this.added.length},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"currentlyWithState",{get:function(){return this.addedLast?this.addedLast:this.initiallyWithState},enumerable:!1,configurable:!0}),t.prototype.reconstructState=function(t,e){e.setInitialState(t)},Object.defineProperty(t.prototype,"stateOfFirstInstruction",{get:function(){return this.initiallyWithState.stateOfFirstInstruction},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"state",{get:function(){return this.currentlyWithState.state},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"initialState",{get:function(){return this.initiallyWithState.initialState},enumerable:!1,configurable:!0}),t.prototype.addClippedPath=function(t){this.currentlyWithState.addClippedPath(t)},t.prototype.add=function(t){this.added.push(t),this.addedLast=t},t.prototype.removeAll=function(t){for(var e;(e=this.added.findIndex(t))>-1;)this.removeAtIndex(e)},t.prototype.contains=function(t){return!!this.added.find(t)},t.prototype.setInitialState=function(t){this.initiallyWithState.setInitialState(t)},t.prototype.setInitialStateWithClippedPaths=function(t){this.initiallyWithState.setInitialStateWithClippedPaths(t)},t.prototype.beforeIndex=function(t){return 0===t?this.initiallyWithState.state:this.added[t-1].state},t.prototype.removeAtIndex=function(t){t===this.added.length-1?1===this.added.length?this.addedLast=void 0:this.addedLast=this.added[t-1]:this.reconstructState(this.beforeIndex(t),this.added[t+1]),this.added.splice(t,1)},t}(),zt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ut=function(t){function e(e){var n=t.call(this,e)||this;return n._initiallyWithState=e,n}return zt(e,t),e.prototype.execute=function(t,e){this._initiallyWithState.execute(t,e);for(var n=0,o=this.added;n<o.length;n++)o[n].execute(t,e)},e}(Yt),Kt=function(){function t(t){this.currentState=t,this.instructions=[]}return t.prototype.restore=function(){this.addChangeToState(this.currentState.restored(),(function(t){t.restore()}))},t.prototype.save=function(){this.addChangeToState(this.currentState.saved(),(function(t){t.save()}))},t.prototype.changeCurrentInstanceTo=function(t,e){if(!this.currentState.current.equals(t)){var n=this.currentState.current.getInstructionToConvertToState(t,e),o=this.currentState.withCurrentState(t);this.addChangeToState(o,n)}},t.prototype.addChangeToState=function(t,e){this.currentState=t,e&&this.instructions.push(e)},Object.defineProperty(t.prototype,"instruction",{get:function(){var t=this;if(0!==this.instructions.length)return function(e,n){for(var o=0,r=t.instructions;o<r.length;o++)(0,r[o])(e,n)}},enumerable:!1,configurable:!0}),t}(),Qt=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Jt=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Qt(e,t),e.prototype.changeCurrentInstanceTo=function(n,o){if(!this.currentState.current.equals(n)){if(!e.canConvert(this.currentState.current,n)){if(!(this.currentState.stack.length>0))return void t.prototype.changeCurrentInstanceTo.call(this,n,o);this.restore(),this.save()}if(n.clippedPaths){var r=this.currentState,i=r.current.clippedPaths;if(n.clippedPaths===i)t.prototype.changeCurrentInstanceTo.call(this,n,o);else{var a=n.clippedPaths.except(i);this.convertToState(a.initialState,o),this.addChangeToState(a.latestClippedPath.state,a.getInstructionToRecreate(o)),this.convertToState(r.replaceCurrent(n),o)}}else t.prototype.changeCurrentInstanceTo.call(this,n,o)}},e.prototype.convertToState=function(t,e){var n=this.currentState.getInstructionToConvertToState(t,e);this.addChangeToState(t,n)},e.canConvert=function(t,e){return!t.clippedPaths||!!e.clippedPaths&&e.clippedPaths.contains(t.clippedPaths)},e}(Kt),Zt=function(){function t(t,e){void 0===e&&(e=[]),this.current=t,this.stack=e}return t.prototype.replaceCurrent=function(e){return new t(e,this.stack)},t.prototype.withCurrentState=function(e){return new t(e,this.stack)},t.prototype.currentlyTransformed=function(t){return this.withCurrentState(this.current.changeProperty("fillAndStrokeStylesTransformed",t))},t.prototype.withClippedPath=function(e){return new t(this.current.withClippedPath(e),this.stack)},t.prototype.saved=function(){return new t(this.current,(this.stack||[]).concat([this.current]))},t.prototype.restored=function(){return this.stack&&0!==this.stack.length?new t(this.stack[this.stack.length-1],this.stack.slice(0,this.stack.length-1)):this},t.prototype.convertToLastSavedInstance=function(t,e){for(var n=this.stack.length-1;n>e;n--)t.restore()},t.prototype.convertFromLastSavedInstance=function(t,e,n){for(var o=e+1;o<this.stack.length;o++)t.changeCurrentInstanceTo(this.stack[o],n),t.save();t.changeCurrentInstanceTo(this.current,n)},t.prototype.getInstructionToConvertToStateUsingConversion=function(e,n,o){var r=t.findIndexOfHighestCommon(this.stack,n.stack);return this.convertToLastSavedInstance(e,r),n.convertFromLastSavedInstance(e,r,o),e.instruction},t.prototype.getInstructionToConvertToState=function(t,e){return this.getInstructionToConvertToStateUsingConversion(new Kt(this),t,e)},t.prototype.getInstructionToConvertToStateWithClippedPath=function(t,e){return this.getInstructionToConvertToStateUsingConversion(new Jt(this),t,e)},t.findIndexOfHighestCommon=function(t,e){for(var n=0,o=Math.min(t.length-1,e.length-1);n<=o;){if(!t[n].equals(e[n]))return n-1;n++}return n-1},t}(),$t=new Zt(Et.default,[]),te=function(){function t(t,e,n){this.initialState=t,this.state=e,this.rectangle=n,this.stateConversion=function(){}}return t.prototype.setInitialState=function(t){this.initialState=t;var e=this.initialState.getInstructionToConvertToState(this.state,this.rectangle);this.stateConversion=e},Object.defineProperty(t.prototype,"stateOfFirstInstruction",{get:function(){return this.state},enumerable:!1,configurable:!0}),t.prototype.addClippedPath=function(t){this.state=this.state.withClippedPath(t)},t.prototype.setInitialStateWithClippedPaths=function(t){this.initialState=t;var e=this.initialState.getInstructionToConvertToStateWithClippedPath(this.state,this.rectangle);this.stateConversion=e},t}(),ee=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ne=function(t){function e(e,n,o,r,i){var a=t.call(this,e,n,i)||this;return a.instruction=o,a.stateConversion=r,a}return ee(e,t),e.prototype.execute=function(t,e){this.stateConversion&&this.stateConversion(t,e),this.instruction(t,e)},e.create=function(t,n,o){return new e(t,t,n,(function(){}),o)},e}(te),oe=function(){function t(t){this.area=t}return t.prototype.hasDrawingAcrossBorderOf=function(t){return!1},t.prototype.intersects=function(t){return this.area.intersects(t)},t.prototype.isContainedBy=function(t){return t.contains(this.area)},t}(),re=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ie=function(t){function e(e,n,o,r,i,a){var s=t.call(this,e,n,o,r,a)||this;return s.area=i,s.drawingArea=new oe(i),s}return re(e,t),e.createClearRect=function(t,n,o,r,i,a,s,c){return new e(t,t,(function(t,e){o.clearRect(t,e,r,i,a,s)}),(function(){}),n,c)},e}(ne),ae={direction:new r(0,1)},se={direction:new r(0,-1)},ce={direction:new r(-1,0)},ue={direction:new r(1,0)};function pe(t,e,n){return function(t,e,n){for(var o,r=0,i=0,a=t;i<a.length;i++){var s=a[i],c=s.minus(e).dot(n);c>r&&(o=s,r=c)}return o?e.plus(o.minus(e).projectOn(n)):e}(t.getVertices(),e,n)}var fe=function(){function t(t,e,n){this.rectangle=t,this.state=e,this.drawnStroke=n}return t.prototype.addPathAroundViewbox=function(t){this.rectangle.addPathAroundViewbox(t,this.drawnStroke.lineWidth)},t.prototype.getTransformedViewbox=function(){var t=this.state.current.transformation.before(this.rectangle.getBitmapTransformationToInfiniteCanvasContext()),e=this.rectangle.polygon;e=e.transform(t.inverse()).expandByDistance(this.drawnStroke.lineWidth);for(var n=0,o=this.drawnStroke.shadowOffsets;n<o.length;n++){var r=o[n],i=e.transform(s.translation(-r.x,-r.y));e=e.join(i)}return e},t.prototype.clearRect=function(t,e,n,o,i,a){var s=this.getTransformedViewbox(),c=e.a,u=e.b,p=e.c,f=e.d,l=e.e,h=e.f;t.save(),t.transform(c,u,p,f,l,h);var y=Number.isFinite(n)?n:pe(s,new r(0,0),n>0?ue.direction:ce.direction).x,d=Number.isFinite(i)?n+i:pe(s,new r(0,0),i>0?ue.direction:ce.direction).x,v=Number.isFinite(o)?o:pe(s,new r(0,0),o>0?ae.direction:se.direction).y,g=Number.isFinite(a)?o+a:pe(s,new r(0,0),a>0?ae.direction:se.direction).y;t.clearRect(y,v,d-y,g-v),t.restore()},t.prototype.moveToInfinityFromPointInDirection=function(t,e,n,o){var r=pe(this.getTransformedViewbox(),n,o);this.moveToTransformed(t,r,e)},t.prototype.drawLineToInfinityFromInfinityFromPoint=function(t,e,n,o,r){var i=this.getTransformedViewbox(),a=pe(i,n,o),s=pe(i,n,r),c=i.expandToIncludePoint(n).expandToIncludePoint(a).expandToIncludePoint(s).getVertices().filter((function(t){return!t.equals(a)&&!t.equals(s)&&!t.equals(n)&&t.minus(n).isInSmallerAngleBetweenPoints(o,r)}));c.sort((function(t,e){return t.minus(n).isInSmallerAngleBetweenPoints(e.minus(n),o)?-1:1}));for(var u=a,p=0,f=0,l=c;f<l.length;f++){var h=l[f];p+=h.minus(u).mod(),this.lineToTransformed(t,h,e),u=h}p+=s.minus(u).mod(),this.lineToTransformed(t,s,e),this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t,e,p,s,r)},t.prototype.drawLineFromInfinityFromPointToInfinityFromPoint=function(t,e,n,o,r){var i=this.getTransformedViewbox(),a=pe(i,n,r),s=pe(i,o,r);this.lineToTransformed(t,s,e);var c=s.minus(a).mod();this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t,e,c,s,r)},t.prototype.drawLineFromInfinityFromPointToPoint=function(t,e,n,o){var r=pe(this.getTransformedViewbox(),n,o),i=n.minus(r).mod();this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t,e,i,r,o),this.lineToTransformed(t,n,e)},t.prototype.drawLineToInfinityFromPointInDirection=function(t,e,n,o){var r=pe(this.getTransformedViewbox(),n,o);this.lineToTransformed(t,r,e);var i=r.minus(n).mod();this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t,e,i,r,o)},t.prototype.ensureDistanceCoveredIsMultipleOfLineDashPeriod=function(t,e,n,o,r){var i=this.drawnStroke.lineDashPeriod;if(0!==i){var a=this.getDistanceLeft(n,i);if(0!==a){var s=o.plus(r.scale(a/(2*r.mod())));this.lineToTransformed(t,s,e),this.lineToTransformed(t,o,e)}}},t.prototype.lineToTransformed=function(t,e,n){var o=n.apply(e),r=o.x,i=o.y;t.lineTo(r,i)},t.prototype.moveToTransformed=function(t,e,n){var o=n.apply(e),r=o.x,i=o.y;t.moveTo(r,i)},t.prototype.getDistanceLeft=function(t,e){if(0===e)return 0;var n=t/e|0;return t-e*n==0?0:(n+1)*e-t},t}(),le=function(){function t(t,e){this.canvasRectangle=t,this.drawnStrokeProperties=e}return t.prototype.getInfinity=function(t){return new fe(this.canvasRectangle,t,this.drawnStrokeProperties)},t}(),he=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ye=function(t){function e(e,n){var o=t.call(this,e)||this;return o.rectangle=n,o}return he(e,t),e.prototype.reconstructState=function(t,e){e.setInitialStateWithClippedPaths(t)},e.prototype.hasDrawingAcrossBorderOf=function(t){return this.contains((function(e){return e.drawingArea.hasDrawingAcrossBorderOf(t)}))},e.prototype.intersects=function(t){return this.contains((function(e){return e.drawingArea.intersects(t)}))},e.prototype.addClearRect=function(t,e,n,o,r,i){var a=new le(this.rectangle,{lineWidth:0,lineDashPeriod:0,shadowOffsets:[]}).getInfinity(e),s=ie.createClearRect(e,t,a,n,o,r,i,this.rectangle);s.setInitialState(this.state),this.add(s)},e.prototype.clearContentsInsideArea=function(t){this.removeAll((function(e){return e.drawingArea.isContainedBy(t)}))},e.create=function(t){return new e(new ne($t,$t,Et.setDefault,(function(){}),t),t)},e}(Ut),de=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ve=function(t){function e(e,n,o,r,i){var a=t.call(this,e,n,i)||this;return a.instruction=o,a.stateConversion=r,a}return de(e,t),e.prototype.copy=function(){return new e(this.initialState,this.state,this.instruction,this.stateConversion,this.rectangle)},e.prototype.makeExecutable=function(){return new ne(this.initialState,this.state,this.instruction,this.stateConversion,this.rectangle)},e.create=function(t,n,o){return new e(t,t,n,(function(){}),o)},e}(te);function ge(t,e){return Wt(t)?e.applyToPointAtInfinity(t):e.apply(t)}var me=function(){function t(t,e){this.areaBuilder=t,this.transformation=e}return t.prototype.addPosition=function(t){this.areaBuilder.addPosition(ge(t,this.transformation))},t}(),be=new(function(){function t(){}return t.prototype.getVertices=function(){return[]},t.prototype.intersectWith=function(t){return this},t.prototype.join=function(t){return t},t.prototype.intersectWithConvexPolygon=function(t){return this},t.prototype.intersects=function(t){return!1},t.prototype.intersectWithLineSegment=function(t){return this},t.prototype.intersectWithRay=function(t){return this},t.prototype.intersectWithLine=function(t){return this},t.prototype.expandToInclude=function(t){return t},t.prototype.transform=function(t){return this},t.prototype.contains=function(t){return!1},t.prototype.isContainedByConvexPolygon=function(t){return!0},t.prototype.isContainedByRay=function(t){return!0},t.prototype.isContainedByLineSegment=function(t){return!0},t.prototype.isContainedByLine=function(t){return!0},t.prototype.intersectsRay=function(t){return!1},t.prototype.intersectsConvexPolygon=function(t){return!1},t.prototype.intersectsLineSegment=function(t){return!1},t.prototype.intersectsLine=function(t){return!1},t.prototype.expandByDistance=function(t){return this},t.prototype.expandToIncludePoint=function(t){return this},t.prototype.expandToIncludeInfinityInDirection=function(t){return this},t.prototype.expandToIncludePolygon=function(t){return t},t}()),Pe=function(){function t(t,e){this.base=t,this.direction=e}return t.prototype.pointIsOnSameLine=function(t){return 0===t.minus(this.base).cross(this.direction)},t.prototype.comesBefore=function(t,e){return e.minus(t).dot(this.direction)>=0},t.prototype.lineSegmentIsOnSameLine=function(t){return 0===this.direction.cross(t.direction)&&this.pointIsOnSameLine(t.point1)},t.prototype.expandLineByDistance=function(t){var e=this.direction.getPerpendicular(),n=new ot(this.base,e).expandByDistance(t),o=new ot(this.base,e.scale(-1)).expandByDistance(t);return new it([n,o])},t.prototype.getPointsInSameDirection=function(t,e){return this.comesBefore(e,t)?{point1:e,point2:t}:{point1:t,point2:e}},t.prototype.pointIsBetweenPoints=function(t,e,n){return t.minus(e).dot(this.direction)*t.minus(n).dot(this.direction)<=0},t.prototype.intersectsConvexPolygon=function(t){if(this.isContainedByConvexPolygon(t))return!0;for(var e=0,n=t.getIntersectionsWithLine(this.base,this.direction);e<n.length;e++){var o=n[e];if(this.interiorContainsPoint(o.point))return!0}return!1},t}(),we=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Oe=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return we(e,t),e.prototype.getVertices=function(){return[]},e.prototype.intersectWith=function(t){return t.intersectWithLine(this)},e.prototype.join=function(t){return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1))},e.prototype.intersectWithConvexPolygon=function(t){if(!this.intersectsConvexPolygon(t))return be;if(this.isContainedByConvexPolygon(t))return this;for(var e,n,o=0,r=t.getIntersectionsWithLine(this.base,this.direction);o<r.length;o++){var i=r[o];(!e&&!n||!e&&this.comesBefore(i.point,n)||!n&&this.comesBefore(e,i.point)||e&&n&&this.pointIsBetweenPoints(i.point,e,n))&&(i.halfPlane.normalTowardInterior.dot(this.direction)>0?e=i.point:n=i.point)}return e&&n?new Se(e,n):e?new Te(e,this.direction):new Te(n,this.direction.scale(-1))},e.prototype.intersectWithLine=function(t){return this.intersectsLine(t)?this:be},e.prototype.intersectWithLineSegment=function(t){return this.lineSegmentIsOnSameLine(t)?t:be},e.prototype.intersectWithRay=function(t){return this.intersectsRay(t)?t:be},e.prototype.isContainedByConvexPolygon=function(t){return t.containsPoint(this.base)&&t.containsInfinityInDirection(this.direction)&&t.containsInfinityInDirection(this.direction.scale(-1))},e.prototype.isContainedByLine=function(t){return this.intersectsSubsetOfLine(t)},e.prototype.isContainedByLineSegment=function(t){return!1},e.prototype.isContainedByRay=function(t){return!1},e.prototype.contains=function(t){return t.isContainedByLine(this)},e.prototype.intersectsLine=function(t){return this.intersectsSubsetOfLine(t)},e.prototype.intersectsSubsetOfLine=function(t){return this.pointIsOnSameLine(t.base)&&0===this.direction.cross(t.direction)},e.prototype.intersectsLineSegment=function(t){return this.lineSegmentIsOnSameLine(t)},e.prototype.intersectsRay=function(t){return this.intersectsSubsetOfLine(t)},e.prototype.intersects=function(t){return t.intersectsLine(this)},e.prototype.expandToIncludePoint=function(t){return this.pointIsOnSameLine(t)?this:it.createTriangleWithInfinityInDirection(this.base,t,this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1))},e.prototype.expandByDistance=function(t){return this.expandLineByDistance(t)},e.prototype.expandToIncludeInfinityInDirection=function(t){var e=t.cross(this.direction),n=this.direction.getPerpendicular();return 0===e?this:e>0?it.createFromHalfPlane(new ot(this.base,n.scale(-1))):it.createFromHalfPlane(new ot(this.base,n))},e.prototype.transform=function(t){var n=t.apply(this.base);return new e(n,t.apply(this.base.plus(this.direction)).minus(n))},e.prototype.interiorContainsPoint=function(t){return this.pointIsOnSameLine(t)},e}(Pe),Ce=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Te=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Ce(e,t),e.prototype.getVertices=function(){return[this.base]},e.prototype.intersectWith=function(t){return t.intersectWithRay(this)},e.prototype.join=function(t){return t.expandToIncludePoint(this.base).expandToIncludeInfinityInDirection(this.direction)},e.prototype.intersectWithConvexPolygon=function(t){if(!this.intersectsConvexPolygon(t))return be;if(this.isContainedByConvexPolygon(t))return this;for(var n,o=t.getIntersectionsWithLine(this.base,this.direction),r=this.base,i=0,a=o;i<a.length;i++){var s=a[i];(!n&&this.comesBefore(r,s.point)||n&&this.pointIsBetweenPoints(s.point,r,n))&&(s.halfPlane.normalTowardInterior.dot(this.direction)>0?r=s.point:n=s.point)}return n?new Se(r,n):new e(r,this.direction)},e.prototype.intersectWithRay=function(t){return this.isContainedByRay(t)?this:t.isContainedByRay(this)?t:this.interiorContainsPoint(t.base)?new Se(this.base,t.base):be},e.prototype.intersectWithLine=function(t){return t.intersectWithRay(this)},e.prototype.intersectWithLineSegment=function(t){if(t.isContainedByRay(this))return t;if(!this.lineSegmentIsOnSameLine(t))return be;var e=this.getPointsInSameDirection(t.point1,t.point2).point2;return this.comesBefore(e,this.base)?be:new Se(this.base,e)},e.prototype.isContainedByConvexPolygon=function(t){return t.containsPoint(this.base)&&t.containsInfinityInDirection(this.direction)},e.prototype.isContainedByRay=function(t){return t.containsPoint(this.base)&&t.containsInfinityInDirection(this.direction)},e.prototype.isContainedByLine=function(t){return t.intersectsSubsetOfLine(this)},e.prototype.isContainedByLineSegment=function(t){return!1},e.prototype.contains=function(t){return t.isContainedByRay(this)},e.prototype.intersectsRay=function(t){return this.isContainedByRay(t)||t.isContainedByRay(this)||this.interiorContainsPoint(t.base)},e.prototype.intersectsLine=function(t){return t.intersectsSubsetOfLine(this)},e.prototype.intersectsLineSegment=function(t){if(t.isContainedByRay(this))return!0;if(!this.lineSegmentIsOnSameLine(t))return!1;var e=this.getPointsInSameDirection(t.point1,t.point2).point2;return!this.comesBefore(e,this.base)},e.prototype.intersects=function(t){return t.intersectsRay(this)},e.prototype.expandToIncludePoint=function(t){return this.containsPoint(t)?this:this.pointIsOnSameLine(t)?new e(t,this.direction):it.createTriangleWithInfinityInDirection(this.base,t,this.direction)},e.prototype.expandByDistance=function(t){var e=this.expandLineByDistance(t),n=new ot(this.base,this.direction).expandByDistance(t);return e.intersectWithConvexPolygon(new it([n]))},e.prototype.expandToIncludeInfinityInDirection=function(t){return t.inSameDirectionAs(this.direction)?this:0===this.direction.cross(t)?new Oe(this.base,this.direction):it.createTriangleWithInfinityInTwoDirections(this.base,this.direction,t)},e.prototype.transform=function(t){var n=t.apply(this.base);return new e(n,t.apply(this.base.plus(this.direction)).minus(n))},e.prototype.interiorContainsPoint=function(t){return this.pointIsOnSameLine(t)&&!this.comesBefore(t,this.base)},e.prototype.containsInfinityInDirection=function(t){return this.direction.inSameDirectionAs(t)},e.prototype.containsPoint=function(t){return this.pointIsOnSameLine(t)&&this.comesBefore(this.base,t)},e}(Pe),Ie=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Se=function(t){function e(e,n){var o=t.call(this,e,n.minus(e))||this;return o.point1=e,o.point2=n,o}return Ie(e,t),e.prototype.getVertices=function(){return[this.point1,this.point2]},e.prototype.join=function(t){return t.expandToIncludePoint(this.point1).expandToIncludePoint(this.point2)},e.prototype.intersectWith=function(t){return t.intersectWithLineSegment(this)},e.prototype.intersectWithLineSegment=function(t){if(this.isContainedByLineSegment(t))return this;if(t.isContainedByLineSegment(this))return t;if(!this.lineSegmentIsOnSameLine(t))return be;var n=this.getPointsInSameDirection(t.point1,t.point2),o=n.point1,r=n.point2;return this.comesBefore(r,this.point1)||this.comesBefore(this.point2,o)?be:this.comesBefore(this.point1,o)?new e(o,this.point2):new e(this.point1,r)},e.prototype.intersectWithRay=function(t){return t.intersectWithLineSegment(this)},e.prototype.intersectWithLine=function(t){return t.intersectWithLineSegment(this)},e.prototype.isContainedByRay=function(t){return t.containsPoint(this.point1)&&t.containsPoint(this.point2)},e.prototype.isContainedByLine=function(t){return t.intersectsSubsetOfLine(this)},e.prototype.isContainedByLineSegment=function(t){return t.containsPoint(this.point1)&&t.containsPoint(this.point2)},e.prototype.intersectWithConvexPolygon=function(t){if(!this.intersectsConvexPolygon(t))return be;if(this.isContainedByConvexPolygon(t))return this;for(var n=t.getIntersectionsWithLine(this.point1,this.direction),o=this.point1,r=this.point2,i=0,a=n;i<a.length;i++){var s=a[i];this.pointIsBetweenPoints(s.point,o,r)&&(s.halfPlane.normalTowardInterior.dot(this.direction)>0?o=s.point:r=s.point)}return new e(o,r)},e.prototype.isContainedByConvexPolygon=function(t){return t.containsPoint(this.point1)&&t.containsPoint(this.point2)},e.prototype.contains=function(t){return t.isContainedByLineSegment(this)},e.prototype.pointIsStrictlyBetweenPoints=function(t,e,n){return t.minus(e).dot(this.direction)*t.minus(n).dot(this.direction)<0},e.prototype.containsPoint=function(t){return this.pointIsOnSameLine(t)&&this.pointIsBetweenPoints(t,this.point1,this.point2)},e.prototype.interiorContainsPoint=function(t){return this.pointIsOnSameLine(t)&&this.pointIsStrictlyBetweenPoints(t,this.point1,this.point2)},e.prototype.intersectsRay=function(t){return t.intersectsLineSegment(this)},e.prototype.intersectsLineSegment=function(t){if(this.isContainedByLineSegment(t)||t.isContainedByLineSegment(this))return!0;if(!this.lineSegmentIsOnSameLine(t))return!1;var e=this.getPointsInSameDirection(t.point1,t.point2),n=e.point1,o=e.point2;return!this.comesBefore(o,this.point1)&&!this.comesBefore(this.point2,n)},e.prototype.intersectsLine=function(t){return t.intersectsSubsetOfLine(this)},e.prototype.intersects=function(t){return t.intersectsLineSegment(this)},e.prototype.expandByDistance=function(t){var e=this.expandLineByDistance(t),n=new ot(this.base,this.direction).expandByDistance(t),o=new ot(this.point2,this.direction.scale(-1)).expandByDistance(t);return e.intersectWithConvexPolygon(new it([n,o]))},e.prototype.expandToIncludePoint=function(t){return this.containsPoint(t)?this:this.pointIsOnSameLine(t)?this.comesBefore(t,this.point1)?new e(t,this.point2):new e(this.point1,t):it.createTriangle(this.point1,t,this.point2)},e.prototype.expandToIncludeInfinityInDirection=function(t){return t.inSameDirectionAs(this.direction)?new Te(this.point1,t):0===t.cross(this.direction)?new Te(this.point2,t):it.createTriangleWithInfinityInDirection(this.point1,this.point2,t)},e.prototype.transform=function(t){return new e(t.apply(this.point1),t.apply(this.point2))},e}(Pe),xe=new(function(){function t(){}return t.prototype.addPoint=function(t){return rt},t.prototype.addPointAtInfinity=function(t){return this},t.prototype.addArea=function(t){return rt},t}()),_e=function(){function t(t){this.towardsMiddle=t}return t.prototype.addPoint=function(t){return it.createFromHalfPlane(new ot(t,this.towardsMiddle))},t.prototype.addPointAtInfinity=function(t){return t.dot(this.towardsMiddle)>=0?this:xe},t.prototype.addArea=function(t){var e=this.towardsMiddle.getPerpendicular();return t.expandToIncludeInfinityInDirection(this.towardsMiddle).expandToIncludeInfinityInDirection(e).expandToIncludeInfinityInDirection(e.scale(-1))},t}(),je=function(){function t(t,e){this.direction1=t,this.direction2=e}return t.prototype.addPoint=function(t){return it.createTriangleWithInfinityInTwoDirections(t,this.direction1,this.direction2)},t.prototype.addPointAtInfinity=function(e){return e.isInSmallerAngleBetweenPoints(this.direction1,this.direction2)?this:0===e.cross(this.direction1)?new _e(this.direction2.projectOn(this.direction1.getPerpendicular())):0===e.cross(this.direction2)?new _e(this.direction1.projectOn(this.direction2.getPerpendicular())):this.direction1.isInSmallerAngleBetweenPoints(e,this.direction2)?new t(e,this.direction2):this.direction2.isInSmallerAngleBetweenPoints(e,this.direction1)?new t(e,this.direction1):xe},t.prototype.addArea=function(t){return t.expandToIncludeInfinityInDirection(this.direction1).expandToIncludeInfinityInDirection(this.direction2)},t}(),Be=function(){function t(t){this.direction=t}return t.prototype.addPoint=function(t){return new Oe(t,this.direction)},t.prototype.addPointAtInfinity=function(t){return 0===t.cross(this.direction)?this:new _e(t.projectOn(this.direction.getPerpendicular()))},t.prototype.addArea=function(t){return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1))},t}(),Ae=function(){function t(t){this.direction=t}return t.prototype.addPointAtInfinity=function(t){return t.inSameDirectionAs(this.direction)?this:0===t.cross(this.direction)?new Be(this.direction):new je(this.direction,t)},t.prototype.addPoint=function(t){return new Te(t,this.direction)},t.prototype.addArea=function(t){return t.expandToIncludeInfinityInDirection(this.direction)},t}(),Ee=function(){function t(t,e,n){this._area=t,this.firstPoint=e,this.subsetOfLineAtInfinity=n}return Object.defineProperty(t.prototype,"area",{get:function(){return this._area||be},enumerable:!1,configurable:!0}),t.prototype.addPoint=function(t){this._area?this._area=this._area.expandToIncludePoint(t):this.firstPoint?t.equals(this.firstPoint)||(this._area=new Se(this.firstPoint,t)):this.subsetOfLineAtInfinity?this._area=this.subsetOfLineAtInfinity.addPoint(t):this.firstPoint=t},t.prototype.addPosition=function(t){Wt(t)?this.addInfinityInDirection(t.direction):this.addPoint(t)},t.prototype.addInfinityInDirection=function(t){this._area?this._area=this._area.expandToIncludeInfinityInDirection(t):this.firstPoint?this._area=new Te(this.firstPoint,t):this.subsetOfLineAtInfinity?(this.subsetOfLineAtInfinity=this.subsetOfLineAtInfinity.addPointAtInfinity(t),this.subsetOfLineAtInfinity===xe&&(this._area=rt)):this.subsetOfLineAtInfinity=new Ae(t)},t.prototype.transformedWith=function(t){return new me(this,t)},t.prototype.copy=function(){return new t(this._area,this.firstPoint,this.subsetOfLineAtInfinity)},t}(),Le=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),De=function(t){function e(e,n,o,r,i){var a=t.call(this,e,n,i)||this;return a.instruction=o,a.stateConversion=r,a}return Le(e,t),e.prototype.replaceInstruction=function(t){this.instruction=t},e.prototype.copy=function(){return new e(this.initialState,this.state,this.instruction,this.stateConversion,this.rectangle)},e.prototype.makeExecutable=function(t){var e=t.getInfinity(this.state),n=this.instruction;return new ne(this.initialState,this.state,(function(t,o){return n(t,o,e)}),this.stateConversion,this.rectangle)},e.create=function(t,n,o){return new e(t,t,n,(function(){}),o)},e}(te),Fe=function(){function t(t){this.shape=t}return t.prototype.getInstructionToDrawLineTo=function(t,e){return this.getInstructionToExtendShapeWithLineTo(this.shape.transform(e.current.transformation.inverse()),t)},t.prototype.getInstructionToMoveToBeginning=function(t){return this.getInstructionToMoveToBeginningOfShape(this.shape.transform(t.current.transformation.inverse()))},Object.defineProperty(t.prototype,"currentPosition",{get:function(){return this.shape.currentPosition},enumerable:!1,configurable:!0}),t.prototype.moveToInfinityFromPointInDirection=function(t,e){return function(n,o,r){r.moveToInfinityFromPointInDirection(n,o,t,e)}},t.prototype.lineFromInfinityFromPointToInfinityFromPoint=function(t,e,n){return function(o,r,i){i.drawLineFromInfinityFromPointToInfinityFromPoint(o,r,t,e,n)}},t.prototype.lineFromInfinityFromPointToPoint=function(t,e){return function(n,o,r){r.drawLineFromInfinityFromPointToPoint(n,o,t,e)}},t.prototype.lineToInfinityFromPointInDirection=function(t,e){return function(n,o,r){r.drawLineToInfinityFromPointInDirection(n,o,t,e)}},t.prototype.lineToInfinityFromInfinityFromPoint=function(t,e,n){return function(o,r,i){i.drawLineToInfinityFromInfinityFromPoint(o,r,t,e,n)}},t.prototype.lineTo=function(t){return function(e,n){var o=n.apply(t),r=o.x,i=o.y;e.lineTo(r,i)}},t.prototype.moveTo=function(t){return function(e,n){var o=n.apply(t),r=o.x,i=o.y;e.moveTo(r,i)}},t}(),We=function(){function t(t,e,n,o){this.initialPosition=t,this.firstFinitePoint=e,this.lastFinitePoint=n,this.currentPosition=o}return t.prototype.transform=function(e){return new t(e.applyToPointAtInfinity(this.initialPosition),e.apply(this.firstFinitePoint),e.apply(this.lastFinitePoint),e.applyToPointAtInfinity(this.currentPosition))},t}(),ke=function(){function t(t,e,n){this.initialPosition=t,this.firstFinitePoint=e,this.currentPosition=n}return t.prototype.transform=function(e){return new t(e.applyToPointAtInfinity(this.initialPosition),e.apply(this.firstFinitePoint),e.apply(this.currentPosition))},t}();function Re(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];return function(){for(var e=[],n=0;n<arguments.length;n++)e[n]=arguments[n];for(var o=0,r=t;o<r.length;o++){var i=r[o];i&&i.apply(void 0,e)}}}var Ne=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ve=function(t){function e(e,n){var o=t.call(this,n)||this;return o.pathBuilderProvider=e,o}return Ne(e,t),e.prototype.getInstructionToMoveToBeginningOfShape=function(t){return 0===t.initialPosition.direction.cross(t.currentPosition.direction)?this.moveToInfinityFromPointInDirection(t.firstFinitePoint,t.initialPosition.direction):Re(this.moveToInfinityFromPointInDirection(t.lastFinitePoint,t.currentPosition.direction),this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint,t.currentPosition.direction,t.initialPosition.direction),this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint,t.firstFinitePoint,t.initialPosition.direction))},e.prototype.getInstructionToExtendShapeWithLineTo=function(t,e){return Wt(e)?this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint,t.currentPosition.direction,e.direction):Re(this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint,e,t.currentPosition.direction),this.lineFromInfinityFromPointToPoint(e,t.currentPosition.direction))},e.prototype.containsFinitePoint=function(){return!0},e.prototype.isClosable=function(){return!this.shape.initialPosition.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction)},e.prototype.canAddLineTo=function(t){return!Wt(t)||!t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction)},e.prototype.addPosition=function(t){return Wt(t)?this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new We(this.shape.initialPosition,this.shape.firstFinitePoint,this.shape.lastFinitePoint,t)):this.pathBuilderProvider.fromPointAtInfinityToPoint(new ke(this.shape.initialPosition,this.shape.firstFinitePoint,t))},e}(Fe),Me=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),qe=function(t){function e(e,n){var o=t.call(this,n)||this;return o.pathBuilderProvider=e,o}return Me(e,t),e.prototype.getInstructionToMoveToBeginningOfShape=function(t){var e=this.moveToInfinityFromPointInDirection(t.currentPosition,t.initialPosition.direction);return t.currentPosition.equals(t.firstFinitePoint)?e:Re(e,this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition,t.firstFinitePoint,t.initialPosition.direction))},e.prototype.getInstructionToExtendShapeWithLineTo=function(t,e){return Wt(e)?this.lineToInfinityFromPointInDirection(t.currentPosition,e.direction):this.lineTo(e)},e.prototype.canAddLineTo=function(t){return!0},e.prototype.containsFinitePoint=function(){return!0},e.prototype.isClosable=function(){return!0},e.prototype.addPosition=function(t){return Wt(t)?this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new We(this.shape.initialPosition,this.shape.firstFinitePoint,this.shape.currentPosition,t)):this.pathBuilderProvider.fromPointAtInfinityToPoint(new ke(this.shape.initialPosition,this.shape.firstFinitePoint,t))},e}(Fe),He=function(){function t(t,e){this.initialPoint=t,this.currentPosition=e}return t.prototype.transform=function(e){return new t(e.apply(this.initialPoint),e.applyToPointAtInfinity(this.currentPosition))},t}(),Ge=function(){function t(t,e){this.initialPoint=t,this.currentPosition=e}return t.prototype.transform=function(e){return new t(e.apply(this.initialPoint),e.apply(this.currentPosition))},t}(),Xe=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ye=function(t){function e(e,n){var o=t.call(this,n)||this;return o.pathBuilderProvider=e,o}return Xe(e,t),e.prototype.getInstructionToMoveToBeginningOfShape=function(t){return this.moveTo(t.initialPoint)},e.prototype.getInstructionToExtendShapeWithLineTo=function(t,e){return Wt(e)?e.direction.inSameDirectionAs(t.currentPosition.direction)?function(){}:this.lineToInfinityFromInfinityFromPoint(t.initialPoint,t.currentPosition.direction,e.direction):Re(this.lineFromInfinityFromPointToInfinityFromPoint(t.initialPoint,e,t.currentPosition.direction),this.lineFromInfinityFromPointToPoint(e,t.currentPosition.direction))},e.prototype.canAddLineTo=function(t){return!Wt(t)||!t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction)},e.prototype.containsFinitePoint=function(){return!0},e.prototype.isClosable=function(){return!0},e.prototype.addPosition=function(t){return Wt(t)?this.pathBuilderProvider.fromPointToPointAtInfinity(new He(this.shape.initialPoint,t)):this.pathBuilderProvider.fromPointToPoint(new Ge(this.shape.initialPoint,t))},e}(Fe),ze=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ue=function(t){function e(e,n){var o=t.call(this,n)||this;return o.pathBuilderProvider=e,o}return ze(e,t),e.prototype.getInstructionToMoveToBeginningOfShape=function(t){return this.moveTo(t.initialPoint)},e.prototype.getInstructionToExtendShapeWithLineTo=function(t,e){if(Wt(e)){var n=this.lineToInfinityFromPointInDirection(t.currentPosition,e.direction);return 0===t.currentPosition.minus(t.initialPoint).cross(e.direction)?n:Re(n,this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition,t.initialPoint,e.direction))}return this.lineTo(e)},e.prototype.canAddLineTo=function(t){return!0},e.prototype.containsFinitePoint=function(){return!0},e.prototype.isClosable=function(){return!0},e.prototype.addPosition=function(t){return Wt(t)?this.pathBuilderProvider.fromPointToPointAtInfinity(new He(this.shape.initialPoint,t)):this.pathBuilderProvider.fromPointToPoint(new Ge(this.shape.initialPoint,t))},e}(Fe),Ke=function(){function t(t,e,n,o){this.initialPosition=t,this.containsFinitePoint=e,this.positionsSoFar=n,this.currentPosition=o}return t.prototype.transform=function(e){return new t(e.applyToPointAtInfinity(this.initialPosition),this.containsFinitePoint,this.positionsSoFar.map((function(t){return e.applyToPointAtInfinity(t)})),e.applyToPointAtInfinity(this.currentPosition))},t}(),Qe=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Je=function(t){function e(e,n){var o=t.call(this,n)||this;return o.pathBuilderProvider=e,o}return Qe(e,t),e.prototype.getInstructionToMoveToBeginningOfShape=function(t){return t.containsFinitePoint?function(t,e,n){return n.addPathAroundViewbox(t)}:function(){}},e.prototype.getInstructionToExtendShapeWithLineTo=function(t,e){if(!Wt(e)){if(1===t.positionsSoFar.length)return this.lineFromInfinityFromPointToPoint(e,t.positionsSoFar[0].direction);for(var n=t.positionsSoFar.slice(1),o=t.initialPosition,r=[],i=0,a=n;i<a.length;i++){var s=a[i];r.push(this.lineToInfinityFromInfinityFromPoint(e,o.direction,s.direction)),o=s}return Re(Re.apply(void 0,r),this.lineFromInfinityFromPointToPoint(e,o.direction))}},e.prototype.canAddLineTo=function(t){return!Wt(t)||!t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction)},e.prototype.containsFinitePoint=function(){return this.shape.containsFinitePoint},e.prototype.isClosable=function(){return!0},e.prototype.addPosition=function(t){if(Wt(t)){var e=t.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction,this.shape.currentPosition.direction)?this.shape.containsFinitePoint:!this.shape.containsFinitePoint;return this.pathBuilderProvider.atInfinity(new Ke(this.shape.initialPosition,e,this.shape.positionsSoFar.concat([t]),t))}return this.pathBuilderProvider.fromPointAtInfinityToPoint(new ke(this.shape.initialPosition,t,t))},e}(Fe),Ze=function(){function t(){}return t.prototype.fromPointAtInfinityToPointAtInfinity=function(t){return new Ve(this,t)},t.prototype.fromPointAtInfinityToPoint=function(t){return new qe(this,t)},t.prototype.fromPointToPointAtInfinity=function(t){return new Ye(this,t)},t.prototype.fromPointToPoint=function(t){return new Ue(this,t)},t.prototype.atInfinity=function(t){return new Je(this,t)},t.prototype.getBuilderFromPosition=function(t){return Wt(t)?new Je(this,new Ke(t,!1,[t],t)):new Ue(this,new Ge(t,t))},t}(),$e=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),tn=function(t){function e(e,n,o){var r=t.call(this,e)||this;return r._initiallyWithState=e,r.pathInstructionBuilder=n,r.rectangle=o,r}return $e(e,t),Object.defineProperty(e.prototype,"currentPosition",{get:function(){return this.pathInstructionBuilder.currentPosition},enumerable:!1,configurable:!0}),e.prototype.addInstruction=function(t){t.setInitialState(this.state),this.add(t)},e.prototype.closePath=function(){var t=ve.create(this.state,(function(t){t.closePath()}),this.rectangle);t.setInitialState(this.state),this.add(t)},e.prototype.copy=function(){for(var t=new e(this._initiallyWithState.copy(),this.pathInstructionBuilder,this.rectangle),n=0,o=this.added;n<o.length;n++){var r=o[n];t.add(r.copy())}return t},e.prototype.makeExecutable=function(t){for(var e=new Ut(this._initiallyWithState.makeExecutable(t)),n=0,o=this.added;n<o.length;n++){var r=o[n];e.add(r.makeExecutable(t))}return e},e.prototype.containsFinitePoint=function(){return this.pathInstructionBuilder.containsFinitePoint()},e.prototype.isClosable=function(){return this.pathInstructionBuilder.isClosable()},e.prototype.canAddLineTo=function(t){return this.pathInstructionBuilder.canAddLineTo(t)},e.prototype.lineTo=function(t,e){var n=ge(t,e.current.transformation);Wt(t)&&!this.pathInstructionBuilder.containsFinitePoint()||this.addInstructionToDrawLineTo(t,e),this.pathInstructionBuilder=this.pathInstructionBuilder.addPosition(n);var o=this.pathInstructionBuilder.getInstructionToMoveToBeginning(this._initiallyWithState.state);this._initiallyWithState.replaceInstruction((function(t,e,n){o(t,e,n)}))},e.prototype.addInstructionToDrawLineTo=function(t,e){var n=this.pathInstructionBuilder.getInstructionToDrawLineTo(t,e),o=De.create(e,n,this.rectangle);o.setInitialState(this.state),this.add(o)},e.prototype.addPathInstruction=function(t,e,n){var o,r;t.initialPoint&&(o=this.pathInstructionBuilder.currentPosition,r=t.initialPoint,!(o?r?Wt(o)?Wt(r)&&o.direction.equals(r.direction):!Wt(r)&&o.equals(r):!o:!r))&&this.lineTo(t.initialPoint,n),t.positionChange&&(this.pathInstructionBuilder=this.pathInstructionBuilder.addPosition(ge(t.positionChange,n.current.transformation))),e.setInitialState(this.state),this.add(e)},e.create=function(t,n,o){var r=ge(n,t.current.transformation),i=(new Ze).getBuilderFromPosition(r),a=i.getInstructionToMoveToBeginning(t);return new e(De.create(t,a,o),i,o)},e}(Yt);function en(t,e){return!!Number.isFinite(t)||!Number.isFinite(e)&&(t<0&&e>0||t>0&&e<0)}function nn(t,e,n,o){return en(t,n)&&en(e,o)}var on=function(){function t(t){this.area=t}return t.prototype.hasDrawingAcrossBorderOf=function(t){return!this.isContainedBy(t)&&this.intersects(t)},t.prototype.isContainedBy=function(t){return t.contains(this.area)},t.prototype.intersects=function(t){return this.area.intersects(t)},t}(),rn=function(){function t(t,e){this.instructions=t,this.drawingArea=new on(e)}return Object.defineProperty(t.prototype,"state",{get:function(){return this.instructions.state},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"initialState",{get:function(){return this.instructions.initialState},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"stateOfFirstInstruction",{get:function(){return this.instructions.stateOfFirstInstruction},enumerable:!1,configurable:!0}),t.prototype.setArea=function(t){this.drawingArea=new on(t)},t.prototype.setInitialState=function(t){this.instructions.setInitialState(t)},t.prototype.setInitialStateWithClippedPaths=function(t){this.instructions.setInitialStateWithClippedPaths(t)},t.prototype.addClippedPath=function(t){this.instructions.addClippedPath(t)},t.prototype.execute=function(t,e){this.instructions.execute(t,e)},t}(),an=function(){function t(t,e){this.instructions=t,this.area=e}return Object.defineProperty(t.prototype,"state",{get:function(){return this.instructions.state},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"initialState",{get:function(){return this.instructions.initialState},enumerable:!1,configurable:!0}),t.prototype.execute=function(t,e){this.instructions.execute(t,e)},t}(),sn=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),cn=function(t){function e(e,n){var o=t.call(this,e)||this;return o._initiallyWithState=e,o.rectangle=n,o.areaBuilder=new Ee,o}return sn(e,t),Object.defineProperty(e.prototype,"area",{get:function(){return this.areaBuilder.area},enumerable:!1,configurable:!0}),e.prototype.containsFinitePoint=function(){for(var t=0,e=this.added;t<e.length;t++)if(e[t].containsFinitePoint())return!0;return!1},e.prototype.currentSubpathIsClosable=function(){return 0===this.added.length||this.added[this.added.length-1].isClosable()},e.prototype.allSubpathsAreClosable=function(){if(0===this.added.length)return!0;for(var t=0,e=this.added;t<e.length;t++)if(!e[t].isClosable())return!1;return!0},e.prototype.fillPath=function(t,e){return this.drawPath(t,e,{lineWidth:0,lineDashPeriod:0,shadowOffsets:e.current.getShadowOffsets()})},e.prototype.strokePath=function(t,e){return this.drawPath(t,e,{lineWidth:e.current.getMaximumLineWidth(),lineDashPeriod:e.current.getLineDashPeriod(),shadowOffsets:e.current.getShadowOffsets()})},e.prototype.drawPath=function(t,e,n){if(0!==this.added.length){var o=this.added[this.added.length-1],r=this.area;r&&n.lineWidth>0&&(r=r.expandByDistance(n.lineWidth/2));var i=ve.create(e,t,this.rectangle);return o.addInstruction(i),new rn(this.makeExecutable(n),r)}},e.prototype.makeExecutable=function(t){for(var e=new Ut(this._initiallyWithState.makeExecutable()),n=new le(this.rectangle,t),o=0,r=this.added;o<r.length;o++){var i=r[o];e.add(i.makeExecutable(n))}return e},e.prototype.clipPath=function(t,e){if(0!==this.added.length){var n=this.added[this.added.length-1],o=ve.create(e,t,this.rectangle);n.addInstruction(o);var r=this.recreatePath();this.addClippedPath(r.getInstructionsToClip())}},e.prototype.closePath=function(){0!==this.added.length&&this.added[this.added.length-1].closePath()},e.prototype.moveTo=function(t,e){var n=ge(t,e.current.transformation);this.areaBuilder.addPosition(n);var o=tn.create(e,t,this.rectangle);o.setInitialState(this.state),this.add(o)},e.prototype.canAddLineTo=function(t,e){if(0===this.added.length)return!0;var n=ge(t,e.current.transformation);return this.added[this.added.length-1].canAddLineTo(n)},e.prototype.lineTo=function(t,e){if(0!==this.added.length){var n=this.added[this.added.length-1],o=ge(t,e.current.transformation);this.areaBuilder.addPosition(o),n.lineTo(t,e)}else this.moveTo(t,e)},e.prototype.moveToPositionDeterminedBy=function(t,e,n){Number.isFinite(t)?Number.isFinite(e)?this.moveTo(new r(t,e),n):this.moveTo(e<0?se:ae,n):this.moveTo(t<0?ce:ue,n)},e.prototype.rect=function(t,e,n,o,i){if(!Number.isFinite(t)&&!Number.isFinite(e))return this.moveTo({direction:new r(1,0)},i),this.lineTo({direction:new r(0,1)},i),void this.lineTo({direction:new r(-1,-1)},i);this.moveToPositionDeterminedBy(t,e,i),nn(t,e,n,o)&&(Number.isFinite(t)?Number.isFinite(e)?(Number.isFinite(n)?(this.lineTo(new r(t+n,e),i),Number.isFinite(o)?(this.lineTo(new r(t+n,e+o),i),this.lineTo(new r(t,e+o),i)):this.lineTo(o>0?ae:se,i)):(this.lineTo(n>0?ue:ce,i),Number.isFinite(o)?this.lineTo(new r(t,e+o),i):this.lineTo(o>0?ae:se,i)),this.lineTo(new r(t,e),i)):(Number.isFinite(n)?this.lineTo(new r(t+n,0),i):this.lineTo(n>0?ue:ce,i),this.lineTo(o>0?ae:se,i),this.lineTo(new r(t,0),i),this.lineTo(e<0?se:ae,i)):(this.lineTo(new r(0,e),i),this.lineTo(n>0?ue:ce,i),Number.isFinite(o)?this.lineTo(new r(0,e+o),i):this.lineTo(o>0?ae:se,i),this.lineTo(t<0?ce:ue,i)),this.closePath(),this.moveToPositionDeterminedBy(t,e,i))},e.prototype.addPathInstruction=function(t,e){if(0===this.added.length){if(!t.initialPoint)return;this.moveTo(t.initialPoint,e)}var n=this.added[this.added.length-1],o=ge(n.currentPosition,e.current.transformation.inverse());t.changeArea(this.areaBuilder.transformedWith(e.current.transformation),o);var r=ve.create(e,t.instruction,this.rectangle);n.addPathInstruction(t,r,e)},e.prototype.getInstructionsToClip=function(){return new an(this.makeExecutable({lineWidth:0,lineDashPeriod:0,shadowOffsets:[]}),this.area)},e.prototype.recreatePath=function(){for(var t=new e(this._initiallyWithState.copy(),this.rectangle),n=0,o=this.added;n<o.length;n++){var r=o[n];t.add(r.copy())}return t.areaBuilder=this.areaBuilder.copy(),t.setInitialState(t.stateOfFirstInstruction),t},e.create=function(t,n){return new e(ve.create(t,(function(t){t.beginPath()}),n),n)},e}(Yt);function un(t,e){return!Number.isFinite(t)&&!Number.isFinite(e)&&(t<0&&e>0||t>0&&e<0)}function pn(t,e,n,o){return un(t,n)&&un(e,o)}var fn,ln=function(){function t(t,e,n,o,r,i){this.instruction=t,this.factory=e,this.takeClippingRegionIntoAccount=n,this.transformationKind=o,this.state=r,this.tempState=i}return t.prototype.build=function(t,e){var n=this.getModifiedInstruction(e),o=this.factory(t,n);return o.setArea(this.changeAreaOfDrawing(o.drawingArea.area,this.tempState||this.state,this.takeClippingRegionIntoAccount)),o},t.prototype.getModifiedInstruction=function(t){var e=this.instruction,n=function(t,e){return t===X.Relative?function(t){var n=e.getBitmapTransformationToTransformedInfiniteCanvasContext(),o=n.a,r=n.b,i=n.c,a=n.d,s=n.e,c=n.f;t.transform(o,r,i,a,s,c)}:t===X.Absolute?function(t){var n=e.getBitmapTransformationToInfiniteCanvasContext(),o=n.a,r=n.b,i=n.c,a=n.d,s=n.e,c=n.f;t.setTransform(o,r,i,a,s,c)}:null}(this.transformationKind,t);return this.tempState&&(n=Re(n,this.takeClippingRegionIntoAccount?this.state.getInstructionToConvertToStateWithClippedPath(this.tempState,t):this.state.getInstructionToConvertToState(this.tempState,t))),e=function(t,e){return e?function(n,o){n.save(),e(n,o),t(n,o),n.restore()}:t}(e,n),e},t.prototype.changeAreaOfDrawing=function(t,e,n){var o=t;if(0!==e.current.shadowBlur||!e.current.shadowOffset.equals(r.origin)){var i=o.expandByDistance(e.current.shadowBlur).transform(s.translation(e.current.shadowOffset.x,e.current.shadowOffset.y));o=o.join(i)}return e.current.clippingRegion&&n&&(o=o.intersectWith(e.current.clippingRegion)),o},t.create=function(e){return new t(e.instruction,e.build,e.takeClippingRegionIntoAccount,e.transformationKind,e.state,e.tempState)},t}(),hn=function(){function t(t,e){this.onChange=t,this.rectangle=e,this.previousInstructionsWithPath=ye.create(e),this.state=this.previousInstructionsWithPath.state}return t.prototype.beginPath=function(){var t=cn.create(this.state,this.rectangle);t.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state),this.currentInstructionsWithPath=t},t.prototype.changeState=function(t){this.state=this.state.withCurrentState(t(this.state.current))},t.prototype.saveState=function(){this.state=this.state.saved()},t.prototype.restoreState=function(){this.state=this.state.restored()},t.prototype.allSubpathsAreClosable=function(){return!this.currentInstructionsWithPath||this.currentInstructionsWithPath.allSubpathsAreClosable()},t.prototype.currentPathContainsFinitePoint=function(){return this.currentInstructionsWithPath&&this.currentInstructionsWithPath.containsFinitePoint()},t.prototype.currentSubpathIsClosable=function(){return!this.currentInstructionsWithPath||this.currentInstructionsWithPath.currentSubpathIsClosable()},t.prototype.fillPath=function(t){this.drawPath(t,(function(t,e,n){return t.fillPath(e,n)}))},t.prototype.strokePath=function(){this.drawPath((function(t){t.stroke()}),(function(t,e,n){return t.strokePath(e,n)}))},t.prototype.fillRect=function(t,e,n,o,r){this.drawRect(t,e,n,o,r,(function(t,e,n){return t.fillPath(e,n)}))},t.prototype.strokeRect=function(t,e,n,o){this.drawRect(t,e,n,o,(function(t){t.stroke()}),(function(t,e,n){return t.strokePath(e,n)}))},t.prototype.drawPath=function(t,e){var n=this;if(this.currentInstructionsWithPath){var o=this.state.current.isTransformable(),r=o?X.None:X.Relative;this.state=this.state.currentlyTransformed(o),this.incorporateDrawingInstruction(ln.create({instruction:t,build:function(t,o){return e(t,o,n.state)},transformationKind:r,state:this.state,takeClippingRegionIntoAccount:!0})),this.onChange()}},t.prototype.drawRect=function(t,e,n,o,r,i){var a=this,s=this.state.current.isTransformable(),c=s?X.None:X.Relative,u=this.state.currentlyTransformed(s);this.incorporateDrawingInstruction(ln.create({instruction:r,build:function(r,s){var c=cn.create(u,a.rectangle);return c.rect(t,e,n,o,u),i(c,s,u)},transformationKind:c,state:u,takeClippingRegionIntoAccount:!0})),this.onChange()},t.prototype.addDrawing=function(t,e,n,o,r){var i,a=this,s=this.state.currentlyTransformed(!1);n===X.Relative&&(e=e.transform(this.state.current.transformation)),r&&(i=s.withCurrentState(r(s.current))),this.incorporateDrawingInstruction(ln.create({instruction:t,build:function(t,n){return new rn(ne.create(s,n,a.rectangle),e)},transformationKind:n,state:s,tempState:i,takeClippingRegionIntoAccount:o})),this.onChange()},t.prototype.clipPath=function(t){this.clipCurrentPath(t)},t.prototype.incorporateDrawingInstruction=function(t){if(this.currentInstructionsWithPath){var e=this.currentInstructionsWithPath.recreatePath();this.addToPreviousInstructions(t),e.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state),this.currentInstructionsWithPath=e}else this.addToPreviousInstructions(t),this.state=this.previousInstructionsWithPath.state},t.prototype.addToPreviousInstructions=function(t){var e=t.build(this.currentInstructionsWithPath,this.rectangle);e.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state),this.previousInstructionsWithPath.add(e)},t.prototype.clipCurrentPath=function(t){this.currentInstructionsWithPath&&(this.currentInstructionsWithPath.clipPath(t,this.state),this.state=this.currentInstructionsWithPath.state)},t.prototype.addPathInstruction=function(t){this.currentInstructionsWithPath&&this.currentInstructionsWithPath.addPathInstruction(t,this.state)},t.prototype.closePath=function(){this.currentInstructionsWithPath&&this.currentInstructionsWithPath.closePath()},t.prototype.moveTo=function(t){this.currentInstructionsWithPath&&this.currentInstructionsWithPath.moveTo(t,this.state)},t.prototype.canAddLineTo=function(t){return!this.currentInstructionsWithPath||this.currentInstructionsWithPath.canAddLineTo(t,this.state)},t.prototype.lineTo=function(t){this.currentInstructionsWithPath&&this.currentInstructionsWithPath.lineTo(t,this.state)},t.prototype.rect=function(t,e,n,o){this.currentInstructionsWithPath&&this.currentInstructionsWithPath.rect(t,e,n,o,this.state)},t.prototype.intersects=function(t){return this.previousInstructionsWithPath.intersects(t)},t.prototype.clearContentsInsideArea=function(t){this.previousInstructionsWithPath.clearContentsInsideArea(t),this.currentInstructionsWithPath&&this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state)},t.prototype.clearArea=function(t,e,n,o){if(nn(t,e,n,o)){var r=pn(t,e,n,o)?rt:it.createRectangle(t,e,n,o),i=r.transform(this.state.current.transformation);this.intersects(i)&&(this.clearContentsInsideArea(i),this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(i)&&(this.previousInstructionsWithPath.addClearRect(r,this.state,t,e,n,o),this.currentInstructionsWithPath&&this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state)),this.onChange())}},t.prototype.execute=function(t,e){this.previousInstructionsWithPath.length&&this.previousInstructionsWithPath.execute(t,e);for(var n=this.previousInstructionsWithPath.state.stack.length,o=0;o<n;o++)t.restore()},t}(),yn=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),dn=function(t){function e(e,n,o,r){var i=t.call(this)||this;return i.context=e,i.startAngle=n,i.x=o,i.y=r,i}return yn(e,t),e.prototype.createTransformedGradient=function(t){var e=t.apply(new r(this.x,this.y)),n=e.x,o=e.y,i=t.getRotationAngle(),a=this.context.createConicGradient(this.startAngle+i,n,o);return this.addColorStopsToGradient(a),a},e.prototype.createGradient=function(){var t=this.context.createConicGradient(this.startAngle,this.x,this.y);return this.addColorStopsToGradient(t),t},e}(Mt),vn=function(){function t(t,e,n,o,r){var i=this;this.canvasRectangle=t,this.context=e,this.drawingIterationProvider=n,this.drawLockProvider=o,this.isTransforming=r,this.instructionSet=new hn((function(){return i.draw()}),t)}return Object.defineProperty(t.prototype,"width",{get:function(){return this.canvasRectangle.viewboxWidth},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"height",{get:function(){return this.canvasRectangle.viewboxHeight},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"state",{get:function(){return this.instructionSet.state},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformation",{get:function(){return this.canvasRectangle.transformation},set:function(t){this.canvasRectangle.setTransformation(t),this.draw()},enumerable:!1,configurable:!0}),t.prototype.getDrawingLock=function(){return this.drawLockProvider()},t.prototype.changeState=function(t){this.instructionSet.changeState(t)},t.prototype.measureText=function(t){this.context.save(),Et.default.getInstructionToConvertToState(this.state.currentlyTransformed(!1).current,this.canvasRectangle)(this.context,s.identity);var e=this.context.measureText(t);return this.context.restore(),e},t.prototype.saveState=function(){this.instructionSet.saveState()},t.prototype.restoreState=function(){this.instructionSet.restoreState()},t.prototype.beginPath=function(){this.instructionSet.beginPath()},t.prototype.createPatternFromImageData=function(t){return e=this,n=void 0,r=function(){var e;return function(t,e){var n,o,r,i,a={label:0,sent:function(){if(1&r[0])throw r[1];return r[1]},trys:[],ops:[]};return i={next:s(0),throw:s(1),return:s(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function s(i){return function(s){return function(i){if(n)throw new TypeError("Generator is already executing.");for(;a;)try{if(n=1,o&&(r=2&i[0]?o.return:i[0]?o.throw||((r=o.return)&&r.call(o),0):o.next)&&!(r=r.call(o,i[1])).done)return r;switch(o=0,r&&(i=[2&i[0],r.value]),i[0]){case 0:case 1:r=i;break;case 4:return a.label++,{value:i[1],done:!1};case 5:a.label++,o=i[1],i=[0];continue;case 7:i=a.ops.pop(),a.trys.pop();continue;default:if(!((r=(r=a.trys).length>0&&r[r.length-1])||6!==i[0]&&2!==i[0])){a=0;continue}if(3===i[0]&&(!r||i[1]>r[0]&&i[1]<r[3])){a.label=i[1];break}if(6===i[0]&&a.label<r[1]){a.label=r[1],r=i;break}if(r&&a.label<r[2]){a.label=r[2],a.ops.push(i);break}r[2]&&a.ops.pop(),a.trys.pop();continue}i=e.call(t,a)}catch(t){i=[6,t],o=0}finally{n=r=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,s])}}}(this,(function(n){switch(n.label){case 0:return[4,createImageBitmap(t)];case 1:return e=n.sent(),[2,this.context.createPattern(e,"no-repeat")]}}))},new((o=void 0)||(o=Promise))((function(t,i){function a(t){try{c(r.next(t))}catch(t){i(t)}}function s(t){try{c(r.throw(t))}catch(t){i(t)}}function c(e){var n;e.done?t(e.value):(n=e.value,n instanceof o?n:new o((function(t){t(n)}))).then(a,s)}c((r=r.apply(e,n||[])).next())}));var e,n,o,r},t.prototype.addDrawing=function(t,e,n,o,r){this.instructionSet.addDrawing(t,e,n,o,r)},t.prototype.addPathInstruction=function(t){this.instructionSet.addPathInstruction(t)},t.prototype.closePath=function(){this.instructionSet.currentSubpathIsClosable()&&this.instructionSet.closePath()},t.prototype.moveTo=function(t){this.instructionSet.moveTo(t)},t.prototype.lineTo=function(t){this.instructionSet.canAddLineTo(t)&&this.instructionSet.lineTo(t)},t.prototype.rect=function(t,e,n,o){this.instructionSet.rect(t,e,n,o)},t.prototype.currentPathCanBeFilled=function(){return this.instructionSet.allSubpathsAreClosable()&&this.instructionSet.currentPathContainsFinitePoint()},t.prototype.fillPath=function(t){this.instructionSet.fillPath(t)},t.prototype.strokePath=function(){this.instructionSet.strokePath()},t.prototype.fillRect=function(t,e,n,o,r){nn(t,e,n,o)&&this.instructionSet.fillRect(t,e,n,o,r)},t.prototype.strokeRect=function(t,e,n,o){nn(t,e,n,o)&&!pn(t,e,n,o)&&this.instructionSet.strokeRect(t,e,n,o)},t.prototype.clipPath=function(t){this.instructionSet.clipPath(t)},t.prototype.clearArea=function(t,e,n,o){this.instructionSet.clearArea(t,e,n,o)},t.prototype.createLinearGradient=function(t,e,n,o){return new Ht(this.context,t,e,n,o)},t.prototype.createRadialGradient=function(t,e,n,o,r,i){return new Xt(this.context,t,e,n,o,r,i)},t.prototype.createConicGradient=function(t,e,n){return new dn(this.context,t,e,n)},t.prototype.createPattern=function(t,e){return new T(this.context.createPattern(t,e))},t.prototype.draw=function(){var t=this;this.drawingIterationProvider.provideDrawingIteration((function(){t.isTransforming()||t.canvasRectangle.measure(),t.context.restore(),t.context.save(),t.context.clearRect(0,0,t.width,t.height),t.setInitialTransformation(),t.instructionSet.execute(t.context,t.transformation)}))},t.prototype.setInitialTransformation=function(){var t=this.canvasRectangle.getInitialTransformation();if(!t.equals(s.identity)){var e=t.a,n=t.b,o=t.c,r=t.d,i=t.e,a=t.f;this.context.setTransform(e,n,o,r,i,a)}},t}(),gn=function(){function t(t,e){var n=this;this.context=e,this.initialTransformation=e.transformation,this.angularVelocity=Math.PI/100,this.point=t.onMoved((function(){n.setTransformation()}),!1)}return t.prototype.setTransformation=function(){this.context.transformation=this.initialTransformation.before(s.rotation(this.point.initial.x,this.point.initial.y,(this.point.initial.x-this.point.current.x)*this.angularVelocity))},t.prototype.withAnchor=function(t){return this},t.prototype.withoutAnchor=function(t){this.point.cancel()},t.prototype.end=function(){this.point.cancel()},t}(),mn=function(){function t(t,e,n,o,r){this.transformable=t,this.centerX=e,this.centerY=n,this.onFinish=r,this.initialTransformation=t.transformation,this.maxScaleLogStep=.1,this.currentScaleLog=0,this.targetScaleLog=Math.log(o),this.makeStep()}return t.prototype.makeStep=function(){var t=this,e=this.targetScaleLog-this.currentScaleLog;Math.abs(e)<=this.maxScaleLogStep?(this.currentScaleLog+=e,this.setTransformToCurrentScaleLog(),this.onFinish()):(this.currentScaleLog+=e<0?-this.maxScaleLogStep:this.maxScaleLogStep,this.setTransformToCurrentScaleLog(),this.stepTimeout=setTimeout((function(){return t.makeStep()}),20))},t.prototype.setTransformToCurrentScaleLog=function(){this.transformable.transformation=this.initialTransformation.before(s.zoom(this.centerX,this.centerY,Math.exp(this.currentScaleLog)))},t.prototype.cancel=function(){void 0!==this.stepTimeout&&clearTimeout(this.stepTimeout)},t}(),bn=function(){function t(t,e){var n=this;this.anchor=t,this.context=e,this.initialTransformation=e.transformation,this.point=t.onMoved((function(){n.setTransformation()}),!0)}return t.prototype.setTransformation=function(){this.context.transformation=this.initialTransformation.before(this.getTranslation())},t.prototype.getTranslation=function(){return s.translation(this.point.current.x-this.point.initial.x,this.point.current.y-this.point.initial.y)},t.prototype.withAnchor=function(t){return t===this.anchor?this:this.context.getGestureForTwoAnchors(this.point.cancel(),t)},t.prototype.withoutAnchor=function(t){this.point.cancel()},t}(),Pn=function(){function t(t,e,n){var o=this;this.context=n,this.initialTransformation=n.transformation,this.point1=t.onMoved((function(){return o.setTransformation()}),this.fixesFirstAnchorOnInfiniteCanvas()),this.point2=e.onMoved((function(){return o.setTransformation()}),this.fixesSecondAnchorOnInfiniteCanvas())}return t.prototype.withAnchor=function(t){return this},t.prototype.withoutAnchor=function(t){var e=this.point1.cancel(),n=this.point2.cancel();return t===e?this.context.getGestureForOneAnchor(n):t===n?this.context.getGestureForOneAnchor(e):void 0},t}(),wn=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),On=function(t){function e(e,n,o){return t.call(this,e,n,o)||this}return wn(e,t),e.prototype.fixesFirstAnchorOnInfiniteCanvas=function(){return!0},e.prototype.fixesSecondAnchorOnInfiniteCanvas=function(){return!1},e.prototype.setTransformation=function(){this.context.transformation=this.initialTransformation.before(s.translateZoom(this.point1.initial.x,this.point1.initial.y,this.point2.initial.x,this.point2.initial.y,this.point1.current.x,this.point1.current.y,this.point2.current.x,this.point2.current.y))},e}(Pn),Cn=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Tn=function(t){function e(e,n,o){return t.call(this,e,n,o)||this}return Cn(e,t),e.prototype.fixesFirstAnchorOnInfiniteCanvas=function(){return!0},e.prototype.fixesSecondAnchorOnInfiniteCanvas=function(){return!0},e.prototype.setTransformation=function(){this.context.transformation=this.initialTransformation.before(s.translateRotateZoom(this.point1.initial.x,this.point1.initial.y,this.point2.initial.x,this.point2.initial.y,this.point1.current.x,this.point1.current.y,this.point2.current.x,this.point2.current.y))},e}(Pn),In=function(){function t(){this.mapped=[]}return t.prototype.onRemoved=function(t){},t.prototype.add=function(t){var e=this;this.mapped.some((function(n){return e.mapsTo(n,t)}))||this.mapped.push(this.map(t))},t.prototype.remove=function(t){var e=this,n=this.mapped.findIndex((function(n){return e.mapsTo(n,t)}));if(-1!==n){var o=this.mapped.splice(n,1)[0];this.onRemoved(o)}},t}(),Sn=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),xn=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Sn(e,t),e.prototype.map=function(t,e){return{listener:t,removedCallback:e}},e.prototype.mapsTo=function(t,e){return t.listener===e},e.prototype.onRemoved=function(t){t.removedCallback&&t.removedCallback()},e.prototype.addListener=function(t){this.add(t)},e.prototype.removeListener=function(t){this.remove(t)},e.prototype.dispatch=function(t){for(var e=0,n=this.mapped.map((function(t){return t.listener}));e<n.length;e++)(0,n[e])(t)},e}(In),_n=function(){function t(t,e){this.setNewValue=t,this.timeoutInMs=e,this._changing=!1,this._firstChange=new xn,this._subsequentChange=new xn,this._changeEnd=new xn}return Object.defineProperty(t.prototype,"firstChange",{get:function(){return this._firstChange},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"subsequentChange",{get:function(){return this._subsequentChange},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"changeEnd",{get:function(){return this._changeEnd},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"changing",{get:function(){return this._changing},enumerable:!1,configurable:!0}),t.prototype.refreshTimeout=function(){var t=this;void 0!==this.currentTimeout&&clearTimeout(this.currentTimeout),this.currentTimeout=setTimeout((function(){t._changing=!1,t.currentTimeout=void 0,t._changeEnd.dispatch()}),this.timeoutInMs)},t.prototype.setValue=function(t){this.setNewValue(t),this._changing||(this._changing=!0,this._firstChange.dispatch()),this._subsequentChange.dispatch(),this.refreshTimeout()},t}(),jn=function(){function t(t,e){var n=this;this.viewBox=t,this.config=e,this._transformationChangeMonitor=new _n((function(t){return n.viewBox.transformation=t}),100)}return Object.defineProperty(t.prototype,"isTransforming",{get:function(){return this._transformationChangeMonitor.changing},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformationStart",{get:function(){return this._transformationChangeMonitor.firstChange},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformationChange",{get:function(){return this._transformationChangeMonitor.subsequentChange},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformationEnd",{get:function(){return this._transformationChangeMonitor.changeEnd},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformation",{get:function(){return this.viewBox.transformation},set:function(t){this._transformationChangeMonitor.setValue(t)},enumerable:!1,configurable:!0}),t.prototype.getGestureForOneAnchor=function(t){return new bn(t,this)},t.prototype.getGestureForTwoAnchors=function(t,e){return this.config.rotationEnabled?new Tn(t,e,this):new On(t,e,this)},t.prototype.releaseAnchor=function(t){this.gesture&&(this.gesture=this.gesture.withoutAnchor(t))},t.prototype.zoom=function(t,e,n){var o=this;this._zoom&&this._zoom.cancel(),this._zoom=new mn(this,t,e,n,(function(){o._zoom=void 0}))},t.prototype.addRotationAnchor=function(t){this.gesture=new gn(t,this)},t.prototype.addAnchor=function(t){if(this.gesture){var e=this.gesture.withAnchor(t);e&&(this.gesture=e)}else this.gesture=this.getGestureForOneAnchor(t)},t}(),Bn=function(){function t(){this.animationFrameRequested=!1}return t.prototype.provideDrawingIteration=function(t){var e=this;this.animationFrameRequested||(this.animationFrameRequested=!0,requestAnimationFrame((function(){t(),e.animationFrameRequested=!1})))},t}(),An=function(){function t(t){this.drawingIterationProvider=t,this._drawHappened=new xn}return Object.defineProperty(t.prototype,"drawHappened",{get:function(){return this._drawHappened},enumerable:!1,configurable:!0}),t.prototype.provideDrawingIteration=function(t){var e=this;this.drawingIterationProvider.provideDrawingIteration((function(){t(),e._drawHappened.dispatch()}))},t}(),En=function(){function t(t){this.drawingIterationProvider=t,this._locks=[]}return t.prototype.removeLock=function(t){var e=this._locks.indexOf(t);this._locks.splice(e,1),0===this._locks.length&&this._draw&&this.drawingIterationProvider.provideDrawingIteration(this._draw)},t.prototype.provideDrawingIteration=function(t){this._locks.length?this._draw=t:this.drawingIterationProvider.provideDrawingIteration(t)},t.prototype.getLock=function(){var t,e=this;return t={release:function(){e.removeLock(t)}},this._locks.push(t),t},t}();!function(t){t[t.CSS=0]="CSS",t[t.CANVAS=1]="CANVAS"}(fn||(fn={}));var Ln=function(){function t(t){this.base=t,this.inverseBase=t.inverse()}return t.prototype.getSimilarTransformation=function(t){return this.inverseBase.before(t).before(this.base)},t.prototype.representSimilarTransformation=function(t){return this.base.before(t).before(this.inverseBase)},t.prototype.representBase=function(t){return t.before(this.inverseBase)},t}(),Dn=function(){function t(t,e){this.userCoordinates=t,this.canvasBitmap=e,this.virtualBitmapBase=e.base,this.setDerivedProperties()}return t.prototype.setCanvasBitmapDistortion=function(t){var e=this.canvasBitmap.representBase(t),n=this.userCoordinates.representSimilarTransformation(e),o=this.virtualBitmapBase.before(n);this.virtualBitmapBase=o,this.canvasBitmap=new Ln(t),this.setDerivedProperties()},t.prototype.setUserTransformation=function(t){this.userCoordinates=new Ln(t),this.setDerivedProperties()},t.prototype.setDerivedProperties=function(){this.infiniteCanvasContext=new Ln(this.virtualBitmapBase.before(this.userCoordinates.base)),this.userCoordinatesInsideCanvasBitmap=new Ln(this.userCoordinates.base.before(this.canvasBitmap.base)),this.initialBitmapTransformation=this.canvasBitmap.representBase(this.userCoordinates.getSimilarTransformation(this.virtualBitmapBase)),this.icContextFromCanvasBitmap=new Ln(this.infiniteCanvasContext.base.before(this.canvasBitmap.inverseBase))},t}(),Fn=function(){function t(t,e){this.userCoordinates=t,this.canvasBitmap=e,this.setDerivedProperties()}return Object.defineProperty(t.prototype,"infiniteCanvasContext",{get:function(){return this.userCoordinates},enumerable:!1,configurable:!0}),t.prototype.setCanvasBitmapDistortion=function(t){this.canvasBitmap=new Ln(t),this.setDerivedProperties()},t.prototype.setUserTransformation=function(t){this.userCoordinates=new Ln(t),this.setDerivedProperties()},t.prototype.setDerivedProperties=function(){this.userCoordinatesInsideCanvasBitmap=new Ln(this.userCoordinates.base.before(this.canvasBitmap.base)),this.initialBitmapTransformation=this.canvasBitmap.inverseBase,this.icContextFromCanvasBitmap=new Ln(this.userCoordinates.base.before(this.canvasBitmap.inverseBase))},t}();function Wn(t){var e=t.screenWidth,n=t.screenHeight,o=t.viewboxWidth,r=t.viewboxHeight;return new s(e/o,0,0,n/r,0,0)}var kn=function(){function t(t,e){this.units=t,this.coordinates=e}return Object.defineProperty(t.prototype,"userTransformation",{get:function(){return this.coordinates.userCoordinates.base},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"infiniteCanvasContext",{get:function(){return this.coordinates.infiniteCanvasContext},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"initialBitmapTransformation",{get:function(){return this.coordinates.initialBitmapTransformation},enumerable:!1,configurable:!0}),t.prototype.setCanvasBitmapDistortion=function(t){this.coordinates.setCanvasBitmapDistortion(t)},t.prototype.getBitmapTransformationToTransformedInfiniteCanvasContext=function(){return this.coordinates.userCoordinates.base},t.prototype.getBitmapTransformationToInfiniteCanvasContext=function(){return this.coordinates.icContextFromCanvasBitmap.base},t.prototype.translateInfiniteCanvasContextTransformationToBitmapTransformation=function(t){return this.coordinates.icContextFromCanvasBitmap.getSimilarTransformation(t)},t.prototype.getInitialTransformationForTransformedInfiniteCanvasContext=function(t){var e=t.before(this.coordinates.infiniteCanvasContext.base),n=this.coordinates.userCoordinatesInsideCanvasBitmap.representBase(e);return this.coordinates.userCoordinates.getSimilarTransformation(n)},t.prototype.setUserTransformation=function(t){this.coordinates.setUserTransformation(t)},t.prototype.setCanvasMeasurement=function(t){var e=Wn(t);this.coordinates.setCanvasBitmapDistortion(e)},t.prototype.useUnits=function(t){t!==this.units&&(this.units=t,t===fn.CANVAS?this.coordinates=new Dn(this.coordinates.userCoordinates,this.coordinates.canvasBitmap):this.coordinates=new Fn(this.coordinates.userCoordinates,this.coordinates.canvasBitmap))},t.create=function(e,n){var o=Wn(n);return new t(e,e===fn.CANVAS?new Dn(new Ln(s.identity),new Ln(o)):new Fn(new Ln(s.identity),new Ln(o)))},t}(),Rn=function(){function t(t,e){this.measurementProvider=t,this.config=e;var n=t.measure(),o=e.units===fn.CSS?fn.CSS:fn.CANVAS;this.coordinatesSwitch=kn.create(o,n),this.addMeasurement(n)}return Object.defineProperty(t.prototype,"viewboxWidth",{get:function(){return this.measurement.viewboxWidth},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"viewboxHeight",{get:function(){return this.measurement.viewboxHeight},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"transformation",{get:function(){return this.coordinatesSwitch.userTransformation},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"infiniteCanvasContextBase",{get:function(){return this.coordinatesSwitch.infiniteCanvasContext.base},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"inverseInfiniteCanvasContextBase",{get:function(){return this.coordinatesSwitch.infiniteCanvasContext.inverseBase},enumerable:!1,configurable:!0}),t.prototype.setTransformation=function(t){this.coordinatesSwitch.setUserTransformation(s.create(t))},t.prototype.getCSSPosition=function(t,e){var n=this.measurementProvider.measure(),o=n.left,i=n.top;return new r(t-o,e-i)},t.prototype.measure=function(){var t=this.config.units===fn.CSS?fn.CSS:fn.CANVAS;this.coordinatesSwitch.useUnits(t);var e=this.measurementProvider.measure();this.addMeasurement(e)},t.prototype.getTransformationForInstruction=function(t){return this.coordinatesSwitch.getInitialTransformationForTransformedInfiniteCanvasContext(s.create(t))},t.prototype.translateInfiniteCanvasContextTransformationToBitmapTransformation=function(t){return this.coordinatesSwitch.translateInfiniteCanvasContextTransformationToBitmapTransformation(s.create(t))},t.prototype.getInitialTransformation=function(){return this.coordinatesSwitch.initialBitmapTransformation},t.prototype.getBitmapTransformationToInfiniteCanvasContext=function(){return this.coordinatesSwitch.getBitmapTransformationToInfiniteCanvasContext()},t.prototype.getBitmapTransformationToTransformedInfiniteCanvasContext=function(){return this.coordinatesSwitch.getBitmapTransformationToTransformedInfiniteCanvasContext()},t.prototype.addPathAroundViewbox=function(t,e){var n=this.viewboxWidth+2*e,o=this.viewboxHeight+2*e;t.save(),t.setTransform(1,0,0,1,0,0),t.rect(-e,-e,n,o),t.restore()},t.prototype.addMeasurement=function(t){var e,n,o=(n=t,(e=this.measurement)?!!n&&e.viewboxWidth===n.viewboxWidth&&e.viewboxHeight===n.viewboxHeight&&e.screenWidth===n.screenWidth&&e.screenHeight===n.screenHeight:!n);if(this.measurement=t,!o){var r=t.viewboxWidth,i=t.viewboxHeight;this.polygon=it.createRectangle(0,0,r,i),this.coordinatesSwitch.setCanvasMeasurement(t)}},t}(),Nn=function(){function t(t){this.canvas=t}return t.prototype.measure=function(){var t=this.canvas.getBoundingClientRect();return{left:t.left,top:t.top,screenWidth:t.width,screenHeight:t.height,viewboxWidth:this.canvas.width,viewboxHeight:this.canvas.height}},t}(),Vn=function(){function t(t){this.canvas=t,this.listeners=[]}return t.prototype.notifyListeners=function(){for(var t=0,e=this.listeners;t<e.length;t++)(0,e[t])()},t.prototype.createObserver=function(){var t=this;this.observer=new ResizeObserver((function(){return t.notifyListeners()})),this.observer.observe(this.canvas)},t.prototype.addListener=function(t){this.listeners.push(t),this.observer||this.createObserver()},t.prototype.removeListener=function(t){var e=this.listeners.indexOf(t);e>-1&&(this.listeners.splice(e,1),0===this.listeners.length&&(this.observer.disconnect(),this.observer=void 0))},t}();function Mn(t){return{a:t.a,b:t.b,c:t.c,d:t.d,e:t.e,f:t.f}}var qn=function(){return qn=Object.assign||function(t){for(var e,n=1,o=arguments.length;n<o;n++)for(var r in e=arguments[n])Object.prototype.hasOwnProperty.call(e,r)&&(t[r]=e[r]);return t},qn.apply(this,arguments)},Hn={transformationstart:null,transformationchange:null,transformationend:null},Gn={auxclick:null,click:null,contextmenu:null,dblclick:null,mouseenter:null,mouseleave:null,mouseout:null,mouseover:null,mouseup:null},Xn={gotpointercapture:null,lostpointercapture:null,pointerenter:null,pointerout:null,pointerover:null},Yn={drag:null,dragend:null,dragenter:null,dragleave:null,dragover:null,dragstart:null,drop:null},zn={touchcancel:null,touchend:null},Un=qn(qn(qn(qn({},Gn),Xn),Yn),zn),Kn={mousedown:null,mousemove:null,pointerdown:null,pointermove:null,pointerleave:null,pointercancel:null,pointerup:null,wheel:null,touchstart:null,touchmove:null,wheelignored:null,touchignored:null};function Qn(t){return Hn.hasOwnProperty(t)}function Jn(t){return Un.hasOwnProperty(t)||Kn.hasOwnProperty(t)}function Zn(t){return Kn.hasOwnProperty(t)}function $n(t){return Gn.hasOwnProperty(t)}function to(t){return Xn.hasOwnProperty(t)}function eo(t){return Yn.hasOwnProperty(t)}function no(t){return zn.hasOwnProperty(t)}var oo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ro=function(t){function e(e){var n=t.call(this)||this;return n.source=e,n}return oo(e,t),e.prototype.map=function(t){var e=this,n=function(){e.remove(t),t.removedCallback&&t.removedCallback()};return this.source.addListener(t.listener,n),{listener:t.listener,removedCallback:n}},e.prototype.mapsTo=function(t,e){return t.listener===e.listener},e.prototype.onRemoved=function(t){t.removedCallback(),this.source.removeListener(t.listener)},e.prototype.addListener=function(t,e){this.add({listener:t,removedCallback:e})},e.prototype.removeListener=function(t){this.remove({listener:t})},e}(In),io=function(t){function e(e,n){var o=t.call(this)||this;return o.transform=n,o.old=new ro(e),o}return oo(e,t),e.prototype.map=function(t){var e=this,n={oldListener:void 0,newListener:t.listener,removedCallback:function(){t.removedCallback&&t.removedCallback()}};return n.oldListener=this.transform(t.listener,(function(e){return n.removedCallback=function(){t.removedCallback&&t.removedCallback(),e()}})),this.old.addListener(n.oldListener,(function(){return e.removeListener(t.listener)})),n},e.prototype.mapsTo=function(t,e){return t.newListener===e.listener},e.prototype.onRemoved=function(t){this.old.removeListener(t.oldListener),t.removedCallback()},e.prototype.addListener=function(t,e){this.add({listener:t,removedCallback:e})},e.prototype.removeListener=function(t){this.remove({listener:t})},e}(In);function ao(t,e){return new io(t,e)}function so(t,e){return ao(t,(function(t){return function(n){t(e(n))}}))}var co=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}();function uo(t){return!!t&&"function"==typeof t.handleEvent}var po=function(t){function e(e){var n=t.call(this)||this;return n.source=e,n}return co(e,t),e.prototype.mapsTo=function(t,e){return t.listenerObject===e.listenerObject},e.prototype.map=function(t){var e=this,n=t.listenerObject,o=t.removedCallback,r=function(t){n.handleEvent(t)},i=function(){e.remove(t),o&&o()};return this.source.addListener(r,i),{listener:r,listenerObject:n,removedCallback:i}},e.prototype.onRemoved=function(t){this.source.removeListener(t.listener),t.removedCallback()},e}(In),fo=function(){function t(t){this.source=t,this.listenerObjectCollection=new po(t)}return t.prototype.addListener=function(t,e){uo(t)?this.listenerObjectCollection.add({listenerObject:t,removedCallback:e}):this.source.addListener(t,e)},t.prototype.removeListener=function(t){uo(t)?this.listenerObjectCollection.remove({listenerObject:t}):this.source.removeListener(t)},t}();function lo(t){return new fo(t)}var ho=function(){function t(t){var e=this;this.source=t,this.firstDispatcher=new xn,this.secondDispatcher=new xn,this.numberOfListeners=0,this.sourceListener=function(t){return e.dispatchEvent(t)}}return t.prototype.add=function(){0===this.numberOfListeners&&this.source.addListener(this.sourceListener),this.numberOfListeners++},t.prototype.remove=function(){this.numberOfListeners--,0===this.numberOfListeners&&this.source.removeListener(this.sourceListener)},t.prototype.dispatchEvent=function(t){this.firstDispatcher.dispatch(t),this.secondDispatcher.dispatch(t)},t.prototype.build=function(){var t=this;return{first:ao(this.firstDispatcher,(function(e,n){return t.add(),n((function(){return t.remove()})),e})),second:ao(this.secondDispatcher,(function(e,n){return t.add(),n((function(){return t.remove()})),e}))}},t}();function yo(t){return new ho(t).build()}function vo(t,e){return ao(t,(function(t){return function(n){e(n)&&t(n)}}))}var go=function(){function t(t,e){t=function(t,e){return ao(t,(function(t){return function(n){t.apply(e,[n])}}))}(t,e),this._onceSource=lo(function(t){var e=ao(t,(function(t){return function(n){t(n),e.removeListener(t)}}));return e}(t)),this.source=lo(t)}return t.prototype.addListener=function(t,e){e&&e.once?this._onceSource.addListener(t):this.source.addListener(t)},t.prototype.removeListener=function(t){this.source.removeListener(t),this._onceSource.removeListener(t)},t}(),mo=function(){function t(t,e){this.captureSource=t,this.bubbleSource=e}return Object.defineProperty(t.prototype,"on",{get:function(){return this.onEventHandler},set:function(t){t?(this.wrappedOnEventHandler=function(e){return t.apply(this,[e])},this.onEventHandler=t,this.bubbleSource.addListener(this.wrappedOnEventHandler)):(this.bubbleSource.removeListener(this.wrappedOnEventHandler),this.wrappedOnEventHandler=null,this.onEventHandler=null)},enumerable:!1,configurable:!0}),t.prototype.addListener=function(t,e){var n=e&&("boolean"==typeof e?void 0:e);("boolean"==typeof e?e:e&&e.capture)?this.captureSource.addListener(t,n):this.bubbleSource.addListener(t,n)},t.prototype.removeListener=function(t,e){("boolean"==typeof e?e:e&&e.capture)?this.captureSource.removeListener(t):this.bubbleSource.removeListener(t)},t}();function bo(t,e,n,o){return function(t,e,n){return new mo(new go(t,n),new go(e,n))}(so(vo(t,(function(t){return!t.immediatePropagationStopped})),(function(t){return t.getResultEvent(n)})),so(vo(e,(function(t){return!t.propagationStopped&&!t.immediatePropagationStopped})),(function(t){return t.getResultEvent(n)})),o)}function Po(t){var e=yo(t),n=e.first,o=yo(e.second);return{captureSource:n,bubbleSource:o.first,afterBubble:o.second}}var wo=function(){function t(t,e){this.rectangle=t,this.infiniteCanvas=e,this.cache={}}return t.prototype.map=function(t,e){return function(t,e,n){var o=Po(t);return bo(o.captureSource,o.bubbleSource,e,n)}(so(t,e),this.rectangle,this.infiniteCanvas)},t.prototype.setOn=function(t,e){if(e)this.cache[t]||(this.cache[t]=this.getEventSource(t)),this.cache[t].on=e;else{if(!this.cache[t])return;this.cache[t].on=null}},t.prototype.getOn=function(t){return this.cache[t]?this.cache[t].on:null},t.prototype.addEventListener=function(t,e,n){this.cache[t]||(this.cache[t]=this.getEventSource(t)),function(t,e,n){uo(e),t.addListener(e,n)}(this.cache[t],e,n)},t.prototype.removeEventListener=function(t,e,n){this.cache[t]&&function(t,e,n){uo(e),t.removeListener(e,n)}(this.cache[t],e,n)},t}(),Oo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Co=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Oo(e,t),e.prototype.getEventSource=function(t){return this.cache&&this.cache[t]||(this.cache=this.createEvents()),this.cache[t]},e}(wo),To=function(){function t(t,e){this.canvasEvent=t,this.preventableDefault=e}return Object.defineProperty(t.prototype,"bubbles",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"isTrusted",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"eventPhase",{get:function(){return Event.AT_TARGET},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"cancelable",{get:function(){return this.preventableDefault.cancelable},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return this.preventableDefault.defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"AT_TARGET",{get:function(){return Event.AT_TARGET},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"BUBBLING_PHASE",{get:function(){return Event.BUBBLING_PHASE},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"CAPTURING_PHASE",{get:function(){return Event.CAPTURING_PHASE},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"NONE",{get:function(){return Event.NONE},enumerable:!1,configurable:!0}),t.prototype.initEvent=function(t,e,n){},t.prototype.preventDefault=function(){this.preventableDefault.preventDefault()},t.prototype.stopImmediatePropagation=function(){this.canvasEvent.stopImmediatePropagation()},t.prototype.stopPropagation=function(){this.canvasEvent.stopPropagation()},t}(),Io=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),So=function(t){function e(e,n,o){var r=t.call(this,e,n)||this;return r.type=o,r}return Io(e,t),Object.defineProperty(e.prototype,"cancelBubble",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"composed",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"currentTarget",{get:function(){return null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"returnValue",{get:function(){return!0},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"srcElement",{get:function(){return null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"target",{get:function(){return null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"timeStamp",{get:function(){return 0},enumerable:!1,configurable:!0}),e.prototype.composedPath=function(){return[]},e}(To),xo=function(){function t(t){this.preventableDefault=t,this.propagationStopped=!1,this.immediatePropagationStopped=!1}return Object.defineProperty(t.prototype,"infiniteCanvasDefaultPrevented",{get:function(){return this.preventableDefault.infiniteCanvasDefaultPrevented},enumerable:!1,configurable:!0}),t.prototype.stopPropagation=function(){this.propagationStopped=!0},t.prototype.stopImmediatePropagation=function(){this.immediatePropagationStopped=!0},t.prototype.getResultEvent=function(t){return this.resultEvent||(this.resultEvent=this.createResultEvent(t)),this.resultEvent},t}(),_o=function(){function t(){}return Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return this._defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"infiniteCanvasDefaultPrevented",{get:function(){return this._defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"cancelable",{get:function(){return!0},enumerable:!1,configurable:!0}),t.prototype.preventDefault=function(){this._defaultPrevented=!0},t}(),jo=function(){function t(){}return Object.defineProperty(t.prototype,"infiniteCanvasDefaultPrevented",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"cancelable",{get:function(){return!1},enumerable:!1,configurable:!0}),t.prototype.preventDefault=function(){},t}(),Bo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ao=function(t){function e(e){return t.call(this,e?new _o:new jo)||this}return Bo(e,t),e}(xo),Eo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Lo=function(t){function e(e,n){var o=t.call(this,e,n,"draw")||this;return o.transformation=e.transformation,o.inverseTransformation=e.inverseTransformation,o}return Eo(e,t),e}(So),Do=function(t){function e(){return t.call(this,!1)||this}return Eo(e,t),e.prototype.createResultEvent=function(t){return this.transformation=Mn(t.inverseInfiniteCanvasContextBase),this.inverseTransformation=Mn(t.infiniteCanvasContextBase),new Lo(this,this.preventableDefault)},e}(Ao),Fo=function(t){function e(e,n,o){var r=t.call(this,n,o)||this;return r.drawingIterationProvider=e,r}return Eo(e,t),e.prototype.createEvents=function(){return{draw:this.map(this.drawingIterationProvider.drawHappened,(function(){return new Do}))}},e}(Co),Wo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ko=function(t){function e(e,n,o){var r=t.call(this,e,n,o)||this;return r.transformation=e.transformation,r.inverseTransformation=e.inverseTransformation,r}return Wo(e,t),e}(So),Ro=function(t){function e(e){var n=t.call(this,!1)||this;return n.type=e,n}return Wo(e,t),e.prototype.createResultEvent=function(t){return this.transformation=Mn(t.inverseInfiniteCanvasContextBase),this.inverseTransformation=Mn(t.infiniteCanvasContextBase),new ko(this,this.preventableDefault,this.type)},e}(Ao),No=function(t){function e(e,n,o){var r=t.call(this,n,o)||this;return r.transformer=e,r}return Wo(e,t),e.prototype.createEvents=function(){return{transformationstart:this.map(this.transformer.transformationStart,(function(){return new Ro("transformationstart")})),transformationchange:this.map(this.transformer.transformationChange,(function(){return new Ro("transformationchange")})),transformationend:this.map(this.transformer.transformationEnd,(function(){return new Ro("transformationend")}))}},e}(Co);function Vo(t,e){return{addListener:function(n){t.addEventListener(e,n)},removeListener:function(n){t.removeEventListener(e,n)}}}var Mo=function(){function t(t){this.event=t}return Object.defineProperty(t.prototype,"infiniteCanvasDefaultPrevented",{get:function(){return!1},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"nativeDefaultPrevented",{get:function(){return this.event.defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"nativeCancelable",{get:function(){return this.event.cancelable},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return this.event.defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"cancelable",{get:function(){return this.event.cancelable},enumerable:!1,configurable:!0}),t.prototype.preventDefault=function(){this.event.preventDefault()},t}(),qo=function(){function t(t){this.event=t}return Object.defineProperty(t.prototype,"infiniteCanvasDefaultPrevented",{get:function(){return this._defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"nativeDefaultPrevented",{get:function(){return this.event.defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"nativeCancelable",{get:function(){return this.event.cancelable},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return this._defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"cancelable",{get:function(){return!0},enumerable:!1,configurable:!0}),t.prototype.preventDefault=function(t){this._defaultPrevented=!0,t&&this.event.preventDefault()},t}(),Ho=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Go=function(t){function e(e,n){var o=t.call(this,n?new qo(e):new Mo(e))||this;return o.event=e,o}return Ho(e,t),e.prototype.stopPropagation=function(){t.prototype.stopPropagation.call(this),this.event&&this.event.stopPropagation()},e.prototype.stopImmediatePropagation=function(){t.prototype.stopImmediatePropagation.call(this),this.event&&this.event.stopImmediatePropagation()},e}(xo),Xo=function(){function t(t,e,n,o){this.offsetX=t,this.offsetY=e,this.movementX=n,this.movementY=o}return t.prototype.toInfiniteCanvasCoordinates=function(e){var n=e.inverseInfiniteCanvasContextBase.apply(new r(this.offsetX,this.offsetY)),o=n.x,i=n.y,a=e.inverseInfiniteCanvasContextBase.untranslated().apply(new r(this.movementX,this.movementY));return new t(o,i,a.x,a.y)},t.create=function(e){return new t(e.offsetX,e.offsetY,e.movementX,e.movementY)},t}(),Yo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),zo=function(t){function e(e,n,o){var r=t.call(this,e,n)||this;return r.event=o,r}return Yo(e,t),Object.defineProperty(e.prototype,"nativeDefaultPrevented",{get:function(){return this.preventableDefault.nativeDefaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"nativeCancelable",{get:function(){return this.preventableDefault.nativeCancelable},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"cancelBubble",{get:function(){return this.event.cancelBubble},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"composed",{get:function(){return this.event.composed},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"currentTarget",{get:function(){return this.event.currentTarget},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"returnValue",{get:function(){return this.event.returnValue},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"srcElement",{get:function(){return this.event.srcElement},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"target",{get:function(){return this.event.target},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"timeStamp",{get:function(){return this.event.timeStamp},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"type",{get:function(){return this.event.type},enumerable:!1,configurable:!0}),e.prototype.preventDefault=function(t){this.preventableDefault.preventDefault(t)},e.prototype.composedPath=function(){return this.event.composedPath()},e}(To),Uo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ko=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Uo(e,t),Object.defineProperty(e.prototype,"detail",{get:function(){return this.event.detail},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"view",{get:function(){return this.event.view},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"which",{get:function(){return this.event.which},enumerable:!1,configurable:!0}),e.prototype.initUIEvent=function(t,e,n,o,r){},e}(zo),Qo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Jo=function(t){function e(e,n,o,r){var i=t.call(this,e,n,o)||this;return i.offsetX=r.offsetX,i.offsetY=r.offsetY,i.movementX=r.movementX,i.movementY=r.movementY,i}return Qo(e,t),Object.defineProperty(e.prototype,"altKey",{get:function(){return this.event.altKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"button",{get:function(){return this.event.button},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"buttons",{get:function(){return this.event.buttons},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"clientX",{get:function(){return this.event.clientX},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"clientY",{get:function(){return this.event.clientY},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"ctrlKey",{get:function(){return this.event.ctrlKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"metaKey",{get:function(){return this.event.metaKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pageX",{get:function(){return this.event.pageX},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pageY",{get:function(){return this.event.pageY},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"relatedTarget",{get:function(){return this.event.relatedTarget},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"screenX",{get:function(){return this.event.screenX},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"screenY",{get:function(){return this.event.screenY},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"shiftKey",{get:function(){return this.event.shiftKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"x",{get:function(){return this.event.x},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"y",{get:function(){return this.event.y},enumerable:!1,configurable:!0}),e.prototype.getModifierState=function(t){return this.event.getModifierState(t)},e.prototype.initMouseEvent=function(t,e,n,o,r,i,a,s,c,u,p,f,l,h,y){},e}(Ko),Zo=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),$o=function(t){function e(e,n){var o=t.call(this,e,n)||this;return o.props=Xo.create(e),o}return Zo(e,t),e.prototype.createResultEvent=function(t){return new Jo(this,this.preventableDefault,this.event,this.props.toInfiniteCanvasCoordinates(t))},e}(Go),tr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),er=function(t){function e(e,n,o,r,i,a){var s=t.call(this,e,n,o,r)||this;return s.width=i,s.height=a,s}return tr(e,t),e.prototype.toInfiniteCanvasCoordinates=function(n){var o=t.prototype.toInfiniteCanvasCoordinates.call(this,n),i=o.offsetX,a=o.offsetY,s=o.movementX,c=o.movementY,u=n.inverseInfiniteCanvasContextBase.untranslated().apply(new r(this.width,this.height));return new e(i,a,s,c,u.x,u.y)},e.create=function(n){var o=t.create.call(this,n);return new e(o.offsetX,o.offsetY,o.movementX,o.movementY,n.width,n.height)},e}(Xo),nr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),or=function(t){function e(e,n,o,r){return t.call(this,e,n,o,r)||this}return nr(e,t),Object.defineProperty(e.prototype,"isPrimary",{get:function(){return this.event.isPrimary},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pointerId",{get:function(){return this.event.pointerId},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pointerType",{get:function(){return this.event.pointerType},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pressure",{get:function(){return this.event.pressure},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"tangentialPressure",{get:function(){return this.event.tangentialPressure},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"tiltX",{get:function(){return this.event.tiltX},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"tiltY",{get:function(){return this.event.tiltY},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"twist",{get:function(){return this.event.twist},enumerable:!1,configurable:!0}),e.prototype.getCoalescedEvents=function(){return console.warn("`PointerEvent.getCoalescedEvents()` is currently not supported by InfiniteCanvas"),[]},e.prototype.getPredictedEvents=function(){return console.warn("`PointerEvent.getPredictedEvents()` is currently not supported by InfiniteCanvas"),[]},e}(Jo),rr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),ir=function(t){function e(e,n){var o=t.call(this,e,n)||this;return o.props=er.create(e),o}return rr(e,t),e.prototype.createResultEvent=function(t){return new or(this,this.preventableDefault,this.event,this.props.toInfiniteCanvasCoordinates(t))},e}(Go),ar=function(t,e){this.initial=t,this.cancel=e,this.current=t},sr=function(){function t(t){this.point=t,this.moveEventDispatcher=new xn,this._fixedOnInfiniteCanvas=!1}return Object.defineProperty(t.prototype,"fixedOnInfiniteCanvas",{get:function(){return this._fixedOnInfiniteCanvas},enumerable:!1,configurable:!0}),t.prototype.removeHandler=function(t){this.moveEventDispatcher.removeListener(t)},t.prototype.moveTo=function(t,e){var n=new r(t,e);this.point=n,this.moveEventDispatcher.dispatch(n)},t.prototype.onMoved=function(t,e){var n,o=this;this._fixedOnInfiniteCanvas=e;var r=function(e){n.current=e,t()};return this.moveEventDispatcher.addListener(r),n=new ar(this.point,(function(){return o.removeHandler(r),o._fixedOnInfiniteCanvas=!1,o}))},t}(),cr=function(){function t(t){this.pointerEvent=t,this._defaultPrevented=!1,this.anchor=new sr(new r(t.offsetX,t.offsetY))}return Object.defineProperty(t.prototype,"defaultPrevented",{get:function(){return this._defaultPrevented},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"touchId",{get:function(){return this._touchId},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"pointerId",{get:function(){return this.pointerEvent.pointerId},enumerable:!1,configurable:!0}),t.prototype.preventDefault=function(){this._defaultPrevented=!0},t.prototype.setTouchId=function(t){this._touchId=t},t.prototype.updatePointerEvent=function(t){this.pointerEvent=t,this.anchor.moveTo(t.offsetX,t.offsetY)},t}(),ur=function(){function t(){this.anchors=[]}return t.prototype.find=function(t){return this.anchors.find(t)},t.prototype.getAll=function(t){return this.anchors.filter(t)},t.prototype.getAnchorForTouch=function(t){return this.anchors.find((function(e){return e.touchId===t}))},t.prototype.addAnchorForPointerEvent=function(t){var e=new cr(t);this.anchors.push(e)},t.prototype.updateAnchorForPointerEvent=function(t){var e=this.getAnchorForPointerEvent(t);e?e.updatePointerEvent(t):this.addAnchorForPointerEvent(t)},t.prototype.getAnchorForPointerEvent=function(t){return this.anchors.find((function(e){return e.pointerId===t.pointerId}))},t.prototype.removeAnchor=function(t){var e=this.anchors.findIndex((function(e){return e===t}));e>-1&&this.anchors.splice(e,1)},t}(),pr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),fr=function(t){function e(e,n,o,r,i,a){var s=t.call(this,e,n,o,r)||this;return s.deltaX=i,s.deltaY=a,s}return pr(e,t),e.prototype.toInfiniteCanvasCoordinates=function(n){var o=t.prototype.toInfiniteCanvasCoordinates.call(this,n),i=o.offsetX,a=o.offsetY,s=o.movementX,c=o.movementY,u=n.inverseInfiniteCanvasContextBase.untranslated().apply(new r(this.deltaX,this.deltaY));return new e(i,a,s,c,u.x,u.y)},e.create=function(n){var o=t.create.call(this,n);return new e(o.offsetX,o.offsetY,o.movementX,o.movementY,n.deltaX,n.deltaY)},e}(Xo),lr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),hr=function(t){function e(e,n,o,r){var i=t.call(this,e,n,o,r)||this;return i.deltaX=r.deltaX,i.deltaY=r.deltaY,i}return lr(e,t),Object.defineProperty(e.prototype,"deltaMode",{get:function(){return this.event.deltaMode},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"deltaZ",{get:function(){return this.event.deltaZ},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"DOM_DELTA_LINE",{get:function(){return this.event.DOM_DELTA_LINE},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"DOM_DELTA_PAGE",{get:function(){return this.event.DOM_DELTA_PAGE},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"DOM_DELTA_PIXEL",{get:function(){return this.event.DOM_DELTA_PIXEL},enumerable:!1,configurable:!0}),e}(Jo),yr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),dr=function(t){function e(e,n){var o=t.call(this,e,n)||this;return o.props=fr.create(e),o}return yr(e,t),e.prototype.createResultEvent=function(t){return new hr(this,this.preventableDefault,this.event,this.props.toInfiniteCanvasCoordinates(t))},e}(Go);function vr(t,e){for(var n=[],o=0;o<t.length;o++){var r=t[o];e&&!e(r)||n.push(r)}return n}var gr=function(){function t(t,e,n,o,r,i){this.x=t,this.y=e,this.radiusX=n,this.radiusY=o,this.rotationAngle=r,this.identifier=i}return t.prototype.toInfiniteCanvasCoordinates=function(e){var n=e.inverseInfiniteCanvasContextBase,o=n.apply(new r(this.x,this.y));return new t(o.x,o.y,this.radiusX*n.scale,this.radiusY*n.scale,this.rotationAngle+n.getRotationAngle(),this.identifier)},t.create=function(e,n){var o=n.getCSSPosition(e.clientX,e.clientY);return new t(o.x,o.y,e.radiusX,e.radiusY,e.rotationAngle,e.identifier)},t}(),mr=function(){function t(){this.translatedProps=[],this.createdProps=[]}return t.prototype.toInfiniteCanvasCoordinates=function(t,e){var n=this.translatedProps.find((function(e){return e.identifier===t.identifier}));return n||(n=t.toInfiniteCanvasCoordinates(e),this.translatedProps.push(n),n)},t.prototype.createProps=function(t,e){var n=this.createdProps.find((function(e){return e.identifier===t.identifier}));return n||(n=gr.create(t,e),this.createdProps.push(n),n)},t.prototype.dispose=function(){this.translatedProps.splice(0,this.translatedProps.length),this.createdProps.splice(0,this.createdProps.length)},t}(),br=function(){function t(t,e,n){this.targetTouches=t,this.changedTouches=e,this.touches=n}return t.prototype.toInfiniteCanvasCoordinates=function(e){var n=new mr,o=new t(this.targetTouches.map((function(t){return n.toInfiniteCanvasCoordinates(t,e)})),this.changedTouches.map((function(t){return n.toInfiniteCanvasCoordinates(t,e)})),this.touches.map((function(t){return n.toInfiniteCanvasCoordinates(t,e)})));return n.dispose(),o},t.create=function(e,n,o){var r=new mr,i=n.map((function(t){return r.createProps(t,e)})),a=o.map((function(t){return r.createProps(t,e)}));return r.dispose(),new t(i,a,i)},t}(),Pr=function(){function t(t,e){this.touch=t,this.infiniteCanvasX=e.x,this.infiniteCanvasY=e.y,this.radiusX=e.radiusX,this.radiusY=e.radiusY,this.rotationAngle=e.rotationAngle}return Object.defineProperty(t.prototype,"clientX",{get:function(){return this.touch.clientX},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"clientY",{get:function(){return this.touch.clientY},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"force",{get:function(){return this.touch.force},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"identifier",{get:function(){return this.touch.identifier},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"pageX",{get:function(){return this.touch.pageX},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"pageY",{get:function(){return this.touch.pageY},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"screenX",{get:function(){return this.touch.screenX},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"screenY",{get:function(){return this.touch.screenY},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"target",{get:function(){return this.touch.target},enumerable:!1,configurable:!0}),t}(),wr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Or=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return wr(e,t),e.prototype.item=function(t){return this[t]},e}(Array);function Cr(t,e){for(var n=t.length,o=0;o<n;o++){var r=t[o];if(r.identifier===e)return r}}function Tr(t,e){for(var n=0,o=t;n<o.length;n++){var r=Cr(o[n],e);if(r)return r}}function Ir(t,e){for(var n=[],o=0,r=e;o<r.length;o++){var i=r[o],a=Tr(t,i.identifier);a&&n.push(new Pr(a,i))}return new(Or.bind.apply(Or,function(t,e,n){if(n||2===arguments.length)for(var o,r=0,i=e.length;r<i;r++)!o&&r in e||(o||(o=Array.prototype.slice.call(e,0,r)),o[r]=e[r]);return t.concat(o||Array.prototype.slice.call(e))}([void 0],n,!1)))}var Sr=function(t){function e(e,n,o,r){var i=t.call(this,e,n,o)||this;return i.touches=Ir([o.touches],r.touches),i.targetTouches=Ir([o.touches],r.targetTouches),i.changedTouches=Ir([o.touches,o.changedTouches],r.changedTouches),i}return wr(e,t),Object.defineProperty(e.prototype,"altKey",{get:function(){return this.event.altKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"ctrlKey",{get:function(){return this.event.ctrlKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"metaKey",{get:function(){return this.event.metaKey},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"shiftKey",{get:function(){return this.event.shiftKey},enumerable:!1,configurable:!0}),e}(Ko),xr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),_r=function(t){function e(e,n,o){var r=t.call(this,e,o)||this;return r.props=n,r}return xr(e,t),e.prototype.createResultEvent=function(t){return new Sr(this,this.preventableDefault,this.event,this.props.toInfiniteCanvasCoordinates(t))},e.create=function(t,n,o,r,i){return new e(n,br.create(t,o,r),i)},e}(Go),jr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Br=function(){function t(t,e){this.source=t,this.listener=e,t.addListener(e)}return t.prototype.remove=function(){this.source.removeListener(this.listener)},t}(),Ar=function(){function t(t,e,n,o){var r;this.listener=n,this.onRemoved=o,this.otherSubscription=new Br(e,(function(t){r=t})),this.subscription=new Br(t,(function(t){n([t,r])}))}return t.prototype.remove=function(){this.subscription.remove(),this.otherSubscription.remove(),this.onRemoved&&this.onRemoved()},t}(),Er=function(t){function e(e,n){var o=t.call(this)||this;return o.source=e,o.otherSource=n,o}return jr(e,t),e.prototype.map=function(t){return new Ar(this.source,this.otherSource,t.listener,t.onRemoved)},e.prototype.mapsTo=function(t,e){return t.listener===e.listener},e.prototype.onRemoved=function(t){t.remove()},e.prototype.addListener=function(t,e){this.add({listener:t,onRemoved:e})},e.prototype.removeListener=function(t){this.remove({listener:t})},e}(In);function Lr(t,e){return new Er(t,e)}function Dr(t,e){return ao(t,(function(t){var n=!1,o=[];function r(){n||0===o.length||(n=!0,e(o.shift()).addListener(t,(function(){n=!1,r()})))}return function(t){o.push(t),r()}}))}var Fr=function(){function t(t){this.sequence=t}return t.prototype.addListener=function(t,e){for(var n=0,o=this.sequence;n<o.length;n++)t(o[n]);e&&e()},t.prototype.removeListener=function(t){},t}(),Wr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),kr=function(t){function e(e){var n=t.call(this,!0)||this;return n.type=e,n}return Wr(e,t),e.prototype.createResultEvent=function(){return new So(this,this.preventableDefault,this.type)},e}(Ao),Rr=function(t){function e(e,n,o,r,i){var a=t.call(this,o,r)||this;a.transformer=n,a.config=i,a.anchorSet=new ur;var s=Vo(e,"pointerdown"),c=Vo(e,"pointerleave"),u=Vo(e,"pointermove"),p=Vo(e,"pointerup"),f=Vo(e,"pointercancel"),l=vo(Vo(e,"touchmove"),(function(t){return function(t,e){for(var n=0;n<t.length;n++)if(o=t[n],!a.hasFixedAnchorForTouch(o.identifier))return!0;var o;return!1}(t.targetTouches)}));s.addListener((function(t){return a.anchorSet.updateAnchorForPointerEvent(t)})),u.addListener((function(t){return a.anchorSet.updateAnchorForPointerEvent(t)})),p.addListener((function(t){return a.removePointer(t)})),c.addListener((function(t){return a.removePointer(t)}));var h=so(Vo(e,"mousedown"),(function(t){return new $o(t,!0)})),y=so(Vo(e,"wheel"),(function(t){return new dr(t,!0)})),d=so(Vo(e,"touchstart"),(function(t){var e=vr(t.targetTouches),n=vr(t.changedTouches);return _r.create(a.rectangle,t,e,n,!0)})),v=Po(so(s,(function(t){return new ir(t,!0)}))),g=v.captureSource,m=v.bubbleSource,b=v.afterBubble,P=Po(h),w=P.captureSource,O=P.bubbleSource,C=P.afterBubble,T=Po(d),I=T.captureSource,S=T.bubbleSource,x=T.afterBubble,_=Po(y),j=_.captureSource,B=_.bubbleSource,A=_.afterBubble,E=Po(so(vo(A,(function(t){return!a.config.greedyGestureHandling&&!t.event.ctrlKey&&!t.infiniteCanvasDefaultPrevented})),(function(){return new kr("wheelignored")}))),L=E.captureSource,D=E.bubbleSource,F=E.afterBubble;A.addListener((function(t){t.infiniteCanvasDefaultPrevented||a.zoom(t.event)})),F.addListener((function(t){t.infiniteCanvasDefaultPrevented||console.warn("use ctrl + scroll to zoom")})),Lr(C,b).addListener((function(t){var e=t[0],n=t[1];e.infiniteCanvasDefaultPrevented||n.infiniteCanvasDefaultPrevented||a.transformUsingPointer(e.event,n.event)}));var W=Lr(vo(x,(function(t){return 1===t.event.changedTouches.length})),b);W.addListener((function(t){var e=t[0],n=t[1],o=e.event.changedTouches[0],r=a.anchorSet.getAnchorForPointerEvent(n.event);if(r)if(r.setTouchId(o.identifier),e.infiniteCanvasDefaultPrevented||n.infiniteCanvasDefaultPrevented)r.preventDefault();else if(a.config.greedyGestureHandling)a.rectangle.measure(),a.transformer.addAnchor(r.anchor),e.event.preventDefault();else{var i=a.anchorSet.find((function(t){return void 0!==t.touchId&&t!==r&&!t.defaultPrevented}));if(!i)return;a.rectangle.measure(),a.transformer.addAnchor(i.anchor),a.transformer.addAnchor(r.anchor),e.event.preventDefault()}}));var k=vo(Lr(f,W),(function(t){var e=t[0],n=t[1],o=(n[0],n[1]);return e.pointerId===o.event.pointerId}));k.addListener((function(t){var e=t[0];a.removePointer(e)}));var R=so(vo(k,(function(t){t[0];var e=t[1],n=e[0],o=e[1];return!a.config.greedyGestureHandling&&!n.infiniteCanvasDefaultPrevented&&!o.infiniteCanvasDefaultPrevented})),(function(){return new kr("touchignored")})),N=Po(R),V=N.captureSource,M=N.bubbleSource;return N.afterBubble.addListener((function(t){t.infiniteCanvasDefaultPrevented||console.warn("use two fingers to move")})),a.cache={mousemove:a.map(vo(Vo(e,"mousemove"),(function(){return!a.mouseAnchorIsFixed()})),(function(t){return new $o(t)})),mousedown:bo(w,O,o,r),pointerdown:bo(g,m,o,r),pointermove:a.map(Dr(vo(u,(function(){return a.hasNonFixedAnchorForSomePointer()})),(function(){return t=a.anchorSet.getAll((function(t){return!t.anchor.fixedOnInfiniteCanvas})).map((function(t){return t.pointerEvent})),new Fr(t);var t})),(function(t){return new ir(t)})),pointerleave:a.map(c,(function(t){return new ir(t)})),pointerup:a.map(p,(function(t){return new ir(t)})),pointercancel:a.map(f,(function(t){return new ir(t)})),wheel:bo(j,B,o,r),wheelignored:bo(L,D,o,r),touchstart:bo(I,S,o,r),touchignored:bo(V,M,o,r),touchmove:a.map(l,(function(t){var e=vr(t.targetTouches),n=vr(t.targetTouches,(function(t){return!a.hasFixedAnchorForTouch(t.identifier)}));return _r.create(a.rectangle,t,e,n)}))},a}return Wr(e,t),e.prototype.getEventSource=function(t){return this.cache[t]},e.prototype.mouseAnchorIsFixed=function(){var t=this.anchorSet.find((function(t){return"mouse"===t.pointerEvent.pointerType}));return!!t&&t.anchor.fixedOnInfiniteCanvas},e.prototype.hasFixedAnchorForTouch=function(t){var e=this.anchorSet.getAnchorForTouch(t);return!!e&&e.anchor.fixedOnInfiniteCanvas},e.prototype.hasNonFixedAnchorForSomePointer=function(){return!!this.anchorSet.find((function(t){return!t.anchor.fixedOnInfiniteCanvas}))},e.prototype.transformUsingPointer=function(t,e){this.rectangle.measure();var n=this.anchorSet.getAnchorForPointerEvent(e);1===e.button&&this.config.rotationEnabled?(t.preventDefault(),this.transformer.addRotationAnchor(n.anchor)):0===e.button&&this.transformer.addAnchor(n.anchor)},e.prototype.removePointer=function(t){var e=this.anchorSet.getAnchorForPointerEvent(t);e&&(this.transformer.releaseAnchor(e.anchor),this.anchorSet.removeAnchor(e))},e.prototype.zoom=function(t){if(this.config.greedyGestureHandling||t.ctrlKey){var e=t.offsetX,n=t.offsetY,o=t.deltaY,r=Math.pow(2,-o/300);this.rectangle.measure(),this.transformer.zoom(e,n,r),t.preventDefault()}},e}(wo),Nr=function(){function t(t,e){this.handledOrFilteredEventCollection=t,this.mappingCollection=e}return t.prototype.setOn=function(t,e){Zn(t)?this.handledOrFilteredEventCollection.setOn(t,e):this.mappingCollection.setOn(t,e)},t.prototype.getOn=function(t){return Zn(t)?this.handledOrFilteredEventCollection.getOn(t):this.mappingCollection.getOn(t)},t.prototype.addEventListener=function(t,e,n){Zn(t)?this.handledOrFilteredEventCollection.addEventListener(t,e,n):this.mappingCollection.addEventListener(t,e,n)},t.prototype.removeEventListener=function(t,e,n){Zn(t)?this.handledOrFilteredEventCollection.removeEventListener(t,e,n):this.mappingCollection.removeEventListener(t,e,n)},t}(),Vr=function(){function t(t,e,n,o){this.mappedMouseEventCollection=t,this.mappedTouchEventCollection=e,this.mappedOnlyPointerEventCollection=n,this.mappedDragEventCollection=o}return t.prototype.setOn=function(t,e){$n(t)?this.mappedMouseEventCollection.setOn(t,e):no(t)?this.mappedTouchEventCollection.setOn(t,e):to(t)?this.mappedOnlyPointerEventCollection.setOn(t,e):eo(t)&&this.mappedDragEventCollection.setOn(t,e)},t.prototype.getOn=function(t){return $n(t)?this.mappedMouseEventCollection.getOn(t):no(t)?this.mappedTouchEventCollection.getOn(t):to(t)?this.mappedOnlyPointerEventCollection.getOn(t):eo(t)?this.mappedDragEventCollection.getOn(t):void 0},t.prototype.addEventListener=function(t,e,n){$n(t)?this.mappedMouseEventCollection.addEventListener(t,e,n):no(t)?this.mappedTouchEventCollection.addEventListener(t,e,n):to(t)?this.mappedOnlyPointerEventCollection.addEventListener(t,e,n):eo(t)&&this.mappedDragEventCollection.addEventListener(t,e,n)},t.prototype.removeEventListener=function(t,e,n){$n(t)?this.mappedMouseEventCollection.removeEventListener(t,e,n):no(t)?this.mappedTouchEventCollection.removeEventListener(t,e,n):to(t)?this.mappedOnlyPointerEventCollection.removeEventListener(t,e,n):eo(t)&&this.mappedDragEventCollection.removeEventListener(t,e,n)},t}(),Mr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),qr=function(t){function e(e,n,o,r){var i=t.call(this,o,r)||this;return i.canvasEl=e,i.createInternalEvent=n,i.cache={},i}return Mr(e,t),e.prototype.getEventSource=function(t){return this.cache[t]||(this.cache[t]=this.createEventSource(t)),this.cache[t]},e.prototype.createEventSource=function(t){var e=this;return this.map(Vo(this.canvasEl,t),(function(t){return e.createInternalEvent(t)}))},e}(wo),Hr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Gr=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return Hr(e,t),Object.defineProperty(e.prototype,"dataTransfer",{get:function(){return this.event.dataTransfer},enumerable:!1,configurable:!0}),e}(Jo),Xr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Yr=function(t){function e(e,n){var o=t.call(this,e,n)||this;return o.props=Xo.create(e),o}return Xr(e,t),e.prototype.createResultEvent=function(t){return new Gr(this,this.preventableDefault,this.event,this.props.toInfiniteCanvasCoordinates(t))},e}(Go),zr=function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}(),Ur=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return zr(e,t),e.prototype.createResultEvent=function(){return this.event},e}(Go),Kr=function(){function t(t,e,n,o){this.drawEventCollection=t,this.transformationEventCollection=e,this.pointerEventCollection=n,this.unmappedEventCollection=o}return t.prototype.setOn=function(t,e){"draw"===t?this.drawEventCollection.setOn("draw",e):Qn(t)?this.transformationEventCollection.setOn(t,e):Jn(t)?this.pointerEventCollection.setOn(t,e):this.unmappedEventCollection.setOn(t,e)},t.prototype.getOn=function(t){return"draw"===t?this.drawEventCollection.getOn("draw"):Qn(t)?this.transformationEventCollection.getOn(t):Jn(t)?this.pointerEventCollection.getOn(t):this.unmappedEventCollection.getOn(t)},t.prototype.addEventListener=function(t,e,n){"draw"===t?this.drawEventCollection.addEventListener("draw",e,n):Qn(t)?this.transformationEventCollection.addEventListener(t,e,n):Jn(t)?this.pointerEventCollection.addEventListener(t,e,n):this.unmappedEventCollection.addEventListener(t,e,n)},t.prototype.removeEventListener=function(t,e,n){"draw"===t?this.drawEventCollection.removeEventListener("draw",e,n):Qn(t)?this.transformationEventCollection.removeEventListener(t,e,n):Jn(t)?this.pointerEventCollection.removeEventListener(t,e,n):this.unmappedEventCollection.removeEventListener(t,e,n)},t.create=function(e,n,o,r,i,a){var s=new Fo(a,o,r),c=new No(n,o,r),u=new Rr(e,n,o,r,i);return new t(s,c,new Nr(u,new Vr(new qr(e,(function(t){return new $o(t)}),o,r),new qr(e,(function(t){var e=vr(t.targetTouches),n=vr(t.changedTouches);return _r.create(o,t,e,n)}),o,r),new qr(e,(function(t){return new ir(t)}),o,r),new qr(e,(function(t){return new Yr(t)}),o,r))),new qr(e,(function(t){return new Ur(t)}),o,r))},t}(),Qr=function(){function t(t){this.ctx=t,this.cache={}}return t.prototype.getNumberOfPixels=function(t,e){if(0===t)return 0;if("px"===e)return t;var n=this.cache[e];return n||(n=function(t,e){var n=t.canvas.width,o=1,r=1,i=-1;return c(),function(){for(var t=0;-1===i&&t<10;)r*=10,c(),t++;s()}(),function(){var t=0;do{var e=i;if(a(),i===e)break;t++}while(t<10)}(),{numerator:o,denominator:r,pixels:i};function a(){for(var t,e=n/(i+1),a=0===i?e:Math.min((n-1)/i,e);(t=Math.floor(a))<2;)a*=10,r*=10;o*=t,c(),s()}function s(){if(-1===i)throw new Error("something went wrong while getting measurement for unit '".concat(e,"' on canvas with width ").concat(n))}function c(){i=function(t,e){var n=-1,o=t.canvas.width;t.save(),t.fillStyle="#fff",t.fillRect(0,0,o,5),t.filter="drop-shadow(".concat(e," 0)"),t.fillRect(0,0,1,5);for(var r=t.getImageData(0,0,o,3).data,i=0;i<o;i++)if(255!==r[4*(2*o+i)]){n=i;break}return t.restore(),n}(t,"".concat(o/r).concat(e))}}(this.ctx,e),this.cache[e]=n),t*n.pixels*n.denominator/n.numerator},t}(),Jr=function(){function t(t,e){var n=this;this.canvas=t,this.config={rotationEnabled:!0,greedyGestureHandling:!1,units:fn.CANVAS},e&&Object.assign(this.config,e),this.canvasResizeObserver=new Vn(t),this.canvasResizeListener=function(){null!==n.canvas.parentElement&&n.viewBox.draw()};var o,r=new An(new Bn),i=new En(r);this.rectangle=new Rn(new Nn(t),this.config);var a=t.getContext("2d");this.cssLengthConverterFactory={create:function(){return new Qr(a)}},this.viewBox=new vn(this.rectangle,a,i,(function(){return i.getLock()}),(function(){return o.isTransforming})),o=new jn(this.viewBox,this.config),this.eventCollection=Kr.create(t,o,this.rectangle,this,this.config,r),e&&e.units===fn.CSS&&this.canvasResizeObserver.addListener(this.canvasResizeListener)}return t.prototype.setUnits=function(t){t===fn.CSS&&this.config.units!==fn.CSS&&this.canvasResizeObserver.addListener(this.canvasResizeListener),t!==fn.CSS&&this.config.units===fn.CSS&&this.canvasResizeObserver.removeListener(this.canvasResizeListener),this.config.units=t,this.rectangle.measure(),this.viewBox.draw()},t.prototype.getContext=function(){return this.context||(this.context=new Nt(this.canvas,this.viewBox,this.cssLengthConverterFactory)),this.context},Object.defineProperty(t.prototype,"transformation",{get:function(){return Mn(this.rectangle.inverseInfiniteCanvasContextBase)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"inverseTransformation",{get:function(){return Mn(this.rectangle.infiniteCanvasContextBase)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"rotationEnabled",{get:function(){return this.config.rotationEnabled},set:function(t){this.config.rotationEnabled=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"units",{get:function(){return this.config.units},set:function(t){this.setUnits(t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"greedyGestureHandling",{get:function(){return this.config.greedyGestureHandling},set:function(t){this.config.greedyGestureHandling=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransformationstart",{get:function(){return this.eventCollection.getOn("transformationstart")},set:function(t){this.eventCollection.setOn("transformationstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransformationchange",{get:function(){return this.eventCollection.getOn("transformationchange")},set:function(t){this.eventCollection.setOn("transformationchange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransformationend",{get:function(){return this.eventCollection.getOn("transformationend")},set:function(t){this.eventCollection.setOn("transformationend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondraw",{get:function(){return this.eventCollection.getOn("draw")},set:function(t){this.eventCollection.setOn("draw",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwheelignored",{get:function(){return this.eventCollection.getOn("wheelignored")},set:function(t){this.eventCollection.setOn("wheelignored",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontouchignored",{get:function(){return this.eventCollection.getOn("touchignored")},set:function(t){this.eventCollection.setOn("touchignored",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncopy",{get:function(){return this.eventCollection.getOn("copy")},set:function(t){this.eventCollection.setOn("copy",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncut",{get:function(){return this.eventCollection.getOn("cut")},set:function(t){this.eventCollection.setOn("cut",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpaste",{get:function(){return this.eventCollection.getOn("paste")},set:function(t){this.eventCollection.setOn("paste",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onabort",{get:function(){return this.eventCollection.getOn("abort")},set:function(t){this.eventCollection.setOn("abort",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onanimationcancel",{get:function(){return this.eventCollection.getOn("animationcancel")},set:function(t){this.eventCollection.setOn("animationcancel",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onanimationend",{get:function(){return this.eventCollection.getOn("animationend")},set:function(t){this.eventCollection.setOn("animationend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onanimationiteration",{get:function(){return this.eventCollection.getOn("animationiteration")},set:function(t){this.eventCollection.setOn("animationiteration",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onanimationstart",{get:function(){return this.eventCollection.getOn("animationstart")},set:function(t){this.eventCollection.setOn("animationstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onauxclick",{get:function(){return this.eventCollection.getOn("auxclick")},set:function(t){this.eventCollection.setOn("auxclick",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onblur",{get:function(){return this.eventCollection.getOn("blur")},set:function(t){this.eventCollection.setOn("blur",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncanplay",{get:function(){return this.eventCollection.getOn("canplay")},set:function(t){this.eventCollection.setOn("canplay",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncanplaythrough",{get:function(){return this.eventCollection.getOn("canplaythrough")},set:function(t){this.eventCollection.setOn("canplaythrough",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onchange",{get:function(){return this.eventCollection.getOn("change")},set:function(t){this.eventCollection.setOn("change",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onclick",{get:function(){return this.eventCollection.getOn("click")},set:function(t){this.eventCollection.setOn("click",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onclose",{get:function(){return this.eventCollection.getOn("close")},set:function(t){this.eventCollection.setOn("close",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncontextmenu",{get:function(){return this.eventCollection.getOn("contextmenu")},set:function(t){this.eventCollection.setOn("contextmenu",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oncuechange",{get:function(){return this.eventCollection.getOn("cuechange")},set:function(t){this.eventCollection.setOn("cuechange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondblclick",{get:function(){return this.eventCollection.getOn("dblclick")},set:function(t){this.eventCollection.setOn("dblclick",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondrag",{get:function(){return this.eventCollection.getOn("drag")},set:function(t){this.eventCollection.setOn("drag",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondragend",{get:function(){return this.eventCollection.getOn("dragend")},set:function(t){this.eventCollection.setOn("dragend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondragenter",{get:function(){return this.eventCollection.getOn("dragenter")},set:function(t){this.eventCollection.setOn("dragenter",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onformdata",{get:function(){return this.eventCollection.getOn("formdata")},set:function(t){this.eventCollection.setOn("formdata",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwebkitanimationend",{get:function(){return this.eventCollection.getOn("webkitanimationend")},set:function(t){this.eventCollection.setOn("webkitanimationend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwebkitanimationstart",{get:function(){return this.eventCollection.getOn("webkitanimationstart")},set:function(t){this.eventCollection.setOn("webkitanimationstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwebkitanimationiteration",{get:function(){return this.eventCollection.getOn("webkitanimationiteration")},set:function(t){this.eventCollection.setOn("webkitanimationiteration",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwebkittransitionend",{get:function(){return this.eventCollection.getOn("webkittransitionend")},set:function(t){this.eventCollection.setOn("webkittransitionend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onslotchange",{get:function(){return this.eventCollection.getOn("slotchange")},set:function(t){this.eventCollection.setOn("slotchange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondragleave",{get:function(){return this.eventCollection.getOn("dragleave")},set:function(t){this.eventCollection.setOn("dragleave",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondragover",{get:function(){return this.eventCollection.getOn("dragover")},set:function(t){this.eventCollection.setOn("dragover",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondragstart",{get:function(){return this.eventCollection.getOn("dragstart")},set:function(t){this.eventCollection.setOn("dragstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondrop",{get:function(){return this.eventCollection.getOn("drop")},set:function(t){this.eventCollection.setOn("drop",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ondurationchange",{get:function(){return this.eventCollection.getOn("durationchange")},set:function(t){this.eventCollection.setOn("durationchange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onemptied",{get:function(){return this.eventCollection.getOn("emptied")},set:function(t){this.eventCollection.setOn("emptied",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onended",{get:function(){return this.eventCollection.getOn("ended")},set:function(t){this.eventCollection.setOn("ended",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onerror",{get:function(){return this.eventCollection.getOn("error")},set:function(t){this.eventCollection.setOn("error",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onfocus",{get:function(){return this.eventCollection.getOn("focus")},set:function(t){this.eventCollection.setOn("focus",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ongotpointercapture",{get:function(){return this.eventCollection.getOn("gotpointercapture")},set:function(t){this.eventCollection.setOn("gotpointercapture",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oninput",{get:function(){return this.eventCollection.getOn("input")},set:function(t){this.eventCollection.setOn("input",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"oninvalid",{get:function(){return this.eventCollection.getOn("invalid")},set:function(t){this.eventCollection.setOn("invalid",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onkeydown",{get:function(){return this.eventCollection.getOn("keydown")},set:function(t){this.eventCollection.setOn("keydown",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onkeypress",{get:function(){return this.eventCollection.getOn("keypress")},set:function(t){this.eventCollection.setOn("keypress",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onkeyup",{get:function(){return this.eventCollection.getOn("keyup")},set:function(t){this.eventCollection.setOn("keyup",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onload",{get:function(){return this.eventCollection.getOn("load")},set:function(t){this.eventCollection.setOn("load",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onloadeddata",{get:function(){return this.eventCollection.getOn("loadeddata")},set:function(t){this.eventCollection.setOn("loadeddata",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onloadedmetadata",{get:function(){return this.eventCollection.getOn("loadedmetadata")},set:function(t){this.eventCollection.setOn("loadedmetadata",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onloadstart",{get:function(){return this.eventCollection.getOn("loadstart")},set:function(t){this.eventCollection.setOn("loadstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onlostpointercapture",{get:function(){return this.eventCollection.getOn("lostpointercapture")},set:function(t){this.eventCollection.setOn("lostpointercapture",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmousedown",{get:function(){return this.eventCollection.getOn("mousedown")},set:function(t){this.eventCollection.setOn("mousedown",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmouseenter",{get:function(){return this.eventCollection.getOn("mouseenter")},set:function(t){this.eventCollection.setOn("mouseenter",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmouseleave",{get:function(){return this.eventCollection.getOn("mouseleave")},set:function(t){this.eventCollection.setOn("mouseleave",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmousemove",{get:function(){return this.eventCollection.getOn("mousemove")},set:function(t){this.eventCollection.setOn("mousemove",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmouseout",{get:function(){return this.eventCollection.getOn("mouseout")},set:function(t){this.eventCollection.setOn("mouseout",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmouseover",{get:function(){return this.eventCollection.getOn("mouseover")},set:function(t){this.eventCollection.setOn("mouseover",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onmouseup",{get:function(){return this.eventCollection.getOn("mouseup")},set:function(t){this.eventCollection.setOn("mouseup",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpause",{get:function(){return this.eventCollection.getOn("pause")},set:function(t){this.eventCollection.setOn("pause",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onplay",{get:function(){return this.eventCollection.getOn("play")},set:function(t){this.eventCollection.setOn("play",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onplaying",{get:function(){return this.eventCollection.getOn("playing")},set:function(t){this.eventCollection.setOn("playing",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointercancel",{get:function(){return this.eventCollection.getOn("pointercancel")},set:function(t){this.eventCollection.setOn("pointercancel",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerdown",{get:function(){return this.eventCollection.getOn("pointerdown")},set:function(t){this.eventCollection.setOn("pointerdown",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerenter",{get:function(){return this.eventCollection.getOn("pointerenter")},set:function(t){this.eventCollection.setOn("pointerenter",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerleave",{get:function(){return this.eventCollection.getOn("pointerleave")},set:function(t){this.eventCollection.setOn("pointerleave",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointermove",{get:function(){return this.eventCollection.getOn("pointermove")},set:function(t){this.eventCollection.setOn("pointermove",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerout",{get:function(){return this.eventCollection.getOn("pointerout")},set:function(t){this.eventCollection.setOn("pointerout",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerover",{get:function(){return this.eventCollection.getOn("pointerover")},set:function(t){this.eventCollection.setOn("pointerover",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onpointerup",{get:function(){return this.eventCollection.getOn("pointerup")},set:function(t){this.eventCollection.setOn("pointerup",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onprogress",{get:function(){return this.eventCollection.getOn("progress")},set:function(t){this.eventCollection.setOn("progress",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onratechange",{get:function(){return this.eventCollection.getOn("ratechange")},set:function(t){this.eventCollection.setOn("ratechange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onreset",{get:function(){return this.eventCollection.getOn("reset")},set:function(t){this.eventCollection.setOn("reset",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onresize",{get:function(){return this.eventCollection.getOn("resize")},set:function(t){this.eventCollection.setOn("resize",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onscroll",{get:function(){return this.eventCollection.getOn("scroll")},set:function(t){this.eventCollection.setOn("scroll",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onsecuritypolicyviolation",{get:function(){return this.eventCollection.getOn("securitypolicyviolation")},set:function(t){this.eventCollection.setOn("securitypolicyviolation",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onseeked",{get:function(){return this.eventCollection.getOn("seeked")},set:function(t){this.eventCollection.setOn("seeked",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onseeking",{get:function(){return this.eventCollection.getOn("seeking")},set:function(t){this.eventCollection.setOn("seeking",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onselect",{get:function(){return this.eventCollection.getOn("select")},set:function(t){this.eventCollection.setOn("select",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onselectionchange",{get:function(){return this.eventCollection.getOn("selectionchange")},set:function(t){this.eventCollection.setOn("selectionchange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onselectstart",{get:function(){return this.eventCollection.getOn("selectstart")},set:function(t){this.eventCollection.setOn("selectstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onstalled",{get:function(){return this.eventCollection.getOn("stalled")},set:function(t){this.eventCollection.setOn("stalled",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onsubmit",{get:function(){return this.eventCollection.getOn("submit")},set:function(t){this.eventCollection.setOn("submit",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onsuspend",{get:function(){return this.eventCollection.getOn("suspend")},set:function(t){this.eventCollection.setOn("suspend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontimeupdate",{get:function(){return this.eventCollection.getOn("timeupdate")},set:function(t){this.eventCollection.setOn("timeupdate",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontoggle",{get:function(){return this.eventCollection.getOn("toggle")},set:function(t){this.eventCollection.setOn("toggle",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontouchcancel",{get:function(){return this.eventCollection.getOn("touchcancel")},set:function(t){this.eventCollection.setOn("touchcancel",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontouchend",{get:function(){return this.eventCollection.getOn("touchend")},set:function(t){this.eventCollection.setOn("touchend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontouchmove",{get:function(){return this.eventCollection.getOn("touchmove")},set:function(t){this.eventCollection.setOn("touchmove",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontouchstart",{get:function(){return this.eventCollection.getOn("touchstart")},set:function(t){this.eventCollection.setOn("touchstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransitioncancel",{get:function(){return this.eventCollection.getOn("transitioncancel")},set:function(t){this.eventCollection.setOn("transitioncancel",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransitionend",{get:function(){return this.eventCollection.getOn("transitionend")},set:function(t){this.eventCollection.setOn("transitionend",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransitionrun",{get:function(){return this.eventCollection.getOn("transitionrun")},set:function(t){this.eventCollection.setOn("transitionrun",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"ontransitionstart",{get:function(){return this.eventCollection.getOn("transitionstart")},set:function(t){this.eventCollection.setOn("transitionstart",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onvolumechange",{get:function(){return this.eventCollection.getOn("volumechange")},set:function(t){this.eventCollection.setOn("volumechange",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwaiting",{get:function(){return this.eventCollection.getOn("waiting")},set:function(t){this.eventCollection.setOn("waiting",t)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"onwheel",{get:function(){return this.eventCollection.getOn("wheel")},set:function(t){this.eventCollection.setOn("wheel",t)},enumerable:!1,configurable:!0}),t.prototype.addEventListener=function(t,e,n){this.eventCollection.addEventListener(t,e,n)},t.prototype.removeEventListener=function(t,e,n){this.eventCollection.removeEventListener(t,e,n)},t.CANVAS_UNITS=fn.CANVAS,t.CSS_UNITS=fn.CSS,t}()},225:(t,e,n)=>{var{InfiniteCanvas:o}=n(582);t.exports=o}},e={};function n(o){var r=e[o];if(void 0!==r)return r.exports;var i=e[o]={exports:{}};return t[o](i,i.exports,n),i.exports}return n.d=(t,e)=>{for(var o in e)n.o(e,o)&&!n.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:e[o]})},n.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),n.r=t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n(225)})()));
+let $n = class {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  restore() {
+    this.viewBox.restoreState();
+  }
+  save() {
+    this.viewBox.saveState();
+  }
+};
+const M = class M {
+  constructor(t, e) {
+    this.x = t, this.y = e;
+  }
+  mod() {
+    return Math.sqrt(this.modSq());
+  }
+  modSq() {
+    return this.x * this.x + this.y * this.y;
+  }
+  minus(t) {
+    return new M(this.x - t.x, this.y - t.y);
+  }
+  plus(t) {
+    return new M(this.x + t.x, this.y + t.y);
+  }
+  dot(t) {
+    return this.x * t.x + this.y * t.y;
+  }
+  cross(t) {
+    return this.x * t.y - this.y * t.x;
+  }
+  equals(t) {
+    return this.x === t.x && this.y === t.y;
+  }
+  getPerpendicular() {
+    return new M(-this.y, this.x);
+  }
+  scale(t) {
+    return new M(t * this.x, t * this.y);
+  }
+  projectOn(t) {
+    return t.scale(this.dot(t) / t.modSq());
+  }
+  matrix(t, e, n, i) {
+    return new M(t * this.x + e * this.y, n * this.x + i * this.y);
+  }
+  inSameDirectionAs(t) {
+    return this.cross(t) === 0 && this.dot(t) >= 0;
+  }
+  isInOppositeDirectionAs(t) {
+    return this.cross(t) === 0 && this.dot(t) < 0;
+  }
+  isOnSameSideOfOriginAs(t, e) {
+    return this.isInSmallerAngleBetweenPoints(t, e) || t.isInSmallerAngleBetweenPoints(this, e) || e.isInSmallerAngleBetweenPoints(this, t);
+  }
+  isInSmallerAngleBetweenPoints(t, e) {
+    const n = t.cross(e);
+    return n > 0 ? t.cross(this) >= 0 && this.cross(e) >= 0 : n < 0 ? t.cross(this) <= 0 && this.cross(e) <= 0 : t.dot(e) > 0 ? this.cross(t) === 0 && this.dot(t) > 0 : !0;
+  }
+};
+M.origin = new M(0, 0);
+let c = M;
+function st(r) {
+  return r.toFixed(10).replace(/\.?0+$/, "");
+}
+const T = class T {
+  constructor(t, e, n, i, s, o) {
+    this.a = t, this.b = e, this.c = n, this.d = i, this.e = s, this.f = o, this.scale = Math.sqrt(t * i - e * n);
+  }
+  getMaximumLineWidthScale() {
+    const t = this.a + this.c, e = this.b + this.d, n = this.a - this.c, i = this.b - this.d;
+    return Math.sqrt(Math.max(t * t + e * e, n * n + i * i));
+  }
+  getRotationAngle() {
+    const t = this.a / this.scale, e = this.b / this.scale;
+    if (t === 0)
+      return e > 0 ? Math.PI / 2 : 3 * Math.PI / 2;
+    const n = Math.atan(e / t);
+    return t > 0 ? e > 0 ? n : e === 0 ? 0 : 2 * Math.PI + n : e > 0 ? Math.PI + n : e === 0 ? Math.PI : Math.PI + n;
+  }
+  applyToPointAtInfinity(t) {
+    return { direction: this.untranslated().apply(t.direction) };
+  }
+  apply(t) {
+    return new c(this.a * t.x + this.c * t.y + this.e, this.b * t.x + this.d * t.y + this.f);
+  }
+  untranslated() {
+    const { x: t, y: e } = this.apply(c.origin);
+    return this.before(T.translation(-t, -e));
+  }
+  before(t) {
+    const e = t.a * this.a + t.c * this.b, n = t.b * this.a + t.d * this.b, i = t.a * this.c + t.c * this.d, s = t.b * this.c + t.d * this.d, o = t.a * this.e + t.c * this.f + t.e, a = t.b * this.e + t.d * this.f + t.f;
+    return new T(e, n, i, s, o, a);
+  }
+  equals(t) {
+    return this.a === t.a && this.b === t.b && this.c === t.c && this.d === t.d && this.e === t.e && this.f === t.f;
+  }
+  inverse() {
+    var t = this.a * this.d - this.b * this.c;
+    if (t == 0)
+      throw "error calculating inverse: zero determinant";
+    const e = this.d / t, n = -this.b / t, i = -this.c / t, s = this.a / t, o = (this.c * this.f - this.d * this.e) / t, a = (this.b * this.e - this.a * this.f) / t;
+    return new T(e, n, i, s, o, a);
+  }
+  static translation(t, e) {
+    return new T(1, 0, 0, 1, t, e);
+  }
+  static scale(t) {
+    return new T(t, 0, 0, t, 0, 0);
+  }
+  static zoom(t, e, n, i, s) {
+    const o = 1 - n;
+    return i !== void 0 ? new T(n, 0, 0, n, t * o + i, e * o + s) : new T(n, 0, 0, n, t * o, e * o);
+  }
+  static translateZoom(t, e, n, i, s, o, a, h) {
+    const u = n - t, d = i - e, l = u * u + d * d;
+    if (l === 0)
+      throw new Error("divide by 0");
+    const g = a - s, m = h - o, I = g * g + m * m, B = Math.sqrt(I / l);
+    return T.zoom(t, e, B, s - t, o - e);
+  }
+  static rotation(t, e, n) {
+    const i = Math.cos(n), s = Math.sin(n), o = 1 - i;
+    return new T(
+      i,
+      s,
+      -s,
+      i,
+      t * o + e * s,
+      -t * s + e * o
+    );
+  }
+  static translateRotateZoom(t, e, n, i, s, o, a, h) {
+    const u = n - t, d = i - e, l = u * u + d * d;
+    if (l === 0)
+      throw new Error("divide by 0");
+    const g = a - s, m = h - o, I = t * i - e * n, B = n * u + i * d, W = t * u + e * d, H = (u * g + d * m) / l, j = (u * m - d * g) / l, dt = -j, ft = H, gt = (s * B - a * W - I * m) / l, mt = (o * B - h * W + I * g) / l;
+    return new T(H, j, dt, ft, gt, mt);
+  }
+  static create(t) {
+    if (t instanceof T)
+      return t;
+    const { a: e, b: n, c: i, d: s, e: o, f: a } = t;
+    return new T(e, n, i, s, o, a);
+  }
+  toString() {
+    return `x: (${st(this.a)}, ${st(this.b)}), y: (${st(this.c)}, ${st(this.d)}), d: (${st(this.e)}, ${st(this.f)})`;
+  }
+};
+T.identity = new T(1, 0, 0, 1, 0, 0);
+let p = T;
+class S {
+  constructor(t) {
+    this.propertyName = t;
+  }
+  changeInstanceValue(t, e) {
+    return this.valuesAreEqual(t[this.propertyName], e) ? t : t.changeProperty(this.propertyName, e);
+  }
+  isEqualForInstances(t, e) {
+    return this.valuesAreEqual(t[this.propertyName], e[this.propertyName]);
+  }
+  getInstructionToChange(t, e, n) {
+    return this.valuesAreEqual(t[this.propertyName], e[this.propertyName]) ? () => {
+    } : this.changeToNewValue(e[this.propertyName], n);
+  }
+  valueIsTransformableForInstance(t) {
+    return !0;
+  }
+}
+class zn extends S {
+  valuesAreEqual(t, e) {
+    return t.equals(e);
+  }
+  changeToNewValue(t, e) {
+    return (n) => {
+      const { a: i, b: s, c: o, d: a, e: h, f: u } = e.getTransformationForInstruction(t);
+      n.setTransform(i, s, o, a, h, u);
+    };
+  }
+}
+const kt = new zn("transformation");
+class Un {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  getTransform() {
+    if (DOMMatrix) {
+      const t = this.viewBox.state.current.transformation;
+      return new DOMMatrix([
+        t.a,
+        t.b,
+        t.c,
+        t.d,
+        t.e,
+        t.f
+      ]);
+    }
+  }
+  resetTransform() {
+    this.viewBox.changeState((t) => kt.changeInstanceValue(t, p.identity));
+  }
+  rotate(t) {
+    this.addTransformation(p.rotation(0, 0, t));
+  }
+  scale(t, e) {
+    this.addTransformation(new p(t, 0, 0, e, 0, 0));
+  }
+  setTransform(t, e, n, i, s, o) {
+    let a, h, u, d, l, g;
+    typeof t == "number" ? (a = t, h = e, u = n, d = i, l = s, g = o) : t.a !== void 0 ? (a = t.a, h = t.b, u = t.c, d = t.d, l = t.e, g = t.f) : (a = t.m11, h = t.m12, u = t.m21, d = t.m22, l = t.m41, g = t.m42), this.viewBox.changeState((m) => kt.changeInstanceValue(m, new p(a, h, u, d, l, g)));
+  }
+  transform(t, e, n, i, s, o) {
+    this.addTransformation(new p(t, e, n, i, s, o));
+  }
+  translate(t, e) {
+    this.addTransformation(p.translation(t, e));
+  }
+  addTransformation(t) {
+    const e = this.viewBox.state.current.transformation, n = t.before(e);
+    this.viewBox.changeState((i) => kt.changeInstanceValue(i, n));
+  }
+}
+class Kn extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.globalAlpha = t;
+  }
+}
+const Ke = new Kn("globalAlpha");
+class jn extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.globalCompositeOperation = t;
+  }
+}
+const je = new jn("globalCompositeOperation");
+class Qn {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  get globalAlpha() {
+    return this.viewBox.state.current.globalAlpha;
+  }
+  set globalAlpha(t) {
+    this.viewBox.changeState((e) => Ke.changeInstanceValue(e, t));
+  }
+  get globalCompositeOperation() {
+    return this.viewBox.state.current.globalCompositeOperation;
+  }
+  set globalCompositeOperation(t) {
+    this.viewBox.changeState((e) => je.changeInstanceValue(e, t));
+  }
+}
+class Jn extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => {
+      n.imageSmoothingEnabled = t;
+    };
+  }
+}
+const Qe = new Jn("imageSmoothingEnabled");
+class Zn extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.imageSmoothingQuality = t;
+    };
+  }
+}
+const Je = new Zn("imageSmoothingQuality");
+class _n {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  get imageSmoothingEnabled() {
+    return this.viewBox.state.current.imageSmoothingEnabled;
+  }
+  set imageSmoothingEnabled(t) {
+    this.viewBox.changeState((e) => Qe.changeInstanceValue(e, t));
+  }
+  get imageSmoothingQuality() {
+    return this.viewBox.state.current.imageSmoothingQuality;
+  }
+  set imageSmoothingQuality(t) {
+    this.viewBox.changeState((e) => Je.changeInstanceValue(e, t));
+  }
+}
+class Rt {
+}
+class Ze extends Rt {
+  constructor(t) {
+    super(), this.fillStrokeStyle = t;
+  }
+  setTransform(t) {
+    this.fillStrokeStyle.setTransform(t);
+  }
+  getInstructionToSetUntransformed(t) {
+    return (e) => {
+      e[t] = this.fillStrokeStyle;
+    };
+  }
+  getInstructionToSetTransformed(t) {
+    return (e) => {
+      e[t] = this.fillStrokeStyle;
+    };
+  }
+}
+class _e {
+  constructor(t) {
+    this.propName = t;
+  }
+  changeInstanceValue(t, e) {
+    return t.changeProperty(this.propName, e);
+  }
+  isEqualForInstances(t, e) {
+    return t[this.propName] === e[this.propName];
+  }
+  getInstructionToChange(t, e) {
+    const n = e[this.propName];
+    return this.isEqualForInstances(t, e) ? !(n instanceof Rt) || t.fillAndStrokeStylesTransformed === e.fillAndStrokeStylesTransformed ? () => {
+    } : e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : n instanceof Rt ? e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : (i) => {
+      i[this.propName] = e[this.propName];
+    };
+  }
+  valueIsTransformableForInstance(t) {
+    return !(t[this.propName] instanceof Ze);
+  }
+}
+const tn = new _e("fillStyle"), en = new _e("strokeStyle");
+class ti {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  set fillStyle(t) {
+    this.viewBox.changeState((e) => tn.changeInstanceValue(e, t));
+  }
+  set strokeStyle(t) {
+    this.viewBox.changeState((e) => en.changeInstanceValue(e, t));
+  }
+  createLinearGradient(t, e, n, i) {
+    return this.viewBox.createLinearGradient(t, e, n, i);
+  }
+  createPattern(t, e) {
+    return this.viewBox.createPattern(t, e);
+  }
+  createRadialGradient(t, e, n, i, s, o) {
+    return this.viewBox.createRadialGradient(t, e, n, i, s, o);
+  }
+  createConicGradient(t, e, n) {
+    return this.viewBox.createConicGradient(t, e, n);
+  }
+}
+class ei extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.shadowColor = t;
+    };
+  }
+}
+const nn = new ei("shadowColor");
+class ni extends S {
+  changeToNewValue(t, e) {
+    return (n) => {
+      const i = p.translation(t.x, t.y), s = e.translateInfiniteCanvasContextTransformationToBitmapTransformation(i), { x: o, y: a } = s.apply(c.origin);
+      n.shadowOffsetX = o, n.shadowOffsetY = a;
+    };
+  }
+  valuesAreEqual(t, e) {
+    return t.x === e.x && t.y == e.y;
+  }
+}
+const ae = new ni("shadowOffset");
+class ii extends S {
+  changeToNewValue(t, e) {
+    return (n) => {
+      const i = p.translation(t, 0), o = e.translateInfiniteCanvasContextTransformationToBitmapTransformation(i).apply(c.origin).mod();
+      n.shadowBlur = o;
+    };
+  }
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+}
+const sn = new ii("shadowBlur");
+class si {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  get shadowBlur() {
+    return this.viewBox.state.current.shadowBlur;
+  }
+  set shadowBlur(t) {
+    this.viewBox.changeState((e) => sn.changeInstanceValue(e, t));
+  }
+  get shadowOffsetX() {
+    return this.viewBox.state.current.shadowOffset.x;
+  }
+  set shadowOffsetX(t) {
+    const e = new c(t, this.viewBox.state.current.shadowOffset.y);
+    this.viewBox.changeState((n) => ae.changeInstanceValue(n, e));
+  }
+  get shadowOffsetY() {
+    return this.viewBox.state.current.shadowOffset.y;
+  }
+  set shadowOffsetY(t) {
+    const e = new c(this.viewBox.state.current.shadowOffset.x, t);
+    this.viewBox.changeState((n) => ae.changeInstanceValue(n, e));
+  }
+  get shadowColor() {
+    return this.viewBox.state.current.shadowColor;
+  }
+  set shadowColor(t) {
+    this.viewBox.changeState((e) => nn.changeInstanceValue(e, t));
+  }
+}
+const rn = "[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?", on = "[+-]?(?:0*\\.)?0+(?:e[+-]?\\d+)?", an = "(?:ch|em|ex|ic|rem|vh|vw|vmax|vmin|vb|vi|cqw|cqh|cqi|cqb|cqmin|cqmax|px|cm|mm|Q|in|pc|pt)", Wt = `(?:${on}|${rn}${an})`, cn = `blur\\((${Wt})\\)`, Le = "[^())\\s]+(?:\\([^)]*?\\))?", hn = `drop-shadow\\((${Wt})\\s+(${Wt})\\s*?(?:(?:(${Wt})\\s*?(${Le})?)|(${Le}))?\\)`, Ee = `${cn}|${hn}`;
+function D(r, t) {
+  const e = r.match(new RegExp(`(?:(${on})|(${rn})(${an}))`));
+  return e[1] ? 0 : t.getNumberOfPixels(Number.parseFloat(e[2]), e[3]);
+}
+class Fe {
+  constructor(t) {
+    this.stringRepresentation = t;
+  }
+  toTransformedString() {
+    return this.stringRepresentation;
+  }
+  getShadowOffset() {
+    return null;
+  }
+}
+class ue {
+  constructor(t, e) {
+    this.stringRepresentation = t, this.size = e;
+  }
+  toTransformedString(t) {
+    return `blur(${t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.size, 0)).apply(c.origin).mod()}px)`;
+  }
+  getShadowOffset() {
+    return null;
+  }
+  static tryCreate(t, e) {
+    const n = t.match(new RegExp(cn));
+    return n === null ? null : new ue(t, D(n[1], e));
+  }
+}
+class ot {
+  constructor(t, e, n, i, s) {
+    this.stringRepresentation = t, this.offsetX = e, this.offsetY = n, this.blurRadius = i, this.color = s;
+  }
+  toTransformedString(t) {
+    const e = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.offsetX, this.offsetY)), { x: n, y: i } = e.apply(c.origin);
+    if (this.blurRadius !== null) {
+      const o = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.blurRadius, 0)).apply(c.origin).mod();
+      return this.color ? `drop-shadow(${n}px ${i}px ${o}px ${this.color})` : `drop-shadow(${n}px ${i}px ${o}px)`;
+    }
+    return this.color ? `drop-shadow(${n}px ${i}px ${this.color})` : `drop-shadow(${n}px ${i}px)`;
+  }
+  getShadowOffset() {
+    return new c(this.offsetX, this.offsetY);
+  }
+  static tryCreate(t, e) {
+    const n = t.match(new RegExp(hn));
+    return n === null ? null : n[5] ? new ot(
+      t,
+      D(n[1], e),
+      D(n[2], e),
+      null,
+      n[5]
+    ) : n[4] ? new ot(
+      t,
+      D(n[1], e),
+      D(n[2], e),
+      D(n[3], e),
+      n[4]
+    ) : n[3] ? new ot(
+      t,
+      D(n[1], e),
+      D(n[2], e),
+      D(n[3], e),
+      null
+    ) : new ot(
+      t,
+      D(n[1], e),
+      D(n[2], e),
+      null,
+      null
+    );
+  }
+}
+const wt = class wt {
+  constructor(t, e) {
+    this.stringRepresentation = t, this.parts = e;
+  }
+  toString() {
+    return this.parts.map((t) => t.stringRepresentation).join(" ");
+  }
+  toTransformedString(t) {
+    return this.parts.map((e) => e.toTransformedString(t)).join(" ");
+  }
+  getShadowOffset() {
+    for (const t of this.parts) {
+      const e = t.getShadowOffset();
+      if (e !== null)
+        return e;
+    }
+    return null;
+  }
+  static create(t, e) {
+    const i = t.match(new RegExp(`${Ee}|((?!\\s|${Ee}).)+`, "g")).map((s) => this.createPart(s, e));
+    return new wt(t, i);
+  }
+  static createPart(t, e) {
+    let n = ue.tryCreate(t, e);
+    return n !== null || (n = ot.tryCreate(t, e), n != null) ? n : new Fe(t);
+  }
+};
+wt.none = new wt("none", [new Fe("none")]);
+let Nt = wt;
+class ri extends S {
+  valuesAreEqual(t, e) {
+    return t.stringRepresentation === e.stringRepresentation;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.filter = t.toTransformedString(e);
+  }
+}
+const ln = new ri("filter");
+class oi {
+  constructor(t, e) {
+    this.viewBox = t, this.cssLengthConverterFactory = e;
+  }
+  get filter() {
+    return this.viewBox.state.current.filter.stringRepresentation;
+  }
+  set filter(t) {
+    const e = Nt.create(t, this.cssLengthConverterFactory.create());
+    this.viewBox.changeState((n) => ln.changeInstanceValue(n, e));
+  }
+}
+class ai {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  clearRect(t, e, n, i) {
+    this.viewBox.clearArea(t, e, n, i);
+  }
+  fillRect(t, e, n, i) {
+    let s = (o) => o.fill();
+    this.viewBox.fillRect(t, e, n, i, s);
+  }
+  strokeRect(t, e, n, i) {
+    this.viewBox.strokeRect(t, e, n, i);
+  }
+}
+class ci {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  isFillRule(t) {
+    return t === "evenodd" || t === "nonzero";
+  }
+  beginPath() {
+    this.viewBox.beginPath();
+  }
+  clip(t, e) {
+    let n = this.isFillRule(t) ? (i) => {
+      i.clip(t);
+    } : (i) => {
+      i.clip();
+    };
+    this.viewBox.clipPath(n);
+  }
+  fill(t, e) {
+    if ((!t || this.isFillRule(t)) && !this.viewBox.currentPathCanBeFilled())
+      return;
+    let n = this.isFillRule(t) ? (i) => {
+      i.fill(t);
+    } : (i) => {
+      i.fill();
+    };
+    this.viewBox.fillPath(n);
+  }
+  isPointInPath(t, e, n, i) {
+    return !0;
+  }
+  isPointInStroke(t, e, n) {
+    return !0;
+  }
+  stroke(t) {
+    this.viewBox.strokePath();
+  }
+}
+class hi {
+  drawFocusIfNeeded(t, e) {
+  }
+  scrollPathIntoView(t) {
+  }
+}
+var k = /* @__PURE__ */ ((r) => (r[r.None = 0] = "None", r[r.Relative = 1] = "Relative", r[r.Absolute = 2] = "Absolute", r))(k || {});
+function li(r, t, e, n) {
+  const i = e.minus(r), s = n.cross(t), o = n.getPerpendicular().dot(i) / s;
+  return r.plus(t.scale(o));
+}
+class ui {
+  constructor(t, e, n) {
+    this.point = t, this.halfPlane1 = e, this.halfPlane2 = n, this.normal1 = e.normalTowardInterior, this.normal2 = n.normalTowardInterior;
+  }
+  isContainedByHalfPlaneWithNormal(t) {
+    return t.isInSmallerAngleBetweenPoints(this.normal1, this.normal2);
+  }
+  containsPoint(t) {
+    return this.halfPlane1.containsPoint(t) && this.halfPlane2.containsPoint(t);
+  }
+  containsLineSegmentWithDirection(t) {
+    return this.containsPoint(this.point.plus(t)) || this.containsPoint(this.point.minus(t));
+  }
+  isContainedByVertex(t) {
+    return this.isContainedByHalfPlaneWithNormal(t.normal1) && this.isContainedByHalfPlaneWithNormal(t.normal2);
+  }
+}
+class w {
+  constructor(t, e) {
+    this.base = t, this.normalTowardInterior = e, this.lengthOfNormal = e.mod();
+  }
+  getDistanceFromEdge(t) {
+    return t.minus(this.base).dot(this.normalTowardInterior) / this.lengthOfNormal;
+  }
+  transform(t) {
+    const e = t.apply(this.base), n = t.apply(this.base.plus(this.normalTowardInterior.getPerpendicular())), i = t.apply(this.base.plus(this.normalTowardInterior));
+    return w.throughPointsAndContainingPoint(e, n, i);
+  }
+  complement() {
+    return new w(this.base, this.normalTowardInterior.scale(-1));
+  }
+  expandByDistance(t) {
+    const e = this.base.plus(this.normalTowardInterior.scale(-t / this.normalTowardInterior.mod()));
+    return new w(e, this.normalTowardInterior);
+  }
+  expandToIncludePoint(t) {
+    return this.containsPoint(t) ? this : new w(t, this.normalTowardInterior);
+  }
+  containsPoint(t) {
+    return this.getDistanceFromEdge(t) >= 0;
+  }
+  interiorContainsPoint(t) {
+    return this.getDistanceFromEdge(t) > 0;
+  }
+  containsInfinityInDirection(t) {
+    return t.dot(this.normalTowardInterior) >= 0;
+  }
+  isContainedByHalfPlane(t) {
+    return this.normalTowardInterior.inSameDirectionAs(t.normalTowardInterior) && t.getDistanceFromEdge(this.base) >= 0;
+  }
+  intersectWithLine(t, e) {
+    return {
+      point: li(this.base, this.normalTowardInterior.getPerpendicular(), t, e),
+      halfPlane: this
+    };
+  }
+  isParallelToLine(t, e) {
+    return this.normalTowardInterior.getPerpendicular().cross(e) === 0;
+  }
+  getIntersectionWith(t) {
+    const e = this.intersectWithLine(t.base, t.normalTowardInterior.getPerpendicular());
+    return new ui(e.point, this, t);
+  }
+  static throughPointsAndContainingPoint(t, e, n) {
+    const i = w.withBorderPoints(t, e);
+    for (let s of i)
+      if (s.containsPoint(n))
+        return s;
+  }
+  static withBorderPointAndInfinityInDirection(t, e) {
+    return w.withBorderPoints(t, t.plus(e));
+  }
+  static withBorderPoints(t, e) {
+    const n = e.minus(t).getPerpendicular();
+    return [
+      new w(t, n),
+      new w(t, n.scale(-1))
+    ];
+  }
+}
+class di {
+  getVertices() {
+    return [];
+  }
+  expandToIncludePoint(t) {
+    return this;
+  }
+  expandToIncludePolygon(t) {
+    return this;
+  }
+  expandToIncludeInfinityInDirection(t) {
+    return this;
+  }
+  expandByDistance(t) {
+    return this;
+  }
+  intersects(t) {
+    return !0;
+  }
+  expandToInclude(t) {
+    return this;
+  }
+  transform(t) {
+    return this;
+  }
+  intersectWithLineSegment(t) {
+    return t;
+  }
+  contains(t) {
+    return !0;
+  }
+  intersectWith(t) {
+    return t;
+  }
+  join(t) {
+    return this;
+  }
+  intersectWithRay(t) {
+    return t;
+  }
+  intersectWithLine(t) {
+    return t;
+  }
+  intersectWithConvexPolygon(t) {
+    return t;
+  }
+  isContainedByRay(t) {
+    return !1;
+  }
+  isContainedByLineSegment(t) {
+    return !1;
+  }
+  isContainedByLine(t) {
+    return !1;
+  }
+  isContainedByConvexPolygon(t) {
+    return !1;
+  }
+  intersectsRay(t) {
+    return !0;
+  }
+  intersectsLineSegment(t) {
+    return !0;
+  }
+  intersectsLine(t) {
+    return !0;
+  }
+  intersectsConvexPolygon(t) {
+    return !0;
+  }
+}
+const Pt = new di();
+class fi {
+  getVertices() {
+    return [];
+  }
+  intersectWith(t) {
+    return this;
+  }
+  join(t) {
+    return t;
+  }
+  intersectWithConvexPolygon(t) {
+    return this;
+  }
+  intersects(t) {
+    return !1;
+  }
+  intersectWithLineSegment(t) {
+    return this;
+  }
+  intersectWithRay(t) {
+    return this;
+  }
+  intersectWithLine(t) {
+    return this;
+  }
+  expandToInclude(t) {
+    return t;
+  }
+  transform(t) {
+    return this;
+  }
+  contains(t) {
+    return !1;
+  }
+  isContainedByConvexPolygon(t) {
+    return !0;
+  }
+  isContainedByRay(t) {
+    return !0;
+  }
+  isContainedByLineSegment(t) {
+    return !0;
+  }
+  isContainedByLine(t) {
+    return !0;
+  }
+  intersectsRay(t) {
+    return !1;
+  }
+  intersectsConvexPolygon(t) {
+    return !1;
+  }
+  intersectsLineSegment(t) {
+    return !1;
+  }
+  intersectsLine(t) {
+    return !1;
+  }
+  expandByDistance(t) {
+    return this;
+  }
+  expandToIncludePoint(t) {
+    return this;
+  }
+  expandToIncludeInfinityInDirection(t) {
+    return this;
+  }
+  expandToIncludePolygon(t) {
+    return t;
+  }
+}
+const b = new fi();
+class v {
+  constructor(t, e) {
+    this.vertices = e, this.halfPlanes = t, this.vertices = this.vertices || v.getVertices(this.halfPlanes);
+  }
+  findVertex(t) {
+    for (let e of this.vertices)
+      if (e.point.equals(t))
+        return e;
+  }
+  intersects(t) {
+    return t.intersectsConvexPolygon(this);
+  }
+  intersectWith(t) {
+    return t.intersectWithConvexPolygon(this);
+  }
+  join(t) {
+    if (this.contains(t))
+      return this;
+    if (t.contains(this))
+      return t;
+    let e = t;
+    for (let n of this.vertices)
+      e = e.expandToIncludePoint(n.point);
+    for (let n of this.getPointsAtInfinityFromHalfPlanes())
+      this.containsInfinityInDirection(n) && (e = e.expandToIncludeInfinityInDirection(n));
+    return e;
+  }
+  intersectWithRay(t) {
+    return t.intersectWithConvexPolygon(this);
+  }
+  intersectWithLine(t) {
+    return t.intersectWithConvexPolygon(this);
+  }
+  intersectWithLineSegment(t) {
+    return t.intersectWithConvexPolygon(this);
+  }
+  contains(t) {
+    return t.isContainedByConvexPolygon(this);
+  }
+  containsHalfPlane(t) {
+    for (let e of this.halfPlanes)
+      if (!t.isContainedByHalfPlane(e))
+        return !1;
+    return !0;
+  }
+  isContainedByHalfPlane(t) {
+    for (let n of this.vertices)
+      if (!t.containsPoint(n.point))
+        return !1;
+    const e = t.complement();
+    for (let n of this.halfPlanes)
+      if (n.isContainedByHalfPlane(t))
+        return !0;
+    for (let n of this.halfPlanes) {
+      const i = this.getVerticesOnHalfPlane(n);
+      if (i.length <= 1 && (n.isContainedByHalfPlane(e) || e.isContainedByHalfPlane(n)))
+        return !1;
+      const s = n.getIntersectionWith(t), o = i.find((a) => a.point.equals(s.point));
+      if (o) {
+        if (!o.isContainedByHalfPlaneWithNormal(t.normalTowardInterior))
+          return !1;
+      } else {
+        if (i.length === 0)
+          return !1;
+        if (this.containsPoint(s.point))
+          return !1;
+      }
+    }
+    return !this.containsHalfPlane(t);
+  }
+  getVertices() {
+    return this.vertices.map((t) => t.point);
+  }
+  expandToIncludePoint(t) {
+    if (this.containsPoint(t))
+      return this;
+    const e = new Set(this.halfPlanes);
+    for (const i of this.halfPlanes) {
+      if (!this.hasAtMostOneVertex(i) || i.containsPoint(t))
+        continue;
+      const s = i.expandToIncludePoint(t);
+      e.delete(i), e.add(s);
+    }
+    for (const i of this.vertices) {
+      const s = i.halfPlane1.containsPoint(t), o = i.halfPlane2.containsPoint(t);
+      if (s && o || (s || e.delete(i.halfPlane1), o || e.delete(i.halfPlane2), !s && !o))
+        continue;
+      let a = t.minus(i.point).getPerpendicular();
+      i.isContainedByHalfPlaneWithNormal(a) || (a = a.scale(-1));
+      const h = new w(t, a);
+      e.add(h);
+    }
+    const n = [];
+    return e.forEach((i) => n.push(i)), new v(v.getHalfPlanesNotContainingAnyOther(n));
+  }
+  expandToIncludeInfinityInDirection(t) {
+    if (this.containsInfinityInDirection(t))
+      return this;
+    let e = this.halfPlanes.filter((n) => n.containsInfinityInDirection(t)).concat(this.getTangentPlanesThroughInfinityInDirection(t));
+    return e = v.getHalfPlanesNotContainingAnyOther(e), e.length === 0 ? Pt : new v(e);
+  }
+  getIntersectionsWithLine(t, e) {
+    const n = [];
+    for (let i of this.halfPlanes) {
+      if (i.isParallelToLine(t, e))
+        continue;
+      const s = i.intersectWithLine(t, e), o = this.findVertex(s.point);
+      o && !o.containsLineSegmentWithDirection(e) || this.containsPoint(s.point) && n.push(s);
+    }
+    return n;
+  }
+  expandByDistance(t) {
+    return new v(this.halfPlanes.map((e) => e.expandByDistance(t)));
+  }
+  transform(t) {
+    return new v(this.halfPlanes.map((e) => e.transform(t)));
+  }
+  intersectWithConvexPolygon(t) {
+    if (t.isContainedByConvexPolygon(this))
+      return t;
+    if (this.isContainedByConvexPolygon(t))
+      return this;
+    if (this.isOutsideConvexPolygon(t))
+      return b;
+    const e = v.getHalfPlanesNotContainingAnyOther(this.halfPlanes.concat(t.halfPlanes)), s = v.groupVerticesByPoint(v.getVertices(e)).map((a) => v.getVerticesNotContainingAnyOther(a)).reduce((a, h) => a.concat(h), []);
+    if (s.length === 0)
+      return new v(e);
+    const o = v.getHalfPlanes(s);
+    return new v(o);
+  }
+  containsInfinityInDirection(t) {
+    for (let e of this.halfPlanes)
+      if (!e.containsInfinityInDirection(t))
+        return !1;
+    return !0;
+  }
+  containsPoint(t) {
+    for (let e of this.halfPlanes)
+      if (!e.containsPoint(t))
+        return !1;
+    return !0;
+  }
+  intersectsRay(t) {
+    return t.intersectsConvexPolygon(this);
+  }
+  intersectsLineSegment(t) {
+    return t.intersectsConvexPolygon(this);
+  }
+  intersectsLine(t) {
+    return t.intersectsConvexPolygon(this);
+  }
+  intersectsConvexPolygon(t) {
+    return this.isContainedByConvexPolygon(t) || t.isContainedByConvexPolygon(this) ? !0 : !this.isOutsideConvexPolygon(t);
+  }
+  isOutsideConvexPolygon(t) {
+    for (let e of t.halfPlanes)
+      if (this.isContainedByHalfPlane(e.complement()))
+        return !0;
+    for (let e of this.halfPlanes)
+      if (t.isContainedByHalfPlane(e.complement()))
+        return !0;
+    return !1;
+  }
+  getVerticesOnHalfPlane(t) {
+    const e = [];
+    for (let n of this.vertices)
+      (n.halfPlane1 === t || n.halfPlane2 === t) && e.push(n);
+    return e;
+  }
+  hasAtMostOneVertex(t) {
+    let e = 0;
+    for (let n of this.vertices)
+      if ((n.halfPlane1 === t || n.halfPlane2 === t) && (e++, e > 1))
+        return !1;
+    return !0;
+  }
+  getTangentPlanesThroughInfinityInDirection(t) {
+    const e = [];
+    for (let n of this.vertices) {
+      const i = w.withBorderPointAndInfinityInDirection(n.point, t);
+      for (let s of i)
+        this.isContainedByHalfPlane(s) && e.push(s);
+    }
+    return e;
+  }
+  getPointsAtInfinityFromHalfPlanes() {
+    const t = [];
+    for (let e of this.halfPlanes) {
+      const n = e.normalTowardInterior, i = n.getPerpendicular();
+      t.push(n), t.push(i), t.push(i.scale(-1));
+    }
+    return t;
+  }
+  isContainedByRay(t) {
+    return !1;
+  }
+  isContainedByLineSegment(t) {
+    return !1;
+  }
+  isContainedByLine(t) {
+    return !1;
+  }
+  isContainedByConvexPolygon(t) {
+    for (let e of t.halfPlanes)
+      if (!this.isContainedByHalfPlane(e))
+        return !1;
+    return !0;
+  }
+  static getHalfPlanes(t) {
+    const e = [];
+    for (let n of t)
+      e.indexOf(n.halfPlane1) === -1 && e.push(n.halfPlane1), e.indexOf(n.halfPlane2) === -1 && e.push(n.halfPlane2);
+    return e;
+  }
+  static getVerticesNotContainingAnyOther(t) {
+    const e = [];
+    for (let n = 0; n < t.length; n++) {
+      let i = !0;
+      for (let s = 0; s < t.length; s++)
+        if (n !== s && t[s].isContainedByVertex(t[n])) {
+          i = !1;
+          break;
+        }
+      i && e.push(t[n]);
+    }
+    return e;
+  }
+  static getHalfPlanesNotContainingAnyOther(t) {
+    const e = [];
+    for (let n of t) {
+      let i = !0;
+      for (let s of e)
+        if (s.isContainedByHalfPlane(n)) {
+          i = !1;
+          break;
+        }
+      i && e.push(n);
+    }
+    return e;
+  }
+  static groupVerticesByPoint(t) {
+    const e = [];
+    for (let n of t) {
+      let i;
+      for (let s of e)
+        if (s[0].point.equals(n.point)) {
+          i = s;
+          break;
+        }
+      i ? i.push(n) : e.push([n]);
+    }
+    return e;
+  }
+  static getVertices(t) {
+    const e = [];
+    for (let n = 0; n < t.length; n++)
+      for (let i = n + 1; i < t.length; i++) {
+        if (t[n].complement().isContainedByHalfPlane(t[i]))
+          continue;
+        const s = t[n].getIntersectionWith(t[i]);
+        let o = !0;
+        for (let a = 0; a < t.length; a++)
+          if (a !== n && a !== i && !t[a].containsPoint(s.point)) {
+            o = !1;
+            break;
+          }
+        o && e.push(s);
+      }
+    return e;
+  }
+  static createTriangleWithInfinityInTwoDirections(t, e, n) {
+    const i = e.getPerpendicular(), s = n.getPerpendicular();
+    return e.cross(n) < 0 ? new v([
+      new w(t, i.scale(-1)),
+      new w(t, s)
+    ]) : new v([
+      new w(t, i),
+      new w(t, s.scale(-1))
+    ]);
+  }
+  static createFromHalfPlane(t) {
+    return new v([t]);
+  }
+  static createTriangleWithInfinityInDirection(t, e, n) {
+    const i = e.minus(t).projectOn(n.getPerpendicular());
+    return new v([
+      new w(t, i),
+      new w(e, i.scale(-1)),
+      w.throughPointsAndContainingPoint(t, e, t.plus(n))
+    ]);
+  }
+  static createTriangle(t, e, n) {
+    return new v([
+      w.throughPointsAndContainingPoint(t, e, n),
+      w.throughPointsAndContainingPoint(t, n, e),
+      w.throughPointsAndContainingPoint(e, n, t)
+    ]);
+  }
+  static createRectangle(t, e, n, i) {
+    const s = [];
+    return Number.isFinite(t) && (s.push(new w(new c(t, 0), n > 0 ? new c(1, 0) : new c(-1, 0))), Number.isFinite(n) && s.push(new w(new c(t + n, 0), n > 0 ? new c(-1, 0) : new c(1, 0)))), Number.isFinite(e) && (s.push(new w(new c(0, e), i > 0 ? new c(0, 1) : new c(0, -1))), Number.isFinite(i) && s.push(new w(new c(0, e + i), i > 0 ? new c(0, -1) : new c(0, 1)))), new v(s);
+  }
+}
+class gi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  fillText(t, e, n, i) {
+    let s = i === void 0 ? (o) => {
+      o.fillText(t, e, n);
+    } : (o) => {
+      o.fillText(t, e, n, i);
+    };
+    this.viewBox.addDrawing(s, this.getDrawnRectangle(e, n, t), k.Relative, !0);
+  }
+  measureText(t) {
+    return this.viewBox.measureText(t);
+  }
+  strokeText(t, e, n, i) {
+    let s = i === void 0 ? (o) => {
+      o.strokeText(t, e, n);
+    } : (o) => {
+      o.strokeText(t, e, n, i);
+    };
+    this.viewBox.addDrawing(s, this.getDrawnRectangle(e, n, t), k.Relative, !0);
+  }
+  getDrawnRectangle(t, e, n) {
+    const i = this.viewBox.measureText(n);
+    let s;
+    i.actualBoundingBoxRight !== void 0 ? s = Math.abs(i.actualBoundingBoxRight - i.actualBoundingBoxLeft) : s = i.width;
+    const o = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent + i.actualBoundingBoxDescent : 1, a = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent : 0;
+    return v.createRectangle(t, e - a, s, o);
+  }
+}
+class mi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  drawImage() {
+    const t = Array.prototype.slice.apply(arguments);
+    let e, n, i, s, o, a, h, u, d;
+    arguments.length <= 5 ? [e, a, h, u, d] = t : [e, n, i, s, o, a, h, u, d] = t;
+    const l = this.getDrawnLength(e.width, n, s, u), g = this.getDrawnLength(e.height, i, o, d), m = v.createRectangle(a, h, l, g), I = this.getDrawImageInstruction(arguments.length, e, n, i, s, o, a, h, u, d);
+    this.viewBox.addDrawing(I, m, k.Relative, !0);
+  }
+  getDrawImageInstruction(t, e, n, i, s, o, a, h, u, d) {
+    switch (t) {
+      case 3:
+        return (l) => {
+          l.drawImage(e, a, h);
+        };
+      case 5:
+        return (l) => {
+          l.drawImage(e, a, h, u, d);
+        };
+      case 9:
+        return (l) => {
+          l.drawImage(e, n, i, s, o, a, h, u, d);
+        };
+      default:
+        throw new TypeError(`Failed to execute 'drawImage' on 'CanvasRenderingContext2D': Valid arities are: [3, 5, 9], but ${t} arguments provided.`);
+    }
+  }
+  getDrawnLength(t, e, n, i) {
+    const s = this.getLength(t);
+    return i !== void 0 ? i : e !== void 0 ? n !== void 0 ? n : s - e : s;
+  }
+  getLength(t) {
+    return typeof t == "number" ? t : t.baseVal.value;
+  }
+}
+function vi(r, t, e, n, i) {
+  t = t === void 0 ? 0 : t, e = e === void 0 ? 0 : e, n = n === void 0 ? r.width : n, i = i === void 0 ? r.height : i;
+  const s = r.data, o = new Uint8ClampedArray(4 * n * i);
+  for (let a = 0; a < i; a++)
+    for (let h = 0; h < n; h++) {
+      const u = 4 * ((e + a) * r.width + t + h), d = 4 * (a * n + h);
+      o[d] = s[u], o[d + 1] = s[u + 1], o[d + 2] = s[u + 2], o[d + 3] = s[u + 3];
+    }
+  return new ImageData(o, n, i);
+}
+class Mt {
+  constructor(t, e, n) {
+    this.area = t, this.latestClippedPath = e, this.previouslyClippedPaths = n;
+  }
+  withClippedPath(t) {
+    const e = t.area.intersectWith(this.area);
+    return new Mt(e, t, this);
+  }
+  get initialState() {
+    return this.previouslyClippedPaths ? this.previouslyClippedPaths.initialState : this.latestClippedPath.initialState;
+  }
+  except(t) {
+    if (t !== this)
+      return this.previouslyClippedPaths ? new Mt(this.area, this.latestClippedPath, this.previouslyClippedPaths.except(t)) : this;
+  }
+  contains(t) {
+    return t ? this === t ? !0 : this.previouslyClippedPaths ? this.previouslyClippedPaths.contains(t) : !1 : !1;
+  }
+  getInstructionToRecreate(t) {
+    const e = (n, i) => {
+      this.latestClippedPath.execute(n, i);
+    };
+    if (this.previouslyClippedPaths) {
+      const n = this.previouslyClippedPaths.getInstructionToRecreate(t), i = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState, t);
+      return (s, o) => {
+        n(s, o), i(s, o), e(s, o);
+      };
+    }
+    return e;
+  }
+}
+class pi extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.direction = t;
+    };
+  }
+}
+const un = new pi("direction");
+class wi extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.font = t;
+    };
+  }
+}
+const dn = new wi("font");
+class fn {
+  constructor(t) {
+    this.propertyName = t;
+  }
+  changeInstanceValue(t, e) {
+    return this.valuesAreEqual(t[this.propertyName], e) ? t : t.changeProperty(this.propertyName, e);
+  }
+  isEqualForInstances(t, e) {
+    return this.valuesAreEqual(t[this.propertyName], e[this.propertyName]);
+  }
+  valueIsTransformableForInstance(t) {
+    return !0;
+  }
+  changeToNewValue(t, e) {
+    return e ? this.changeToNewValueTransformed(t) : this.changeToNewValueUntransformed(t);
+  }
+  getInstructionToChange(t, e) {
+    const n = t[this.propertyName], i = e[this.propertyName];
+    return this.valuesAreEqual(n, i) && (t.fillAndStrokeStylesTransformed === e.fillAndStrokeStylesTransformed || this.valuesAreEqualWhenTransformed(n, i)) ? () => {
+    } : this.changeToNewValue(i, e.fillAndStrokeStylesTransformed);
+  }
+}
+class gn extends fn {
+  constructor(t) {
+    super(t);
+  }
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValueTransformed(t) {
+    return (e, n) => {
+      e[this.propertyName] = t * n.scale;
+    };
+  }
+  changeToNewValueUntransformed(t) {
+    return (e) => {
+      e[this.propertyName] = t;
+    };
+  }
+  valuesAreEqualWhenTransformed(t, e) {
+    return t === 0 && e === 0;
+  }
+}
+const mn = new gn("lineWidth"), vn = new gn("lineDashOffset");
+class Pi extends fn {
+  valuesAreEqual(t, e) {
+    if (t.length !== e.length)
+      return !1;
+    for (let n = 0; n < t.length; n++)
+      if (t[n] !== e[n])
+        return !1;
+    return !0;
+  }
+  changeToNewValueTransformed(t) {
+    return (e, n) => {
+      e.setLineDash(t.map((i) => i * n.scale));
+    };
+  }
+  changeToNewValueUntransformed(t) {
+    return (e) => {
+      e.setLineDash(t);
+    };
+  }
+  valuesAreEqualWhenTransformed(t, e) {
+    return t.length === 0 && e.length === 0;
+  }
+}
+const pn = new Pi("lineDash");
+class Ci extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.textAlign = t;
+    };
+  }
+}
+const wn = new Ci("textAlign");
+class Ii extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => {
+      e.textBaseline = t;
+    };
+  }
+}
+const Pn = new Ii("textBaseline");
+class Ti extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.lineCap = t;
+  }
+}
+const Cn = new Ti("lineCap");
+class Si extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.lineJoin = t;
+  }
+}
+const In = new Si("lineJoin");
+class yi extends S {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t, e) {
+    return (n) => n.miterLimit = t;
+  }
+}
+const Tn = new yi("miterLimit"), ie = [
+  un,
+  Qe,
+  Je,
+  tn,
+  vn,
+  pn,
+  Cn,
+  In,
+  Tn,
+  Ke,
+  je,
+  ln,
+  mn,
+  en,
+  wn,
+  Pn,
+  kt,
+  dn,
+  ae,
+  sn,
+  nn
+], ct = class ct {
+  constructor(t) {
+    this.fillStyle = t.fillStyle, this.lineWidth = t.lineWidth, this.lineCap = t.lineCap, this.lineJoin = t.lineJoin, this.lineDash = t.lineDash, this.miterLimit = t.miterLimit, this.globalAlpha = t.globalAlpha, this.globalCompositeOperation = t.globalCompositeOperation, this.filter = t.filter, this.strokeStyle = t.strokeStyle, this.lineDashOffset = t.lineDashOffset, this.transformation = t.transformation, this.direction = t.direction, this.imageSmoothingEnabled = t.imageSmoothingEnabled, this.imageSmoothingQuality = t.imageSmoothingQuality, this.font = t.font, this.textAlign = t.textAlign, this.textBaseline = t.textBaseline, this.clippedPaths = t.clippedPaths, this.fillAndStrokeStylesTransformed = t.fillAndStrokeStylesTransformed, this.shadowOffset = t.shadowOffset, this.shadowColor = t.shadowColor, this.shadowBlur = t.shadowBlur;
+  }
+  changeProperty(t, e) {
+    const {
+      fillStyle: n,
+      lineWidth: i,
+      lineDash: s,
+      lineCap: o,
+      lineJoin: a,
+      miterLimit: h,
+      globalAlpha: u,
+      globalCompositeOperation: d,
+      filter: l,
+      strokeStyle: g,
+      lineDashOffset: m,
+      transformation: I,
+      direction: B,
+      imageSmoothingEnabled: W,
+      imageSmoothingQuality: H,
+      font: j,
+      textAlign: dt,
+      textBaseline: ft,
+      clippedPaths: gt,
+      fillAndStrokeStylesTransformed: mt,
+      shadowOffset: _t,
+      shadowColor: te,
+      shadowBlur: ee
+    } = this, xt = {
+      fillStyle: n,
+      lineWidth: i,
+      lineDash: s,
+      lineCap: o,
+      lineJoin: a,
+      miterLimit: h,
+      globalAlpha: u,
+      globalCompositeOperation: d,
+      filter: l,
+      strokeStyle: g,
+      lineDashOffset: m,
+      transformation: I,
+      direction: B,
+      imageSmoothingEnabled: W,
+      imageSmoothingQuality: H,
+      font: j,
+      textAlign: dt,
+      textBaseline: ft,
+      clippedPaths: gt,
+      fillAndStrokeStylesTransformed: mt,
+      shadowOffset: _t,
+      shadowColor: te,
+      shadowBlur: ee
+    };
+    return xt[t] = e, new ct(xt);
+  }
+  get clippingRegion() {
+    return this.clippedPaths ? this.clippedPaths.area : void 0;
+  }
+  equals(t) {
+    for (let e of ie)
+      if (!e.isEqualForInstances(this, t))
+        return !1;
+    return (!this.clippedPaths && !t.clippedPaths || this.clippedPaths && this.clippedPaths === t.clippedPaths) && this.fillAndStrokeStylesTransformed === t.fillAndStrokeStylesTransformed;
+  }
+  getMaximumLineWidth() {
+    return this.lineWidth * this.transformation.getMaximumLineWidthScale();
+  }
+  getLineDashPeriod() {
+    return this.lineDash.reduce((t, e) => t + e, 0);
+  }
+  isTransformable() {
+    for (let t of ie)
+      if (!t.valueIsTransformableForInstance(this))
+        return !1;
+    return !0;
+  }
+  getShadowOffsets() {
+    const t = [], e = this.filter.getShadowOffset();
+    return e !== null && t.push(e), this.shadowOffset.equals(c.origin) || t.push(this.shadowOffset), t;
+  }
+  getInstructionToConvertToState(t, e) {
+    const n = ie.map((i) => i.getInstructionToChange(this, t, e));
+    return (i, s) => {
+      for (let o = 0; o < n.length; o++)
+        n[o](i, s);
+    };
+  }
+  withClippedPath(t) {
+    const e = this.clippedPaths ? this.clippedPaths.withClippedPath(t) : new Mt(t.area, t);
+    return this.changeProperty("clippedPaths", e);
+  }
+};
+ct.default = new ct({
+  fillStyle: "#000",
+  lineWidth: 1,
+  lineDash: [],
+  lineCap: "butt",
+  lineJoin: "miter",
+  miterLimit: 10,
+  globalAlpha: 1,
+  globalCompositeOperation: "source-over",
+  filter: Nt.none,
+  strokeStyle: "#000",
+  lineDashOffset: 0,
+  transformation: p.identity,
+  direction: "inherit",
+  imageSmoothingEnabled: !0,
+  imageSmoothingQuality: "low",
+  font: "10px sans-serif",
+  textAlign: "start",
+  textBaseline: "alphabetic",
+  clippedPaths: void 0,
+  fillAndStrokeStylesTransformed: !1,
+  shadowOffset: c.origin,
+  shadowColor: "rgba(0, 0, 0, 0)",
+  shadowBlur: 0
+}), ct.setDefault = () => {
+};
+let E = ct;
+class bi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  createImageData(t, e) {
+  }
+  getImageData(t, e, n, i) {
+  }
+  putImageData(t, e, n, i, s, o, a) {
+    t = vi(t, i, s, o, a);
+    let h, u = this.viewBox.getDrawingLock();
+    this.viewBox.createPatternFromImageData(t).then((l) => {
+      h = l, u.release();
+    }), this.viewBox.addDrawing((l) => {
+      l.translate(e, n), l.fillStyle = h, l.fillRect(0, 0, t.width, t.height);
+    }, v.createRectangle(e, n, t.width, t.height), k.Absolute, !1, (l) => l.changeProperty("shadowColor", E.default.shadowColor).changeProperty("shadowOffset", E.default.shadowOffset).changeProperty("shadowBlur", E.default.shadowBlur).changeProperty("globalAlpha", E.default.globalAlpha).changeProperty("globalCompositeOperation", E.default.globalCompositeOperation).changeProperty("imageSmoothingEnabled", !1).changeProperty("filter", E.default.filter));
+  }
+}
+class xi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  get lineCap() {
+    return this.viewBox.state.current.lineCap;
+  }
+  set lineCap(t) {
+    this.viewBox.changeState((e) => Cn.changeInstanceValue(e, t));
+  }
+  get lineDashOffset() {
+    return this.viewBox.state.current.lineDashOffset;
+  }
+  set lineDashOffset(t) {
+    this.viewBox.changeState((e) => vn.changeInstanceValue(e, t));
+  }
+  get lineJoin() {
+    return this.viewBox.state.current.lineJoin;
+  }
+  set lineJoin(t) {
+    this.viewBox.changeState((e) => In.changeInstanceValue(e, t));
+  }
+  get lineWidth() {
+    return this.viewBox.state.current.lineWidth;
+  }
+  set lineWidth(t) {
+    this.viewBox.changeState((e) => mn.changeInstanceValue(e, t));
+  }
+  get miterLimit() {
+    return this.viewBox.state.current.miterLimit;
+  }
+  set miterLimit(t) {
+    this.viewBox.changeState((e) => Tn.changeInstanceValue(e, t));
+  }
+  getLineDash() {
+    return this.viewBox.state.current.lineDash;
+  }
+  setLineDash(t) {
+    t.length % 2 === 1 && (t = t.concat(t)), this.viewBox.changeState((e) => pn.changeInstanceValue(e, t));
+  }
+}
+class Oi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  set direction(t) {
+    this.viewBox.changeState((e) => un.changeInstanceValue(e, t));
+  }
+  set font(t) {
+    this.viewBox.changeState((e) => dn.changeInstanceValue(e, t));
+  }
+  set textAlign(t) {
+    this.viewBox.changeState((e) => wn.changeInstanceValue(e, t));
+  }
+  set textBaseline(t) {
+    this.viewBox.changeState((e) => Pn.changeInstanceValue(e, t));
+  }
+}
+function P(r) {
+  return r.direction !== void 0;
+}
+class vt {
+  static arc(t, e, n, i, s, o) {
+    return {
+      instruction: (u, d) => {
+        const l = d.getRotationAngle(), { x: g, y: m } = d.apply(new c(t, e));
+        u.arc(g, m, n * d.scale, i + l, s + l, o);
+      },
+      changeArea: (u) => {
+        u.addPosition(new c(t - n, e - n)), u.addPosition(new c(t - n, e + n)), u.addPosition(new c(t + n, e - n)), u.addPosition(new c(t + n, e + n));
+      },
+      positionChange: new c(t, e).plus(p.rotation(0, 0, s).apply(new c(n, 0))),
+      initialPoint: new c(t, e).plus(p.rotation(0, 0, i).apply(new c(n, 0)))
+    };
+  }
+  static arcTo(t, e, n, i, s) {
+    const o = new c(t, e), a = new c(n, i);
+    return {
+      instruction: (d, l) => {
+        const g = l.apply(o), m = l.apply(a);
+        d.arcTo(g.x, g.y, m.x, m.y, s * l.scale);
+      },
+      changeArea: (d) => {
+        d.addPosition(o), d.addPosition(a);
+      },
+      positionChange: new c(n, i)
+    };
+  }
+  static ellipse(t, e, n, i, s, o, a, h) {
+    return {
+      instruction: (u, d) => {
+        const l = d.apply(new c(t, e)), g = d.getRotationAngle();
+        u.ellipse(l.x, l.y, n * d.scale, i * d.scale, s + g, o, a, h);
+      },
+      changeArea: (u) => {
+        u.addPosition(new c(t - n, e - i)), u.addPosition(new c(t - n, e + i)), u.addPosition(new c(t + n, e - i)), u.addPosition(new c(t + n, e + i));
+      },
+      positionChange: new c(t, e).plus(
+        p.rotation(0, 0, a).before(
+          new p(n, 0, 0, i, 0, 0)
+        ).before(
+          p.rotation(0, 0, s)
+        ).apply(new c(1, 0))
+      ),
+      initialPoint: new c(t, e).plus(
+        p.rotation(0, 0, o).before(
+          new p(n, 0, 0, i, 0, 0)
+        ).before(
+          p.rotation(0, 0, s)
+        ).apply(new c(1, 0))
+      )
+    };
+  }
+  static bezierCurveTo(t, e, n, i, s, o) {
+    return {
+      instruction: (a, h) => {
+        const u = h.apply(new c(t, e)), d = h.apply(new c(n, i)), l = h.apply(new c(s, o));
+        a.bezierCurveTo(u.x, u.y, d.x, d.y, l.x, l.y);
+      },
+      changeArea: (a, h) => {
+        P(h) || (a.addPosition(new c((h.x + t) / 2, (h.y + e) / 2)), a.addPosition(new c((t + n) / 2, (e + i) / 2)), a.addPosition(new c((n + s) / 2, (i + o) / 2)), a.addPosition(new c(s, o)));
+      },
+      positionChange: new c(s, o)
+    };
+  }
+  static quadraticCurveTo(t, e, n, i) {
+    return {
+      instruction: (s, o) => {
+        const a = o.apply(new c(t, e)), h = o.apply(new c(n, i));
+        s.quadraticCurveTo(a.x, a.y, h.x, h.y);
+      },
+      changeArea: (s, o) => {
+        P(o) || (s.addPosition(new c((o.x + t) / 2, (o.y + e) / 2)), s.addPosition(new c((t + n) / 2, (e + i) / 2)), s.addPosition(new c(n, i)));
+      },
+      positionChange: new c(n, i)
+    };
+  }
+}
+class Bi {
+  constructor(t) {
+    this.viewBox = t;
+  }
+  arc(t, e, n, i, s, o) {
+    this.viewBox.addPathInstruction(vt.arc(t, e, n, i, s, o));
+  }
+  arcTo(t, e, n, i, s) {
+    this.viewBox.addPathInstruction(vt.arcTo(t, e, n, i, s));
+  }
+  closePath() {
+    this.viewBox.closePath();
+  }
+  ellipse(t, e, n, i, s, o, a, h) {
+    this.viewBox.addPathInstruction(vt.ellipse(t, e, n, i, s, o, a, h));
+  }
+  lineTo(t, e) {
+    this.viewBox.lineTo(new c(t, e));
+  }
+  lineToInfinityInDirection(t, e) {
+    this.viewBox.lineTo({ direction: new c(t, e) });
+  }
+  moveTo(t, e) {
+    this.viewBox.moveTo(new c(t, e));
+  }
+  moveToInfinityInDirection(t, e) {
+    this.viewBox.moveTo({ direction: new c(t, e) });
+  }
+  quadraticCurveTo(t, e, n, i) {
+    this.viewBox.addPathInstruction(vt.quadraticCurveTo(t, e, n, i));
+  }
+  bezierCurveTo(t, e, n, i, s, o) {
+    this.viewBox.addPathInstruction(vt.bezierCurveTo(t, e, n, i, s, o));
+  }
+  rect(t, e, n, i) {
+    this.viewBox.rect(t, e, n, i);
+  }
+}
+class Ai {
+  constructor(t, e, n) {
+    this.canvas = t, this.canvasState = new $n(e), this.canvasTransform = new Un(e), this.canvasCompositing = new Qn(e), this.canvasImageSmoothing = new _n(e), this.canvasStrokeStyles = new ti(e), this.canvasShadowStyles = new si(e), this.canvasFilters = new oi(e, n), this.canvasRect = new ai(e), this.canvasDrawPath = new ci(e), this.canvasUserInterface = new hi(), this.canvasText = new gi(e), this.canvasDrawImage = new mi(e), this.canvasImageData = new bi(e), this.canvasPathDrawingStyles = new xi(e), this.canvasTextDrawingStyles = new Oi(e), this.canvasPath = new Bi(e);
+  }
+  getContextAttributes() {
+    return this.canvas.getContext("2d").getContextAttributes();
+  }
+  save() {
+    this.canvasState.save();
+  }
+  restore() {
+    this.canvasState.restore();
+  }
+  getTransform() {
+    return this.canvasTransform.getTransform();
+  }
+  resetTransform() {
+    this.canvasTransform.resetTransform();
+  }
+  rotate(t) {
+    this.canvasTransform.rotate(t);
+  }
+  scale(t, e) {
+    this.canvasTransform.scale(t, e);
+  }
+  setTransform(t, e, n, i, s, o) {
+    this.canvasTransform.setTransform(t, e, n, i, s, o);
+  }
+  transform(t, e, n, i, s, o) {
+    this.canvasTransform.transform(t, e, n, i, s, o);
+  }
+  translate(t, e) {
+    this.canvasTransform.translate(t, e);
+  }
+  set globalAlpha(t) {
+    this.canvasCompositing.globalAlpha = t;
+  }
+  set globalCompositeOperation(t) {
+    this.canvasCompositing.globalCompositeOperation = t;
+  }
+  set imageSmoothingEnabled(t) {
+    this.canvasImageSmoothing.imageSmoothingEnabled = t;
+  }
+  set imageSmoothingQuality(t) {
+    this.canvasImageSmoothing.imageSmoothingQuality = t;
+  }
+  set fillStyle(t) {
+    this.canvasStrokeStyles.fillStyle = t;
+  }
+  set strokeStyle(t) {
+    this.canvasStrokeStyles.strokeStyle = t;
+  }
+  createLinearGradient(t, e, n, i) {
+    return this.canvasStrokeStyles.createLinearGradient(t, e, n, i);
+  }
+  createPattern(t, e) {
+    return this.canvasStrokeStyles.createPattern(t, e);
+  }
+  createRadialGradient(t, e, n, i, s, o) {
+    return this.canvasStrokeStyles.createRadialGradient(t, e, n, i, s, o);
+  }
+  createConicGradient(t, e, n) {
+    return this.canvasStrokeStyles.createConicGradient(t, e, n);
+  }
+  set shadowBlur(t) {
+    this.canvasShadowStyles.shadowBlur = t;
+  }
+  set shadowColor(t) {
+    this.canvasShadowStyles.shadowColor = t;
+  }
+  set shadowOffsetX(t) {
+    this.canvasShadowStyles.shadowOffsetX = t;
+  }
+  set shadowOffsetY(t) {
+    this.canvasShadowStyles.shadowOffsetY = t;
+  }
+  set filter(t) {
+    this.canvasFilters.filter = t;
+  }
+  clearRect(t, e, n, i) {
+    this.canvasRect.clearRect(t, e, n, i);
+  }
+  fillRect(t, e, n, i) {
+    this.canvasRect.fillRect(t, e, n, i);
+  }
+  strokeRect(t, e, n, i) {
+    this.canvasRect.strokeRect(t, e, n, i);
+  }
+  beginPath() {
+    this.canvasDrawPath.beginPath();
+  }
+  clip(t, e) {
+    this.canvasDrawPath.clip(t, e);
+  }
+  fill(t, e) {
+    this.canvasDrawPath.fill(t, e);
+  }
+  isPointInPath(t, e, n, i) {
+    return this.canvasDrawPath.isPointInPath(t, e, n, i);
+  }
+  isPointInStroke(t, e, n) {
+    return this.canvasDrawPath.isPointInStroke(t, e, n);
+  }
+  stroke(t) {
+    this.canvasDrawPath.stroke(t);
+  }
+  drawFocusIfNeeded(t, e) {
+    this.canvasUserInterface.drawFocusIfNeeded(t, e);
+  }
+  scrollPathIntoView(t) {
+    this.canvasUserInterface.scrollPathIntoView(t);
+  }
+  fillText(t, e, n, i) {
+    this.canvasText.fillText(t, e, n, i);
+  }
+  measureText(t) {
+    return this.canvasText.measureText(t);
+  }
+  strokeText(t, e, n, i) {
+    this.canvasText.strokeText(t, e, n, i);
+  }
+  drawImage() {
+    this.canvasDrawImage.drawImage.apply(this.canvasDrawImage, arguments);
+  }
+  createImageData(t, e) {
+    return this.canvasImageData.createImageData(t, e);
+  }
+  getImageData(t, e, n, i) {
+    return this.canvasImageData.getImageData(t, e, n, i);
+  }
+  putImageData(t, e, n, i, s, o, a) {
+    this.canvasImageData.putImageData(t, e, n, i, s, o, a);
+  }
+  set lineCap(t) {
+    this.canvasPathDrawingStyles.lineCap = t;
+  }
+  set lineDashOffset(t) {
+    this.canvasPathDrawingStyles.lineDashOffset = t;
+  }
+  set lineJoin(t) {
+    this.canvasPathDrawingStyles.lineJoin = t;
+  }
+  set lineWidth(t) {
+    this.canvasPathDrawingStyles.lineWidth = t;
+  }
+  set miterLimit(t) {
+    this.canvasPathDrawingStyles.miterLimit = t;
+  }
+  getLineDash() {
+    return this.canvasPathDrawingStyles.getLineDash();
+  }
+  setLineDash(t) {
+    this.canvasPathDrawingStyles.setLineDash(t);
+  }
+  set direction(t) {
+    this.canvasTextDrawingStyles.direction = t;
+  }
+  set font(t) {
+    this.canvasTextDrawingStyles.font = t;
+  }
+  set textAlign(t) {
+    this.canvasTextDrawingStyles.textAlign = t;
+  }
+  set textBaseline(t) {
+    this.canvasTextDrawingStyles.textBaseline = t;
+  }
+  arc(t, e, n, i, s, o) {
+    this.canvasPath.arc(t, e, n, i, s, o);
+  }
+  arcTo(t, e, n, i, s) {
+    this.canvasPath.arcTo(t, e, n, i, s);
+  }
+  bezierCurveTo(t, e, n, i, s, o) {
+    this.canvasPath.bezierCurveTo(t, e, n, i, s, o);
+  }
+  closePath() {
+    this.canvasPath.closePath();
+  }
+  ellipse(t, e, n, i, s, o, a, h) {
+    this.canvasPath.ellipse(t, e, n, i, s, o, a);
+  }
+  lineTo(t, e) {
+    this.canvasPath.lineTo(t, e);
+  }
+  lineToInfinityInDirection(t, e) {
+    this.canvasPath.lineToInfinityInDirection(t, e);
+  }
+  moveTo(t, e) {
+    this.canvasPath.moveTo(t, e);
+  }
+  moveToInfinityInDirection(t, e) {
+    this.canvasPath.moveToInfinityInDirection(t, e);
+  }
+  quadraticCurveTo(t, e, n, i) {
+    this.canvasPath.quadraticCurveTo(t, e, n, i);
+  }
+  rect(t, e, n, i) {
+    if (!Number.isFinite(t) && !Number.isFinite(e))
+      throw new Error(`The starting coordinates provided (${t} and ${e}) do not determine a direction.`);
+    this.canvasPath.rect(t, e, n, i);
+  }
+}
+class de extends Rt {
+  constructor() {
+    super(...arguments), this.colorStops = [];
+  }
+  addColorStopsToGradient(t) {
+    for (const e of this.colorStops)
+      t.addColorStop(e.offset, e.color);
+  }
+  addColorStop(t, e) {
+    this.colorStops.push({ offset: t, color: e });
+  }
+  getInstructionToSetTransformed(t) {
+    return (e, n) => {
+      e[t] = this.createTransformedGradient(n);
+    };
+  }
+  getInstructionToSetUntransformed(t) {
+    return (e) => {
+      e[t] = this.createGradient();
+    };
+  }
+}
+class Di extends de {
+  constructor(t, e, n, i, s) {
+    super(), this.context = t, this.x0 = e, this.y0 = n, this.x1 = i, this.y1 = s;
+  }
+  createTransformedGradient(t) {
+    const { x: e, y: n } = t.apply(new c(this.x0, this.y0)), { x: i, y: s } = t.apply(new c(this.x1, this.y1)), o = this.context.createLinearGradient(e, n, i, s);
+    return this.addColorStopsToGradient(o), o;
+  }
+  createGradient() {
+    const t = this.context.createLinearGradient(this.x0, this.y0, this.x1, this.y1);
+    return this.addColorStopsToGradient(t), t;
+  }
+}
+class Li extends de {
+  constructor(t, e, n, i, s, o, a) {
+    super(), this.context = t, this.x0 = e, this.y0 = n, this.r0 = i, this.x1 = s, this.y1 = o, this.r1 = a;
+  }
+  createTransformedGradient(t) {
+    const { x: e, y: n } = t.apply(new c(this.x0, this.y0)), { x: i, y: s } = t.apply(new c(this.x1, this.y1)), o = this.r0 * t.scale, a = this.r1 * t.scale, h = this.context.createRadialGradient(e, n, o, i, s, a);
+    return this.addColorStopsToGradient(h), h;
+  }
+  createGradient() {
+    const t = this.context.createRadialGradient(this.x0, this.y0, this.r0, this.x1, this.y1, this.r1);
+    return this.addColorStopsToGradient(t), t;
+  }
+}
+class fe {
+  constructor(t) {
+    this.initiallyWithState = t, this.added = [];
+  }
+  get length() {
+    return this.added.length;
+  }
+  get currentlyWithState() {
+    return this.addedLast ? this.addedLast : this.initiallyWithState;
+  }
+  reconstructState(t, e) {
+    e.setInitialState(t);
+  }
+  get stateOfFirstInstruction() {
+    return this.initiallyWithState.stateOfFirstInstruction;
+  }
+  get state() {
+    return this.currentlyWithState.state;
+  }
+  get initialState() {
+    return this.initiallyWithState.initialState;
+  }
+  addClippedPath(t) {
+    this.currentlyWithState.addClippedPath(t);
+  }
+  add(t) {
+    this.added.push(t), this.addedLast = t;
+  }
+  removeAll(t) {
+    let e;
+    for (; (e = this.added.findIndex(t)) > -1; )
+      this.removeAtIndex(e);
+  }
+  contains(t) {
+    return !!this.added.find(t);
+  }
+  setInitialState(t) {
+    this.initiallyWithState.setInitialState(t);
+  }
+  setInitialStateWithClippedPaths(t) {
+    this.initiallyWithState.setInitialStateWithClippedPaths(t);
+  }
+  beforeIndex(t) {
+    return t === 0 ? this.initiallyWithState.state : this.added[t - 1].state;
+  }
+  removeAtIndex(t) {
+    t === this.added.length - 1 ? this.added.length === 1 ? this.addedLast = void 0 : this.addedLast = this.added[t - 1] : this.reconstructState(this.beforeIndex(t), this.added[t + 1]), this.added.splice(t, 1);
+  }
+}
+class ge extends fe {
+  constructor(t) {
+    super(t), this._initiallyWithState = t;
+  }
+  execute(t, e) {
+    this._initiallyWithState.execute(t, e);
+    for (const n of this.added)
+      n.execute(t, e);
+  }
+}
+class Sn {
+  constructor(t) {
+    this.currentState = t, this.instructions = [];
+  }
+  restore() {
+    this.addChangeToState(this.currentState.restored(), (t) => {
+      t.restore();
+    });
+  }
+  save() {
+    this.addChangeToState(this.currentState.saved(), (t) => {
+      t.save();
+    });
+  }
+  changeCurrentInstanceTo(t, e) {
+    if (this.currentState.current.equals(t))
+      return;
+    const n = this.currentState.current.getInstructionToConvertToState(t, e), i = this.currentState.withCurrentState(t);
+    this.addChangeToState(i, n);
+  }
+  addChangeToState(t, e) {
+    this.currentState = t, e && this.instructions.push(e);
+  }
+  get instruction() {
+    if (this.instructions.length !== 0)
+      return (t, e) => {
+        for (const n of this.instructions)
+          n(t, e);
+      };
+  }
+}
+class me extends Sn {
+  changeCurrentInstanceTo(t, e) {
+    if (!this.currentState.current.equals(t)) {
+      if (!me.canConvert(this.currentState.current, t))
+        if (this.currentState.stack.length > 0)
+          this.restore(), this.save();
+        else {
+          super.changeCurrentInstanceTo(t, e);
+          return;
+        }
+      if (t.clippedPaths) {
+        const n = this.currentState, s = n.current.clippedPaths;
+        if (t.clippedPaths === s)
+          super.changeCurrentInstanceTo(t, e);
+        else {
+          const a = t.clippedPaths.except(s);
+          this.convertToState(a.initialState, e), this.addChangeToState(a.latestClippedPath.state, a.getInstructionToRecreate(e)), this.convertToState(n.replaceCurrent(t), e);
+        }
+      } else
+        super.changeCurrentInstanceTo(t, e);
+    }
+  }
+  convertToState(t, e) {
+    const n = this.currentState.getInstructionToConvertToState(t, e);
+    this.addChangeToState(t, n);
+  }
+  static canConvert(t, e) {
+    return t.clippedPaths ? e.clippedPaths ? e.clippedPaths.contains(t.clippedPaths) : !1 : !0;
+  }
+}
+class X {
+  constructor(t, e = []) {
+    this.current = t, this.stack = e;
+  }
+  replaceCurrent(t) {
+    return new X(t, this.stack);
+  }
+  withCurrentState(t) {
+    return new X(t, this.stack);
+  }
+  currentlyTransformed(t) {
+    return this.withCurrentState(this.current.changeProperty("fillAndStrokeStylesTransformed", t));
+  }
+  withClippedPath(t) {
+    return new X(this.current.withClippedPath(t), this.stack);
+  }
+  saved() {
+    return new X(this.current, (this.stack || []).concat([this.current]));
+  }
+  restored() {
+    if (!this.stack || this.stack.length === 0)
+      return this;
+    const t = this.stack[this.stack.length - 1];
+    return new X(t, this.stack.slice(0, this.stack.length - 1));
+  }
+  convertToLastSavedInstance(t, e) {
+    for (let n = this.stack.length - 1; n > e; n--)
+      t.restore();
+  }
+  convertFromLastSavedInstance(t, e, n) {
+    for (let i = e + 1; i < this.stack.length; i++)
+      t.changeCurrentInstanceTo(this.stack[i], n), t.save();
+    t.changeCurrentInstanceTo(this.current, n);
+  }
+  getInstructionToConvertToStateUsingConversion(t, e, n) {
+    const i = X.findIndexOfHighestCommon(this.stack, e.stack);
+    return this.convertToLastSavedInstance(t, i), e.convertFromLastSavedInstance(t, i, n), t.instruction;
+  }
+  getInstructionToConvertToState(t, e) {
+    return this.getInstructionToConvertToStateUsingConversion(new Sn(this), t, e);
+  }
+  getInstructionToConvertToStateWithClippedPath(t, e) {
+    return this.getInstructionToConvertToStateUsingConversion(new me(this), t, e);
+  }
+  static findIndexOfHighestCommon(t, e) {
+    let n = 0, i = Math.min(t.length - 1, e.length - 1);
+    for (; n <= i; ) {
+      if (!t[n].equals(e[n]))
+        return n - 1;
+      n++;
+    }
+    return n - 1;
+  }
+}
+const ke = new X(E.default, []);
+class ve {
+  constructor(t, e, n) {
+    this.initialState = t, this.state = e, this.rectangle = n, this.stateConversion = () => {
+    };
+  }
+  setInitialState(t) {
+    this.initialState = t;
+    const e = this.initialState.getInstructionToConvertToState(this.state, this.rectangle);
+    this.stateConversion = e;
+  }
+  get stateOfFirstInstruction() {
+    return this.state;
+  }
+  addClippedPath(t) {
+    this.state = this.state.withClippedPath(t);
+  }
+  setInitialStateWithClippedPaths(t) {
+    this.initialState = t;
+    const e = this.initialState.getInstructionToConvertToStateWithClippedPath(this.state, this.rectangle);
+    this.stateConversion = e;
+  }
+}
+class it extends ve {
+  constructor(t, e, n, i, s) {
+    super(t, e, s), this.instruction = n, this.stateConversion = i;
+  }
+  execute(t, e) {
+    this.stateConversion && this.stateConversion(t, e), this.instruction(t, e);
+  }
+  static create(t, e, n) {
+    return new it(t, t, e, () => {
+    }, n);
+  }
+}
+class Ei {
+  constructor(t) {
+    this.area = t;
+  }
+  hasDrawingAcrossBorderOf(t) {
+    return !1;
+  }
+  intersects(t) {
+    return this.area.intersects(t);
+  }
+  isContainedBy(t) {
+    return t.contains(this.area);
+  }
+}
+class pe extends it {
+  constructor(t, e, n, i, s, o) {
+    super(t, e, n, i, o), this.area = s, this.drawingArea = new Ei(s);
+  }
+  static createClearRect(t, e, n, i, s, o, a, h) {
+    return new pe(t, t, (u, d) => {
+      n.clearRect(u, d, i, s, o, a);
+    }, () => {
+    }, e, h);
+  }
+}
+const Y = { direction: new c(0, 1) }, $ = { direction: new c(0, -1) }, Z = { direction: new c(-1, 0) }, _ = { direction: new c(1, 0) };
+function Fi(r, t, e) {
+  let n = 0, i;
+  for (let s of r) {
+    const o = s.minus(t).dot(e);
+    o > n && (i = s, n = o);
+  }
+  return i ? t.plus(i.minus(t).projectOn(e)) : t;
+}
+function A(r, t, e) {
+  return Fi(r.getVertices(), t, e);
+}
+class ki {
+  constructor(t, e, n) {
+    this.rectangle = t, this.state = e, this.drawnPathProperties = n;
+  }
+  addPathAroundViewbox(t) {
+    this.rectangle.addPathAroundViewbox(t, this.drawnPathProperties.lineWidth);
+  }
+  getTransformedViewbox() {
+    const t = this.state.current.transformation.before(this.rectangle.getBitmapTransformationToInfiniteCanvasContext());
+    let e = this.rectangle.polygon;
+    e = e.transform(t.inverse()).expandByDistance(this.drawnPathProperties.lineWidth);
+    for (const n of this.drawnPathProperties.shadowOffsets) {
+      const i = e.transform(p.translation(-n.x, -n.y));
+      e = e.join(i);
+    }
+    return e;
+  }
+  clearRect(t, e, n, i, s, o) {
+    const a = this.getTransformedViewbox(), { a: h, b: u, c: d, d: l, e: g, f: m } = e;
+    t.save(), t.transform(h, u, d, l, g, m);
+    const I = Number.isFinite(n) ? n : A(a, new c(0, 0), n > 0 ? _.direction : Z.direction).x, B = Number.isFinite(s) ? n + s : A(a, new c(0, 0), s > 0 ? _.direction : Z.direction).x, W = Number.isFinite(i) ? i : A(a, new c(0, 0), i > 0 ? Y.direction : $.direction).y, H = Number.isFinite(o) ? i + o : A(a, new c(0, 0), o > 0 ? Y.direction : $.direction).y;
+    t.clearRect(I, W, B - I, H - W), t.restore();
+  }
+  moveToInfinityFromPointInDirection(t, e, n, i) {
+    const s = A(this.getTransformedViewbox(), n, i);
+    this.moveToTransformed(t, s, e);
+  }
+  drawLineToInfinityFromInfinityFromPoint(t, e, n, i, s) {
+    const o = this.getTransformedViewbox(), a = A(o, n, i), h = A(o, n, s), d = o.expandToIncludePoint(n).expandToIncludePoint(a).expandToIncludePoint(h).getVertices().filter((m) => !m.equals(a) && !m.equals(h) && !m.equals(n) && m.minus(n).isInSmallerAngleBetweenPoints(i, s));
+    d.sort((m, I) => m.minus(n).isInSmallerAngleBetweenPoints(I.minus(n), i) ? -1 : 1);
+    let l = a, g = 0;
+    for (let m of d)
+      g += m.minus(l).mod(), this.lineToTransformed(t, m, e), l = m;
+    g += h.minus(l).mod(), this.lineToTransformed(t, h, e), this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, g, h, s);
+  }
+  drawLineFromInfinityFromPointToInfinityFromPoint(t, e, n, i, s) {
+    const o = this.getTransformedViewbox(), a = A(o, n, s), h = A(o, i, s);
+    this.lineToTransformed(t, h, e);
+    const u = h.minus(a).mod();
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, u, h, s);
+  }
+  drawLineFromInfinityFromPointToPoint(t, e, n, i) {
+    const s = A(this.getTransformedViewbox(), n, i), o = n.minus(s).mod();
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, o, s, i), this.lineToTransformed(t, n, e);
+  }
+  drawLineToInfinityFromPointInDirection(t, e, n, i) {
+    const s = A(this.getTransformedViewbox(), n, i);
+    this.lineToTransformed(t, s, e);
+    const o = s.minus(n).mod();
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, o, s, i);
+  }
+  ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, n, i, s) {
+    const o = this.drawnPathProperties.lineDashPeriod;
+    if (o === 0)
+      return;
+    const a = this.getDistanceLeft(n, o);
+    if (a === 0)
+      return;
+    const h = i.plus(s.scale(a / (2 * s.mod())));
+    this.lineToTransformed(t, h, e), this.lineToTransformed(t, i, e);
+  }
+  lineToTransformed(t, e, n) {
+    const { x: i, y: s } = n.apply(e);
+    t.lineTo(i, s);
+  }
+  moveToTransformed(t, e, n) {
+    const { x: i, y: s } = n.apply(e);
+    t.moveTo(i, s);
+  }
+  getDistanceLeft(t, e) {
+    if (e === 0)
+      return 0;
+    const n = t / e | 0;
+    return t - e * n === 0 ? 0 : (n + 1) * e - t;
+  }
+}
+class yn {
+  constructor(t, e) {
+    this.canvasRectangle = t, this.drawnPathProperties = e;
+  }
+  getInfinity(t) {
+    return new ki(this.canvasRectangle, t, this.drawnPathProperties);
+  }
+}
+class we extends ge {
+  constructor(t, e) {
+    super(t), this.rectangle = e;
+  }
+  reconstructState(t, e) {
+    e.setInitialStateWithClippedPaths(t);
+  }
+  hasDrawingAcrossBorderOf(t) {
+    return this.contains((e) => e.drawingArea.hasDrawingAcrossBorderOf(t));
+  }
+  intersects(t) {
+    return this.contains((e) => e.drawingArea.intersects(t));
+  }
+  addClearRect(t, e, n, i, s, o) {
+    const h = new yn(this.rectangle, { lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] }).getInfinity(e), u = pe.createClearRect(e, t, h, n, i, s, o, this.rectangle);
+    u.setInitialState(this.state), this.add(u);
+  }
+  clearContentsInsideArea(t) {
+    this.removeAll((e) => e.drawingArea.isContainedBy(t));
+  }
+  static create(t) {
+    return new we(new it(ke, ke, E.setDefault, () => {
+    }, t), t);
+  }
+}
+class z extends ve {
+  constructor(t, e, n, i, s) {
+    super(t, e, s), this.instruction = n, this.stateConversion = i;
+  }
+  copy() {
+    return new z(this.initialState, this.state, this.instruction, this.stateConversion, this.rectangle);
+  }
+  makeExecutable() {
+    return new it(this.initialState, this.state, this.instruction, this.stateConversion, this.rectangle);
+  }
+  static create(t, e, n) {
+    return new z(t, t, e, () => {
+    }, n);
+  }
+}
+function U(r, t) {
+  return P(r) ? t.applyToPointAtInfinity(r) : t.apply(r);
+}
+class Wi {
+  constructor(t, e) {
+    this.areaBuilder = t, this.transformation = e;
+  }
+  addPosition(t) {
+    this.areaBuilder.addPosition(U(t, this.transformation));
+  }
+}
+class Pe {
+  constructor(t, e) {
+    this.base = t, this.direction = e;
+  }
+  pointIsOnSameLine(t) {
+    return t.minus(this.base).cross(this.direction) === 0;
+  }
+  comesBefore(t, e) {
+    return e.minus(t).dot(this.direction) >= 0;
+  }
+  lineSegmentIsOnSameLine(t) {
+    return this.direction.cross(t.direction) === 0 && this.pointIsOnSameLine(t.point1);
+  }
+  expandLineByDistance(t) {
+    const e = this.direction.getPerpendicular(), n = new w(this.base, e).expandByDistance(t), i = new w(this.base, e.scale(-1)).expandByDistance(t);
+    return new v([n, i]);
+  }
+  getPointsInSameDirection(t, e) {
+    return this.comesBefore(e, t) ? { point1: e, point2: t } : { point1: t, point2: e };
+  }
+  pointIsBetweenPoints(t, e, n) {
+    return t.minus(e).dot(this.direction) * t.minus(n).dot(this.direction) <= 0;
+  }
+  intersectsConvexPolygon(t) {
+    if (this.isContainedByConvexPolygon(t))
+      return !0;
+    const e = t.getIntersectionsWithLine(this.base, this.direction);
+    for (let n of e)
+      if (this.interiorContainsPoint(n.point))
+        return !0;
+    return !1;
+  }
+}
+class Kt extends Pe {
+  getVertices() {
+    return [];
+  }
+  intersectWith(t) {
+    return t.intersectWithLine(this);
+  }
+  join(t) {
+    return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
+  }
+  intersectWithConvexPolygon(t) {
+    if (!this.intersectsConvexPolygon(t))
+      return b;
+    if (this.isContainedByConvexPolygon(t))
+      return this;
+    const e = t.getIntersectionsWithLine(this.base, this.direction);
+    let n, i;
+    for (let s of e)
+      (!n && !i || !n && this.comesBefore(s.point, i) || !i && this.comesBefore(n, s.point) || n && i && this.pointIsBetweenPoints(s.point, n, i)) && (s.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = s.point : i = s.point);
+    return n && i ? new O(n, i) : n ? new F(n, this.direction) : new F(i, this.direction.scale(-1));
+  }
+  intersectWithLine(t) {
+    return this.intersectsLine(t) ? this : b;
+  }
+  intersectWithLineSegment(t) {
+    return this.lineSegmentIsOnSameLine(t) ? t : b;
+  }
+  intersectWithRay(t) {
+    return this.intersectsRay(t) ? t : b;
+  }
+  isContainedByConvexPolygon(t) {
+    return t.containsPoint(this.base) && t.containsInfinityInDirection(this.direction) && t.containsInfinityInDirection(this.direction.scale(-1));
+  }
+  isContainedByLine(t) {
+    return this.intersectsSubsetOfLine(t);
+  }
+  isContainedByLineSegment(t) {
+    return !1;
+  }
+  isContainedByRay(t) {
+    return !1;
+  }
+  contains(t) {
+    return t.isContainedByLine(this);
+  }
+  intersectsLine(t) {
+    return this.intersectsSubsetOfLine(t);
+  }
+  intersectsSubsetOfLine(t) {
+    return this.pointIsOnSameLine(t.base) && this.direction.cross(t.direction) === 0;
+  }
+  intersectsLineSegment(t) {
+    return this.lineSegmentIsOnSameLine(t);
+  }
+  intersectsRay(t) {
+    return this.intersectsSubsetOfLine(t);
+  }
+  intersects(t) {
+    return t.intersectsLine(this);
+  }
+  expandToIncludePoint(t) {
+    return this.pointIsOnSameLine(t) ? this : v.createTriangleWithInfinityInDirection(this.base, t, this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
+  }
+  expandByDistance(t) {
+    return this.expandLineByDistance(t);
+  }
+  expandToIncludeInfinityInDirection(t) {
+    const e = t.cross(this.direction), n = this.direction.getPerpendicular();
+    return e === 0 ? this : e > 0 ? v.createFromHalfPlane(new w(this.base, n.scale(-1))) : v.createFromHalfPlane(new w(this.base, n));
+  }
+  transform(t) {
+    const e = t.apply(this.base);
+    return new Kt(e, t.apply(this.base.plus(this.direction)).minus(e));
+  }
+  interiorContainsPoint(t) {
+    return this.pointIsOnSameLine(t);
+  }
+}
+class F extends Pe {
+  getVertices() {
+    return [this.base];
+  }
+  intersectWith(t) {
+    return t.intersectWithRay(this);
+  }
+  join(t) {
+    return t.expandToIncludePoint(this.base).expandToIncludeInfinityInDirection(this.direction);
+  }
+  intersectWithConvexPolygon(t) {
+    if (!this.intersectsConvexPolygon(t))
+      return b;
+    if (this.isContainedByConvexPolygon(t))
+      return this;
+    const e = t.getIntersectionsWithLine(this.base, this.direction);
+    let n = this.base, i;
+    for (let s of e)
+      (!i && this.comesBefore(n, s.point) || i && this.pointIsBetweenPoints(s.point, n, i)) && (s.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = s.point : i = s.point);
+    return i ? new O(n, i) : new F(n, this.direction);
+  }
+  intersectWithRay(t) {
+    return this.isContainedByRay(t) ? this : t.isContainedByRay(this) ? t : this.interiorContainsPoint(t.base) ? new O(this.base, t.base) : b;
+  }
+  intersectWithLine(t) {
+    return t.intersectWithRay(this);
+  }
+  intersectWithLineSegment(t) {
+    if (t.isContainedByRay(this))
+      return t;
+    if (!this.lineSegmentIsOnSameLine(t))
+      return b;
+    let { point2: e } = this.getPointsInSameDirection(t.point1, t.point2);
+    return this.comesBefore(e, this.base) ? b : new O(this.base, e);
+  }
+  isContainedByConvexPolygon(t) {
+    return t.containsPoint(this.base) && t.containsInfinityInDirection(this.direction);
+  }
+  isContainedByRay(t) {
+    return t.containsPoint(this.base) && t.containsInfinityInDirection(this.direction);
+  }
+  isContainedByLine(t) {
+    return t.intersectsSubsetOfLine(this);
+  }
+  isContainedByLineSegment(t) {
+    return !1;
+  }
+  contains(t) {
+    return t.isContainedByRay(this);
+  }
+  intersectsRay(t) {
+    return this.isContainedByRay(t) || t.isContainedByRay(this) || this.interiorContainsPoint(t.base);
+  }
+  intersectsLine(t) {
+    return t.intersectsSubsetOfLine(this);
+  }
+  intersectsLineSegment(t) {
+    if (t.isContainedByRay(this))
+      return !0;
+    if (!this.lineSegmentIsOnSameLine(t))
+      return !1;
+    let { point2: e } = this.getPointsInSameDirection(t.point1, t.point2);
+    return !this.comesBefore(e, this.base);
+  }
+  intersects(t) {
+    return t.intersectsRay(this);
+  }
+  expandToIncludePoint(t) {
+    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? new F(t, this.direction) : v.createTriangleWithInfinityInDirection(this.base, t, this.direction);
+  }
+  expandByDistance(t) {
+    const e = this.expandLineByDistance(t), n = new w(this.base, this.direction).expandByDistance(t);
+    return e.intersectWithConvexPolygon(new v([n]));
+  }
+  expandToIncludeInfinityInDirection(t) {
+    return t.inSameDirectionAs(this.direction) ? this : this.direction.cross(t) === 0 ? new Kt(this.base, this.direction) : v.createTriangleWithInfinityInTwoDirections(this.base, this.direction, t);
+  }
+  transform(t) {
+    const e = t.apply(this.base);
+    return new F(e, t.apply(this.base.plus(this.direction)).minus(e));
+  }
+  interiorContainsPoint(t) {
+    return this.pointIsOnSameLine(t) && !this.comesBefore(t, this.base);
+  }
+  containsInfinityInDirection(t) {
+    return this.direction.inSameDirectionAs(t);
+  }
+  containsPoint(t) {
+    return this.pointIsOnSameLine(t) && this.comesBefore(this.base, t);
+  }
+}
+class O extends Pe {
+  constructor(t, e) {
+    super(t, e.minus(t)), this.point1 = t, this.point2 = e;
+  }
+  getVertices() {
+    return [this.point1, this.point2];
+  }
+  join(t) {
+    return t.expandToIncludePoint(this.point1).expandToIncludePoint(this.point2);
+  }
+  intersectWith(t) {
+    return t.intersectWithLineSegment(this);
+  }
+  intersectWithLineSegment(t) {
+    if (this.isContainedByLineSegment(t))
+      return this;
+    if (t.isContainedByLineSegment(this))
+      return t;
+    if (!this.lineSegmentIsOnSameLine(t))
+      return b;
+    let { point1: e, point2: n } = this.getPointsInSameDirection(t.point1, t.point2);
+    return this.comesBefore(n, this.point1) || this.comesBefore(this.point2, e) ? b : this.comesBefore(this.point1, e) ? new O(e, this.point2) : new O(this.point1, n);
+  }
+  intersectWithRay(t) {
+    return t.intersectWithLineSegment(this);
+  }
+  intersectWithLine(t) {
+    return t.intersectWithLineSegment(this);
+  }
+  isContainedByRay(t) {
+    return t.containsPoint(this.point1) && t.containsPoint(this.point2);
+  }
+  isContainedByLine(t) {
+    return t.intersectsSubsetOfLine(this);
+  }
+  isContainedByLineSegment(t) {
+    return t.containsPoint(this.point1) && t.containsPoint(this.point2);
+  }
+  intersectWithConvexPolygon(t) {
+    if (!this.intersectsConvexPolygon(t))
+      return b;
+    if (this.isContainedByConvexPolygon(t))
+      return this;
+    const e = t.getIntersectionsWithLine(this.point1, this.direction);
+    let n = this.point1, i = this.point2;
+    for (let s of e)
+      this.pointIsBetweenPoints(s.point, n, i) && (s.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = s.point : i = s.point);
+    return new O(n, i);
+  }
+  isContainedByConvexPolygon(t) {
+    return t.containsPoint(this.point1) && t.containsPoint(this.point2);
+  }
+  contains(t) {
+    return t.isContainedByLineSegment(this);
+  }
+  pointIsStrictlyBetweenPoints(t, e, n) {
+    return t.minus(e).dot(this.direction) * t.minus(n).dot(this.direction) < 0;
+  }
+  containsPoint(t) {
+    return this.pointIsOnSameLine(t) && this.pointIsBetweenPoints(t, this.point1, this.point2);
+  }
+  interiorContainsPoint(t) {
+    return this.pointIsOnSameLine(t) && this.pointIsStrictlyBetweenPoints(t, this.point1, this.point2);
+  }
+  intersectsRay(t) {
+    return t.intersectsLineSegment(this);
+  }
+  intersectsLineSegment(t) {
+    if (this.isContainedByLineSegment(t) || t.isContainedByLineSegment(this))
+      return !0;
+    if (!this.lineSegmentIsOnSameLine(t))
+      return !1;
+    const { point1: e, point2: n } = this.getPointsInSameDirection(t.point1, t.point2);
+    return !this.comesBefore(n, this.point1) && !this.comesBefore(this.point2, e);
+  }
+  intersectsLine(t) {
+    return t.intersectsSubsetOfLine(this);
+  }
+  intersects(t) {
+    return t.intersectsLineSegment(this);
+  }
+  expandByDistance(t) {
+    const e = this.expandLineByDistance(t), n = new w(this.base, this.direction).expandByDistance(t), i = new w(this.point2, this.direction.scale(-1)).expandByDistance(t);
+    return e.intersectWithConvexPolygon(new v([n, i]));
+  }
+  expandToIncludePoint(t) {
+    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? this.comesBefore(t, this.point1) ? new O(t, this.point2) : new O(this.point1, t) : v.createTriangle(this.point1, t, this.point2);
+  }
+  expandToIncludeInfinityInDirection(t) {
+    return t.inSameDirectionAs(this.direction) ? new F(this.point1, t) : t.cross(this.direction) === 0 ? new F(this.point2, t) : v.createTriangleWithInfinityInDirection(this.point1, this.point2, t);
+  }
+  transform(t) {
+    return new O(t.apply(this.point1), t.apply(this.point2));
+  }
+}
+class Ri {
+  addPoint(t) {
+    return Pt;
+  }
+  addPointAtInfinity(t) {
+    return this;
+  }
+  addArea(t) {
+    return Pt;
+  }
+}
+const Ce = new Ri();
+class ce {
+  constructor(t) {
+    this.towardsMiddle = t;
+  }
+  addPoint(t) {
+    return v.createFromHalfPlane(new w(t, this.towardsMiddle));
+  }
+  addPointAtInfinity(t) {
+    return t.dot(this.towardsMiddle) >= 0 ? this : Ce;
+  }
+  addArea(t) {
+    const e = this.towardsMiddle.getPerpendicular();
+    return t.expandToIncludeInfinityInDirection(this.towardsMiddle).expandToIncludeInfinityInDirection(e).expandToIncludeInfinityInDirection(e.scale(-1));
+  }
+}
+class Vt {
+  constructor(t, e) {
+    this.direction1 = t, this.direction2 = e;
+  }
+  addPoint(t) {
+    return v.createTriangleWithInfinityInTwoDirections(t, this.direction1, this.direction2);
+  }
+  addPointAtInfinity(t) {
+    return t.isInSmallerAngleBetweenPoints(this.direction1, this.direction2) ? this : t.cross(this.direction1) === 0 ? new ce(this.direction2.projectOn(this.direction1.getPerpendicular())) : t.cross(this.direction2) === 0 ? new ce(this.direction1.projectOn(this.direction2.getPerpendicular())) : this.direction1.isInSmallerAngleBetweenPoints(t, this.direction2) ? new Vt(t, this.direction2) : this.direction2.isInSmallerAngleBetweenPoints(t, this.direction1) ? new Vt(t, this.direction1) : Ce;
+  }
+  addArea(t) {
+    return t.expandToIncludeInfinityInDirection(this.direction1).expandToIncludeInfinityInDirection(this.direction2);
+  }
+}
+class Ni {
+  constructor(t) {
+    this.direction = t;
+  }
+  addPoint(t) {
+    return new Kt(t, this.direction);
+  }
+  addPointAtInfinity(t) {
+    return t.cross(this.direction) === 0 ? this : new ce(t.projectOn(this.direction.getPerpendicular()));
+  }
+  addArea(t) {
+    return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
+  }
+}
+class Mi {
+  constructor(t) {
+    this.direction = t;
+  }
+  addPointAtInfinity(t) {
+    return t.inSameDirectionAs(this.direction) ? this : t.cross(this.direction) === 0 ? new Ni(this.direction) : new Vt(this.direction, t);
+  }
+  addPoint(t) {
+    return new F(t, this.direction);
+  }
+  addArea(t) {
+    return t.expandToIncludeInfinityInDirection(this.direction);
+  }
+}
+class Ie {
+  constructor(t, e, n) {
+    this._area = t, this.firstPoint = e, this.subsetOfLineAtInfinity = n;
+  }
+  get area() {
+    return this._area || b;
+  }
+  addPoint(t) {
+    this._area ? this._area = this._area.expandToIncludePoint(t) : this.firstPoint ? t.equals(this.firstPoint) || (this._area = new O(this.firstPoint, t)) : this.subsetOfLineAtInfinity ? this._area = this.subsetOfLineAtInfinity.addPoint(t) : this.firstPoint = t;
+  }
+  addPosition(t) {
+    P(t) ? this.addInfinityInDirection(t.direction) : this.addPoint(t);
+  }
+  addInfinityInDirection(t) {
+    this._area ? this._area = this._area.expandToIncludeInfinityInDirection(t) : this.firstPoint ? this._area = new F(this.firstPoint, t) : this.subsetOfLineAtInfinity ? (this.subsetOfLineAtInfinity = this.subsetOfLineAtInfinity.addPointAtInfinity(t), this.subsetOfLineAtInfinity === Ce && (this._area = Pt)) : this.subsetOfLineAtInfinity = new Mi(t);
+  }
+  transformedWith(t) {
+    return new Wi(this, t);
+  }
+  copy() {
+    return new Ie(this._area, this.firstPoint, this.subsetOfLineAtInfinity);
+  }
+}
+class Ct extends ve {
+  constructor(t, e, n, i, s) {
+    super(t, e, s), this.instruction = n, this.stateConversion = i;
+  }
+  replaceInstruction(t) {
+    this.instruction = t;
+  }
+  copy() {
+    return new Ct(this.initialState, this.state, this.instruction, this.stateConversion, this.rectangle);
+  }
+  makeExecutable(t) {
+    const e = t.getInfinity(this.state), n = this.instruction, i = (s, o) => n(s, o, e);
+    return new it(this.initialState, this.state, i, this.stateConversion, this.rectangle);
+  }
+  static create(t, e, n) {
+    return new Ct(t, t, e, () => {
+    }, n);
+  }
+}
+function Vi(r, t) {
+  return r ? t ? P(r) ? P(t) && r.direction.equals(t.direction) : !P(t) && r.equals(t) : !r : !t;
+}
+class Tt {
+  constructor(t) {
+    this.shape = t;
+  }
+  getInstructionToDrawLineTo(t, e) {
+    return this.getInstructionToExtendShapeWithLineTo(this.shape.transform(e.current.transformation.inverse()), t);
+  }
+  getInstructionToMoveToBeginning(t) {
+    return this.getInstructionToMoveToBeginningOfShape(this.shape.transform(t.current.transformation.inverse()));
+  }
+  get currentPosition() {
+    return this.shape.currentPosition;
+  }
+  moveToInfinityFromPointInDirection(t, e) {
+    return (n, i, s) => {
+      s.moveToInfinityFromPointInDirection(n, i, t, e);
+    };
+  }
+  lineFromInfinityFromPointToInfinityFromPoint(t, e, n) {
+    return (i, s, o) => {
+      o.drawLineFromInfinityFromPointToInfinityFromPoint(i, s, t, e, n);
+    };
+  }
+  lineFromInfinityFromPointToPoint(t, e) {
+    return (n, i, s) => {
+      s.drawLineFromInfinityFromPointToPoint(n, i, t, e);
+    };
+  }
+  lineToInfinityFromPointInDirection(t, e) {
+    return (n, i, s) => {
+      s.drawLineToInfinityFromPointInDirection(n, i, t, e);
+    };
+  }
+  lineToInfinityFromInfinityFromPoint(t, e, n) {
+    return (i, s, o) => {
+      o.drawLineToInfinityFromInfinityFromPoint(i, s, t, e, n);
+    };
+  }
+  lineTo(t) {
+    return (e, n) => {
+      const { x: i, y: s } = n.apply(t);
+      e.lineTo(i, s);
+    };
+  }
+  moveTo(t) {
+    return (e, n) => {
+      const { x: i, y: s } = n.apply(t);
+      e.moveTo(i, s);
+    };
+  }
+}
+class jt {
+  constructor(t, e, n, i) {
+    this.initialPosition = t, this.firstFinitePoint = e, this.lastFinitePoint = n, this.currentPosition = i;
+  }
+  transform(t) {
+    return new jt(
+      t.applyToPointAtInfinity(this.initialPosition),
+      t.apply(this.firstFinitePoint),
+      t.apply(this.lastFinitePoint),
+      t.applyToPointAtInfinity(this.currentPosition)
+    );
+  }
+}
+class St {
+  constructor(t, e, n) {
+    this.initialPosition = t, this.firstFinitePoint = e, this.currentPosition = n;
+  }
+  transform(t) {
+    return new St(
+      t.applyToPointAtInfinity(this.initialPosition),
+      t.apply(this.firstFinitePoint),
+      t.apply(this.currentPosition)
+    );
+  }
+}
+function K(...r) {
+  return (...t) => {
+    for (const e of r)
+      e && e(...t);
+  };
+}
+function qi(r, t) {
+  return t ? (e, n) => {
+    e.save(), t(e, n), r(e, n), e.restore();
+  } : r;
+}
+function Hi(r, t) {
+  return r === k.Relative ? (e) => {
+    const { a: n, b: i, c: s, d: o, e: a, f: h } = t.getBitmapTransformationToTransformedInfiniteCanvasContext();
+    e.transform(n, i, s, o, a, h);
+  } : r === k.Absolute ? (e) => {
+    const { a: n, b: i, c: s, d: o, e: a, f: h } = t.getBitmapTransformationToInfiniteCanvasContext();
+    e.setTransform(n, i, s, o, a, h);
+  } : null;
+}
+class Gi extends Tt {
+  constructor(t, e) {
+    super(e), this.pathBuilderProvider = t;
+  }
+  getInstructionToMoveToBeginningOfShape(t) {
+    return t.initialPosition.direction.cross(t.currentPosition.direction) === 0 ? this.moveToInfinityFromPointInDirection(t.firstFinitePoint, t.initialPosition.direction) : K(
+      this.moveToInfinityFromPointInDirection(t.lastFinitePoint, t.currentPosition.direction),
+      this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint, t.currentPosition.direction, t.initialPosition.direction),
+      this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint, t.firstFinitePoint, t.initialPosition.direction)
+    );
+  }
+  getInstructionToExtendShapeWithLineTo(t, e) {
+    return P(e) ? this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint, t.currentPosition.direction, e.direction) : K(
+      this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint, e, t.currentPosition.direction),
+      this.lineFromInfinityFromPointToPoint(e, t.currentPosition.direction)
+    );
+  }
+  containsFinitePoint() {
+    return !0;
+  }
+  isClosable() {
+    return !this.shape.initialPosition.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+  }
+  canAddLineTo(t) {
+    return !P(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+  }
+  addPosition(t) {
+    return P(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new jt(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.lastFinitePoint, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new St(this.shape.initialPosition, this.shape.firstFinitePoint, t));
+  }
+}
+class Xi extends Tt {
+  constructor(t, e) {
+    super(e), this.pathBuilderProvider = t;
+  }
+  getInstructionToMoveToBeginningOfShape(t) {
+    const e = this.moveToInfinityFromPointInDirection(t.currentPosition, t.initialPosition.direction);
+    if (t.currentPosition.equals(t.firstFinitePoint))
+      return e;
+    const n = this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition, t.firstFinitePoint, t.initialPosition.direction);
+    return K(e, n);
+  }
+  getInstructionToExtendShapeWithLineTo(t, e) {
+    return P(e) ? this.lineToInfinityFromPointInDirection(t.currentPosition, e.direction) : this.lineTo(e);
+  }
+  canAddLineTo(t) {
+    return !0;
+  }
+  containsFinitePoint() {
+    return !0;
+  }
+  isClosable() {
+    return !0;
+  }
+  addPosition(t) {
+    return P(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new jt(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.currentPosition, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new St(this.shape.initialPosition, this.shape.firstFinitePoint, t));
+  }
+}
+class Qt {
+  constructor(t, e) {
+    this.initialPoint = t, this.currentPosition = e;
+  }
+  transform(t) {
+    return new Qt(
+      t.apply(this.initialPoint),
+      t.applyToPointAtInfinity(this.currentPosition)
+    );
+  }
+}
+class yt {
+  constructor(t, e) {
+    this.initialPoint = t, this.currentPosition = e;
+  }
+  transform(t) {
+    return new yt(
+      t.apply(this.initialPoint),
+      t.apply(this.currentPosition)
+    );
+  }
+}
+class Yi extends Tt {
+  constructor(t, e) {
+    super(e), this.pathBuilderProvider = t;
+  }
+  getInstructionToMoveToBeginningOfShape(t) {
+    return this.moveTo(t.initialPoint);
+  }
+  getInstructionToExtendShapeWithLineTo(t, e) {
+    return P(e) ? e.direction.inSameDirectionAs(t.currentPosition.direction) ? () => {
+    } : this.lineToInfinityFromInfinityFromPoint(t.initialPoint, t.currentPosition.direction, e.direction) : K(this.lineFromInfinityFromPointToInfinityFromPoint(t.initialPoint, e, t.currentPosition.direction), this.lineFromInfinityFromPointToPoint(e, t.currentPosition.direction));
+  }
+  canAddLineTo(t) {
+    return !P(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+  }
+  containsFinitePoint() {
+    return !0;
+  }
+  isClosable() {
+    return !0;
+  }
+  addPosition(t) {
+    return P(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new Qt(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new yt(this.shape.initialPoint, t));
+  }
+}
+class We extends Tt {
+  constructor(t, e) {
+    super(e), this.pathBuilderProvider = t;
+  }
+  getInstructionToMoveToBeginningOfShape(t) {
+    return this.moveTo(t.initialPoint);
+  }
+  getInstructionToExtendShapeWithLineTo(t, e) {
+    if (P(e)) {
+      const n = this.lineToInfinityFromPointInDirection(t.currentPosition, e.direction);
+      if (t.currentPosition.minus(t.initialPoint).cross(e.direction) === 0)
+        return n;
+      const i = this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition, t.initialPoint, e.direction);
+      return K(n, i);
+    }
+    return this.lineTo(e);
+  }
+  canAddLineTo(t) {
+    return !0;
+  }
+  containsFinitePoint() {
+    return !0;
+  }
+  isClosable() {
+    return !0;
+  }
+  addPosition(t) {
+    return P(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new Qt(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new yt(this.shape.initialPoint, t));
+  }
+}
+class Jt {
+  constructor(t, e, n, i) {
+    this.initialPosition = t, this.containsFinitePoint = e, this.positionsSoFar = n, this.currentPosition = i;
+  }
+  transform(t) {
+    return new Jt(
+      t.applyToPointAtInfinity(this.initialPosition),
+      this.containsFinitePoint,
+      this.positionsSoFar.map((e) => t.applyToPointAtInfinity(e)),
+      t.applyToPointAtInfinity(this.currentPosition)
+    );
+  }
+}
+class Re extends Tt {
+  constructor(t, e) {
+    super(e), this.pathBuilderProvider = t;
+  }
+  getInstructionToMoveToBeginningOfShape(t) {
+    return t.containsFinitePoint ? (e, n, i) => i.addPathAroundViewbox(e) : () => {
+    };
+  }
+  getInstructionToExtendShapeWithLineTo(t, e) {
+    if (P(e))
+      return;
+    if (t.positionsSoFar.length === 1)
+      return this.lineFromInfinityFromPointToPoint(e, t.positionsSoFar[0].direction);
+    const n = t.positionsSoFar.slice(1);
+    let i = t.initialPosition;
+    const s = [];
+    for (let o of n)
+      s.push(this.lineToInfinityFromInfinityFromPoint(e, i.direction, o.direction)), i = o;
+    return K(K(...s), this.lineFromInfinityFromPointToPoint(e, i.direction));
+  }
+  canAddLineTo(t) {
+    return !P(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+  }
+  containsFinitePoint() {
+    return this.shape.containsFinitePoint;
+  }
+  isClosable() {
+    return !0;
+  }
+  addPosition(t) {
+    if (P(t)) {
+      const n = t.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction, this.shape.currentPosition.direction) ? this.shape.containsFinitePoint : !this.shape.containsFinitePoint;
+      return this.pathBuilderProvider.atInfinity(new Jt(this.shape.initialPosition, n, this.shape.positionsSoFar.concat([t]), t));
+    }
+    return this.pathBuilderProvider.fromPointAtInfinityToPoint(new St(this.shape.initialPosition, t, t));
+  }
+}
+class $i {
+  fromPointAtInfinityToPointAtInfinity(t) {
+    return new Gi(this, t);
+  }
+  fromPointAtInfinityToPoint(t) {
+    return new Xi(this, t);
+  }
+  fromPointToPointAtInfinity(t) {
+    return new Yi(this, t);
+  }
+  fromPointToPoint(t) {
+    return new We(this, t);
+  }
+  atInfinity(t) {
+    return new Re(this, t);
+  }
+  getBuilderFromPosition(t) {
+    return P(t) ? new Re(this, new Jt(t, !1, [t], t)) : new We(this, new yt(t, t));
+  }
+}
+class qt extends fe {
+  constructor(t, e, n) {
+    super(t), this._initiallyWithState = t, this.pathInstructionBuilder = e, this.rectangle = n;
+  }
+  get currentPosition() {
+    return this.pathInstructionBuilder.currentPosition;
+  }
+  addInstruction(t) {
+    t.setInitialState(this.state), this.add(t);
+  }
+  closePath() {
+    const t = z.create(this.state, (e) => {
+      e.closePath();
+    }, this.rectangle);
+    t.setInitialState(this.state), this.add(t);
+  }
+  copy() {
+    const t = new qt(this._initiallyWithState.copy(), this.pathInstructionBuilder, this.rectangle);
+    for (const e of this.added)
+      t.add(e.copy());
+    return t;
+  }
+  makeExecutable(t) {
+    const e = new ge(this._initiallyWithState.makeExecutable(t));
+    for (const n of this.added)
+      e.add(n.makeExecutable(t));
+    return e;
+  }
+  containsFinitePoint() {
+    return this.pathInstructionBuilder.containsFinitePoint();
+  }
+  isClosable() {
+    return this.pathInstructionBuilder.isClosable();
+  }
+  canAddLineTo(t) {
+    return this.pathInstructionBuilder.canAddLineTo(t);
+  }
+  lineTo(t, e) {
+    const n = U(t, e.current.transformation);
+    (!P(t) || this.pathInstructionBuilder.containsFinitePoint()) && this.addInstructionToDrawLineTo(t, e), this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(n);
+    const i = this.pathInstructionBuilder.getInstructionToMoveToBeginning(this._initiallyWithState.state);
+    this._initiallyWithState.replaceInstruction((s, o, a) => {
+      i(s, o, a);
+    });
+  }
+  addInstructionToDrawLineTo(t, e) {
+    const n = this.pathInstructionBuilder.getInstructionToDrawLineTo(t, e), i = Ct.create(e, n, this.rectangle);
+    i.setInitialState(this.state), this.add(i);
+  }
+  addPathInstruction(t, e, n) {
+    t.initialPoint && !Vi(this.pathInstructionBuilder.currentPosition, t.initialPoint) && this.lineTo(t.initialPoint, n), t.positionChange && (this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(U(t.positionChange, n.current.transformation))), e.setInitialState(this.state), this.add(e);
+  }
+  static create(t, e, n) {
+    const i = U(e, t.current.transformation), s = new $i().getBuilderFromPosition(i), o = s.getInstructionToMoveToBeginning(t), a = Ct.create(t, o, n);
+    return new qt(a, s, n);
+  }
+}
+function Ne(r, t) {
+  return Number.isFinite(r) ? !0 : Number.isFinite(t) ? !1 : r < 0 && t > 0 || r > 0 && t < 0;
+}
+function Ht(r, t, e, n) {
+  return Ne(r, e) && Ne(t, n);
+}
+class zi {
+  constructor(t, e) {
+    this.instructions = t, this.area = e;
+  }
+  get state() {
+    return this.instructions.state;
+  }
+  get initialState() {
+    return this.instructions.initialState;
+  }
+  execute(t, e) {
+    this.instructions.execute(t, e);
+  }
+}
+class ht extends fe {
+  constructor(t, e) {
+    super(t), this._initiallyWithState = t, this.rectangle = e, this.areaBuilder = new Ie();
+  }
+  get area() {
+    return this.areaBuilder.area;
+  }
+  containsFinitePoint() {
+    for (const t of this.added)
+      if (t.containsFinitePoint())
+        return !0;
+    return !1;
+  }
+  currentSubpathIsClosable() {
+    return this.added.length === 0 ? !0 : this.added[this.added.length - 1].isClosable();
+  }
+  allSubpathsAreClosable() {
+    if (this.added.length === 0)
+      return !0;
+    for (const t of this.added)
+      if (!t.isClosable())
+        return !1;
+    return !0;
+  }
+  drawPath(t, e, n) {
+    if (this.added.length === 0)
+      return;
+    const i = this.added[this.added.length - 1], s = z.create(e, t, this.rectangle);
+    return i.addInstruction(s), this.makeExecutable(n);
+  }
+  makeExecutable(t) {
+    const e = new ge(this._initiallyWithState.makeExecutable()), n = new yn(this.rectangle, t);
+    for (const i of this.added)
+      e.add(i.makeExecutable(n));
+    return e;
+  }
+  clipPath(t, e) {
+    if (this.added.length === 0)
+      return;
+    const n = this.added[this.added.length - 1], i = z.create(e, t, this.rectangle);
+    n.addInstruction(i);
+    const s = this.recreatePath();
+    this.addClippedPath(s.getInstructionsToClip());
+  }
+  closePath() {
+    if (this.added.length === 0)
+      return;
+    this.added[this.added.length - 1].closePath();
+  }
+  moveTo(t, e) {
+    const n = U(t, e.current.transformation);
+    this.areaBuilder.addPosition(n);
+    const i = qt.create(e, t, this.rectangle);
+    i.setInitialState(this.state), this.add(i);
+  }
+  canAddLineTo(t, e) {
+    if (this.added.length === 0)
+      return !0;
+    const n = U(t, e.current.transformation);
+    return this.added[this.added.length - 1].canAddLineTo(n);
+  }
+  lineTo(t, e) {
+    if (this.added.length === 0) {
+      this.moveTo(t, e);
+      return;
+    }
+    const n = this.added[this.added.length - 1], i = U(t, e.current.transformation);
+    this.areaBuilder.addPosition(i), n.lineTo(t, e);
+  }
+  moveToPositionDeterminedBy(t, e, n) {
+    Number.isFinite(t) ? Number.isFinite(e) ? this.moveTo(new c(t, e), n) : this.moveTo(e < 0 ? $ : Y, n) : this.moveTo(t < 0 ? Z : _, n);
+  }
+  rect(t, e, n, i, s) {
+    if (!Number.isFinite(t) && !Number.isFinite(e)) {
+      this.moveTo({ direction: new c(1, 0) }, s), this.lineTo({ direction: new c(0, 1) }, s), this.lineTo({ direction: new c(-1, -1) }, s);
+      return;
+    }
+    this.moveToPositionDeterminedBy(t, e, s), Ht(t, e, n, i) && (Number.isFinite(t) ? Number.isFinite(e) ? (Number.isFinite(n) ? (this.lineTo(new c(t + n, e), s), Number.isFinite(i) ? (this.lineTo(new c(t + n, e + i), s), this.lineTo(new c(t, e + i), s)) : this.lineTo(i > 0 ? Y : $, s)) : (this.lineTo(n > 0 ? _ : Z, s), Number.isFinite(i) ? this.lineTo(new c(t, e + i), s) : this.lineTo(i > 0 ? Y : $, s)), this.lineTo(new c(t, e), s)) : (Number.isFinite(n) ? this.lineTo(new c(t + n, 0), s) : this.lineTo(n > 0 ? _ : Z, s), this.lineTo(i > 0 ? Y : $, s), this.lineTo(new c(t, 0), s), this.lineTo(e < 0 ? $ : Y, s)) : (this.lineTo(new c(0, e), s), this.lineTo(n > 0 ? _ : Z, s), Number.isFinite(i) ? this.lineTo(new c(0, e + i), s) : this.lineTo(i > 0 ? Y : $, s), this.lineTo(t < 0 ? Z : _, s)), this.closePath(), this.moveToPositionDeterminedBy(t, e, s));
+  }
+  addPathInstruction(t, e) {
+    if (this.added.length === 0)
+      if (t.initialPoint)
+        this.moveTo(t.initialPoint, e);
+      else
+        return;
+    const n = this.added[this.added.length - 1], i = n.currentPosition, s = U(i, e.current.transformation.inverse());
+    t.changeArea(this.areaBuilder.transformedWith(e.current.transformation), s);
+    const o = z.create(e, t.instruction, this.rectangle);
+    n.addPathInstruction(t, o, e);
+  }
+  getInstructionsToClip() {
+    return new zi(this.makeExecutable({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] }), this.area);
+  }
+  recreatePath() {
+    const t = new ht(this._initiallyWithState.copy(), this.rectangle);
+    for (const e of this.added)
+      t.add(e.copy());
+    return t.areaBuilder = this.areaBuilder.copy(), t.setInitialState(t.stateOfFirstInstruction), t;
+  }
+  static create(t, e) {
+    return new ht(z.create(t, (n) => {
+      n.beginPath();
+    }, e), e);
+  }
+}
+function Me(r, t) {
+  return Number.isFinite(r) || Number.isFinite(t) ? !1 : r < 0 && t > 0 || r > 0 && t < 0;
+}
+function bn(r, t, e, n) {
+  return Me(r, e) && Me(t, n);
+}
+class Ui {
+  constructor(t) {
+    this.area = t;
+  }
+  hasDrawingAcrossBorderOf(t) {
+    return this.isContainedBy(t) ? !1 : this.intersects(t);
+  }
+  isContainedBy(t) {
+    return t.contains(this.area);
+  }
+  intersects(t) {
+    return this.area.intersects(t);
+  }
+}
+class Ki {
+  constructor(t, e) {
+    this.instructions = t, this.drawingArea = new Ui(e);
+  }
+  get state() {
+    return this.instructions.state;
+  }
+  get initialState() {
+    return this.instructions.initialState;
+  }
+  get stateOfFirstInstruction() {
+    return this.instructions.stateOfFirstInstruction;
+  }
+  setInitialState(t) {
+    this.instructions.setInitialState(t);
+  }
+  setInitialStateWithClippedPaths(t) {
+    this.instructions.setInitialStateWithClippedPaths(t);
+  }
+  addClippedPath(t) {
+    this.instructions.addClippedPath(t);
+  }
+  execute(t, e) {
+    this.instructions.execute(t, e);
+  }
+}
+function ji(r, t) {
+  let e = r.area;
+  return e && t.lineWidth > 0 && (e = e.expandByDistance(t.lineWidth / 2)), e;
+}
+function Qi(r) {
+  return {
+    lineWidth: r.current.getMaximumLineWidth(),
+    lineDashPeriod: r.current.getLineDashPeriod(),
+    shadowOffsets: r.current.getShadowOffsets()
+  };
+}
+function Ji(r) {
+  return {
+    lineWidth: 0,
+    lineDashPeriod: 0,
+    shadowOffsets: r.current.getShadowOffsets()
+  };
+}
+class q {
+  constructor(t, e, n, i, s, o, a) {
+    this.instruction = t, this.area = e, this.build = n, this.takeClippingRegionIntoAccount = i, this.transformationKind = s, this.state = o, this.tempState = a;
+  }
+  static forStrokingPath(t, e, n) {
+    return q.forPath(t, e, Qi, n);
+  }
+  static forFillingPath(t, e, n) {
+    return q.forPath(t, e, Ji, n);
+  }
+  static forPath(t, e, n, i) {
+    const s = e.current.isTransformable(), o = s ? k.None : k.Relative, a = e.currentlyTransformed(s), h = n(a), u = i(a), d = ji(u, h);
+    return new q(
+      t,
+      d,
+      (l) => u.drawPath(l, a, h),
+      !0,
+      o,
+      a
+    );
+  }
+  getDrawnArea() {
+    let t = this.area;
+    const e = this.state;
+    if (e.current.shadowBlur !== 0 || !e.current.shadowOffset.equals(c.origin)) {
+      const n = t.expandByDistance(e.current.shadowBlur).transform(p.translation(e.current.shadowOffset.x, e.current.shadowOffset.y));
+      t = t.join(n);
+    }
+    return e.current.clippingRegion && this.takeClippingRegionIntoAccount && (t = t.intersectWith(e.current.clippingRegion)), t;
+  }
+  getModifiedInstruction(t) {
+    let e = Hi(this.transformationKind, t);
+    if (this.tempState) {
+      const i = this.takeClippingRegionIntoAccount ? this.state.getInstructionToConvertToStateWithClippedPath(this.tempState, t) : this.state.getInstructionToConvertToState(this.tempState, t);
+      e = K(e, i);
+    }
+    return qi(this.instruction, e);
+  }
+}
+class Zi {
+  constructor(t, e) {
+    this.onChange = t, this.rectangle = e, this.previousInstructionsWithPath = we.create(e), this.state = this.previousInstructionsWithPath.state;
+  }
+  beginPath() {
+    const t = ht.create(this.state, this.rectangle);
+    t.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state), this.currentInstructionsWithPath = t;
+  }
+  changeState(t) {
+    this.state = this.state.withCurrentState(t(this.state.current));
+  }
+  saveState() {
+    this.state = this.state.saved();
+  }
+  restoreState() {
+    this.state = this.state.restored();
+  }
+  allSubpathsAreClosable() {
+    return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.allSubpathsAreClosable();
+  }
+  currentPathContainsFinitePoint() {
+    return this.currentInstructionsWithPath && this.currentInstructionsWithPath.containsFinitePoint();
+  }
+  currentSubpathIsClosable() {
+    return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.currentSubpathIsClosable();
+  }
+  fillPath(t) {
+    if (!this.currentInstructionsWithPath)
+      return;
+    const e = q.forFillingPath(t, this.state, () => this.currentInstructionsWithPath);
+    this.state = e.state, this.incorporateDrawingInstruction(e);
+  }
+  strokePath() {
+    if (!this.currentInstructionsWithPath)
+      return;
+    const t = q.forStrokingPath((e) => {
+      e.stroke();
+    }, this.state, () => this.currentInstructionsWithPath);
+    this.state = t.state, this.incorporateDrawingInstruction(t);
+  }
+  fillRect(t, e, n, i, s) {
+    const o = q.forFillingPath(s, this.state, (a) => {
+      const h = ht.create(a, this.rectangle);
+      return h.rect(t, e, n, i, a), h;
+    });
+    this.incorporateDrawingInstruction(o);
+  }
+  strokeRect(t, e, n, i) {
+    const s = q.forStrokingPath((o) => {
+      o.stroke();
+    }, this.state, (o) => {
+      const a = ht.create(o, this.rectangle);
+      return a.rect(t, e, n, i, o), a;
+    });
+    this.incorporateDrawingInstruction(s);
+  }
+  addDrawing(t, e, n, i, s) {
+    const o = this.state.currentlyTransformed(!1);
+    n === k.Relative && (e = e.transform(this.state.current.transformation));
+    let a;
+    s && (a = o.withCurrentState(s(o.current))), this.incorporateDrawingInstruction(new q(
+      t,
+      e,
+      (h) => it.create(o, h, this.rectangle),
+      i,
+      n,
+      o,
+      a
+    ));
+  }
+  clipPath(t) {
+    this.clipCurrentPath(t);
+  }
+  incorporateDrawingInstruction(t) {
+    const e = t.getDrawnArea();
+    if (e === b)
+      return;
+    const n = t.getModifiedInstruction(this.rectangle);
+    if (this.currentInstructionsWithPath) {
+      const i = this.currentInstructionsWithPath.recreatePath();
+      this.addToPreviousInstructions(n, e, t.build), i.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state), this.currentInstructionsWithPath = i;
+    } else
+      this.addToPreviousInstructions(n, e, t.build), this.state = this.previousInstructionsWithPath.state;
+    this.onChange();
+  }
+  addToPreviousInstructions(t, e, n) {
+    const i = new Ki(n(t), e);
+    i.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state), this.previousInstructionsWithPath.add(i);
+  }
+  clipCurrentPath(t) {
+    this.currentInstructionsWithPath && (this.currentInstructionsWithPath.clipPath(t, this.state), this.state = this.currentInstructionsWithPath.state);
+  }
+  addPathInstruction(t) {
+    this.currentInstructionsWithPath && this.currentInstructionsWithPath.addPathInstruction(t, this.state);
+  }
+  closePath() {
+    this.currentInstructionsWithPath && this.currentInstructionsWithPath.closePath();
+  }
+  moveTo(t) {
+    this.currentInstructionsWithPath && this.currentInstructionsWithPath.moveTo(t, this.state);
+  }
+  canAddLineTo(t) {
+    return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.canAddLineTo(t, this.state);
+  }
+  lineTo(t) {
+    this.currentInstructionsWithPath && this.currentInstructionsWithPath.lineTo(t, this.state);
+  }
+  rect(t, e, n, i) {
+    this.currentInstructionsWithPath && this.currentInstructionsWithPath.rect(t, e, n, i, this.state);
+  }
+  intersects(t) {
+    return this.previousInstructionsWithPath.intersects(t);
+  }
+  clearContentsInsideArea(t) {
+    this.previousInstructionsWithPath.clearContentsInsideArea(t), this.currentInstructionsWithPath && this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
+  }
+  clearArea(t, e, n, i) {
+    if (!Ht(t, e, n, i))
+      return;
+    const s = bn(t, e, n, i) ? Pt : v.createRectangle(t, e, n, i), o = s.transform(this.state.current.transformation);
+    this.intersects(o) && (this.clearContentsInsideArea(o), this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(o) && (this.previousInstructionsWithPath.addClearRect(s, this.state, t, e, n, i), this.currentInstructionsWithPath && this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state)), this.onChange());
+  }
+  execute(t, e) {
+    this.previousInstructionsWithPath.length && this.previousInstructionsWithPath.execute(t, e);
+    const i = this.previousInstructionsWithPath.state.stack.length;
+    for (let s = 0; s < i; s++)
+      t.restore();
+  }
+}
+class _i extends de {
+  constructor(t, e, n, i) {
+    super(), this.context = t, this.startAngle = e, this.x = n, this.y = i;
+  }
+  createTransformedGradient(t) {
+    const { x: e, y: n } = t.apply(new c(this.x, this.y)), i = t.getRotationAngle(), s = this.context.createConicGradient(this.startAngle + i, e, n);
+    return this.addColorStopsToGradient(s), s;
+  }
+  createGradient() {
+    const t = this.context.createConicGradient(this.startAngle, this.x, this.y);
+    return this.addColorStopsToGradient(t), t;
+  }
+}
+class ts {
+  constructor(t, e, n, i, s) {
+    this.canvasRectangle = t, this.context = e, this.drawingIterationProvider = n, this.drawLockProvider = i, this.isTransforming = s, this.instructionSet = new Zi(() => this.draw(), t);
+  }
+  get width() {
+    return this.canvasRectangle.viewboxWidth;
+  }
+  get height() {
+    return this.canvasRectangle.viewboxHeight;
+  }
+  get state() {
+    return this.instructionSet.state;
+  }
+  get transformation() {
+    return this.canvasRectangle.transformation;
+  }
+  set transformation(t) {
+    this.canvasRectangle.setTransformation(t), this.draw();
+  }
+  getDrawingLock() {
+    return this.drawLockProvider();
+  }
+  changeState(t) {
+    this.instructionSet.changeState(t);
+  }
+  measureText(t) {
+    this.context.save(), E.default.getInstructionToConvertToState(this.state.currentlyTransformed(!1).current, this.canvasRectangle)(this.context, p.identity);
+    const n = this.context.measureText(t);
+    return this.context.restore(), n;
+  }
+  saveState() {
+    this.instructionSet.saveState();
+  }
+  restoreState() {
+    this.instructionSet.restoreState();
+  }
+  beginPath() {
+    this.instructionSet.beginPath();
+  }
+  async createPatternFromImageData(t) {
+    const e = await createImageBitmap(t);
+    return this.context.createPattern(e, "no-repeat");
+  }
+  addDrawing(t, e, n, i, s) {
+    this.instructionSet.addDrawing(t, e, n, i, s);
+  }
+  addPathInstruction(t) {
+    this.instructionSet.addPathInstruction(t);
+  }
+  closePath() {
+    this.instructionSet.currentSubpathIsClosable() && this.instructionSet.closePath();
+  }
+  moveTo(t) {
+    this.instructionSet.moveTo(t);
+  }
+  lineTo(t) {
+    this.instructionSet.canAddLineTo(t) && this.instructionSet.lineTo(t);
+  }
+  rect(t, e, n, i) {
+    this.instructionSet.rect(t, e, n, i);
+  }
+  currentPathCanBeFilled() {
+    return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathContainsFinitePoint();
+  }
+  fillPath(t) {
+    this.instructionSet.fillPath(t);
+  }
+  strokePath() {
+    this.instructionSet.strokePath();
+  }
+  fillRect(t, e, n, i, s) {
+    Ht(t, e, n, i) && this.instructionSet.fillRect(t, e, n, i, s);
+  }
+  strokeRect(t, e, n, i) {
+    !Ht(t, e, n, i) || bn(t, e, n, i) || this.instructionSet.strokeRect(t, e, n, i);
+  }
+  clipPath(t) {
+    this.instructionSet.clipPath(t);
+  }
+  clearArea(t, e, n, i) {
+    this.instructionSet.clearArea(t, e, n, i);
+  }
+  createLinearGradient(t, e, n, i) {
+    return new Di(this.context, t, e, n, i);
+  }
+  createRadialGradient(t, e, n, i, s, o) {
+    return new Li(this.context, t, e, n, i, s, o);
+  }
+  createConicGradient(t, e, n) {
+    return new _i(this.context, t, e, n);
+  }
+  createPattern(t, e) {
+    let n;
+    return n = new Ze(this.context.createPattern(t, e)), n;
+  }
+  draw() {
+    this.drawingIterationProvider.provideDrawingIteration(() => {
+      this.isTransforming() || this.canvasRectangle.measure(), this.context.restore(), this.context.save(), this.context.clearRect(0, 0, this.width, this.height), this.setInitialTransformation(), this.instructionSet.execute(this.context, this.transformation);
+    });
+  }
+  setInitialTransformation() {
+    const t = this.canvasRectangle.getInitialTransformation();
+    if (t.equals(p.identity))
+      return;
+    const { a: e, b: n, c: i, d: s, e: o, f: a } = t;
+    this.context.setTransform(e, n, i, s, o, a);
+  }
+}
+class es {
+  constructor(t, e) {
+    this.context = e, this.initialTransformation = e.transformation, this.angularVelocity = Math.PI / 100, this.point = t.onMoved(() => {
+      this.setTransformation();
+    }, !1);
+  }
+  setTransformation() {
+    this.context.transformation = this.initialTransformation.before(p.rotation(
+      this.point.initial.x,
+      this.point.initial.y,
+      (this.point.initial.x - this.point.current.x) * this.angularVelocity
+    ));
+  }
+  withAnchor(t) {
+    return this;
+  }
+  withoutAnchor(t) {
+    this.point.cancel();
+  }
+  end() {
+    this.point.cancel();
+  }
+}
+class ns {
+  constructor(t, e, n, i, s) {
+    this.transformable = t, this.centerX = e, this.centerY = n, this.onFinish = s, this.initialTransformation = t.transformation, this.maxScaleLogStep = 0.1, this.currentScaleLog = 0, this.targetScaleLog = Math.log(i), this.makeStep();
+  }
+  makeStep() {
+    const t = this.targetScaleLog - this.currentScaleLog;
+    Math.abs(t) <= this.maxScaleLogStep ? (this.currentScaleLog += t, this.setTransformToCurrentScaleLog(), this.onFinish()) : (this.currentScaleLog += t < 0 ? -this.maxScaleLogStep : this.maxScaleLogStep, this.setTransformToCurrentScaleLog(), this.stepTimeout = setTimeout(() => this.makeStep(), 20));
+  }
+  setTransformToCurrentScaleLog() {
+    this.transformable.transformation = this.initialTransformation.before(
+      p.zoom(
+        this.centerX,
+        this.centerY,
+        Math.exp(this.currentScaleLog)
+      )
+    );
+  }
+  cancel() {
+    this.stepTimeout !== void 0 && clearTimeout(this.stepTimeout);
+  }
+}
+class is {
+  constructor(t, e) {
+    this.anchor = t, this.context = e, this.initialTransformation = e.transformation, this.point = t.onMoved(() => {
+      this.setTransformation();
+    }, !0);
+  }
+  setTransformation() {
+    this.context.transformation = this.initialTransformation.before(this.getTranslation());
+  }
+  getTranslation() {
+    return p.translation(this.point.current.x - this.point.initial.x, this.point.current.y - this.point.initial.y);
+  }
+  withAnchor(t) {
+    return t === this.anchor ? this : this.context.getGestureForTwoAnchors(this.point.cancel(), t);
+  }
+  withoutAnchor(t) {
+    this.point.cancel();
+  }
+}
+class xn {
+  constructor(t, e, n) {
+    this.context = n, this.initialTransformation = n.transformation, this.point1 = t.onMoved(() => this.setTransformation(), this.fixesFirstAnchorOnInfiniteCanvas()), this.point2 = e.onMoved(() => this.setTransformation(), this.fixesSecondAnchorOnInfiniteCanvas());
+  }
+  withAnchor(t) {
+    return this;
+  }
+  withoutAnchor(t) {
+    const e = this.point1.cancel(), n = this.point2.cancel();
+    if (t === e)
+      return this.context.getGestureForOneAnchor(n);
+    if (t === n)
+      return this.context.getGestureForOneAnchor(e);
+  }
+}
+class ss extends xn {
+  constructor(t, e, n) {
+    super(t, e, n);
+  }
+  fixesFirstAnchorOnInfiniteCanvas() {
+    return !0;
+  }
+  fixesSecondAnchorOnInfiniteCanvas() {
+    return !1;
+  }
+  setTransformation() {
+    this.context.transformation = this.initialTransformation.before(p.translateZoom(
+      this.point1.initial.x,
+      this.point1.initial.y,
+      this.point2.initial.x,
+      this.point2.initial.y,
+      this.point1.current.x,
+      this.point1.current.y,
+      this.point2.current.x,
+      this.point2.current.y
+    ));
+  }
+}
+class rs extends xn {
+  constructor(t, e, n) {
+    super(t, e, n);
+  }
+  fixesFirstAnchorOnInfiniteCanvas() {
+    return !0;
+  }
+  fixesSecondAnchorOnInfiniteCanvas() {
+    return !0;
+  }
+  setTransformation() {
+    this.context.transformation = this.initialTransformation.before(p.translateRotateZoom(
+      this.point1.initial.x,
+      this.point1.initial.y,
+      this.point2.initial.x,
+      this.point2.initial.y,
+      this.point1.current.x,
+      this.point1.current.y,
+      this.point2.current.x,
+      this.point2.current.y
+    ));
+  }
+}
+class bt {
+  constructor() {
+    this.mapped = [];
+  }
+  onRemoved(t) {
+  }
+  add(t) {
+    this.mapped.some((e) => this.mapsTo(e, t)) || this.mapped.push(this.map(t));
+  }
+  remove(t) {
+    const e = this.mapped.findIndex((i) => this.mapsTo(i, t));
+    if (e === -1)
+      return;
+    const [n] = this.mapped.splice(e, 1);
+    this.onRemoved(n);
+  }
+}
+class tt extends bt {
+  map(t, e) {
+    return { listener: t, removedCallback: e };
+  }
+  mapsTo(t, e) {
+    return t.listener === e;
+  }
+  onRemoved(t) {
+    t.removedCallback && t.removedCallback();
+  }
+  addListener(t) {
+    this.add(t);
+  }
+  removeListener(t) {
+    this.remove(t);
+  }
+  dispatch(t) {
+    const e = this.mapped.map((n) => n.listener);
+    for (let n of e)
+      n(t);
+  }
+}
+class os {
+  constructor(t, e) {
+    this.setNewValue = t, this.timeoutInMs = e, this._changing = !1, this._firstChange = new tt(), this._subsequentChange = new tt(), this._changeEnd = new tt();
+  }
+  get firstChange() {
+    return this._firstChange;
+  }
+  get subsequentChange() {
+    return this._subsequentChange;
+  }
+  get changeEnd() {
+    return this._changeEnd;
+  }
+  get changing() {
+    return this._changing;
+  }
+  refreshTimeout() {
+    this.currentTimeout !== void 0 && clearTimeout(this.currentTimeout), this.currentTimeout = setTimeout(() => {
+      this._changing = !1, this.currentTimeout = void 0, this._changeEnd.dispatch();
+    }, this.timeoutInMs);
+  }
+  setValue(t) {
+    this.setNewValue(t), this._changing || (this._changing = !0, this._firstChange.dispatch()), this._subsequentChange.dispatch(), this.refreshTimeout();
+  }
+}
+class as {
+  constructor(t, e) {
+    this.viewBox = t, this.config = e, this._transformationChangeMonitor = new os((n) => this.viewBox.transformation = n, 100);
+  }
+  get isTransforming() {
+    return this._transformationChangeMonitor.changing;
+  }
+  get transformationStart() {
+    return this._transformationChangeMonitor.firstChange;
+  }
+  get transformationChange() {
+    return this._transformationChangeMonitor.subsequentChange;
+  }
+  get transformationEnd() {
+    return this._transformationChangeMonitor.changeEnd;
+  }
+  get transformation() {
+    return this.viewBox.transformation;
+  }
+  set transformation(t) {
+    this._transformationChangeMonitor.setValue(t);
+  }
+  getGestureForOneAnchor(t) {
+    return new is(t, this);
+  }
+  getGestureForTwoAnchors(t, e) {
+    return this.config.rotationEnabled ? new rs(t, e, this) : new ss(t, e, this);
+  }
+  releaseAnchor(t) {
+    this.gesture && (this.gesture = this.gesture.withoutAnchor(t));
+  }
+  zoom(t, e, n) {
+    this._zoom && this._zoom.cancel(), this._zoom = new ns(this, t, e, n, () => {
+      this._zoom = void 0;
+    });
+  }
+  addRotationAnchor(t) {
+    this.gesture = new es(t, this);
+  }
+  addAnchor(t) {
+    if (!this.gesture) {
+      this.gesture = this.getGestureForOneAnchor(t);
+      return;
+    }
+    const e = this.gesture.withAnchor(t);
+    e && (this.gesture = e);
+  }
+}
+class cs {
+  constructor() {
+    this.animationFrameRequested = !1;
+  }
+  provideDrawingIteration(t) {
+    this.animationFrameRequested || (this.animationFrameRequested = !0, requestAnimationFrame(() => {
+      t(), this.animationFrameRequested = !1;
+    }));
+  }
+}
+class hs {
+  constructor(t) {
+    this.drawingIterationProvider = t, this._drawHappened = new tt();
+  }
+  get drawHappened() {
+    return this._drawHappened;
+  }
+  provideDrawingIteration(t) {
+    this.drawingIterationProvider.provideDrawingIteration(() => {
+      t(), this._drawHappened.dispatch();
+    });
+  }
+}
+class ls {
+  constructor(t) {
+    this.drawingIterationProvider = t, this._locks = [];
+  }
+  removeLock(t) {
+    const e = this._locks.indexOf(t);
+    this._locks.splice(e, 1), this._locks.length === 0 && this._draw && this.drawingIterationProvider.provideDrawingIteration(this._draw);
+  }
+  provideDrawingIteration(t) {
+    this._locks.length ? this._draw = t : this.drawingIterationProvider.provideDrawingIteration(t);
+  }
+  getLock() {
+    let t;
+    return t = { release: () => {
+      this.removeLock(t);
+    } }, this._locks.push(t), t;
+  }
+}
+var C = /* @__PURE__ */ ((r) => (r[r.CSS = 0] = "CSS", r[r.CANVAS = 1] = "CANVAS", r))(C || {});
+class x {
+  constructor(t) {
+    this.base = t, this.inverseBase = t.inverse();
+  }
+  getSimilarTransformation(t) {
+    return this.inverseBase.before(t).before(this.base);
+  }
+  representSimilarTransformation(t) {
+    return this.base.before(t).before(this.inverseBase);
+  }
+  representBase(t) {
+    return t.before(this.inverseBase);
+  }
+}
+class Ve {
+  constructor(t, e) {
+    this.userCoordinates = t, this.canvasBitmap = e, this.virtualBitmapBase = e.base, this.setDerivedProperties();
+  }
+  setCanvasBitmapDistortion(t) {
+    const e = this.canvasBitmap.representBase(t), n = this.userCoordinates.representSimilarTransformation(e), i = this.virtualBitmapBase.before(n);
+    this.virtualBitmapBase = i, this.canvasBitmap = new x(t), this.setDerivedProperties();
+  }
+  setUserTransformation(t) {
+    this.userCoordinates = new x(t), this.setDerivedProperties();
+  }
+  setDerivedProperties() {
+    this.infiniteCanvasContext = new x(this.virtualBitmapBase.before(this.userCoordinates.base)), this.userCoordinatesInsideCanvasBitmap = new x(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.representBase(this.userCoordinates.getSimilarTransformation(this.virtualBitmapBase)), this.icContextFromCanvasBitmap = new x(this.infiniteCanvasContext.base.before(this.canvasBitmap.inverseBase));
+  }
+}
+class qe {
+  constructor(t, e) {
+    this.userCoordinates = t, this.canvasBitmap = e, this.setDerivedProperties();
+  }
+  get infiniteCanvasContext() {
+    return this.userCoordinates;
+  }
+  setCanvasBitmapDistortion(t) {
+    this.canvasBitmap = new x(t), this.setDerivedProperties();
+  }
+  setUserTransformation(t) {
+    this.userCoordinates = new x(t), this.setDerivedProperties();
+  }
+  setDerivedProperties() {
+    this.userCoordinatesInsideCanvasBitmap = new x(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.inverseBase, this.icContextFromCanvasBitmap = new x(this.userCoordinates.base.before(this.canvasBitmap.inverseBase));
+  }
+}
+function He(r) {
+  const { screenWidth: t, screenHeight: e, viewboxWidth: n, viewboxHeight: i } = r;
+  return new p(t / n, 0, 0, e / i, 0, 0);
+}
+class Te {
+  constructor(t, e) {
+    this.units = t, this.coordinates = e;
+  }
+  get userTransformation() {
+    return this.coordinates.userCoordinates.base;
+  }
+  get infiniteCanvasContext() {
+    return this.coordinates.infiniteCanvasContext;
+  }
+  get initialBitmapTransformation() {
+    return this.coordinates.initialBitmapTransformation;
+  }
+  setCanvasBitmapDistortion(t) {
+    this.coordinates.setCanvasBitmapDistortion(t);
+  }
+  getBitmapTransformationToTransformedInfiniteCanvasContext() {
+    return this.coordinates.userCoordinates.base;
+  }
+  getBitmapTransformationToInfiniteCanvasContext() {
+    return this.coordinates.icContextFromCanvasBitmap.base;
+  }
+  translateInfiniteCanvasContextTransformationToBitmapTransformation(t) {
+    return this.coordinates.icContextFromCanvasBitmap.getSimilarTransformation(t);
+  }
+  getInitialTransformationForTransformedInfiniteCanvasContext(t) {
+    const e = t.before(this.coordinates.infiniteCanvasContext.base), n = this.coordinates.userCoordinatesInsideCanvasBitmap.representBase(e);
+    return this.coordinates.userCoordinates.getSimilarTransformation(n);
+  }
+  setUserTransformation(t) {
+    this.coordinates.setUserTransformation(t);
+  }
+  setCanvasMeasurement(t) {
+    const e = He(t);
+    this.coordinates.setCanvasBitmapDistortion(e);
+  }
+  useUnits(t) {
+    t !== this.units && (this.units = t, t === C.CANVAS ? this.coordinates = new Ve(this.coordinates.userCoordinates, this.coordinates.canvasBitmap) : this.coordinates = new qe(this.coordinates.userCoordinates, this.coordinates.canvasBitmap));
+  }
+  static create(t, e) {
+    const n = He(e), i = t === C.CANVAS ? new Ve(new x(p.identity), new x(n)) : new qe(new x(p.identity), new x(n));
+    return new Te(t, i);
+  }
+}
+function us(r, t) {
+  return r ? t ? r.viewboxWidth === t.viewboxWidth && r.viewboxHeight === t.viewboxHeight && r.screenWidth === t.screenWidth && r.screenHeight === t.screenHeight : !1 : !t;
+}
+class ds {
+  constructor(t, e) {
+    this.measurementProvider = t, this.config = e;
+    const n = t.measure(), i = e.units === C.CSS ? C.CSS : C.CANVAS;
+    this.coordinatesSwitch = Te.create(i, n), this.addMeasurement(n);
+  }
+  get viewboxWidth() {
+    return this.measurement.viewboxWidth;
+  }
+  get viewboxHeight() {
+    return this.measurement.viewboxHeight;
+  }
+  get transformation() {
+    return this.coordinatesSwitch.userTransformation;
+  }
+  get infiniteCanvasContextBase() {
+    return this.coordinatesSwitch.infiniteCanvasContext.base;
+  }
+  get inverseInfiniteCanvasContextBase() {
+    return this.coordinatesSwitch.infiniteCanvasContext.inverseBase;
+  }
+  setTransformation(t) {
+    this.coordinatesSwitch.setUserTransformation(p.create(t));
+  }
+  getCSSPosition(t, e) {
+    const { left: n, top: i } = this.measurementProvider.measure();
+    return new c(t - n, e - i);
+  }
+  measure() {
+    const t = this.config.units === C.CSS ? C.CSS : C.CANVAS;
+    this.coordinatesSwitch.useUnits(t);
+    const e = this.measurementProvider.measure();
+    this.addMeasurement(e);
+  }
+  getTransformationForInstruction(t) {
+    return this.coordinatesSwitch.getInitialTransformationForTransformedInfiniteCanvasContext(p.create(t));
+  }
+  translateInfiniteCanvasContextTransformationToBitmapTransformation(t) {
+    return this.coordinatesSwitch.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.create(t));
+  }
+  getInitialTransformation() {
+    return this.coordinatesSwitch.initialBitmapTransformation;
+  }
+  getBitmapTransformationToInfiniteCanvasContext() {
+    return this.coordinatesSwitch.getBitmapTransformationToInfiniteCanvasContext();
+  }
+  getBitmapTransformationToTransformedInfiniteCanvasContext() {
+    return this.coordinatesSwitch.getBitmapTransformationToTransformedInfiniteCanvasContext();
+  }
+  addPathAroundViewbox(t, e) {
+    const n = this.viewboxWidth + 2 * e, i = this.viewboxHeight + 2 * e;
+    t.save(), t.setTransform(1, 0, 0, 1, 0, 0), t.rect(-e, -e, n, i), t.restore();
+  }
+  addMeasurement(t) {
+    const e = us(this.measurement, t);
+    if (this.measurement = t, e)
+      return;
+    const { viewboxWidth: n, viewboxHeight: i } = t;
+    this.polygon = v.createRectangle(0, 0, n, i), this.coordinatesSwitch.setCanvasMeasurement(t);
+  }
+}
+class fs {
+  constructor(t) {
+    this.canvas = t;
+  }
+  measure() {
+    const t = this.canvas.getBoundingClientRect();
+    return {
+      left: t.left,
+      top: t.top,
+      screenWidth: t.width,
+      screenHeight: t.height,
+      viewboxWidth: this.canvas.width,
+      viewboxHeight: this.canvas.height
+    };
+  }
+}
+class gs {
+  constructor(t) {
+    this.canvas = t, this.listeners = [];
+  }
+  notifyListeners() {
+    for (let t of this.listeners)
+      t();
+  }
+  createObserver() {
+    this.observer = new ResizeObserver(() => this.notifyListeners()), this.observer.observe(this.canvas);
+  }
+  addListener(t) {
+    this.listeners.push(t), this.observer || this.createObserver();
+  }
+  removeListener(t) {
+    const e = this.listeners.indexOf(t);
+    e > -1 && (this.listeners.splice(e, 1), this.listeners.length === 0 && (this.observer.disconnect(), this.observer = void 0));
+  }
+}
+function lt(r) {
+  const { a: t, b: e, c: n, d: i, e: s, f: o } = r;
+  return { a: t, b: e, c: n, d: i, e: s, f: o };
+}
+const ms = {
+  transformationstart: null,
+  transformationchange: null,
+  transformationend: null
+}, On = {
+  auxclick: null,
+  click: null,
+  contextmenu: null,
+  dblclick: null,
+  mouseenter: null,
+  mouseleave: null,
+  mouseout: null,
+  mouseover: null,
+  mouseup: null
+}, Bn = {
+  gotpointercapture: null,
+  lostpointercapture: null,
+  pointerenter: null,
+  pointerout: null,
+  pointerover: null
+}, An = {
+  drag: null,
+  dragend: null,
+  dragenter: null,
+  dragleave: null,
+  dragover: null,
+  dragstart: null,
+  drop: null
+}, Dn = {
+  touchcancel: null,
+  touchend: null
+}, vs = {
+  ...On,
+  ...Bn,
+  ...An,
+  ...Dn
+}, Ln = {
+  mousedown: null,
+  mousemove: null,
+  pointerdown: null,
+  pointermove: null,
+  pointerleave: null,
+  pointercancel: null,
+  pointerup: null,
+  wheel: null,
+  touchstart: null,
+  touchmove: null,
+  wheelignored: null,
+  touchignored: null
+};
+function Ot(r) {
+  return ms.hasOwnProperty(r);
+}
+function Bt(r) {
+  return vs.hasOwnProperty(r) || Ln.hasOwnProperty(r);
+}
+function At(r) {
+  return Ln.hasOwnProperty(r);
+}
+function Dt(r) {
+  return On.hasOwnProperty(r);
+}
+function Lt(r) {
+  return Bn.hasOwnProperty(r);
+}
+function Et(r) {
+  return An.hasOwnProperty(r);
+}
+function Ft(r) {
+  return Dn.hasOwnProperty(r);
+}
+class ps extends bt {
+  constructor(t) {
+    super(), this.source = t;
+  }
+  map(t) {
+    const e = () => {
+      this.remove(t), t.removedCallback && t.removedCallback();
+    };
+    return this.source.addListener(t.listener, e), { listener: t.listener, removedCallback: e };
+  }
+  mapsTo(t, e) {
+    return t.listener === e.listener;
+  }
+  onRemoved(t) {
+    t.removedCallback(), this.source.removeListener(t.listener);
+  }
+  addListener(t, e) {
+    this.add({ listener: t, removedCallback: e });
+  }
+  removeListener(t) {
+    this.remove({ listener: t });
+  }
+}
+class ws extends bt {
+  constructor(t, e) {
+    super(), this.transform = e, this.old = new ps(t);
+  }
+  map(t) {
+    const e = {
+      oldListener: void 0,
+      newListener: t.listener,
+      removedCallback: () => {
+        t.removedCallback && t.removedCallback();
+      }
+    };
+    return e.oldListener = this.transform(t.listener, (n) => e.removedCallback = () => {
+      t.removedCallback && t.removedCallback(), n();
+    }), this.old.addListener(e.oldListener, () => this.removeListener(t.listener)), e;
+  }
+  mapsTo(t, e) {
+    return t.newListener === e.listener;
+  }
+  onRemoved(t) {
+    this.old.removeListener(t.oldListener), t.removedCallback();
+  }
+  addListener(t, e) {
+    this.add({ listener: t, removedCallback: e });
+  }
+  removeListener(t) {
+    this.remove({ listener: t });
+  }
+}
+function et(r, t) {
+  return new ws(r, t);
+}
+function V(r, t) {
+  return et(r, (e) => (n) => {
+    e(t(n));
+  });
+}
+function Gt(r) {
+  return !!r && typeof r.handleEvent == "function";
+}
+class Ps extends bt {
+  constructor(t) {
+    super(), this.source = t;
+  }
+  mapsTo(t, e) {
+    return t.listenerObject === e.listenerObject;
+  }
+  map(t) {
+    const { listenerObject: e, removedCallback: n } = t, i = (o) => {
+      e.handleEvent(o);
+    }, s = () => {
+      this.remove(t), n && n();
+    };
+    return this.source.addListener(i, s), { listener: i, listenerObject: e, removedCallback: s };
+  }
+  onRemoved(t) {
+    this.source.removeListener(t.listener), t.removedCallback();
+  }
+}
+class Cs {
+  constructor(t) {
+    this.source = t, this.listenerObjectCollection = new Ps(t);
+  }
+  addListener(t, e) {
+    Gt(t) ? this.listenerObjectCollection.add({ listenerObject: t, removedCallback: e }) : this.source.addListener(t, e);
+  }
+  removeListener(t) {
+    Gt(t) ? this.listenerObjectCollection.remove({ listenerObject: t }) : this.source.removeListener(t);
+  }
+}
+function Ge(r) {
+  return new Cs(r);
+}
+function Is(r, t, e) {
+  Gt(t), r.addListener(t, e);
+}
+function Ts(r, t, e) {
+  Gt(t), r.removeListener(t, e);
+}
+function Ss(r) {
+  const t = et(r, (e) => (n) => {
+    e(n), t.removeListener(e);
+  });
+  return t;
+}
+function ys(r, t) {
+  return et(r, (e) => (n) => {
+    e.apply(t, [n]);
+  });
+}
+class bs {
+  constructor(t) {
+    this.source = t, this.firstDispatcher = new tt(), this.secondDispatcher = new tt(), this.numberOfListeners = 0, this.sourceListener = (e) => this.dispatchEvent(e);
+  }
+  add() {
+    this.numberOfListeners === 0 && this.source.addListener(this.sourceListener), this.numberOfListeners++;
+  }
+  remove() {
+    this.numberOfListeners--, this.numberOfListeners === 0 && this.source.removeListener(this.sourceListener);
+  }
+  dispatchEvent(t) {
+    this.firstDispatcher.dispatch(t), this.secondDispatcher.dispatch(t);
+  }
+  build() {
+    return {
+      first: et(this.firstDispatcher, (t, e) => (this.add(), e(() => this.remove()), t)),
+      second: et(this.secondDispatcher, (t, e) => (this.add(), e(() => this.remove()), t))
+    };
+  }
+}
+function Xe(r) {
+  return new bs(r).build();
+}
+function N(r, t) {
+  return et(r, (e) => (n) => {
+    t(n) && e(n);
+  });
+}
+class Ye {
+  constructor(t, e) {
+    t = ys(t, e), this._onceSource = Ge(Ss(t)), this.source = Ge(t);
+  }
+  addListener(t, e) {
+    e && e.once ? this._onceSource.addListener(t) : this.source.addListener(t);
+  }
+  removeListener(t) {
+    this.source.removeListener(t), this._onceSource.removeListener(t);
+  }
+}
+class xs {
+  constructor(t, e) {
+    this.captureSource = t, this.bubbleSource = e;
+  }
+  get on() {
+    return this.onEventHandler;
+  }
+  set on(t) {
+    t ? (this.wrappedOnEventHandler = function(e) {
+      return t.apply(this, [e]);
+    }, this.onEventHandler = t, this.bubbleSource.addListener(this.wrappedOnEventHandler)) : (this.bubbleSource.removeListener(this.wrappedOnEventHandler), this.wrappedOnEventHandler = null, this.onEventHandler = null);
+  }
+  addListener(t, e) {
+    const n = e && (typeof e == "boolean" ? void 0 : e);
+    (typeof e == "boolean" ? e : e && e.capture) ? this.captureSource.addListener(t, n) : this.bubbleSource.addListener(t, n);
+  }
+  removeListener(t, e) {
+    (typeof e == "boolean" ? e : e && e.capture) ? this.captureSource.removeListener(t) : this.bubbleSource.removeListener(t);
+  }
+}
+function Os(r, t, e) {
+  return new xs(
+    new Ye(r, e),
+    new Ye(t, e)
+  );
+}
+function Q(r, t, e, n) {
+  const i = V(N(r, (o) => !o.immediatePropagationStopped), (o) => o.getResultEvent(e)), s = V(N(t, (o) => !o.propagationStopped && !o.immediatePropagationStopped), (o) => o.getResultEvent(e));
+  return Os(i, s, n);
+}
+function J(r) {
+  const { first: t, second: e } = Xe(r), { first: n, second: i } = Xe(e);
+  return {
+    captureSource: t,
+    bubbleSource: n,
+    afterBubble: i
+  };
+}
+function Bs(r, t, e) {
+  const { captureSource: n, bubbleSource: i } = J(r);
+  return Q(
+    n,
+    i,
+    t,
+    e
+  );
+}
+class Se {
+  constructor(t, e) {
+    this.rectangle = t, this.infiniteCanvas = e, this.cache = {};
+  }
+  map(t, e) {
+    return Bs(V(t, e), this.rectangle, this.infiniteCanvas);
+  }
+  setOn(t, e) {
+    if (e)
+      this.cache[t] || (this.cache[t] = this.getEventSource(t)), this.cache[t].on = e;
+    else {
+      if (!this.cache[t])
+        return;
+      this.cache[t].on = null;
+    }
+  }
+  getOn(t) {
+    return this.cache[t] ? this.cache[t].on : null;
+  }
+  addEventListener(t, e, n) {
+    this.cache[t] || (this.cache[t] = this.getEventSource(t)), Is(this.cache[t], e, n);
+  }
+  removeEventListener(t, e, n) {
+    this.cache[t] && Ts(this.cache[t], e, n);
+  }
+}
+class En extends Se {
+  getEventSource(t) {
+    return (!this.cache || !this.cache[t]) && (this.cache = this.createEvents()), this.cache[t];
+  }
+}
+class Fn {
+  constructor(t, e) {
+    this.canvasEvent = t, this.preventableDefault = e;
+  }
+  get bubbles() {
+    return !1;
+  }
+  get isTrusted() {
+    return !1;
+  }
+  get eventPhase() {
+    return Event.AT_TARGET;
+  }
+  get cancelable() {
+    return this.preventableDefault.cancelable;
+  }
+  get defaultPrevented() {
+    return this.preventableDefault.defaultPrevented;
+  }
+  get AT_TARGET() {
+    return Event.AT_TARGET;
+  }
+  get BUBBLING_PHASE() {
+    return Event.BUBBLING_PHASE;
+  }
+  get CAPTURING_PHASE() {
+    return Event.CAPTURING_PHASE;
+  }
+  get NONE() {
+    return Event.NONE;
+  }
+  initEvent(t, e, n) {
+  }
+  preventDefault() {
+    this.preventableDefault.preventDefault();
+  }
+  stopImmediatePropagation() {
+    this.canvasEvent.stopImmediatePropagation();
+  }
+  stopPropagation() {
+    this.canvasEvent.stopPropagation();
+  }
+}
+class ye extends Fn {
+  constructor(t, e, n) {
+    super(t, e), this.type = n;
+  }
+  get cancelBubble() {
+    return !1;
+  }
+  get composed() {
+    return !1;
+  }
+  get currentTarget() {
+    return null;
+  }
+  get returnValue() {
+    return !0;
+  }
+  get srcElement() {
+    return null;
+  }
+  get target() {
+    return null;
+  }
+  get timeStamp() {
+    return 0;
+  }
+  composedPath() {
+    return [];
+  }
+}
+class kn {
+  constructor(t) {
+    this.preventableDefault = t, this.propagationStopped = !1, this.immediatePropagationStopped = !1;
+  }
+  get infiniteCanvasDefaultPrevented() {
+    return this.preventableDefault.infiniteCanvasDefaultPrevented;
+  }
+  stopPropagation() {
+    this.propagationStopped = !0;
+  }
+  stopImmediatePropagation() {
+    this.immediatePropagationStopped = !0;
+  }
+  getResultEvent(t) {
+    return this.resultEvent || (this.resultEvent = this.createResultEvent(t)), this.resultEvent;
+  }
+}
+class As {
+  get defaultPrevented() {
+    return this._defaultPrevented;
+  }
+  get infiniteCanvasDefaultPrevented() {
+    return this._defaultPrevented;
+  }
+  get cancelable() {
+    return !0;
+  }
+  preventDefault() {
+    this._defaultPrevented = !0;
+  }
+}
+class Ds {
+  get infiniteCanvasDefaultPrevented() {
+    return !1;
+  }
+  get defaultPrevented() {
+    return !1;
+  }
+  get cancelable() {
+    return !1;
+  }
+  preventDefault() {
+  }
+}
+class be extends kn {
+  constructor(t) {
+    super(t ? new As() : new Ds());
+  }
+}
+class Ls extends ye {
+  constructor(t, e) {
+    super(t, e, "draw"), this.transformation = t.transformation, this.inverseTransformation = t.inverseTransformation;
+  }
+}
+class Es extends be {
+  constructor() {
+    super(!1);
+  }
+  createResultEvent(t) {
+    return this.transformation = lt(t.inverseInfiniteCanvasContextBase), this.inverseTransformation = lt(t.infiniteCanvasContextBase), new Ls(this, this.preventableDefault);
+  }
+}
+class Fs extends En {
+  constructor(t, e, n) {
+    super(e, n), this.drawingIterationProvider = t;
+  }
+  createEvents() {
+    return {
+      draw: this.map(this.drawingIterationProvider.drawHappened, () => new Es())
+    };
+  }
+}
+class ks extends ye {
+  constructor(t, e, n) {
+    super(t, e, n), this.transformation = t.transformation, this.inverseTransformation = t.inverseTransformation;
+  }
+}
+class se extends be {
+  constructor(t) {
+    super(!1), this.type = t;
+  }
+  createResultEvent(t) {
+    return this.transformation = lt(t.inverseInfiniteCanvasContextBase), this.inverseTransformation = lt(t.infiniteCanvasContextBase), new ks(this, this.preventableDefault, this.type);
+  }
+}
+class Ws extends En {
+  constructor(t, e, n) {
+    super(e, n), this.transformer = t;
+  }
+  createEvents() {
+    return {
+      transformationstart: this.map(this.transformer.transformationStart, () => new se("transformationstart")),
+      transformationchange: this.map(this.transformer.transformationChange, () => new se("transformationchange")),
+      transformationend: this.map(this.transformer.transformationEnd, () => new se("transformationend"))
+    };
+  }
+}
+function L(r, t) {
+  return {
+    addListener(e) {
+      r.addEventListener(t, e);
+    },
+    removeListener(e) {
+      r.removeEventListener(t, e);
+    }
+  };
+}
+class Rs {
+  constructor(t) {
+    this.event = t;
+  }
+  get infiniteCanvasDefaultPrevented() {
+    return !1;
+  }
+  get nativeDefaultPrevented() {
+    return this.event.defaultPrevented;
+  }
+  get nativeCancelable() {
+    return this.event.cancelable;
+  }
+  get defaultPrevented() {
+    return this.event.defaultPrevented;
+  }
+  get cancelable() {
+    return this.event.cancelable;
+  }
+  preventDefault() {
+    this.event.preventDefault();
+  }
+}
+class Ns {
+  constructor(t) {
+    this.event = t;
+  }
+  get infiniteCanvasDefaultPrevented() {
+    return this._defaultPrevented;
+  }
+  get nativeDefaultPrevented() {
+    return this.event.defaultPrevented;
+  }
+  get nativeCancelable() {
+    return this.event.cancelable;
+  }
+  get defaultPrevented() {
+    return this._defaultPrevented;
+  }
+  get cancelable() {
+    return !0;
+  }
+  preventDefault(t) {
+    this._defaultPrevented = !0, t && this.event.preventDefault();
+  }
+}
+class ut extends kn {
+  constructor(t, e) {
+    super(e ? new Ns(t) : new Rs(t)), this.event = t;
+  }
+  stopPropagation() {
+    super.stopPropagation(), this.event && this.event.stopPropagation();
+  }
+  stopImmediatePropagation() {
+    super.stopImmediatePropagation(), this.event && this.event.stopImmediatePropagation();
+  }
+}
+class nt {
+  constructor(t, e, n, i) {
+    this.offsetX = t, this.offsetY = e, this.movementX = n, this.movementY = i;
+  }
+  toInfiniteCanvasCoordinates(t) {
+    const { x: e, y: n } = t.inverseInfiniteCanvasContextBase.apply(new c(this.offsetX, this.offsetY)), { x: i, y: s } = t.inverseInfiniteCanvasContextBase.untranslated().apply(new c(this.movementX, this.movementY));
+    return new nt(e, n, i, s);
+  }
+  static create(t) {
+    return new nt(t.offsetX, t.offsetY, t.movementX, t.movementY);
+  }
+}
+class Ms extends Fn {
+  constructor(t, e, n) {
+    super(t, e), this.event = n;
+  }
+  get nativeDefaultPrevented() {
+    return this.preventableDefault.nativeDefaultPrevented;
+  }
+  get nativeCancelable() {
+    return this.preventableDefault.nativeCancelable;
+  }
+  get cancelBubble() {
+    return this.event.cancelBubble;
+  }
+  get composed() {
+    return this.event.composed;
+  }
+  get currentTarget() {
+    return this.event.currentTarget;
+  }
+  get returnValue() {
+    return this.event.returnValue;
+  }
+  get srcElement() {
+    return this.event.srcElement;
+  }
+  get target() {
+    return this.event.target;
+  }
+  get timeStamp() {
+    return this.event.timeStamp;
+  }
+  get type() {
+    return this.event.type;
+  }
+  preventDefault(t) {
+    this.preventableDefault.preventDefault(t);
+  }
+  composedPath() {
+    return this.event.composedPath();
+  }
+}
+class Wn extends Ms {
+  get detail() {
+    return this.event.detail;
+  }
+  get view() {
+    return this.event.view;
+  }
+  get which() {
+    return this.event.which;
+  }
+  initUIEvent(t, e, n, i, s) {
+  }
+}
+class Zt extends Wn {
+  constructor(t, e, n, i) {
+    super(t, e, n), this.offsetX = i.offsetX, this.offsetY = i.offsetY, this.movementX = i.movementX, this.movementY = i.movementY;
+  }
+  get altKey() {
+    return this.event.altKey;
+  }
+  get button() {
+    return this.event.button;
+  }
+  get buttons() {
+    return this.event.buttons;
+  }
+  get clientX() {
+    return this.event.clientX;
+  }
+  get clientY() {
+    return this.event.clientY;
+  }
+  get ctrlKey() {
+    return this.event.ctrlKey;
+  }
+  get metaKey() {
+    return this.event.metaKey;
+  }
+  get pageX() {
+    return this.event.pageX;
+  }
+  get pageY() {
+    return this.event.pageY;
+  }
+  get relatedTarget() {
+    return this.event.relatedTarget;
+  }
+  get screenX() {
+    return this.event.screenX;
+  }
+  get screenY() {
+    return this.event.screenY;
+  }
+  get shiftKey() {
+    return this.event.shiftKey;
+  }
+  get x() {
+    return this.event.x;
+  }
+  get y() {
+    return this.event.y;
+  }
+  getModifierState(t) {
+    return this.event.getModifierState(t);
+  }
+  initMouseEvent(t, e, n, i, s, o, a, h, u, d, l, g, m, I, B) {
+  }
+}
+class he extends ut {
+  constructor(t, e) {
+    super(t, e), this.props = nt.create(t);
+  }
+  createResultEvent(t) {
+    return new Zt(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  }
+}
+class Xt extends nt {
+  constructor(t, e, n, i, s, o) {
+    super(t, e, n, i), this.width = s, this.height = o;
+  }
+  toInfiniteCanvasCoordinates(t) {
+    const { offsetX: e, offsetY: n, movementX: i, movementY: s } = super.toInfiniteCanvasCoordinates(t), { x: o, y: a } = t.inverseInfiniteCanvasContextBase.untranslated().apply(new c(this.width, this.height));
+    return new Xt(
+      e,
+      n,
+      i,
+      s,
+      o,
+      a
+    );
+  }
+  static create(t) {
+    const { offsetX: e, offsetY: n, movementX: i, movementY: s } = super.create(t);
+    return new Xt(
+      e,
+      n,
+      i,
+      s,
+      t.width,
+      t.height
+    );
+  }
+}
+class Vs extends Zt {
+  constructor(t, e, n, i) {
+    super(t, e, n, i);
+  }
+  get isPrimary() {
+    return this.event.isPrimary;
+  }
+  get pointerId() {
+    return this.event.pointerId;
+  }
+  get pointerType() {
+    return this.event.pointerType;
+  }
+  get pressure() {
+    return this.event.pressure;
+  }
+  get tangentialPressure() {
+    return this.event.tangentialPressure;
+  }
+  get tiltX() {
+    return this.event.tiltX;
+  }
+  get tiltY() {
+    return this.event.tiltY;
+  }
+  get twist() {
+    return this.event.twist;
+  }
+  getCoalescedEvents() {
+    return console.warn("`PointerEvent.getCoalescedEvents()` is currently not supported by InfiniteCanvas"), [];
+  }
+  getPredictedEvents() {
+    return console.warn("`PointerEvent.getPredictedEvents()` is currently not supported by InfiniteCanvas"), [];
+  }
+}
+class rt extends ut {
+  constructor(t, e) {
+    super(t, e), this.props = Xt.create(t);
+  }
+  createResultEvent(t) {
+    return new Vs(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  }
+}
+class qs {
+  constructor(t, e) {
+    this.initial = t, this.cancel = e, this.current = t;
+  }
+}
+class Hs {
+  constructor(t) {
+    this.point = t, this.moveEventDispatcher = new tt(), this._fixedOnInfiniteCanvas = !1;
+  }
+  get fixedOnInfiniteCanvas() {
+    return this._fixedOnInfiniteCanvas;
+  }
+  removeHandler(t) {
+    this.moveEventDispatcher.removeListener(t);
+  }
+  moveTo(t, e) {
+    const n = new c(t, e);
+    this.point = n, this.moveEventDispatcher.dispatch(n);
+  }
+  onMoved(t, e) {
+    let n;
+    this._fixedOnInfiniteCanvas = e;
+    const i = (s) => {
+      n.current = s, t();
+    };
+    return this.moveEventDispatcher.addListener(i), n = new qs(this.point, () => (this.removeHandler(i), this._fixedOnInfiniteCanvas = !1, this)), n;
+  }
+}
+class Gs {
+  constructor(t) {
+    this.pointerEvent = t, this._defaultPrevented = !1, this.anchor = new Hs(new c(t.offsetX, t.offsetY));
+  }
+  get defaultPrevented() {
+    return this._defaultPrevented;
+  }
+  get touchId() {
+    return this._touchId;
+  }
+  get pointerId() {
+    return this.pointerEvent.pointerId;
+  }
+  preventDefault() {
+    this._defaultPrevented = !0;
+  }
+  setTouchId(t) {
+    this._touchId = t;
+  }
+  updatePointerEvent(t) {
+    this.pointerEvent = t, this.anchor.moveTo(t.offsetX, t.offsetY);
+  }
+}
+class Xs {
+  constructor() {
+    this.anchors = [];
+  }
+  find(t) {
+    return this.anchors.find(t);
+  }
+  getAll(t) {
+    return this.anchors.filter(t);
+  }
+  getAnchorForTouch(t) {
+    return this.anchors.find((e) => e.touchId === t);
+  }
+  addAnchorForPointerEvent(t) {
+    const e = new Gs(t);
+    this.anchors.push(e);
+  }
+  updateAnchorForPointerEvent(t) {
+    const e = this.getAnchorForPointerEvent(t);
+    if (!e) {
+      this.addAnchorForPointerEvent(t);
+      return;
+    }
+    e.updatePointerEvent(t);
+  }
+  getAnchorForPointerEvent(t) {
+    return this.anchors.find((e) => e.pointerId === t.pointerId);
+  }
+  removeAnchor(t) {
+    const e = this.anchors.findIndex((n) => n === t);
+    e > -1 && this.anchors.splice(e, 1);
+  }
+}
+class Yt extends nt {
+  constructor(t, e, n, i, s, o) {
+    super(t, e, n, i), this.deltaX = s, this.deltaY = o;
+  }
+  toInfiniteCanvasCoordinates(t) {
+    const { offsetX: e, offsetY: n, movementX: i, movementY: s } = super.toInfiniteCanvasCoordinates(t), { x: o, y: a } = t.inverseInfiniteCanvasContextBase.untranslated().apply(new c(this.deltaX, this.deltaY));
+    return new Yt(
+      e,
+      n,
+      i,
+      s,
+      o,
+      a
+    );
+  }
+  static create(t) {
+    const { offsetX: e, offsetY: n, movementX: i, movementY: s } = super.create(t);
+    return new Yt(
+      e,
+      n,
+      i,
+      s,
+      t.deltaX,
+      t.deltaY
+    );
+  }
+}
+class Ys extends Zt {
+  constructor(t, e, n, i) {
+    super(t, e, n, i), this.deltaX = i.deltaX, this.deltaY = i.deltaY;
+  }
+  get deltaMode() {
+    return this.event.deltaMode;
+  }
+  get deltaZ() {
+    return this.event.deltaZ;
+  }
+  get DOM_DELTA_LINE() {
+    return this.event.DOM_DELTA_LINE;
+  }
+  get DOM_DELTA_PAGE() {
+    return this.event.DOM_DELTA_PAGE;
+  }
+  get DOM_DELTA_PIXEL() {
+    return this.event.DOM_DELTA_PIXEL;
+  }
+}
+class $s extends ut {
+  constructor(t, e) {
+    super(t, e), this.props = Yt.create(t);
+  }
+  createResultEvent(t) {
+    return new Ys(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  }
+}
+function at(r, t) {
+  const e = [];
+  for (let n = 0; n < r.length; n++) {
+    const i = r[n];
+    (!t || t(i)) && e.push(i);
+  }
+  return e;
+}
+class $t {
+  constructor(t, e, n, i, s, o) {
+    this.x = t, this.y = e, this.radiusX = n, this.radiusY = i, this.rotationAngle = s, this.identifier = o;
+  }
+  toInfiniteCanvasCoordinates(t) {
+    const e = t.inverseInfiniteCanvasContextBase, { x: n, y: i } = e.apply(new c(this.x, this.y)), s = this.radiusX * e.scale, o = this.radiusY * e.scale, a = this.rotationAngle + e.getRotationAngle();
+    return new $t(
+      n,
+      i,
+      s,
+      o,
+      a,
+      this.identifier
+    );
+  }
+  static create(t, e) {
+    const { x: n, y: i } = e.getCSSPosition(t.clientX, t.clientY);
+    return new $t(
+      n,
+      i,
+      t.radiusX,
+      t.radiusY,
+      t.rotationAngle,
+      t.identifier
+    );
+  }
+}
+class $e {
+  constructor() {
+    this.translatedProps = [], this.createdProps = [];
+  }
+  toInfiniteCanvasCoordinates(t, e) {
+    let n = this.translatedProps.find((i) => i.identifier === t.identifier);
+    return n || (n = t.toInfiniteCanvasCoordinates(e), this.translatedProps.push(n), n);
+  }
+  createProps(t, e) {
+    let n = this.createdProps.find((i) => i.identifier === t.identifier);
+    return n || (n = $t.create(t, e), this.createdProps.push(n), n);
+  }
+  dispose() {
+    this.translatedProps.splice(0, this.translatedProps.length), this.createdProps.splice(0, this.createdProps.length);
+  }
+}
+class zt {
+  constructor(t, e, n) {
+    this.targetTouches = t, this.changedTouches = e, this.touches = n;
+  }
+  toInfiniteCanvasCoordinates(t) {
+    const e = new $e(), n = new zt(
+      this.targetTouches.map((i) => e.toInfiniteCanvasCoordinates(i, t)),
+      this.changedTouches.map((i) => e.toInfiniteCanvasCoordinates(i, t)),
+      this.touches.map((i) => e.toInfiniteCanvasCoordinates(i, t))
+    );
+    return e.dispose(), n;
+  }
+  static create(t, e, n) {
+    const i = new $e(), s = e.map((a) => i.createProps(a, t)), o = n.map((a) => i.createProps(a, t));
+    return i.dispose(), new zt(
+      s,
+      o,
+      s
+    );
+  }
+}
+class zs {
+  constructor(t, e) {
+    this.touch = t, this.infiniteCanvasX = e.x, this.infiniteCanvasY = e.y, this.radiusX = e.radiusX, this.radiusY = e.radiusY, this.rotationAngle = e.rotationAngle;
+  }
+  get clientX() {
+    return this.touch.clientX;
+  }
+  get clientY() {
+    return this.touch.clientY;
+  }
+  get force() {
+    return this.touch.force;
+  }
+  get identifier() {
+    return this.touch.identifier;
+  }
+  get pageX() {
+    return this.touch.pageX;
+  }
+  get pageY() {
+    return this.touch.pageY;
+  }
+  get screenX() {
+    return this.touch.screenX;
+  }
+  get screenY() {
+    return this.touch.screenY;
+  }
+  get target() {
+    return this.touch.target;
+  }
+}
+class Us extends Array {
+  item(t) {
+    return this[t];
+  }
+}
+function Ks(r, t) {
+  const e = r.length;
+  for (let n = 0; n < e; n++) {
+    const i = r[n];
+    if (i.identifier === t)
+      return i;
+  }
+}
+function js(r, t) {
+  for (let e of r) {
+    const n = Ks(e, t);
+    if (n)
+      return n;
+  }
+}
+function re(r, t) {
+  const e = [];
+  for (const n of t) {
+    const i = js(r, n.identifier);
+    i && e.push(new zs(i, n));
+  }
+  return new Us(...e);
+}
+class Qs extends Wn {
+  constructor(t, e, n, i) {
+    super(t, e, n), this.touches = re([n.touches], i.touches), this.targetTouches = re([n.touches], i.targetTouches), this.changedTouches = re([n.touches, n.changedTouches], i.changedTouches);
+  }
+  get altKey() {
+    return this.event.altKey;
+  }
+  get ctrlKey() {
+    return this.event.ctrlKey;
+  }
+  get metaKey() {
+    return this.event.metaKey;
+  }
+  get shiftKey() {
+    return this.event.shiftKey;
+  }
+}
+class It extends ut {
+  constructor(t, e, n) {
+    super(t, n), this.props = e;
+  }
+  createResultEvent(t) {
+    return new Qs(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  }
+  static create(t, e, n, i, s) {
+    const o = zt.create(t, n, i);
+    return new It(e, o, s);
+  }
+}
+class ze {
+  constructor(t, e) {
+    this.source = t, this.listener = e, t.addListener(e);
+  }
+  remove() {
+    this.source.removeListener(this.listener);
+  }
+}
+class Js {
+  constructor(t, e, n, i) {
+    this.listener = n, this.onRemoved = i;
+    let s;
+    this.otherSubscription = new ze(e, (o) => {
+      s = o;
+    }), this.subscription = new ze(t, (o) => {
+      n([o, s]);
+    });
+  }
+  remove() {
+    this.subscription.remove(), this.otherSubscription.remove(), this.onRemoved && this.onRemoved();
+  }
+}
+class Zs extends bt {
+  constructor(t, e) {
+    super(), this.source = t, this.otherSource = e;
+  }
+  map(t) {
+    return new Js(this.source, this.otherSource, t.listener, t.onRemoved);
+  }
+  mapsTo(t, e) {
+    return t.listener === e.listener;
+  }
+  onRemoved(t) {
+    t.remove();
+  }
+  addListener(t, e) {
+    this.add({ listener: t, onRemoved: e });
+  }
+  removeListener(t) {
+    this.remove({ listener: t });
+  }
+}
+function oe(r, t) {
+  return new Zs(r, t);
+}
+function _s(r, t) {
+  for (let e = 0; e < r.length; e++) {
+    const n = r[e];
+    if (t(n))
+      return !0;
+  }
+  return !1;
+}
+function tr(r, t) {
+  return et(r, (e) => {
+    let n = !1;
+    const i = [];
+    function s() {
+      n || i.length === 0 || (n = !0, t(i.shift()).addListener(e, () => {
+        n = !1, s();
+      }));
+    }
+    return (o) => {
+      i.push(o), s();
+    };
+  });
+}
+class er {
+  constructor(t) {
+    this.sequence = t;
+  }
+  addListener(t, e) {
+    for (const n of this.sequence)
+      t(n);
+    e && e();
+  }
+  removeListener(t) {
+  }
+}
+function nr(r) {
+  return new er(r);
+}
+class Ue extends be {
+  constructor(t) {
+    super(!0), this.type = t;
+  }
+  createResultEvent() {
+    return new ye(this, this.preventableDefault, this.type);
+  }
+}
+class ir extends Se {
+  constructor(t, e, n, i, s) {
+    super(n, i), this.transformer = e, this.config = s, this.anchorSet = new Xs();
+    const o = L(t, "pointerdown"), a = L(t, "pointerleave"), h = L(t, "pointermove"), u = L(t, "pointerup"), d = L(t, "pointercancel"), l = N(
+      L(t, "touchmove"),
+      (f) => _s(f.targetTouches, (y) => !this.hasFixedAnchorForTouch(y.identifier))
+    );
+    o.addListener((f) => this.anchorSet.updateAnchorForPointerEvent(f)), h.addListener((f) => this.anchorSet.updateAnchorForPointerEvent(f)), u.addListener((f) => this.removePointer(f)), a.addListener((f) => this.removePointer(f));
+    const g = V(L(t, "mousedown"), (f) => new he(f, !0)), m = V(L(t, "wheel"), (f) => new $s(f, !0)), I = V(L(t, "touchstart"), (f) => {
+      const y = at(f.targetTouches), R = at(f.changedTouches);
+      return It.create(
+        this.rectangle,
+        f,
+        y,
+        R,
+        !0
+      );
+    }), B = V(o, (f) => new rt(f, !0)), { captureSource: W, bubbleSource: H, afterBubble: j } = J(B), { captureSource: dt, bubbleSource: ft, afterBubble: gt } = J(g), { captureSource: mt, bubbleSource: _t, afterBubble: te } = J(I), { captureSource: ee, bubbleSource: xt, afterBubble: Oe } = J(m), Rn = V(
+      N(Oe, (f) => !this.config.greedyGestureHandling && !f.event.ctrlKey && !f.infiniteCanvasDefaultPrevented),
+      () => new Ue("wheelignored")
+    ), { captureSource: Nn, bubbleSource: Mn, afterBubble: Vn } = J(Rn);
+    Oe.addListener((f) => {
+      f.infiniteCanvasDefaultPrevented || this.zoom(f.event);
+    }), Vn.addListener((f) => {
+      f.infiniteCanvasDefaultPrevented || console.warn("use ctrl + scroll to zoom");
+    }), oe(gt, j).addListener(([f, y]) => {
+      !f.infiniteCanvasDefaultPrevented && !y.infiniteCanvasDefaultPrevented && this.transformUsingPointer(f.event, y.event);
+    });
+    const qn = N(te, (f) => f.event.changedTouches.length === 1), Be = oe(qn, j);
+    Be.addListener(([f, y]) => {
+      const R = f.event.changedTouches[0], G = this.anchorSet.getAnchorForPointerEvent(y.event);
+      if (G)
+        if (G.setTouchId(R.identifier), !f.infiniteCanvasDefaultPrevented && !y.infiniteCanvasDefaultPrevented)
+          if (this.config.greedyGestureHandling)
+            this.rectangle.measure(), this.transformer.addAnchor(G.anchor), f.event.preventDefault();
+          else {
+            const De = this.anchorSet.find((ne) => ne.touchId !== void 0 && ne !== G && !ne.defaultPrevented);
+            if (!De)
+              return;
+            this.rectangle.measure(), this.transformer.addAnchor(De.anchor), this.transformer.addAnchor(G.anchor), f.event.preventDefault();
+          }
+        else
+          G.preventDefault();
+    });
+    const Ae = N(
+      oe(d, Be),
+      ([f, [y, R]]) => f.pointerId === R.event.pointerId
+    );
+    Ae.addListener(([f]) => {
+      this.removePointer(f);
+    });
+    const Hn = V(
+      N(Ae, ([f, [y, R]]) => !this.config.greedyGestureHandling && !y.infiniteCanvasDefaultPrevented && !R.infiniteCanvasDefaultPrevented),
+      () => new Ue("touchignored")
+    ), { captureSource: Gn, bubbleSource: Xn, afterBubble: Yn } = J(Hn);
+    Yn.addListener((f) => {
+      f.infiniteCanvasDefaultPrevented || console.warn("use two fingers to move");
+    }), this.cache = {
+      mousemove: this.map(N(L(t, "mousemove"), () => !this.mouseAnchorIsFixed()), (f) => new he(f)),
+      mousedown: Q(dt, ft, n, i),
+      pointerdown: Q(W, H, n, i),
+      pointermove: this.map(
+        tr(
+          N(h, () => this.hasNonFixedAnchorForSomePointer()),
+          () => nr(this.anchorSet.getAll((f) => !f.anchor.fixedOnInfiniteCanvas).map((f) => f.pointerEvent))
+        ),
+        (f) => new rt(f)
+      ),
+      pointerleave: this.map(a, (f) => new rt(f)),
+      pointerup: this.map(u, (f) => new rt(f)),
+      pointercancel: this.map(d, (f) => new rt(f)),
+      wheel: Q(ee, xt, n, i),
+      wheelignored: Q(Nn, Mn, n, i),
+      touchstart: Q(mt, _t, n, i),
+      touchignored: Q(Gn, Xn, n, i),
+      touchmove: this.map(l, (f) => {
+        const y = at(f.targetTouches), R = at(f.targetTouches, (G) => !this.hasFixedAnchorForTouch(G.identifier));
+        return It.create(
+          this.rectangle,
+          f,
+          y,
+          R
+        );
+      })
+    };
+  }
+  getEventSource(t) {
+    return this.cache[t];
+  }
+  mouseAnchorIsFixed() {
+    const t = this.anchorSet.find((e) => e.pointerEvent.pointerType === "mouse");
+    return t ? t.anchor.fixedOnInfiniteCanvas : !1;
+  }
+  hasFixedAnchorForTouch(t) {
+    const e = this.anchorSet.getAnchorForTouch(t);
+    return !!e && e.anchor.fixedOnInfiniteCanvas;
+  }
+  hasNonFixedAnchorForSomePointer() {
+    return !!this.anchorSet.find((t) => !t.anchor.fixedOnInfiniteCanvas);
+  }
+  transformUsingPointer(t, e) {
+    this.rectangle.measure();
+    const n = this.anchorSet.getAnchorForPointerEvent(e);
+    e.button === 1 && this.config.rotationEnabled ? (t.preventDefault(), this.transformer.addRotationAnchor(n.anchor)) : e.button === 0 && this.transformer.addAnchor(n.anchor);
+  }
+  removePointer(t) {
+    const e = this.anchorSet.getAnchorForPointerEvent(t);
+    e && (this.transformer.releaseAnchor(e.anchor), this.anchorSet.removeAnchor(e));
+  }
+  zoom(t) {
+    if (!this.config.greedyGestureHandling && !t.ctrlKey)
+      return;
+    const { offsetX: e, offsetY: n } = t;
+    let i = t.deltaY;
+    const s = Math.pow(2, -i / 300);
+    this.rectangle.measure(), this.transformer.zoom(e, n, s), t.preventDefault();
+  }
+}
+class sr {
+  constructor(t, e) {
+    this.handledOrFilteredEventCollection = t, this.mappingCollection = e;
+  }
+  setOn(t, e) {
+    At(t) ? this.handledOrFilteredEventCollection.setOn(t, e) : this.mappingCollection.setOn(t, e);
+  }
+  getOn(t) {
+    return At(t) ? this.handledOrFilteredEventCollection.getOn(t) : this.mappingCollection.getOn(t);
+  }
+  addEventListener(t, e, n) {
+    At(t) ? this.handledOrFilteredEventCollection.addEventListener(t, e, n) : this.mappingCollection.addEventListener(t, e, n);
+  }
+  removeEventListener(t, e, n) {
+    At(t) ? this.handledOrFilteredEventCollection.removeEventListener(t, e, n) : this.mappingCollection.removeEventListener(t, e, n);
+  }
+}
+class rr {
+  constructor(t, e, n, i) {
+    this.mappedMouseEventCollection = t, this.mappedTouchEventCollection = e, this.mappedOnlyPointerEventCollection = n, this.mappedDragEventCollection = i;
+  }
+  setOn(t, e) {
+    Dt(t) ? this.mappedMouseEventCollection.setOn(t, e) : Ft(t) ? this.mappedTouchEventCollection.setOn(t, e) : Lt(t) ? this.mappedOnlyPointerEventCollection.setOn(t, e) : Et(t) && this.mappedDragEventCollection.setOn(t, e);
+  }
+  getOn(t) {
+    if (Dt(t))
+      return this.mappedMouseEventCollection.getOn(t);
+    if (Ft(t))
+      return this.mappedTouchEventCollection.getOn(t);
+    if (Lt(t))
+      return this.mappedOnlyPointerEventCollection.getOn(t);
+    if (Et(t))
+      return this.mappedDragEventCollection.getOn(t);
+  }
+  addEventListener(t, e, n) {
+    Dt(t) ? this.mappedMouseEventCollection.addEventListener(t, e, n) : Ft(t) ? this.mappedTouchEventCollection.addEventListener(t, e, n) : Lt(t) ? this.mappedOnlyPointerEventCollection.addEventListener(t, e, n) : Et(t) && this.mappedDragEventCollection.addEventListener(t, e, n);
+  }
+  removeEventListener(t, e, n) {
+    Dt(t) ? this.mappedMouseEventCollection.removeEventListener(t, e, n) : Ft(t) ? this.mappedTouchEventCollection.removeEventListener(t, e, n) : Lt(t) ? this.mappedOnlyPointerEventCollection.removeEventListener(t, e, n) : Et(t) && this.mappedDragEventCollection.removeEventListener(t, e, n);
+  }
+}
+class pt extends Se {
+  constructor(t, e, n, i) {
+    super(n, i), this.canvasEl = t, this.createInternalEvent = e, this.cache = {};
+  }
+  getEventSource(t) {
+    return this.cache[t] || (this.cache[t] = this.createEventSource(t)), this.cache[t];
+  }
+  createEventSource(t) {
+    return this.map(L(this.canvasEl, t), (e) => this.createInternalEvent(e));
+  }
+}
+class or extends Zt {
+  get dataTransfer() {
+    return this.event.dataTransfer;
+  }
+}
+class ar extends ut {
+  constructor(t, e) {
+    super(t, e), this.props = nt.create(t);
+  }
+  createResultEvent(t) {
+    return new or(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  }
+}
+class cr extends ut {
+  createResultEvent() {
+    return this.event;
+  }
+}
+class xe {
+  constructor(t, e, n, i) {
+    this.drawEventCollection = t, this.transformationEventCollection = e, this.pointerEventCollection = n, this.unmappedEventCollection = i;
+  }
+  setOn(t, e) {
+    t === "draw" ? this.drawEventCollection.setOn("draw", e) : Ot(t) ? this.transformationEventCollection.setOn(t, e) : Bt(t) ? this.pointerEventCollection.setOn(t, e) : this.unmappedEventCollection.setOn(t, e);
+  }
+  getOn(t) {
+    return t === "draw" ? this.drawEventCollection.getOn("draw") : Ot(t) ? this.transformationEventCollection.getOn(t) : Bt(t) ? this.pointerEventCollection.getOn(t) : this.unmappedEventCollection.getOn(t);
+  }
+  addEventListener(t, e, n) {
+    t === "draw" ? this.drawEventCollection.addEventListener("draw", e, n) : Ot(t) ? this.transformationEventCollection.addEventListener(t, e, n) : Bt(t) ? this.pointerEventCollection.addEventListener(t, e, n) : this.unmappedEventCollection.addEventListener(t, e, n);
+  }
+  removeEventListener(t, e, n) {
+    t === "draw" ? this.drawEventCollection.removeEventListener("draw", e, n) : Ot(t) ? this.transformationEventCollection.removeEventListener(t, e, n) : Bt(t) ? this.pointerEventCollection.removeEventListener(t, e, n) : this.unmappedEventCollection.removeEventListener(t, e, n);
+  }
+  static create(t, e, n, i, s, o) {
+    const a = new Fs(o, n, i), h = new Ws(e, n, i), u = new ir(
+      t,
+      e,
+      n,
+      i,
+      s
+    ), d = new sr(
+      u,
+      new rr(
+        new pt(t, (l) => new he(l), n, i),
+        new pt(t, (l) => {
+          const g = at(l.targetTouches), m = at(l.changedTouches);
+          return It.create(
+            n,
+            l,
+            g,
+            m
+          );
+        }, n, i),
+        new pt(t, (l) => new rt(l), n, i),
+        new pt(t, (l) => new ar(l), n, i)
+      )
+    );
+    return new xe(
+      a,
+      h,
+      d,
+      new pt(t, (l) => new cr(l), n, i)
+    );
+  }
+}
+function hr(r, t) {
+  let e = -1;
+  const n = r.canvas.width;
+  r.save(), r.fillStyle = "#fff", r.fillRect(0, 0, n, 5), r.filter = `drop-shadow(${t} 0)`, r.fillRect(0, 0, 1, 5);
+  const s = r.getImageData(0, 0, n, 3).data;
+  for (let o = 0; o < n; o++) {
+    const a = 4 * (2 * n + o);
+    if (s[a] !== 255) {
+      e = o;
+      break;
+    }
+  }
+  return r.restore(), e;
+}
+function lr(r, t) {
+  const e = r.canvas.width;
+  let n = 1, i = 1, s = -1;
+  return d(), h(), o(), { numerator: n, denominator: i, pixels: s };
+  function o() {
+    let l = 0;
+    do {
+      const g = s;
+      if (a(), s === g)
+        break;
+      l++;
+    } while (l < 10);
+  }
+  function a() {
+    const l = e / (s + 1);
+    let g = s === 0 ? l : Math.min((e - 1) / s, l), m;
+    for (; (m = Math.floor(g)) < 2; )
+      g *= 10, i *= 10;
+    n *= m, d(), u();
+  }
+  function h() {
+    let l = 0;
+    for (; s === -1 && l < 10; )
+      i *= 10, d(), l++;
+    u();
+  }
+  function u() {
+    if (s === -1)
+      throw new Error(`something went wrong while getting measurement for unit '${t}' on canvas with width ${e}`);
+  }
+  function d() {
+    s = hr(r, `${n / i}${t}`);
+  }
+}
+class ur {
+  constructor(t) {
+    this.ctx = t, this.cache = {};
+  }
+  getNumberOfPixels(t, e) {
+    if (t === 0)
+      return 0;
+    if (e === "px")
+      return t;
+    let n = this.cache[e];
+    return n || (n = lr(this.ctx, e), this.cache[e] = n), t * n.pixels * n.denominator / n.numerator;
+  }
+}
+const Ut = class Ut {
+  constructor(t, e) {
+    this.canvas = t, this.config = { rotationEnabled: !0, greedyGestureHandling: !1, units: C.CANVAS }, e && Object.assign(this.config, e), this.canvasResizeObserver = new gs(t), this.canvasResizeListener = () => {
+      this.canvas.parentElement !== null && this.viewBox.draw();
+    };
+    const n = new hs(new cs()), i = new ls(n);
+    this.rectangle = new ds(new fs(t), this.config);
+    let s;
+    const o = t.getContext("2d");
+    this.cssLengthConverterFactory = {
+      create: () => new ur(o)
+    }, this.viewBox = new ts(
+      this.rectangle,
+      o,
+      i,
+      () => i.getLock(),
+      () => s.isTransforming
+    ), s = new as(this.viewBox, this.config), this.eventCollection = xe.create(t, s, this.rectangle, this, this.config, n), e && e.units === C.CSS && this.canvasResizeObserver.addListener(this.canvasResizeListener);
+  }
+  setUnits(t) {
+    t === C.CSS && this.config.units !== C.CSS && this.canvasResizeObserver.addListener(this.canvasResizeListener), t !== C.CSS && this.config.units === C.CSS && this.canvasResizeObserver.removeListener(this.canvasResizeListener), this.config.units = t, this.rectangle.measure(), this.viewBox.draw();
+  }
+  getContext() {
+    return this.context || (this.context = new Ai(this.canvas, this.viewBox, this.cssLengthConverterFactory)), this.context;
+  }
+  get transformation() {
+    return lt(this.rectangle.inverseInfiniteCanvasContextBase);
+  }
+  get inverseTransformation() {
+    return lt(this.rectangle.infiniteCanvasContextBase);
+  }
+  get rotationEnabled() {
+    return this.config.rotationEnabled;
+  }
+  set rotationEnabled(t) {
+    this.config.rotationEnabled = t;
+  }
+  get units() {
+    return this.config.units;
+  }
+  set units(t) {
+    this.setUnits(t);
+  }
+  get greedyGestureHandling() {
+    return this.config.greedyGestureHandling;
+  }
+  set greedyGestureHandling(t) {
+    this.config.greedyGestureHandling = t;
+  }
+  set ontransformationstart(t) {
+    this.eventCollection.setOn("transformationstart", t);
+  }
+  get ontransformationstart() {
+    return this.eventCollection.getOn("transformationstart");
+  }
+  set ontransformationchange(t) {
+    this.eventCollection.setOn("transformationchange", t);
+  }
+  get ontransformationchange() {
+    return this.eventCollection.getOn("transformationchange");
+  }
+  set ontransformationend(t) {
+    this.eventCollection.setOn("transformationend", t);
+  }
+  get ontransformationend() {
+    return this.eventCollection.getOn("transformationend");
+  }
+  set ondraw(t) {
+    this.eventCollection.setOn("draw", t);
+  }
+  get ondraw() {
+    return this.eventCollection.getOn("draw");
+  }
+  set onwheelignored(t) {
+    this.eventCollection.setOn("wheelignored", t);
+  }
+  get onwheelignored() {
+    return this.eventCollection.getOn("wheelignored");
+  }
+  set ontouchignored(t) {
+    this.eventCollection.setOn("touchignored", t);
+  }
+  get ontouchignored() {
+    return this.eventCollection.getOn("touchignored");
+  }
+  set oncopy(t) {
+    this.eventCollection.setOn("copy", t);
+  }
+  get oncopy() {
+    return this.eventCollection.getOn("copy");
+  }
+  set oncut(t) {
+    this.eventCollection.setOn("cut", t);
+  }
+  get oncut() {
+    return this.eventCollection.getOn("cut");
+  }
+  set onpaste(t) {
+    this.eventCollection.setOn("paste", t);
+  }
+  get onpaste() {
+    return this.eventCollection.getOn("paste");
+  }
+  set onabort(t) {
+    this.eventCollection.setOn("abort", t);
+  }
+  get onabort() {
+    return this.eventCollection.getOn("abort");
+  }
+  set onanimationcancel(t) {
+    this.eventCollection.setOn("animationcancel", t);
+  }
+  get onanimationcancel() {
+    return this.eventCollection.getOn("animationcancel");
+  }
+  set onanimationend(t) {
+    this.eventCollection.setOn("animationend", t);
+  }
+  get onanimationend() {
+    return this.eventCollection.getOn("animationend");
+  }
+  set onanimationiteration(t) {
+    this.eventCollection.setOn("animationiteration", t);
+  }
+  get onanimationiteration() {
+    return this.eventCollection.getOn("animationiteration");
+  }
+  set onanimationstart(t) {
+    this.eventCollection.setOn("animationstart", t);
+  }
+  get onanimationstart() {
+    return this.eventCollection.getOn("animationstart");
+  }
+  set onauxclick(t) {
+    this.eventCollection.setOn("auxclick", t);
+  }
+  get onauxclick() {
+    return this.eventCollection.getOn("auxclick");
+  }
+  set onblur(t) {
+    this.eventCollection.setOn("blur", t);
+  }
+  get onblur() {
+    return this.eventCollection.getOn("blur");
+  }
+  get oncanplay() {
+    return this.eventCollection.getOn("canplay");
+  }
+  set oncanplay(t) {
+    this.eventCollection.setOn("canplay", t);
+  }
+  get oncanplaythrough() {
+    return this.eventCollection.getOn("canplaythrough");
+  }
+  set oncanplaythrough(t) {
+    this.eventCollection.setOn("canplaythrough", t);
+  }
+  get onchange() {
+    return this.eventCollection.getOn("change");
+  }
+  set onchange(t) {
+    this.eventCollection.setOn("change", t);
+  }
+  get onclick() {
+    return this.eventCollection.getOn("click");
+  }
+  set onclick(t) {
+    this.eventCollection.setOn("click", t);
+  }
+  get onclose() {
+    return this.eventCollection.getOn("close");
+  }
+  set onclose(t) {
+    this.eventCollection.setOn("close", t);
+  }
+  get oncontextmenu() {
+    return this.eventCollection.getOn("contextmenu");
+  }
+  set oncontextmenu(t) {
+    this.eventCollection.setOn("contextmenu", t);
+  }
+  get oncuechange() {
+    return this.eventCollection.getOn("cuechange");
+  }
+  set oncuechange(t) {
+    this.eventCollection.setOn("cuechange", t);
+  }
+  get ondblclick() {
+    return this.eventCollection.getOn("dblclick");
+  }
+  set ondblclick(t) {
+    this.eventCollection.setOn("dblclick", t);
+  }
+  get ondrag() {
+    return this.eventCollection.getOn("drag");
+  }
+  set ondrag(t) {
+    this.eventCollection.setOn("drag", t);
+  }
+  get ondragend() {
+    return this.eventCollection.getOn("dragend");
+  }
+  set ondragend(t) {
+    this.eventCollection.setOn("dragend", t);
+  }
+  get ondragenter() {
+    return this.eventCollection.getOn("dragenter");
+  }
+  set ondragenter(t) {
+    this.eventCollection.setOn("dragenter", t);
+  }
+  get onformdata() {
+    return this.eventCollection.getOn("formdata");
+  }
+  set onformdata(t) {
+    this.eventCollection.setOn("formdata", t);
+  }
+  get onwebkitanimationend() {
+    return this.eventCollection.getOn("webkitanimationend");
+  }
+  set onwebkitanimationend(t) {
+    this.eventCollection.setOn("webkitanimationend", t);
+  }
+  get onwebkitanimationstart() {
+    return this.eventCollection.getOn("webkitanimationstart");
+  }
+  set onwebkitanimationstart(t) {
+    this.eventCollection.setOn("webkitanimationstart", t);
+  }
+  get onwebkitanimationiteration() {
+    return this.eventCollection.getOn("webkitanimationiteration");
+  }
+  set onwebkitanimationiteration(t) {
+    this.eventCollection.setOn("webkitanimationiteration", t);
+  }
+  get onwebkittransitionend() {
+    return this.eventCollection.getOn("webkittransitionend");
+  }
+  set onwebkittransitionend(t) {
+    this.eventCollection.setOn("webkittransitionend", t);
+  }
+  get onslotchange() {
+    return this.eventCollection.getOn("slotchange");
+  }
+  set onslotchange(t) {
+    this.eventCollection.setOn("slotchange", t);
+  }
+  get ondragleave() {
+    return this.eventCollection.getOn("dragleave");
+  }
+  set ondragleave(t) {
+    this.eventCollection.setOn("dragleave", t);
+  }
+  get ondragover() {
+    return this.eventCollection.getOn("dragover");
+  }
+  set ondragover(t) {
+    this.eventCollection.setOn("dragover", t);
+  }
+  get ondragstart() {
+    return this.eventCollection.getOn("dragstart");
+  }
+  set ondragstart(t) {
+    this.eventCollection.setOn("dragstart", t);
+  }
+  get ondrop() {
+    return this.eventCollection.getOn("drop");
+  }
+  set ondrop(t) {
+    this.eventCollection.setOn("drop", t);
+  }
+  get ondurationchange() {
+    return this.eventCollection.getOn("durationchange");
+  }
+  set ondurationchange(t) {
+    this.eventCollection.setOn("durationchange", t);
+  }
+  get onemptied() {
+    return this.eventCollection.getOn("emptied");
+  }
+  set onemptied(t) {
+    this.eventCollection.setOn("emptied", t);
+  }
+  get onended() {
+    return this.eventCollection.getOn("ended");
+  }
+  set onended(t) {
+    this.eventCollection.setOn("ended", t);
+  }
+  get onerror() {
+    return this.eventCollection.getOn("error");
+  }
+  set onerror(t) {
+    this.eventCollection.setOn("error", t);
+  }
+  get onfocus() {
+    return this.eventCollection.getOn("focus");
+  }
+  set onfocus(t) {
+    this.eventCollection.setOn("focus", t);
+  }
+  get ongotpointercapture() {
+    return this.eventCollection.getOn("gotpointercapture");
+  }
+  set ongotpointercapture(t) {
+    this.eventCollection.setOn("gotpointercapture", t);
+  }
+  get oninput() {
+    return this.eventCollection.getOn("input");
+  }
+  set oninput(t) {
+    this.eventCollection.setOn("input", t);
+  }
+  get oninvalid() {
+    return this.eventCollection.getOn("invalid");
+  }
+  set oninvalid(t) {
+    this.eventCollection.setOn("invalid", t);
+  }
+  get onkeydown() {
+    return this.eventCollection.getOn("keydown");
+  }
+  set onkeydown(t) {
+    this.eventCollection.setOn("keydown", t);
+  }
+  get onkeypress() {
+    return this.eventCollection.getOn("keypress");
+  }
+  set onkeypress(t) {
+    this.eventCollection.setOn("keypress", t);
+  }
+  get onkeyup() {
+    return this.eventCollection.getOn("keyup");
+  }
+  set onkeyup(t) {
+    this.eventCollection.setOn("keyup", t);
+  }
+  get onload() {
+    return this.eventCollection.getOn("load");
+  }
+  set onload(t) {
+    this.eventCollection.setOn("load", t);
+  }
+  get onloadeddata() {
+    return this.eventCollection.getOn("loadeddata");
+  }
+  set onloadeddata(t) {
+    this.eventCollection.setOn("loadeddata", t);
+  }
+  get onloadedmetadata() {
+    return this.eventCollection.getOn("loadedmetadata");
+  }
+  set onloadedmetadata(t) {
+    this.eventCollection.setOn("loadedmetadata", t);
+  }
+  get onloadstart() {
+    return this.eventCollection.getOn("loadstart");
+  }
+  set onloadstart(t) {
+    this.eventCollection.setOn("loadstart", t);
+  }
+  get onlostpointercapture() {
+    return this.eventCollection.getOn("lostpointercapture");
+  }
+  set onlostpointercapture(t) {
+    this.eventCollection.setOn("lostpointercapture", t);
+  }
+  get onmousedown() {
+    return this.eventCollection.getOn("mousedown");
+  }
+  set onmousedown(t) {
+    this.eventCollection.setOn("mousedown", t);
+  }
+  get onmouseenter() {
+    return this.eventCollection.getOn("mouseenter");
+  }
+  set onmouseenter(t) {
+    this.eventCollection.setOn("mouseenter", t);
+  }
+  get onmouseleave() {
+    return this.eventCollection.getOn("mouseleave");
+  }
+  set onmouseleave(t) {
+    this.eventCollection.setOn("mouseleave", t);
+  }
+  get onmousemove() {
+    return this.eventCollection.getOn("mousemove");
+  }
+  set onmousemove(t) {
+    this.eventCollection.setOn("mousemove", t);
+  }
+  get onmouseout() {
+    return this.eventCollection.getOn("mouseout");
+  }
+  set onmouseout(t) {
+    this.eventCollection.setOn("mouseout", t);
+  }
+  get onmouseover() {
+    return this.eventCollection.getOn("mouseover");
+  }
+  set onmouseover(t) {
+    this.eventCollection.setOn("mouseover", t);
+  }
+  get onmouseup() {
+    return this.eventCollection.getOn("mouseup");
+  }
+  set onmouseup(t) {
+    this.eventCollection.setOn("mouseup", t);
+  }
+  get onpause() {
+    return this.eventCollection.getOn("pause");
+  }
+  set onpause(t) {
+    this.eventCollection.setOn("pause", t);
+  }
+  get onplay() {
+    return this.eventCollection.getOn("play");
+  }
+  set onplay(t) {
+    this.eventCollection.setOn("play", t);
+  }
+  get onplaying() {
+    return this.eventCollection.getOn("playing");
+  }
+  set onplaying(t) {
+    this.eventCollection.setOn("playing", t);
+  }
+  get onpointercancel() {
+    return this.eventCollection.getOn("pointercancel");
+  }
+  set onpointercancel(t) {
+    this.eventCollection.setOn("pointercancel", t);
+  }
+  get onpointerdown() {
+    return this.eventCollection.getOn("pointerdown");
+  }
+  set onpointerdown(t) {
+    this.eventCollection.setOn("pointerdown", t);
+  }
+  get onpointerenter() {
+    return this.eventCollection.getOn("pointerenter");
+  }
+  set onpointerenter(t) {
+    this.eventCollection.setOn("pointerenter", t);
+  }
+  get onpointerleave() {
+    return this.eventCollection.getOn("pointerleave");
+  }
+  set onpointerleave(t) {
+    this.eventCollection.setOn("pointerleave", t);
+  }
+  get onpointermove() {
+    return this.eventCollection.getOn("pointermove");
+  }
+  set onpointermove(t) {
+    this.eventCollection.setOn("pointermove", t);
+  }
+  get onpointerout() {
+    return this.eventCollection.getOn("pointerout");
+  }
+  set onpointerout(t) {
+    this.eventCollection.setOn("pointerout", t);
+  }
+  get onpointerover() {
+    return this.eventCollection.getOn("pointerover");
+  }
+  set onpointerover(t) {
+    this.eventCollection.setOn("pointerover", t);
+  }
+  get onpointerup() {
+    return this.eventCollection.getOn("pointerup");
+  }
+  set onpointerup(t) {
+    this.eventCollection.setOn("pointerup", t);
+  }
+  get onprogress() {
+    return this.eventCollection.getOn("progress");
+  }
+  set onprogress(t) {
+    this.eventCollection.setOn("progress", t);
+  }
+  get onratechange() {
+    return this.eventCollection.getOn("ratechange");
+  }
+  set onratechange(t) {
+    this.eventCollection.setOn("ratechange", t);
+  }
+  get onreset() {
+    return this.eventCollection.getOn("reset");
+  }
+  set onreset(t) {
+    this.eventCollection.setOn("reset", t);
+  }
+  get onresize() {
+    return this.eventCollection.getOn("resize");
+  }
+  set onresize(t) {
+    this.eventCollection.setOn("resize", t);
+  }
+  get onscroll() {
+    return this.eventCollection.getOn("scroll");
+  }
+  set onscroll(t) {
+    this.eventCollection.setOn("scroll", t);
+  }
+  get onsecuritypolicyviolation() {
+    return this.eventCollection.getOn("securitypolicyviolation");
+  }
+  set onsecuritypolicyviolation(t) {
+    this.eventCollection.setOn("securitypolicyviolation", t);
+  }
+  get onseeked() {
+    return this.eventCollection.getOn("seeked");
+  }
+  set onseeked(t) {
+    this.eventCollection.setOn("seeked", t);
+  }
+  get onseeking() {
+    return this.eventCollection.getOn("seeking");
+  }
+  set onseeking(t) {
+    this.eventCollection.setOn("seeking", t);
+  }
+  get onselect() {
+    return this.eventCollection.getOn("select");
+  }
+  set onselect(t) {
+    this.eventCollection.setOn("select", t);
+  }
+  get onselectionchange() {
+    return this.eventCollection.getOn("selectionchange");
+  }
+  set onselectionchange(t) {
+    this.eventCollection.setOn("selectionchange", t);
+  }
+  get onselectstart() {
+    return this.eventCollection.getOn("selectstart");
+  }
+  set onselectstart(t) {
+    this.eventCollection.setOn("selectstart", t);
+  }
+  get onstalled() {
+    return this.eventCollection.getOn("stalled");
+  }
+  set onstalled(t) {
+    this.eventCollection.setOn("stalled", t);
+  }
+  get onsubmit() {
+    return this.eventCollection.getOn("submit");
+  }
+  set onsubmit(t) {
+    this.eventCollection.setOn("submit", t);
+  }
+  get onsuspend() {
+    return this.eventCollection.getOn("suspend");
+  }
+  set onsuspend(t) {
+    this.eventCollection.setOn("suspend", t);
+  }
+  get ontimeupdate() {
+    return this.eventCollection.getOn("timeupdate");
+  }
+  set ontimeupdate(t) {
+    this.eventCollection.setOn("timeupdate", t);
+  }
+  get ontoggle() {
+    return this.eventCollection.getOn("toggle");
+  }
+  set ontoggle(t) {
+    this.eventCollection.setOn("toggle", t);
+  }
+  get ontouchcancel() {
+    return this.eventCollection.getOn("touchcancel");
+  }
+  set ontouchcancel(t) {
+    this.eventCollection.setOn("touchcancel", t);
+  }
+  get ontouchend() {
+    return this.eventCollection.getOn("touchend");
+  }
+  set ontouchend(t) {
+    this.eventCollection.setOn("touchend", t);
+  }
+  get ontouchmove() {
+    return this.eventCollection.getOn("touchmove");
+  }
+  set ontouchmove(t) {
+    this.eventCollection.setOn("touchmove", t);
+  }
+  get ontouchstart() {
+    return this.eventCollection.getOn("touchstart");
+  }
+  set ontouchstart(t) {
+    this.eventCollection.setOn("touchstart", t);
+  }
+  get ontransitioncancel() {
+    return this.eventCollection.getOn("transitioncancel");
+  }
+  set ontransitioncancel(t) {
+    this.eventCollection.setOn("transitioncancel", t);
+  }
+  get ontransitionend() {
+    return this.eventCollection.getOn("transitionend");
+  }
+  set ontransitionend(t) {
+    this.eventCollection.setOn("transitionend", t);
+  }
+  get ontransitionrun() {
+    return this.eventCollection.getOn("transitionrun");
+  }
+  set ontransitionrun(t) {
+    this.eventCollection.setOn("transitionrun", t);
+  }
+  get ontransitionstart() {
+    return this.eventCollection.getOn("transitionstart");
+  }
+  set ontransitionstart(t) {
+    this.eventCollection.setOn("transitionstart", t);
+  }
+  get onvolumechange() {
+    return this.eventCollection.getOn("volumechange");
+  }
+  set onvolumechange(t) {
+    this.eventCollection.setOn("volumechange", t);
+  }
+  get onwaiting() {
+    return this.eventCollection.getOn("waiting");
+  }
+  set onwaiting(t) {
+    this.eventCollection.setOn("waiting", t);
+  }
+  get onwheel() {
+    return this.eventCollection.getOn("wheel");
+  }
+  set onwheel(t) {
+    this.eventCollection.setOn("wheel", t);
+  }
+  addEventListener(t, e, n) {
+    this.eventCollection.addEventListener(t, e, n);
+  }
+  removeEventListener(t, e, n) {
+    this.eventCollection.removeEventListener(t, e, n);
+  }
+};
+Ut.CANVAS_UNITS = C.CANVAS, Ut.CSS_UNITS = C.CSS;
+let le = Ut;
+const fr = le;
+export {
+  C as Units,
+  fr as default
+};

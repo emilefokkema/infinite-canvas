@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
       "outDir": "./dist/",
+      "composite": true,
       "noImplicitAny": true,
       "module": "es6",
-      "target": "es5",
-      "jsx": "react",
+      "target": "es6",
       "allowJs": true,
-      "esModuleInterop":true
+      "esModuleInterop":true,
+      "moduleResolution": "node"
     },
     "include": ["src/**/*"]
   }
