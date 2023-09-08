@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "module": "esnext",
+        "target": "esnext",
+        "allowJs": true,
+        "esModuleInterop":true,
+        "moduleResolution": "node",
+        "composite": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "paths": {
+            "infinite-canvas": ["./src/infinite-canvas"],
+            "infinite-canvas-api": ["./src/api-surface/infinite-canvas"]
+        },
+        "lib": ["dom"]
+    },
+    "include": [
+        "test-e2e/test-page-lib/impl/**/*",
+        "test-e2e/test-page-lib/api/**/*",
+        "test-e2e/testing-message-ports/open-testing-message-port.ts",
+        "src/**/*"]
+}

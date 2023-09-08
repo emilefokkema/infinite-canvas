@@ -1,0 +1,13 @@
+:root{
+    overflow: hidden;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+input, button, select{
+    font-family: inherit;
+    font-size: inherit;
+}

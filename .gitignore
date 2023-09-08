@@ -8,3 +8,10 @@ test/e2e/server/content/infinite-canvas.js
 test/e2e/server/content/test-case/rhino.jpg
 test/e2e/server/content/test-page/test-page-lib.js
 docs/dev/page/infinite-canvas.js
+.rollup.cache
+dev-utils/app/dist
+docs/.vitepress/dist
+docs/.vitepress/cache
+docs/.vitepress/api-docs/.temp
+test-e2e/test-page-lib/impl/dist
+.updated-snapshots

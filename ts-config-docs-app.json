@@ -1,0 +1,12 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "composite": true,
+        "moduleResolution": "node",
+        "paths": {
+            "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
+        }
+    },
+    "include": ["docs/.vitepress/theme/**/*.*", "docs/.vitepress/shared/**/*", "examples/shared/**/*", "utils/**/*", "src/api-surface/**/*"]
+}
