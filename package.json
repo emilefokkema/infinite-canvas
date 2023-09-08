@@ -1,7 +1,7 @@
 {
   "name": "ef-infinite-canvas",
   "type": "module",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "An infinite version of the html canvas",
   "main": "./dist/infinite-canvas.umd.cjs",
   "module": "./dist/infinite-canvas.js",
@@ -32,7 +32,7 @@
     "canvas",
     "infinite"
   ],
-  "homepage": "https://github.com/emilefokkema/infinite-canvas",
+  "homepage": "https://infinite-canvas.org/",
   "bugs": {
     "url": "https://github.com/emilefokkema/infinite-canvas/issues"
   },
