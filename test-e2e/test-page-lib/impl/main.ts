@@ -144,9 +144,29 @@ function addEventListener<
         return { setHandler, remove };
 }
 
+function makeSerializableTextMetrics(textMetrics: TextMetrics): TextMetrics{
+    const { 
+        actualBoundingBoxAscent,
+        actualBoundingBoxDescent,
+        actualBoundingBoxLeft,
+        actualBoundingBoxRight,
+        fontBoundingBoxAscent,
+        fontBoundingBoxDescent,
+        width } = textMetrics;
+    return { 
+        actualBoundingBoxAscent,
+        actualBoundingBoxDescent,
+        actualBoundingBoxLeft,
+        actualBoundingBoxRight,
+        fontBoundingBoxAscent,
+        fontBoundingBoxDescent,
+        width }
+}
+
 window.TestPageLib = {
     initializeCanvasElement,
     initializeInfiniteCanvas,
     openMessagePort,
-    addEventListener
+    addEventListener,
+    makeSerializableTextMetrics
 };

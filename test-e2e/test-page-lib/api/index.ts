@@ -21,6 +21,7 @@ export interface TestPageLib{
         TEventType,
         TEventTarget extends EventTarget<TEventType, TEventName>
         >(target: TEventTarget, name: TEventName, capture: boolean | undefined, eventListenerId: string): AttachedEventListener<TEventType>
+    makeSerializableTextMetrics(textMetrics: TextMetrics): TextMetrics
 }
 
 export interface TestCaseLib{

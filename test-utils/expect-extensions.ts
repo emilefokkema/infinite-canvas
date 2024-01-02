@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import { toMatchImageSnapshot as toMatchImageSnapshotOriginal, type MatchImageSnapshotOptions } from 'jest-image-snapshot'
 import { TransformationRepresentation } from '../src/api-surface/transformation-representation';
-import snapshotEnvironments from './snapshot-environments'
+import { getEnvironmentSuffix } from './get-environment-suffix'
 
 type TransformationDimension = 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
 
@@ -76,14 +76,6 @@ function toMatchStringWithNumbersCloseTo(actual: string, numberMatcher: RegExp, 
         pass: true,
         message: () => `did not expect ${JSON.stringify(actual)} to match ${numberMatcher} with numbers ${JSON.stringify(expected)}`
     };
-}
-
-function getEnvironmentSuffix(environmentIdentifiers: string[]): string{
-    const match = snapshotEnvironments.find(e => e.isCurrent());
-    if(!!match && environmentIdentifiers.includes(match.identifier)){
-        return match.identifier;
-    }
-    return 'default';
 }
 
 function toMatchImageSnapshotCustom(received: any, options?: CustomImageSnapshotMatchOptions): { message(): string; pass: boolean }{
