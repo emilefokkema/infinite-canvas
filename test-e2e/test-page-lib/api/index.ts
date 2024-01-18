@@ -1,4 +1,4 @@
-import type { InfiniteCanvas } from '../../../src/api-surface/infinite-canvas'
+import type { InfiniteCanvas, InfiniteCanvasCtr } from 'infinite-canvas-api'
 import { CanvasElementInitialization, InfiniteCanvasInitialization } from './configuration';
 import { CanvasElementWrapper, AttachedEventListener } from './wrappers';
 import { EventTarget } from './event-target'
@@ -13,6 +13,7 @@ declare global{
 export const EVENT_LISTENER_DATA = 'EVENT_LISTENER_DATA'
 
 export interface TestPageLib{
+    InfiniteCanvas: InfiniteCanvasCtr,
     initializeCanvasElement(config: CanvasElementInitialization): CanvasElementWrapper
     initializeInfiniteCanvas(config: CanvasElementInitialization & InfiniteCanvasInitialization): Promise<InfiniteCanvas>
     openMessagePort(url: string): Promise<void>;

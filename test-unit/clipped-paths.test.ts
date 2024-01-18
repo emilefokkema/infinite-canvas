@@ -7,18 +7,10 @@ import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
 import { Instruction } from "../src/instructions/instruction";
-import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
-import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("a clipped paths", () => {
     let clippedPaths: ClippedPaths;
     let currentState: InfiniteCanvasState;
-    let rectangle: CanvasRectangle;
-
-    beforeEach(() => {
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {});
-    });
 
     describe("and another one", () => {
         let clippedPath: InstructionsWithPath;
@@ -26,7 +18,7 @@ describe("a clipped paths", () => {
 
         beforeEach(() => {
             currentState = defaultState;
-            clippedPath = InstructionsWithPath.create(currentState, rectangle);
+            clippedPath = InstructionsWithPath.create(currentState);
             clippedPath.moveTo(new Point(0, 0), currentState);
             clippedPath.lineTo(new Point(1, 0), currentState);
             clippedPath.lineTo(new Point(1, 1), currentState);
@@ -53,7 +45,7 @@ describe("a clipped paths", () => {
                 let recreation: Instruction;
 
                 beforeEach(() => {
-                    recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
+                    recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
                 });
 
                 it("then the recreation should contain the difference", () => {
@@ -73,7 +65,7 @@ describe("a clipped paths", () => {
                     let recreation: Instruction;
     
                     beforeEach(() => {
-                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
+                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
                     });
     
                     it("then the recreation should contain the difference", () => {
@@ -86,7 +78,7 @@ describe("a clipped paths", () => {
 
                 beforeEach(() => {
                     currentState = clippedPath.state;
-                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
+                    const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
                     currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
                     otherClippedPath.moveTo(new Point(1, 1), currentState);
                     otherClippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
@@ -97,7 +89,7 @@ describe("a clipped paths", () => {
                     let recreation: Instruction;
     
                     beforeEach(() => {
-                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate(rectangle);
+                        recreation = otherOne.except(clippedPaths).getInstructionToRecreate();
                     });
     
                     it("then the recreation should contain the difference", () => {

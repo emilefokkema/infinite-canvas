@@ -3,7 +3,7 @@ import { EventListenerCollection } from "./event-collection";
 import {Transformer} from "../../transformer/transformer";
 import { InfiniteCanvas } from "../../api-surface/infinite-canvas";
 import { InfiniteCanvasEventSource } from "../infinite-canvas-event-source";
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { RectangleManager } from "../../rectangle/rectangle-manager";
 import { Config } from "../../api-surface/config";
 import { fromType } from "./from-type";
 import { EventSource } from "../../event-utils/event-source";
@@ -39,11 +39,11 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
     constructor(
         canvas: EventListenerCollection<HTMLElementEventMap>,
         private readonly transformer: Transformer,
-        rectangle: CanvasRectangle,
+        rectangleManager: RectangleManager,
         infiniteCanvas: InfiniteCanvas,
         private readonly config: Config
     ){
-        super(rectangle, infiniteCanvas);
+        super(rectangleManager, infiniteCanvas);
         this.anchorSet = new AnchorSet();
         const pointerDown: EventSource<PointerEvent> = fromType(canvas, 'pointerdown');
         const pointerLeave: EventSource<PointerEvent> = fromType(canvas, 'pointerleave');
@@ -66,7 +66,7 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
             const touches = toTouchesArray(ev.targetTouches);
             const changedTouches = toTouchesArray(ev.changedTouches);
             return InternalTouchEvent.create(
-                this.rectangle,
+                this.rectangleManager.rectangle,
                 ev,
                 touches,
                 changedTouches,
@@ -113,7 +113,7 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
             pointerAnchor.setTouchId(touch.identifier);
             if(!touchStartEv.infiniteCanvasDefaultPrevented && !latestPointerDownEv.infiniteCanvasDefaultPrevented){
                 if(this.config.greedyGestureHandling){
-                    this.rectangle.measure();
+                    this.rectangleManager.measure();
                     this.transformer.addAnchor(pointerAnchor.anchor);
                     touchStartEv.event.preventDefault();
                 }else{
@@ -121,7 +121,7 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
                     if(!otherAnchor){
                         return;
                     }
-                    this.rectangle.measure();
+                    this.rectangleManager.measure();
                     this.transformer.addAnchor(otherAnchor.anchor);
                     this.transformer.addAnchor(pointerAnchor.anchor);
                     touchStartEv.event.preventDefault();
@@ -153,8 +153,8 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
         })
         this.cache = {
             mousemove: this.map(filter(fromType(canvas, 'mousemove'), () => !this.mouseAnchorIsFixed()), ev => new InternalMouseEvent(ev)),
-            mousedown: preventPropagation(mouseDownCaptureSource, mouseDownBubbleSource, rectangle, infiniteCanvas),
-            pointerdown: preventPropagation(pointerDownCaptureSource, pointerDownBubbleSource, rectangle, infiniteCanvas),
+            mousedown: preventPropagation(mouseDownCaptureSource, mouseDownBubbleSource, rectangleManager, infiniteCanvas),
+            pointerdown: preventPropagation(pointerDownCaptureSource, pointerDownBubbleSource, rectangleManager, infiniteCanvas),
             pointermove: this.map(
                     concatMap(
                         filter(pointerMove, () => this.hasNonFixedAnchorForSomePointer()),
@@ -165,15 +165,15 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
             pointerleave: this.map(pointerLeave, e => new InternalPointerEvent(e)),
             pointerup: this.map(pointerUp, e => new InternalPointerEvent(e)),
             pointercancel: this.map(pointerCancel, e => new InternalPointerEvent(e)),
-            wheel: preventPropagation(wheelCaptureSource, wheelBubbleSource, rectangle, infiniteCanvas),
-            wheelignored: preventPropagation(wheelIgnoredCaptureSource, wheelIgnoredBubbleSource, rectangle, infiniteCanvas),
-            touchstart: preventPropagation(touchStartCaptureSource, touchStartBubbleSource, rectangle, infiniteCanvas),
-            touchignored: preventPropagation(touchIgnoredCaptureSource, touchIgnoredBubbleSource, rectangle, infiniteCanvas),
+            wheel: preventPropagation(wheelCaptureSource, wheelBubbleSource, rectangleManager, infiniteCanvas),
+            wheelignored: preventPropagation(wheelIgnoredCaptureSource, wheelIgnoredBubbleSource, rectangleManager, infiniteCanvas),
+            touchstart: preventPropagation(touchStartCaptureSource, touchStartBubbleSource, rectangleManager, infiniteCanvas),
+            touchignored: preventPropagation(touchIgnoredCaptureSource, touchIgnoredBubbleSource, rectangleManager, infiniteCanvas),
             touchmove: this.map(touchMove, ev => {
                 const touches = toTouchesArray(ev.targetTouches);
                 const changedTouches = toTouchesArray(ev.targetTouches, t => !this.hasFixedAnchorForTouch(t.identifier));
                 return InternalTouchEvent.create(
-                    this.rectangle,
+                    this.rectangleManager.rectangle,
                     ev,
                     touches,
                     changedTouches
@@ -199,7 +199,7 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
         return !!this.anchorSet.find(a => !a.anchor.fixedOnInfiniteCanvas);
     }
     private transformUsingPointer(mouseEv: MouseEvent, pointerEv: PointerEvent): void{
-        this.rectangle.measure();
+        this.rectangleManager.measure();
         const anchor: PointerAnchor = this.anchorSet.getAnchorForPointerEvent(pointerEv);
         if(pointerEv.button === 1 && this.config.rotationEnabled){
             mouseEv.preventDefault();
@@ -223,7 +223,7 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
         const {offsetX: x, offsetY: y} = ev;
         let delta: number = ev.deltaY;
         const scale: number = Math.pow(2, -delta / 300);
-        this.rectangle.measure();
+        this.rectangleManager.measure();
         this.transformer.zoom(x, y, scale);
         ev.preventDefault();
     }

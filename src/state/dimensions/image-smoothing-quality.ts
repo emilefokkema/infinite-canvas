@@ -1,4 +1,4 @@
-import { Instruction } from "../../instructions/instruction";
+import { Instruction, noopInstruction } from "../../instructions/instruction";
 import { InfiniteCanvasStateInstanceDimension } from "./infinite-canvas-state-instance-dimension";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 
@@ -13,4 +13,4 @@ class ImageSmoothingQualityDim extends InfiniteCanvasStateInstanceDimension<'ima
     }
 }
 
-export const imageSmoothingQuality: TypedStateInstanceDimension<ImageSmoothingQuality> = new ImageSmoothingQualityDim('imageSmoothingQuality');
+export const imageSmoothingQuality: TypedStateInstanceDimension<ImageSmoothingQuality> = new ImageSmoothingQualityDim('imageSmoothingQuality', noopInstruction);

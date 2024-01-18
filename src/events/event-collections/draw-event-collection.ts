@@ -3,7 +3,8 @@ import { DrawEvent } from '../../api-surface/draw-event';
 import {InfiniteCanvasEventSource} from "../infinite-canvas-event-source";
 import { DrawingIterationProviderWithCallback } from "../../drawing-iteration-provider-with-callback";
 import {representTransformation} from "../../transformer/represent-transformation";
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { RectangleManager } from '../../rectangle/rectangle-manager';
+import { CanvasRectangle } from '../../rectangle/canvas-rectangle';
 import { CustomEventImpl } from '../custom-event-impl';
 import { TransformationRepresentation } from '../../api-surface/transformation-representation';
 import {DrawEventMap} from "../infinite-canvas-event-map";
@@ -28,8 +29,8 @@ class CanvasDrawEvent extends SimpleInternalEvent<DrawEvent>{
         super(false);
     }
     protected createResultEvent(rectangle: CanvasRectangle): DrawEvent{
-        this.transformation = representTransformation(rectangle.inverseInfiniteCanvasContextBase);
-        this.inverseTransformation = representTransformation(rectangle.infiniteCanvasContextBase);
+        this.transformation = representTransformation(rectangle.infiniteCanvasContext.inverseBase);
+        this.inverseTransformation = representTransformation(rectangle.infiniteCanvasContext.base);
         return new InfiniteCanvasDrawEventImpl(this, this.preventableDefault);
     }
 }
@@ -37,9 +38,9 @@ class CanvasDrawEvent extends SimpleInternalEvent<DrawEvent>{
 export class DrawEventCollection extends StaticEventCollection<DrawEventMap>{
     constructor(
         private readonly drawingIterationProvider: DrawingIterationProviderWithCallback,
-        rectangle: CanvasRectangle,
+        rectangleManager: RectangleManager,
         infiniteCanvas: InfiniteCanvas){
-        super(rectangle, infiniteCanvas);
+        super(rectangleManager, infiniteCanvas);
     }
     protected createEvents(): {[K in keyof DrawEventMap]: InfiniteCanvasEventSource<DrawEventMap[K]>}{
         return {

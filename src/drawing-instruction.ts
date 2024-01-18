@@ -6,7 +6,6 @@ import { Area } from './areas/area'
 import { Point } from "./geometry/point"
 import { Transformation } from "./transformation"
 import { getTempStateFnFromTransformationKind, sequence, useTempState } from "./instruction-utils"
-import { CanvasRectangle } from "./rectangle/canvas-rectangle"
 import { DrawnPathProperties } from "./interfaces/drawn-path-properties"
 import { CurrentPath } from "./interfaces/current-path"
 
@@ -93,12 +92,12 @@ export class DrawingInstruction{
         }
         return result;
     }
-    public getModifiedInstruction(rectangle: CanvasRectangle): Instruction{
-        let tempStateInstruction = getTempStateFnFromTransformationKind(this.transformationKind, rectangle)
+    public getModifiedInstruction(): Instruction{
+        let tempStateInstruction = getTempStateFnFromTransformationKind(this.transformationKind)
         if(this.tempState){
             const stateChangeInstruction = this.takeClippingRegionIntoAccount
-            ? this.state.getInstructionToConvertToStateWithClippedPath(this.tempState, rectangle)
-            : this.state.getInstructionToConvertToState(this.tempState, rectangle);
+            ? this.state.getInstructionToConvertToStateWithClippedPath(this.tempState)
+            : this.state.getInstructionToConvertToState(this.tempState);
             tempStateInstruction = sequence(tempStateInstruction, stateChangeInstruction)
         }
         const instruction = useTempState(this.instruction, tempStateInstruction)

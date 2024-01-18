@@ -43,14 +43,14 @@ export function getNext<T>(source: Source<T>): Promise<T>{
     return firstValueFrom(fromSource(source))
 }
 
-export async function ensureNoNext<T>(source: Observable<T>, interval: number): Promise<void>{
+export async function ensureNoNext<T>(source: Observable<T>, interval: number, message?: (v: T) => string): Promise<void>{
     await firstValueFrom(
         merge(
             timer(interval),
             source.pipe(
                 switchMap(
                     (e) => throwError(
-                        () => new Error(`Expected no value for ${interval}, but received ${JSON.stringify(e)}`)
+                        () => new Error(`Expected no value for ${interval}, but received ${message ? message(e) : JSON.stringify(e)}`)
                         )
                     )
                 )

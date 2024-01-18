@@ -3,7 +3,8 @@ import { TransformationEventMap } from '../infinite-canvas-event-map';
 import {InfiniteCanvasEventSource} from "../infinite-canvas-event-source";
 import {Transformer} from "../../transformer/transformer";
 import {representTransformation} from "../../transformer/represent-transformation";
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { RectangleManager } from '../../rectangle/rectangle-manager';
+import { CanvasRectangle } from '../../rectangle/canvas-rectangle';
 import { TransformationEvent } from '../../api-surface/transformation-event';
 import { CustomEventImpl } from '../custom-event-impl';
 import { TransformationRepresentation } from '../../api-surface/transformation-representation';
@@ -29,8 +30,8 @@ class CanvasTransformationEvent extends SimpleInternalEvent<TransformationEvent>
         super(false);
     }
     protected createResultEvent(rectangle: CanvasRectangle): TransformationEvent{
-        this.transformation = representTransformation(rectangle.inverseInfiniteCanvasContextBase);
-        this.inverseTransformation = representTransformation(rectangle.infiniteCanvasContextBase);
+        this.transformation = representTransformation(rectangle.infiniteCanvasContext.inverseBase);
+        this.inverseTransformation = representTransformation(rectangle.infiniteCanvasContext.base);
         return new InfiniteCanvasTransformationEventImpl(this, this.preventableDefault, this.type);
     }
 }
@@ -38,9 +39,9 @@ class CanvasTransformationEvent extends SimpleInternalEvent<TransformationEvent>
 export class TransformationEventCollection extends StaticEventCollection<TransformationEventMap>{
     constructor(
         private readonly transformer: Transformer,
-        rectangle: CanvasRectangle,
+        rectangleManager: RectangleManager,
         infiniteCanvas: InfiniteCanvas){
-        super(rectangle, infiniteCanvas);
+        super(rectangleManager, infiniteCanvas);
     }
     protected createEvents(): {[K in keyof TransformationEventMap]: InfiniteCanvasEventSource<TransformationEventMap[K]>}{
         return {

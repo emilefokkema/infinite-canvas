@@ -9,7 +9,7 @@ import { FromPointAtInfinityToPoint } from "../from-point-at-infinity-to-point/f
 import { PointAtInfinity } from "../../../geometry/point-at-infinity";
 import { sequence } from "../../../instruction-utils";
 import { ViewboxInfinity } from "../../../interfaces/viewbox-infinity";
-import { Transformation } from "../../../transformation";
+import { CanvasRectangle } from "../../../rectangle/canvas-rectangle";
 
 export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstructionBuilder<AtInfinity> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: AtInfinity){
@@ -17,7 +17,7 @@ export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstruct
     }
     protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity{
         if(shape.containsFinitePoint){
-            return (context: CanvasRenderingContext2D, transformation: Transformation, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context)
+            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context, rectangle)
         }
         return () => {};
     }

@@ -82,7 +82,7 @@ export class Transformation implements TransformationRepresentation{
 	public inverse(): Transformation{
 		var det = this.a * this.d - this.b * this.c;
 		if(det == 0){
-			throw "error calculating inverse: zero determinant";
+			throw new Error("error calculating inverse: zero determinant");
 		}
 		const a: number = this.d / det,
 			b: number = - this.b / det,

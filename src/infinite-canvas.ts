@@ -8,16 +8,15 @@ import {AnimationFrameDrawingIterationProvider} from "./animation-frame-drawing-
 import { EventMap } from './api-surface/event-map';
 import {DrawingIterationProviderWithCallback} from "./drawing-iteration-provider-with-callback";
 import {LockableDrawingIterationProvider} from "./lockable-drawing-iteration-provider";
-import {CanvasRectangle} from "./rectangle/canvas-rectangle";
-import {CanvasRectangleImpl} from "./rectangle/canvas-rectangle-impl";
+import { RectangleManager } from "./rectangle/rectangle-manager";
+import {RectangleManagerImpl} from "./rectangle/rectangle-manager-impl";
 import {HtmlCanvasMeasurementProvider} from "./rectangle/html-canvas-measurement-provider";
 import {Units} from "./api-surface/units";
-import {CanvasResizeObserver} from "./canvas-resize-observer";
-import {HtmlCanvasResizeObserver} from "./html-canvas-resize-observer";
 import {representTransformation} from "./transformer/represent-transformation";
 import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from './api-surface/infinite-canvas'
 import {InfiniteCanvasEventCollection} from "./events/event-collections/infinite-canvas-event-collection";
 import {TransformationRepresentation} from "./api-surface/transformation-representation";
+import { EventSource } from "./event-utils/event-source";
 import { EventCollection } from './events/event-collections/event-collection';
 import { TransformationEvent } from "./api-surface/transformation-event";
 import { DrawEvent } from "./api-surface/draw-event";
@@ -25,14 +24,18 @@ import { InfiniteCanvasEventWithDefaultBehavior } from "./api-surface/infinite-c
 import { InfiniteCanvasTouchEvent } from "./api-surface/infinite-canvas-touch-event";
 import { CssLengthConverterImpl } from "./css-length-converter-impl";
 import { CssLengthConverterFactory } from "./css-length-converter-factory";
+import { CanvasResizes } from "./canvas-resize-observer-impl";
+import { CanvasUnitsResizeObserver } from './canvas-units-resize-observer'
+import { CanvasMeasurement } from "./rectangle/canvas-measurement";
 
 class InfiniteCanvas implements InfiniteCanvasInterface{
 	private context: InfiniteCanvasRenderingContext2D;
 	private viewBox: ViewBox;
 	private config: Config;
-	private rectangle: CanvasRectangle;
-	private canvasResizeObserver: CanvasResizeObserver;
-	private canvasResizeListener: () => void;
+	private rectangleManager: RectangleManager;
+	private canvasResizes: EventSource<CanvasMeasurement>;
+	private cssUnitsCanvasResizeListener: () => void;
+    private canvasUnitsCanvasResizeObserver: CanvasUnitsResizeObserver;
 	private readonly eventCollection: EventCollection<EventMap>;
     private readonly cssLengthConverterFactory: CssLengthConverterFactory;
 	constructor(private readonly canvas: HTMLCanvasElement, config?: Config){
@@ -40,8 +43,9 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 		if(config){
 			Object.assign(this.config, config)
 		}
-		this.canvasResizeObserver = new HtmlCanvasResizeObserver(canvas);
-		this.canvasResizeListener = () => {
+        const canvasResizes = new CanvasResizes(canvas);
+		this.canvasResizes = canvasResizes;
+		this.cssUnitsCanvasResizeListener = () => {
 			if(this.canvas.parentElement === null){
 				return;
 			}
@@ -49,35 +53,44 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 		};
 		const drawingIterationProvider: DrawingIterationProviderWithCallback = new DrawingIterationProviderWithCallback(new AnimationFrameDrawingIterationProvider());
 		const lockableDrawingIterationProvider: LockableDrawingIterationProvider = new LockableDrawingIterationProvider(drawingIterationProvider);
-		this.rectangle = new CanvasRectangleImpl(new HtmlCanvasMeasurementProvider(canvas), this.config);
+        const measurementProvider = new HtmlCanvasMeasurementProvider(canvas)
+        
+		this.rectangleManager = new RectangleManagerImpl(measurementProvider, this.config);
 		let transformer: InfiniteCanvasTransformer;
         const context = canvas.getContext("2d");
         this.cssLengthConverterFactory = {
             create: () => new CssLengthConverterImpl(context)
         };
-		this.viewBox = new InfiniteCanvasViewBox(
-			this.rectangle,
+		const viewBox = new InfiniteCanvasViewBox(
+			this.rectangleManager,
 			context,
 			lockableDrawingIterationProvider,
 			() => lockableDrawingIterationProvider.getLock(),
 			() => transformer.isTransforming);
+        this.viewBox = viewBox;
+        this.canvasUnitsCanvasResizeObserver = new CanvasUnitsResizeObserver(measurementProvider, canvasResizes, viewBox);
 		transformer = new InfiniteCanvasTransformer(this.viewBox, this.config);
-		this.eventCollection = InfiniteCanvasEventCollection.create(canvas, transformer, this.rectangle, this, this.config, drawingIterationProvider);
-		if(config && config.units === Units.CSS){
-			this.canvasResizeObserver.addListener(this.canvasResizeListener);
-		}
+		this.eventCollection = InfiniteCanvasEventCollection.create(canvas, transformer, this.rectangleManager, this, this.config, drawingIterationProvider);
+		if(this.config.units === Units.CSS){
+			this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener);
+		}else if(this.config.units === Units.CANVAS){
+            this.canvasUnitsCanvasResizeObserver.observe();
+        }
 	}
 	private setUnits(units: Units): void{
 		if(units === Units.CSS && this.config.units !== Units.CSS){
-			this.canvasResizeObserver.addListener(this.canvasResizeListener);
+            this.canvasUnitsCanvasResizeObserver.disconnect();
+			this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener);
 		}
-		if(units !== Units.CSS && this.config.units === Units.CSS){
-			this.canvasResizeObserver.removeListener(this.canvasResizeListener);
+		if(units === Units.CANVAS && this.config.units !== Units.CANVAS){
+			this.canvasResizes.removeListener(this.cssUnitsCanvasResizeListener);
+            this.canvasUnitsCanvasResizeObserver.observe();
 		}
 		this.config.units = units;
-		this.rectangle.measure();
+		this.rectangleManager.measure();
 		this.viewBox.draw();
 	}
+
 	public getContext(): InfiniteCanvasRenderingContext2D{
 		if(!this.context){
 			this.context = new InfiniteContext(this.canvas, this.viewBox, this.cssLengthConverterFactory);
@@ -85,10 +98,10 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 		return this.context;
 	}
 	public get transformation(): TransformationRepresentation{
-		return representTransformation(this.rectangle.inverseInfiniteCanvasContextBase);
+		return representTransformation(this.rectangleManager.rectangle.infiniteCanvasContext.inverseBase);
 	}
 	public get inverseTransformation(): TransformationRepresentation{
-		return representTransformation(this.rectangle.infiniteCanvasContextBase);
+		return representTransformation(this.rectangleManager.rectangle.infiniteCanvasContext.base);
 	}
 	public get rotationEnabled(): boolean{
 		return this.config.rotationEnabled;

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi, type Mock} from 'vitest'
+import { beforeEach, afterEach, describe, expect, it, vi, type Mock} from 'vitest'
 import {EventDispatcher} from "../src/event-utils/event-dispatcher";
 import {EventSource} from "../src/event-utils/event-source";
 import {share} from "../src/event-utils/share";
@@ -424,3 +424,32 @@ describe('an event source that is concatMapped', () => {
         expect(seen).toEqual([0, 1, 2, 3, 4, 5]);
     });
 });
+
+describe('an event dispatcher', () => {
+    let eventSource: EventSource<number>;
+    
+    beforeEach(() => {
+        eventSource = new EventDispatcher<number>();
+    });
+
+    describe('to which a listener is added', () => {
+        let removedSpy: Mock;
+        let listener: Mock;
+
+        beforeEach(() => {
+            removedSpy = vi.fn();
+            listener = vi.fn();
+            eventSource.addListener(listener, removedSpy)
+        })
+
+        it('should call the removed callback when listener is removed', () => {
+            eventSource.removeListener(listener)
+            expect(removedSpy).toHaveBeenCalled();
+        })
+
+        afterEach(() => {
+            removedSpy.mockClear()
+            listener.mockClear()
+        })
+    })
+})

@@ -1,14 +1,12 @@
-import { CanvasMeasurementProvider } from "./canvas-measurement-provider";
-import { CanvasRectangle } from "./canvas-rectangle";
-import { Config } from "../api-surface/config";
+import { CanvasRectangle } from './canvas-rectangle';
+import { CoordinatesSwitch } from './coordinates-switch';
+import { CanvasMeasurement } from "./canvas-measurement";
 import { ConvexPolygon } from "../areas/polygons/convex-polygon";
-import { Transformation } from "../transformation";
 import { Point } from "../geometry/point";
 import { TransformationRepresentation } from "../api-surface/transformation-representation";
-import { CoordinatesSwitch } from "./coordinates-switch";
-import { CanvasMeasurement } from "./canvas-measurement";
-import { CoordinatesSwitchImpl } from "./coordinates-switch-impl";
+import { Transformation } from "../transformation";
 import { Units } from "../api-surface/units";
+import { CoordinateSystem } from './coordinate-system';
 
 function measurementsAreOfEqualSize(one: CanvasMeasurement, other: CanvasMeasurement): boolean{
     if(!one){
@@ -24,48 +22,59 @@ function measurementsAreOfEqualSize(one: CanvasMeasurement, other: CanvasMeasure
 }
 
 export class CanvasRectangleImpl implements CanvasRectangle{
-    private measurement: CanvasMeasurement
-    private coordinatesSwitch: CoordinatesSwitch;
     public get viewboxWidth(): number{return this.measurement.viewboxWidth;}
     public get viewboxHeight(): number{return this.measurement.viewboxHeight}
-    public polygon: ConvexPolygon;
-    public get transformation(): Transformation{return this.coordinatesSwitch.userTransformation;}
-    public get infiniteCanvasContextBase(): Transformation{return this.coordinatesSwitch.infiniteCanvasContext.base;}
-    public get inverseInfiniteCanvasContextBase(): Transformation{return this.coordinatesSwitch.infiniteCanvasContext.inverseBase;}
-    constructor(private readonly measurementProvider: CanvasMeasurementProvider, private readonly config: Partial<Config>){
-        const measurement = measurementProvider.measure();
-        const units = config.units === Units.CSS ? Units.CSS : Units.CANVAS;
-        this.coordinatesSwitch = CoordinatesSwitchImpl.create(units, measurement);
-        this.addMeasurement(measurement);
+    public get userTransformation(): Transformation{return this.coordinates.userTransformation;}
+    public get infiniteCanvasContext(): CoordinateSystem{return this.coordinates.infiniteCanvasContext;}
+    public get initialBitmapTransformation(): Transformation{return this.coordinates.initialBitmapTransformation;}
+    constructor(
+        private readonly coordinates: CoordinatesSwitch,
+        private readonly measurement: CanvasMeasurement,
+        public readonly polygon: ConvexPolygon){
     }
-    public setTransformation(transformation: TransformationRepresentation): void {
-        this.coordinatesSwitch.setUserTransformation(Transformation.create(transformation))
+
+    public withUnits(units: Units): CanvasRectangle{
+        const coordinatesSwitch = this.coordinates.withUnits(units);
+        return new CanvasRectangleImpl(coordinatesSwitch, this.measurement, this.polygon)
     }
+
+    public withTransformation(transformation: TransformationRepresentation): CanvasRectangle{
+        const coordinatesSwitch = this.coordinates.withUserTransformation(Transformation.create(transformation));
+        return new CanvasRectangleImpl(coordinatesSwitch, this.measurement, this.polygon);
+    }
+
+    public withMeasurement(measurement: CanvasMeasurement): CanvasRectangle{
+        const isEqual = measurementsAreOfEqualSize(this.measurement, measurement);
+        if(isEqual){
+            return this;
+        }
+        const {viewboxWidth, viewboxHeight} = measurement;
+        const polygon = ConvexPolygon.createRectangle(0, 0, viewboxWidth, viewboxHeight);
+        const coordinatesSwitch = this.coordinates.withCanvasMeasurement(measurement);
+        return new CanvasRectangleImpl(coordinatesSwitch, measurement, polygon)
+    }
+
     public getCSSPosition(clientX: number, clientY: number): Point{
-        const {left, top} = this.measurementProvider.measure();
+        const {left, top} = this.measurement
         return new Point(clientX - left, clientY - top);
     }
-    public measure(): void {
-        const newUnitsToUse = this.config.units === Units.CSS ? Units.CSS : Units.CANVAS;
-        this.coordinatesSwitch.useUnits(newUnitsToUse);
-        const measurement = this.measurementProvider.measure();
-        this.addMeasurement(measurement);
+
+    public getTransformationForInstruction(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation{
+        return this.coordinates.getTransformationForInstruction(infiniteCanvasContextTransformation)
     }
-    public getTransformationForInstruction(toTransformation: TransformationRepresentation): Transformation{
-        return this.coordinatesSwitch.getInitialTransformationForTransformedInfiniteCanvasContext(Transformation.create(toTransformation))
-    }
+
     public translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation{
-        return this.coordinatesSwitch.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.create(infiniteCanvasContextTransformation))
+        return this.coordinates.translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation)
     }
-    public getInitialTransformation(): Transformation{
-        return this.coordinatesSwitch.initialBitmapTransformation;
-    }
-    public getBitmapTransformationToInfiniteCanvasContext(): Transformation{
-        return this.coordinatesSwitch.getBitmapTransformationToInfiniteCanvasContext();
-    }
+
     public getBitmapTransformationToTransformedInfiniteCanvasContext(): Transformation{
-        return this.coordinatesSwitch.getBitmapTransformationToTransformedInfiniteCanvasContext();
+        return this.coordinates.getBitmapTransformationToTransformedInfiniteCanvasContext();
     }
+
+    public getBitmapTransformationToInfiniteCanvasContext(): Transformation{
+        return this.coordinates.getBitmapTransformationToInfiniteCanvasContext();
+    }
+
     public addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void{
         const width: number = this.viewboxWidth + 2 * margin;
         const height: number = this.viewboxHeight + 2 * margin;
@@ -74,14 +83,11 @@ export class CanvasRectangleImpl implements CanvasRectangle{
         context.rect(-margin, -margin, width, height);
         context.restore();
     }
-    private addMeasurement(measurement: CanvasMeasurement): void{
-        const isEqual = measurementsAreOfEqualSize(this.measurement, measurement);
-        this.measurement = measurement;
-        if(isEqual){
-            return;
-        }
+
+    public static create(measurement: CanvasMeasurement, units: Units): CanvasRectangleImpl{
         const {viewboxWidth, viewboxHeight} = measurement;
-        this.polygon = ConvexPolygon.createRectangle(0, 0, viewboxWidth, viewboxHeight);
-        this.coordinatesSwitch.setCanvasMeasurement(measurement);
+        const polygon = ConvexPolygon.createRectangle(0, 0, viewboxWidth, viewboxHeight);
+        const coordinates = CoordinatesSwitch.create(units, measurement);
+        return new CanvasRectangleImpl(coordinates, measurement, polygon)
     }
 }

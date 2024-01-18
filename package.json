@@ -21,6 +21,7 @@
     "test-e2e": "vitest run --config vitest-e2e.config.ts",
     "build-only": "vite build --config vite-config-build.ts && vite build --config vite-config-build-cjs.ts",
     "type-check": "npx tsc --project ts-config.build.json --noEmit  --composite false",
+    "type-check-tests-unit": "npx tsc --project ts-config-test.json --noEmit  --composite false",
     "build": "run-p type-check build-only build:types",
     "build:types": "npx tsc --project ts-config-types.json",
     "docs:dev": "vitepress dev docs",

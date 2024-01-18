@@ -7,19 +7,20 @@ import { defaultState } from "../src/state/default-state";
 import { transformation } from "../src/state/dimensions/transformation";
 import { PathInfinityProvider } from "../src/interfaces/path-infinity-provider";
 import {CanvasContextMock} from "./canvas-context-mock";
-import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
+import { RectangleManager } from '../src/rectangle/rectangle-manager';
+import { RectangleManagerImpl } from "../src/rectangle/rectangle-manager-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 import { InfiniteCanvasPathInfinityProvider } from '../src/infinite-canvas-path-infinity-provider';
 import { DrawnPathProperties } from '../src/interfaces/drawn-path-properties';
+import { CanvasRectangle } from '../src/rectangle/canvas-rectangle';
 
-function recordPoints(instruction: (context: CanvasRenderingContext2D, transformation: Transformation) => void, transformation: Transformation): Point[]{
+function recordPoints(instruction: (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => void, transformation: Transformation, rectangle: CanvasRectangle): Point[]{
     const contextMock: any = new CanvasContextMock();
     const result: Point[] = [];
     contextMock.lineTo = function(x: number, y: number){
         result.push(new Point(x, y));
     }
-    instruction(contextMock, transformation);
+    instruction(contextMock, rectangle);
     return result;
 }
 function getStateWithTransformation(_transformation: Transformation): InfiniteCanvasState{
@@ -27,22 +28,22 @@ function getStateWithTransformation(_transformation: Transformation): InfiniteCa
     result = result.withCurrentState(transformation.changeInstanceValue(result.current, _transformation));
     return result;
 }
-function getInfinityFromPointInDirection(infinity: ViewboxInfinity, fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation): Point{
-    const recordedPoints: Point[] = recordPoints((context: CanvasRenderingContext2D, transformation: Transformation) => {
-        infinity.drawLineToInfinityFromPointInDirection(context, transformation, fromPoint, inDirection);
-    }, viewboxTransformation);
+function getInfinityFromPointInDirection(infinity: ViewboxInfinity, fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation, rectangle: CanvasRectangle): Point{
+    const recordedPoints: Point[] = recordPoints((context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+        infinity.drawLineToInfinityFromPointInDirection(context, rectangle, fromPoint, inDirection);
+    }, viewboxTransformation, rectangle);
     expect(recordedPoints.length).toBe(1);
     return recordedPoints[0];
 }
-function getInfinitiesFromDirectionFromPointToDirection(infinity: ViewboxInfinity, point: Point, direction1: Point, direction2: Point, viewboxTransformation: Transformation): Point[]{
-    return recordPoints((context: CanvasRenderingContext2D, transformation: Transformation) => {
-        infinity.drawLineToInfinityFromInfinityFromPoint(context, transformation, point, direction1, direction2);
-    }, viewboxTransformation);
+function getInfinitiesFromDirectionFromPointToDirection(infinity: ViewboxInfinity, point: Point, direction1: Point, direction2: Point, viewboxTransformation: Transformation, rectangle: CanvasRectangle): Point[]{
+    return recordPoints((context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+        infinity.drawLineToInfinityFromInfinityFromPoint(context, rectangle, point, direction1, direction2);
+    }, viewboxTransformation, rectangle);
 }
 
 describe('a viewbox infinity for an untransformed context and with shadow offsets', () => {
     let infinity: ViewboxInfinity;
-    let rectangle: CanvasRectangle;
+    let rectangle: RectangleManager;
 
     beforeEach(() => {
         const drawnPathProperties: DrawnPathProperties = {
@@ -50,8 +51,9 @@ describe('a viewbox infinity for an untransformed context and with shadow offset
             lineDashPeriod: 0,
             shadowOffsets: [new Point(-1, 1), new Point(1, 1)]
         };
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        const pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
+        rectangle = new RectangleManagerImpl(new MockCanvasMeasurementProvider(10, 10), {});
+        rectangle.measure();
+        const pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.identity));
     })
 
@@ -67,7 +69,7 @@ describe('a viewbox infinity for an untransformed context and with shadow offset
         [new Point(0, 0), new Point(0, 1), Transformation.rotation(0, 0, -Math.PI / 4), new Point(11, 11)]
     ])("should return the right infinities along the x and y axes", (fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation, expected: Point) => {
         rectangle.setTransformation(viewboxTransformation);
-        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation);
+        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation, rectangle.rectangle);
         expect(calculated.x).toBeCloseTo(expected.x);
         expect(calculated.y).toBeCloseTo(expected.y);
     });
@@ -76,7 +78,7 @@ describe('a viewbox infinity for an untransformed context and with shadow offset
 describe("a viewbox infinity for an untransformed context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
-    let rectangle: CanvasRectangle;
+    let rectangle: RectangleManager;
     let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
@@ -85,8 +87,9 @@ describe("a viewbox infinity for an untransformed context", () => {
             lineDashPeriod: 0,
             shadowOffsets: []
         };
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
+        rectangle = new RectangleManagerImpl(new MockCanvasMeasurementProvider(10, 10), {});
+        rectangle.measure();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.identity));
     });
 
@@ -99,7 +102,7 @@ describe("a viewbox infinity for an untransformed context", () => {
         [new Point(0, 0), new Point(0, 1), Transformation.rotation(0, 0, -Math.PI / 4), new Point(10, 10)]
     ])("should return the right infinities along the x and y axes", (fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation, expected: Point) => {
         rectangle.setTransformation(viewboxTransformation);
-        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation);
+        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation, rectangle.rectangle);
         expect(calculated.x).toBeCloseTo(expected.x);
         expect(calculated.y).toBeCloseTo(expected.y);
     });
@@ -122,7 +125,7 @@ describe("a viewbox infinity for an untransformed context", () => {
         [new Point(-25, 5), new Point(1, 1), new Point(1, -1), Transformation.identity, [new Point(10, 10), new Point(10, 0), new Point(-5, -15)]]
     ])("should get the right infinities from direction from point to direction", (point: Point, direction1: Point, direction2: Point, viewboxTransformation: Transformation, expectedPoints: Point[]) => {
         rectangle.setTransformation(viewboxTransformation);
-        const result: Point[] = getInfinitiesFromDirectionFromPointToDirection(infinity, point, direction1, direction2, viewboxTransformation);
+        const result: Point[] = getInfinitiesFromDirectionFromPointToDirection(infinity, point, direction1, direction2, viewboxTransformation, rectangle.rectangle);
         expect(result.length).toBe(expectedPoints.length);
         for(let i: number = 0; i < expectedPoints.length; i++){
             expect(result[i].x).toBeCloseTo(expectedPoints[i].x);
@@ -134,7 +137,7 @@ describe("a viewbox infinity for an untransformed context", () => {
 describe("a viewbox infinity for a translated context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
-    let rectangle: CanvasRectangle;
+    let rectangle: RectangleManager;
     let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
@@ -143,14 +146,15 @@ describe("a viewbox infinity for a translated context", () => {
             lineDashPeriod: 0,
             shadowOffsets: []
         };
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
+        rectangle = new RectangleManagerImpl(new MockCanvasMeasurementProvider(10, 10), {});
+        rectangle.measure();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0, 0, 1, 5, 5)));
     });
 
     it("should return the right infinity", () => {
         rectangle.setTransformation(Transformation.identity);
-        const result: Point = getInfinityFromPointInDirection(infinity, new Point(0, 0), new Point(1, 0), Transformation.identity);
+        const result: Point = getInfinityFromPointInDirection(infinity, new Point(0, 0), new Point(1, 0), Transformation.identity, rectangle.rectangle);
         const expectedResult: Point = new Point(5, 0);
         expect(result.x).toBeCloseTo(expectedResult.x);
         expect(result.y).toBeCloseTo(expectedResult.y);
@@ -160,7 +164,7 @@ describe("a viewbox infinity for a translated context", () => {
 describe("a viewbox infinity for skewed context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
-    let rectangle: CanvasRectangle;
+    let rectangle: RectangleManager;
     let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
@@ -169,8 +173,9 @@ describe("a viewbox infinity for skewed context", () => {
             lineDashPeriod: 0,
             shadowOffsets: []
         };
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
+        rectangle = new RectangleManagerImpl(new MockCanvasMeasurementProvider(10, 10), {});
+        rectangle.measure();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(new Transformation(1, 0.2, 0, 1, 0, 0)));
     });
 
@@ -178,7 +183,7 @@ describe("a viewbox infinity for skewed context", () => {
         [new Point(0, 0), new Point(0, 1), Transformation.identity, new Point(0, 10)],
     ])("should return the right infinities along the x and y axes", (fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation, expected: Point) => {
         rectangle.setTransformation(viewboxTransformation);
-        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation);
+        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation, rectangle.rectangle);
         expect(calculated.x).toBeCloseTo(expected.x);
         expect(calculated.y).toBeCloseTo(expected.y);
     });
@@ -187,7 +192,7 @@ describe("a viewbox infinity for skewed context", () => {
 describe("a viewbox infinity for a scaled context", () => {
     let infinity: ViewboxInfinity;
     let pathInfinityProvider: PathInfinityProvider;
-    let rectangle: CanvasRectangle;
+    let rectangle: RectangleManager;
     let drawnPathProperties: DrawnPathProperties;
 
     beforeEach(() => {
@@ -196,8 +201,9 @@ describe("a viewbox infinity for a scaled context", () => {
             lineDashPeriod: 0,
             shadowOffsets: []
         };
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(10, 10), {});
-        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(rectangle, drawnPathProperties);
+        rectangle = new RectangleManagerImpl(new MockCanvasMeasurementProvider(10, 10), {});
+        rectangle.measure();
+        pathInfinityProvider = new InfiniteCanvasPathInfinityProvider(drawnPathProperties);
         infinity = pathInfinityProvider.getInfinity(getStateWithTransformation(Transformation.scale(2)));
     });
 
@@ -210,7 +216,7 @@ describe("a viewbox infinity for a scaled context", () => {
         [new Point(0, 0), new Point(0, 1), Transformation.rotation(0, 0, -Math.PI / 4), new Point(5, 5)]
     ])("should return the right infinities along the x and y axes", (fromPoint: Point, inDirection: Point, viewboxTransformation: Transformation, expected: Point) => {
         rectangle.setTransformation(viewboxTransformation);
-        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation);
+        const calculated: Point = getInfinityFromPointInDirection(infinity, fromPoint, inDirection, viewboxTransformation, rectangle.rectangle);
         expect(calculated.x).toBeCloseTo(expected.x);
         expect(calculated.y).toBeCloseTo(expected.y);
     });

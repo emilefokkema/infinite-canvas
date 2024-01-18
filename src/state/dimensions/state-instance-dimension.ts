@@ -1,9 +1,8 @@
 import { InfiniteCanvasStateInstance } from "../infinite-canvas-state-instance";
 import { Instruction } from "../../instructions/instruction";
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 
-export interface StateInstanceDimension{
+export interface StateInstanceDimension<TInstruction extends Instruction = Instruction>{
     isEqualForInstances(one: InfiniteCanvasStateInstance, other: InfiniteCanvasStateInstance): boolean;
-    getInstructionToChange(fromInstance: InfiniteCanvasStateInstance, toInstance: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction;
+    getInstructionToChange(fromInstance: InfiniteCanvasStateInstance, toInstance: InfiniteCanvasStateInstance): TInstruction;
     valueIsTransformableForInstance(instance: InfiniteCanvasStateInstance): boolean;
 }

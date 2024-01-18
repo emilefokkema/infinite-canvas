@@ -6,7 +6,7 @@ import {CanvasContextMock} from "./canvas-context-mock";
 import {Transformation} from "../src/transformation";
 import {DrawingLock} from "../src/drawing-lock";
 import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
-import {CanvasRectangleImpl} from "../src/rectangle/canvas-rectangle-impl";
+import {RectangleManagerImpl} from "../src/rectangle/rectangle-manager-impl";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
 import {Config} from "../src/api-surface/config";
 import {Units} from "../src/api-surface/units";
@@ -72,7 +72,7 @@ describe("an infinite canvas context", () => {
 		contextMock = new CanvasContextMock();
 		const context: any = contextMock.mock;
 		viewbox = new InfiniteCanvasViewBox(
-			new CanvasRectangleImpl(measurementProvider, config),
+			new RectangleManagerImpl(measurementProvider, config),
 			context,
 			{
 				provideDrawingIteration(draw: () => void): void {

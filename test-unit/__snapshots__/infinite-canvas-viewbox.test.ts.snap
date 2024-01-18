@@ -4082,7 +4082,6 @@ exports[`an infinite canvas context > that saves, creates a path, fills two rect
 exports[`an infinite canvas context > that sets a line width, makes a rect, strokes it and then strokes text > should set the line width twice 1`] = `
 [
   "context.save()",
-  "context.lineWidth = 2",
   "context.restore()",
   "context.restore()",
   "context.save()",

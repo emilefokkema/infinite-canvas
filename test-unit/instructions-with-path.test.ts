@@ -6,9 +6,6 @@ import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { CurrentPath } from '../src/interfaces/current-path';
 import { Point } from "../src/geometry/point";
-import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
-import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 function drawAndLog(instructionsWithPath: CurrentPath, state: InfiniteCanvasState): string[]{
     const result = instructionsWithPath.drawPath(
@@ -25,12 +22,10 @@ function drawAndLog(instructionsWithPath: CurrentPath, state: InfiniteCanvasStat
 describe("a set of instructions that is also about a path", () => {
     let instructionsWithPath: InstructionsWithPath;
     let currentState: InfiniteCanvasState;
-    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
+        instructionsWithPath = InstructionsWithPath.create(currentState);
     });
 
     describe("that receives a change of state", () => {
@@ -109,12 +104,10 @@ describe("a set of instructions that is also about a path", () => {
 describe("a set of instructions that describe a rectangle path that is drawn", () => {
     let instructionsWithPath: InstructionsWithPath;
     let currentState: InfiniteCanvasState;
-    let rectangle: CanvasRectangle;
 
     beforeEach(() => {
-        rectangle = new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {})
         currentState = defaultState;
-        instructionsWithPath = InstructionsWithPath.create(currentState, rectangle);
+        instructionsWithPath = InstructionsWithPath.create(currentState);
         instructionsWithPath.rect(0, 0, 1, 1, currentState);
         instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
             context.fill();

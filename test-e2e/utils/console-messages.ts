@@ -6,6 +6,10 @@ export async function waitForConsoleMessage(page: Page, predicate: (msg: Console
     return await firstValueFrom(fromEvent(page, 'console').pipe(filter(predicate)))
 }
 
+export function ensureNoError(page: Page, interval: number): Promise<void>{
+    return ensureNoNext(fromEvent(page, 'pageerror'), interval, (error: Error) => error.message);
+}
+
 export function ensureNoConsoleMessage(page: Page, predicate: (msg: ConsoleMessage) => boolean, interval: number): Promise<void>{
     return ensureNoNext(fromEvent(page, 'console').pipe(filter(predicate)), interval)
 }

@@ -18,6 +18,7 @@ import { globalCompositeOperation } from "./global-composite-operation";
 import { filter } from "./filter";
 import { imageSmoothingEnabled } from "./image-smoothing-enabled";
 import { imageSmoothingQuality } from "./image-smoothing-quality";
+import { MinimalInstruction } from "../../instructions/instruction";
 
 export const allDimensions: StateInstanceDimension[] = [
     direction,
@@ -41,4 +42,11 @@ export const allDimensions: StateInstanceDimension[] = [
     shadowOffset,
     shadowBlur,
     shadowColor
+];
+
+export const textDrawingStylesDimensions: StateInstanceDimension<MinimalInstruction>[] = [
+    font,
+    textAlign,
+    textBaseline,
+    direction
 ];

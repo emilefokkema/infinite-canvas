@@ -17,7 +17,7 @@ export class PointerEventPropertiesImpl extends MouseEventPropertiesImpl impleme
     }
     public toInfiniteCanvasCoordinates(rectangle: CanvasRectangle): PointerEventPropertiesImpl{
         const {offsetX, offsetY, movementX, movementY } = super.toInfiniteCanvasCoordinates(rectangle);
-        const {x: width, y: height} = rectangle.inverseInfiniteCanvasContextBase.untranslated().apply(new Point(this.width, this.height));
+        const {x: width, y: height} = rectangle.infiniteCanvasContext.inverseBase.untranslated().apply(new Point(this.width, this.height));
         return new PointerEventPropertiesImpl(
             offsetX,
             offsetY,

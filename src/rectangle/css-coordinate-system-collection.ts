@@ -1,6 +1,6 @@
-import { Transformation } from "../transformation";
-import { CoordinateSystem } from "./coordinate-system";
 import { CoordinateSystemCollection } from "./coordinate-system-collection";
+import { CoordinateSystem } from "./coordinate-system";
+import { Transformation } from "../transformation";
 
 export class CssCoordinateSystemCollection implements CoordinateSystemCollection{
     public userCoordinatesInsideCanvasBitmap: CoordinateSystem;
@@ -14,13 +14,11 @@ export class CssCoordinateSystemCollection implements CoordinateSystemCollection
         public canvasBitmap: CoordinateSystem){
             this.setDerivedProperties();
     }
-    public setCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): void{
-        this.canvasBitmap = new CoordinateSystem(canvasBitmapDistortion)
-        this.setDerivedProperties();
+    public withUserTransformation(userTransformation: Transformation): CssCoordinateSystemCollection{
+        return new CssCoordinateSystemCollection(new CoordinateSystem(userTransformation), this.canvasBitmap)
     }
-    public setUserTransformation(userTransformation: Transformation): void{
-        this.userCoordinates = new CoordinateSystem(userTransformation);
-        this.setDerivedProperties();
+    public withCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): CssCoordinateSystemCollection{
+        return new CssCoordinateSystemCollection(this.userCoordinates, new CoordinateSystem(canvasBitmapDistortion))
     }
     private setDerivedProperties(): void{
         this.userCoordinatesInsideCanvasBitmap = new CoordinateSystem(this.userCoordinates.base.before(this.canvasBitmap.base))

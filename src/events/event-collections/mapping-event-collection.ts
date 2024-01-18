@@ -1,4 +1,4 @@
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { RectangleManager } from "../../rectangle/rectangle-manager";
 import { fromType } from "./from-type";
 import { InfiniteCanvasEventSource } from "../infinite-canvas-event-source";
 import { InfiniteCanvas } from "../../api-surface/infinite-canvas";
@@ -10,9 +10,9 @@ export class MappingEventCollection<TKey extends keyof HTMLElementEventMap, TEve
     constructor(
         private readonly canvasEl: EventListenerCollection<HTMLElementEventMap>,
         private readonly createInternalEvent: (event: HTMLElementEventMap[TKey]) => MappableInternalEvent<TEventMap[TKey]>,
-        rectangle: CanvasRectangle,
+        rectangleManager: RectangleManager,
         infiniteCanvas: InfiniteCanvas){
-            super(rectangle, infiniteCanvas);
+            super(rectangleManager, infiniteCanvas);
             this.cache = {};
     }
     protected getEventSource(type: TKey): InfiniteCanvasEventSource<TEventMap[TKey]>{

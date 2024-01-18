@@ -164,6 +164,7 @@ function makeSerializableTextMetrics(textMetrics: TextMetrics): TextMetrics{
 }
 
 window.TestPageLib = {
+    InfiniteCanvas: InfiniteCanvasCtr,
     initializeCanvasElement,
     initializeInfiniteCanvas,
     openMessagePort,

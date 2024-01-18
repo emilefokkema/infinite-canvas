@@ -1,11 +1,11 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { CanvasRectangle } from '../src/rectangle/canvas-rectangle';
 import { CssLengthConverter } from "../src/css-length-converter";
 import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
 import { Transformation } from '../src/transformation'
 import '../test-utils/expect-extensions'
+import { CanvasRectangle } from '../src/rectangle/canvas-rectangle';
 
-function createMockRectangle(userTransformation: Transformation): CanvasRectangle{
+function createMockCoordinates(userTransformation: Transformation): CanvasRectangle{
     return {
         translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: Transformation): Transformation{
             return userTransformation.inverse().before(infiniteCanvasContextTransformation).before(userTransformation);
@@ -41,8 +41,8 @@ describe('a transformable filter', () => {
         ['blur(2px) drop-shadow(2px 2px 1px red)', /blur\((.*?)px\) drop-shadow\((.*?)px (.*?)px (.*?)px red\)/, [4, 4, -4, 2]]
     ])('should transform \'%s\'', (initial: string, numberMatcher: RegExp, numbers: number[]) => {
         const transformation = new Transformation(0, -2, 2, 0, 1, 1);
-        const mockRectangle = createMockRectangle(transformation)
-        expect(TransformableFilter.create(initial, cssLengthConverter).toTransformedString(mockRectangle)).toMatchStringWithNumbersCloseTo(numberMatcher, ...numbers)
+        const mockCoordinates = createMockCoordinates(transformation)
+        expect(TransformableFilter.create(initial, cssLengthConverter).toTransformedString(mockCoordinates)).toMatchStringWithNumbersCloseTo(numberMatcher, ...numbers)
     })
 })
 
@@ -64,8 +64,8 @@ describe('for a different unit', () => {
 
     it('should transform using number of pixels corresponding to unit', () => {
         const transformation = new Transformation(0, -2, 2, 0, 1, 1);
-        const mockRectangle = createMockRectangle(transformation)
-        expect(TransformableFilter.create(`drop-shadow(2${unit} 0)`, cssLengthConverter).toTransformedString(mockRectangle)).toMatchStringWithNumbersCloseTo(/drop-shadow\((.*?)px (.*?)px\)/, 0, -8)
+        const mockCoordinates = createMockCoordinates(transformation)
+        expect(TransformableFilter.create(`drop-shadow(2${unit} 0)`, cssLengthConverter).toTransformedString(mockCoordinates)).toMatchStringWithNumbersCloseTo(/drop-shadow\((.*?)px (.*?)px\)/, 0, -8)
     })
 });
 
@@ -85,7 +85,7 @@ describe('filter', () => {
         'drop-shadow(3px 3px red blue)' // two colors
     ])('should not be transformed', (filter: string) => {
         const transformation = new Transformation(2, 0, 0, 2, 1, 1);
-        const mockRectangle = createMockRectangle(transformation)
-        expect(TransformableFilter.create(filter, cssLengthConverter).toTransformedString(mockRectangle)).toEqual(filter);
+        const mockCoordinates = createMockCoordinates(transformation)
+        expect(TransformableFilter.create(filter, cssLengthConverter).toTransformedString(mockCoordinates)).toEqual(filter);
     })
 });

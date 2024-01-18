@@ -1,6 +1,6 @@
 import { Transformation } from "./transformation"
 import { ViewBox } from "./interfaces/viewbox";
-import { Instruction } from "./instructions/instruction";
+import { Instruction, MinimalInstruction } from "./instructions/instruction";
 import { PathInstruction } from "./interfaces/path-instruction";
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
 import {InfiniteCanvasStateInstance} from "./state/infinite-canvas-state-instance";
@@ -15,25 +15,26 @@ import { Area } from "./areas/area";
 import { Position } from "./geometry/position"
 import {rectangleHasArea} from "./geometry/rectangle-has-area";
 import {rectangleIsPlane} from "./geometry/rectangle-is-plane";
-import {CanvasRectangle} from "./rectangle/canvas-rectangle";
+import { RectangleManager } from "./rectangle/rectangle-manager";
 import { InfiniteCanvasConicGradient } from "./styles/infinite-canvas-conic-gradient";
+import { textDrawingStylesDimensions } from "./state/dimensions/all-dimensions";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
 	constructor(
-		private readonly canvasRectangle: CanvasRectangle,
+		private readonly rectangleManager: RectangleManager,
 		private context: CanvasRenderingContext2D,
 		private readonly drawingIterationProvider: DrawingIterationProvider,
 		private readonly drawLockProvider: () => DrawingLock,
 		private readonly isTransforming: () => boolean){
-			this.instructionSet = new InfiniteCanvasInstructionSet(() => this.draw(), canvasRectangle);
+			this.instructionSet = new InfiniteCanvasInstructionSet(() => this.draw());
 	}
-	public get width(): number{return this.canvasRectangle.viewboxWidth;}
-	public get height(): number{return this.canvasRectangle.viewboxHeight;}
+	private get width(): number{return this.rectangleManager.rectangle.viewboxWidth;}
+	private get height(): number{return this.rectangleManager.rectangle.viewboxHeight;}
 	public get state(): InfiniteCanvasState{return this.instructionSet.state;}
-	public get transformation(): Transformation{return this.canvasRectangle.transformation};
+	public get transformation(): Transformation{return this.rectangleManager.rectangle.userTransformation};
 	public set transformation(value: Transformation){
-		this.canvasRectangle.setTransformation(value);
+		this.rectangleManager.setTransformation(value);
 		this.draw();
 	}
 	public getDrawingLock(): DrawingLock{
@@ -44,8 +45,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public measureText(text: string): TextMetrics{
 		this.context.save();
-		const changeToCurrentState: Instruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToState(this.state.currentlyTransformed(false).current, this.canvasRectangle);
-		changeToCurrentState(this.context, Transformation.identity);
+		const changeToCurrentState: MinimalInstruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(false).current, textDrawingStylesDimensions);
+		changeToCurrentState(this.context);
 		const result: TextMetrics = this.context.measureText(text);
 		this.context.restore();
 		return result;
@@ -130,17 +131,20 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public draw(): void{
 		this.drawingIterationProvider.provideDrawingIteration(() => {
 			if(!this.isTransforming()){
-				this.canvasRectangle.measure();
+				this.rectangleManager.measure();
+			}
+			if(!this.rectangleManager.rectangle){
+				return;
 			}
 			this.context.restore();
 			this.context.save();
 			this.context.clearRect(0, 0, this.width, this.height);
 			this.setInitialTransformation();
-			this.instructionSet.execute(this.context, this.transformation);
+			this.instructionSet.execute(this.context, this.rectangleManager.rectangle);
 		});
 	}
 	private setInitialTransformation(): void{
-		const initialTransformation = this.canvasRectangle.getInitialTransformation();
+		const initialTransformation = this.rectangleManager.rectangle.initialBitmapTransformation;
 		if(initialTransformation.equals(Transformation.identity)){
 			return;
 		}

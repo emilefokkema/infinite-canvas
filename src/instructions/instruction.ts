@@ -1,3 +1,6 @@
-import { Transformation } from "../transformation";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
-export declare type Instruction = (context: CanvasRenderingContext2D, transformation: Transformation) => void;
+export type Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => void;
+export type MinimalInstruction = (context: CanvasRenderingContext2D) => void
+
+export const noopInstruction: MinimalInstruction = () => {}

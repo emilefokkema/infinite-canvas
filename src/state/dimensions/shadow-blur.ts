@@ -1,13 +1,12 @@
 import { Point } from "../../geometry/point";
-import { Instruction } from "../../instructions/instruction";
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { Instruction, noopInstruction } from "../../instructions/instruction";
 import { Transformation } from "../../transformation";
 import { InfiniteCanvasStateInstanceDimension } from "./infinite-canvas-state-instance-dimension";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 
 class ShadowBlur extends InfiniteCanvasStateInstanceDimension<"shadowBlur">{
-    protected changeToNewValue(newValue: number, rectangle: CanvasRectangle): Instruction {
-        return (context: CanvasRenderingContext2D) => {
+    protected changeToNewValue(newValue: number): Instruction {
+        return (context, rectangle) => {
             const translation = Transformation.translation(newValue, 0);
             const bitmapTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(translation);
             const newValueTransformed = bitmapTranslation.apply(Point.origin).mod();
@@ -19,4 +18,4 @@ class ShadowBlur extends InfiniteCanvasStateInstanceDimension<"shadowBlur">{
     }
 }
 
-export const shadowBlur: TypedStateInstanceDimension<number> = new ShadowBlur('shadowBlur');
+export const shadowBlur: TypedStateInstanceDimension<number> = new ShadowBlur('shadowBlur', noopInstruction);
