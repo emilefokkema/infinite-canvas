@@ -27,7 +27,8 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "dev": "vite dev --config examples/backend/vite-config-serve.ts"
+    "dev": "vite dev --config examples/backend/vite-config-serve.ts",
+    "bump-version-patch": "node scripts/bump-version.js --patch"
   },
   "keywords": [
     "canvas",
@@ -65,6 +66,7 @@
     "vitepress": "^1.0.0-beta.7",
     "vitest": "^0.34.2",
     "vue": "^3.3.4",
-    "ws": "^8.13.0"
+    "ws": "^8.13.0",
+    "yargs": "^17.7.2"
   }
 }

@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url'
 import { defineConfig } from 'vitepress'
 import { addExamples } from '../../examples/backend/vite-plugin'
 import addApi from './api-docs/serve-plugin'
+import replaceVersion from './replace-version'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -49,7 +50,8 @@ export default defineConfig({
     },
     plugins: [
       addExamples({external: {publicPath: '/examples'}}),
-      addApi()
+      addApi(),
+      replaceVersion()
     ]
   }
 })
