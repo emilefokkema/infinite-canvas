@@ -1,13 +1,13 @@
 import { InfiniteCanvasStateInstanceDimension } from "./infinite-canvas-state-instance-dimension";
-import { Instruction } from "../../instructions/instruction";
+import { MinimalInstruction, noopInstruction } from "../../instructions/instruction";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 
-class TextAlign extends InfiniteCanvasStateInstanceDimension<"textAlign">{
+class TextAlign extends InfiniteCanvasStateInstanceDimension<"textAlign", MinimalInstruction>{
     protected valuesAreEqual(oldValue: CanvasTextAlign, newValue: CanvasTextAlign): boolean{
         return oldValue === newValue;
     }
-    protected changeToNewValue(newValue: CanvasTextAlign): Instruction{
+    protected changeToNewValue(newValue: CanvasTextAlign): MinimalInstruction{
         return (context: CanvasRenderingContext2D) => {context.textAlign = newValue;};
     }
 }
-export const textAlign: TypedStateInstanceDimension<CanvasTextAlign> = new TextAlign("textAlign");
+export const textAlign: TypedStateInstanceDimension<CanvasTextAlign, MinimalInstruction> = new TextAlign("textAlign", noopInstruction);

@@ -5,9 +5,10 @@ import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
 import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 import { TransformableFilter } from "./dimensions/transformable-filter";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
+import { StateInstanceDimension } from "./dimensions/state-instance-dimension";
+import { sequence } from "../instruction-utils";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -148,18 +149,20 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         return result;
     }
 
-    public getInstructionToConvertToState(other: InfiniteCanvasStateInstance, rectangle: CanvasRectangle): Instruction{
-        const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other, rectangle));
-        return (context: CanvasRenderingContext2D, transformation: Transformation) => {
-            for(let i: number = 0; i< instructions.length; i++){
-                instructions[i](context, transformation);
-            }
-        };
+    public getInstructionToConvertToState(other: InfiniteCanvasStateInstance): Instruction{
+        return this.getInstructionToConvertToStateOnDimensions(other, allDimensions);
     }
 
     public withClippedPath(clippedPath: InstructionsToClip): InfiniteCanvasStateInstance{
         const newClippedPaths: ClippedPaths = this.clippedPaths ? this.clippedPaths.withClippedPath(clippedPath) : new ClippedPaths(clippedPath.area, clippedPath);
         return this.changeProperty("clippedPaths", newClippedPaths);
+    }
+
+    public getInstructionToConvertToStateOnDimensions<
+        TInstruction extends Instruction,
+        TDimension extends StateInstanceDimension<TInstruction>>(other: InfiniteCanvasStateInstance, dimensions: TDimension[]): TInstruction{
+            const instructions: TInstruction[] = dimensions.map(d => d.getInstructionToChange(this, other));
+            return sequence(...instructions) as TInstruction
     }
 
     public static default: InfiniteCanvasStateInstance = new InfiniteCanvasStateInstance({

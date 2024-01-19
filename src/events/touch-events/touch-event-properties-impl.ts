@@ -16,7 +16,7 @@ class TouchPropertiesImpl implements TouchProperties, TranslatableLocationData<T
 
     }
     public toInfiniteCanvasCoordinates(rectangle: CanvasRectangle): TouchPropertiesImpl{
-        const transformation = rectangle.inverseInfiniteCanvasContextBase;
+        const transformation = rectangle.infiniteCanvasContext.inverseBase;
         const {x, y} = transformation.apply(new Point(this.x, this.y));
         const radiusX = this.radiusX * transformation.scale;
         const radiusY = this.radiusY * transformation.scale;

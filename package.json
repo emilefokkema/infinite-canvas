@@ -1,7 +1,7 @@
 {
   "name": "ef-infinite-canvas",
   "type": "module",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "An infinite version of the html canvas",
   "main": "./dist/infinite-canvas.umd.cjs",
   "module": "./dist/infinite-canvas.js",
@@ -21,12 +21,14 @@
     "test-e2e": "vitest run --config vitest-e2e.config.ts",
     "build-only": "vite build --config vite-config-build.ts && vite build --config vite-config-build-cjs.ts",
     "type-check": "npx tsc --project ts-config.build.json --noEmit  --composite false",
+    "type-check-tests-unit": "npx tsc --project ts-config-test.json --noEmit  --composite false",
     "build": "run-p type-check build-only build:types",
     "build:types": "npx tsc --project ts-config-types.json",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "dev": "vite dev --config examples/backend/vite-config-serve.ts"
+    "dev": "vite dev --config examples/backend/vite-config-serve.ts",
+    "bump-version-patch": "node scripts/bump-version.js --patch"
   },
   "keywords": [
     "canvas",
@@ -64,6 +66,7 @@
     "vitepress": "^1.0.0-beta.7",
     "vitest": "^0.34.2",
     "vue": "^3.3.4",
-    "ws": "^8.13.0"
+    "ws": "^8.13.0",
+    "yargs": "^17.7.2"
   }
 }

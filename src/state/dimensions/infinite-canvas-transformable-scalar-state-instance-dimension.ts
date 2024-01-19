@@ -1,7 +1,7 @@
 import { InfiniteCanvasTransformableStateInstanceDimension } from "./infinite-canvas-transformable-state-instance-dimension";
 import { Instruction } from "../../instructions/instruction";
-import { Transformation } from "../../transformation";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
+import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 
 declare type TransformableScalarPropertyName = "lineWidth" | "lineDashOffset" | "shadowBlur";
 export class InfiniteCanvasTransformableScalarStateInstanceDimension extends InfiniteCanvasTransformableStateInstanceDimension<TransformableScalarPropertyName>{
@@ -12,7 +12,8 @@ export class InfiniteCanvasTransformableScalarStateInstanceDimension extends Inf
         return oldValue === newValue;
     }
     protected changeToNewValueTransformed(newValue: number): Instruction{
-        return (context: CanvasRenderingContext2D, transformation: Transformation) => {
+        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+            const transformation = rectangle.userTransformation;
             context[this.propertyName] = newValue * transformation.scale;
         };
     }

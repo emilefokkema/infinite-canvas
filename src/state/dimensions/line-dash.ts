@@ -1,7 +1,7 @@
 import { InfiniteCanvasTransformableStateInstanceDimension } from "./infinite-canvas-transformable-state-instance-dimension";
 import { Instruction } from "../../instructions/instruction";
-import { Transformation } from "../../transformation";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
+import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 
 class LineDash extends InfiniteCanvasTransformableStateInstanceDimension<"lineDash">{
     protected valuesAreEqual(oldValue: number[], newValue: number[]): boolean{
@@ -16,7 +16,8 @@ class LineDash extends InfiniteCanvasTransformableStateInstanceDimension<"lineDa
         return true;
     }
     protected changeToNewValueTransformed(newValue: number[]): Instruction{
-        return (context: CanvasRenderingContext2D, transformation: Transformation) => {
+        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+            const transformation = rectangle.userTransformation;
             context.setLineDash(newValue.map(d => d * transformation.scale));
         };
     }

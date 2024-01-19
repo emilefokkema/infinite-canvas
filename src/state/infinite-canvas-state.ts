@@ -3,7 +3,6 @@ import {StateConversion} from "./state-conversion";
 import {StateConversionWithClippedPaths} from "./state-conversion-with-clipped-paths";
 import { Instruction } from "../instructions/instruction";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class InfiniteCanvasState{
     constructor(public current: InfiniteCanvasStateInstance, public stack: InfiniteCanvasStateInstance[] = []){}
@@ -36,25 +35,25 @@ export class InfiniteCanvasState{
         }
     }
 
-    private convertFromLastSavedInstance(conversion: StateConversion, indexOfLastSavedInstance: number, rectangle: CanvasRectangle): void{
+    private convertFromLastSavedInstance(conversion: StateConversion, indexOfLastSavedInstance: number): void{
         for(let i: number = indexOfLastSavedInstance + 1; i < this.stack.length; i++){
-            conversion.changeCurrentInstanceTo(this.stack[i], rectangle);
+            conversion.changeCurrentInstanceTo(this.stack[i]);
             conversion.save();
         }
-        conversion.changeCurrentInstanceTo(this.current, rectangle);
+        conversion.changeCurrentInstanceTo(this.current);
     }
 
-    private getInstructionToConvertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
+    private getInstructionToConvertToStateUsingConversion(conversion: StateConversion, other: InfiniteCanvasState): Instruction{
         const indexOfHighestCommon: number = InfiniteCanvasState.findIndexOfHighestCommon(this.stack, other.stack);
         this.convertToLastSavedInstance(conversion, indexOfHighestCommon);
-        other.convertFromLastSavedInstance(conversion, indexOfHighestCommon, rectangle);
+        other.convertFromLastSavedInstance(conversion, indexOfHighestCommon);
         return conversion.instruction;
     }
-    public getInstructionToConvertToState(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
-        return this.getInstructionToConvertToStateUsingConversion(new StateConversion(this), other, rectangle);
+    public getInstructionToConvertToState(other: InfiniteCanvasState): Instruction{
+        return this.getInstructionToConvertToStateUsingConversion(new StateConversion(this), other);
     }
-    public getInstructionToConvertToStateWithClippedPath(other: InfiniteCanvasState, rectangle: CanvasRectangle): Instruction{
-        return this.getInstructionToConvertToStateUsingConversion(new StateConversionWithClippedPaths(this), other, rectangle);
+    public getInstructionToConvertToStateWithClippedPath(other: InfiniteCanvasState): Instruction{
+        return this.getInstructionToConvertToStateUsingConversion(new StateConversionWithClippedPaths(this), other);
     }
     private static findIndexOfHighestCommon(one: InfiniteCanvasStateInstance[], other: InfiniteCanvasStateInstance[]): number{
         let result: number = 0;

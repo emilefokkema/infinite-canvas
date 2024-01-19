@@ -11,7 +11,8 @@ import { MappableInternalEvent } from "./internal-events/mappable-internal-event
 import { shareSplit } from "../event-utils/share-split";
 import { filter } from "../event-utils/filter";
 import { map } from "../event-utils/map";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { CanvasRectangle } from '../rectangle/canvas-rectangle'
+import { RectangleManager } from '../rectangle/rectangle-manager'
 
 class InfiniteCanvasEventPhaseSource<TEvent extends Event> {
     private readonly _onceSource: EventSourceThatAcceptsEventListenerObjects<TEvent>;
@@ -93,11 +94,11 @@ export function preventPropagation<
     >(
     captureSource: EventSource<TInternalEvent>,
     bubbleSource: EventSource<TInternalEvent>,
-    rectangle: CanvasRectangle,
+    rectangleManager: RectangleManager,
     infiniteCanvas: InfiniteCanvas
 ): InfiniteCanvasEventSource<TTarget>{
-    const captureSourceMapped = map(filter(captureSource, ev => !ev.immediatePropagationStopped), e => e.getResultEvent(rectangle));
-    const bubbleSourceMapped = map(filter(bubbleSource, ev => !ev.propagationStopped && !ev.immediatePropagationStopped), e => e.getResultEvent(rectangle));
+    const captureSourceMapped = map(filter(captureSource, ev => !ev.immediatePropagationStopped), e => e.getResultEvent(rectangleManager.rectangle));
+    const bubbleSourceMapped = map(filter(bubbleSource, ev => !ev.propagationStopped && !ev.immediatePropagationStopped), e => e.getResultEvent(rectangleManager.rectangle));
     return createInfiniteCanvasEvent(captureSourceMapped, bubbleSourceMapped, infiniteCanvas);
 }
 
@@ -122,13 +123,13 @@ export function createStoppableInfiniteCanvasEvent<
     TTarget extends Event = TInternalEvent extends MappableInternalEvent<infer R> ? R : never
     >(
     source: EventSource<TInternalEvent>,
-    rectangle: CanvasRectangle,
+    rectangleManager: RectangleManager,
     infiniteCanvas: InfiniteCanvas
 ): InfiniteCanvasEventSource<TTarget>{
     const {captureSource, bubbleSource} = getStages(source);
     return preventPropagation(
         captureSource, 
         bubbleSource,
-        rectangle,
+        rectangleManager,
         infiniteCanvas);
 }

@@ -1,11 +1,8 @@
 import { beforeEach, describe, expect, it, vi, type Mock} from 'vitest'
-import { Transformation } from "../src/transformation";
 import { logInstruction } from "./log-instruction";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
 import { Point } from "../src/geometry/point";
-import { CanvasRectangleImpl } from "../src/rectangle/canvas-rectangle-impl";
-import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -13,7 +10,7 @@ describe("an instruction set", () => {
 
     beforeEach(() => {
         onChangeSpy = vi.fn();
-        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy, new CanvasRectangleImpl(new MockCanvasMeasurementProvider(200, 200), {}));
+        instructionSet = new InfiniteCanvasInstructionSet(onChangeSpy);
     });
 
     describe("that begins drawing a path", () => {
@@ -51,8 +48,8 @@ describe("an instruction set", () => {
                 });
 
                 it("should have recorded a clearRect", () => {
-                    expect(logInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-                        instructionSet.execute(context, transformation);
+                    expect(logInstruction((context, rectangle) => {
+                        instructionSet.execute(context, rectangle);
                     })).toMatchSnapshot();
                 });
             });
@@ -63,7 +60,7 @@ describe("an instruction set", () => {
 
         beforeEach(() => {
             instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
-            instructionSet.fillRect(0, 0, 1, 1, (context: CanvasRenderingContext2D, transformation: Transformation) => {
+            instructionSet.fillRect(0, 0, 1, 1, (context: CanvasRenderingContext2D) => {
                 context.fill();
             });
         });
@@ -80,8 +77,8 @@ describe("an instruction set", () => {
             });
 
             it("should end up with a rectangle followed by a clearRect", () => {
-                expect(logInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-                    instructionSet.execute(context, transformation);
+                expect(logInstruction((context, rectangle) => {
+                    instructionSet.execute(context, rectangle);
                 })).toMatchSnapshot();
             });
 
@@ -98,8 +95,8 @@ describe("an instruction set", () => {
             });
 
             it("should no longer have recorded the first rectangle", () => {
-                expect(logInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-                    instructionSet.execute(context, transformation);
+                expect(logInstruction((context, rectangle) => {
+                    instructionSet.execute(context, rectangle);
                 })).toMatchSnapshot();
             });
 
@@ -112,14 +109,14 @@ describe("an instruction set", () => {
 
             beforeEach(() => {
                 instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
-                instructionSet.fillRect(2, 0, 1, 1, (context: CanvasRenderingContext2D, transformation: Transformation) => {
+                instructionSet.fillRect(2, 0, 1, 1, (context: CanvasRenderingContext2D) => {
                     context.fill();
                 });
             });
 
             it("should have recorded everything in the right order", () => {
-                expect(logInstruction((context: CanvasRenderingContext2D, transformation: Transformation) => {
-                    instructionSet.execute(context, transformation);
+                expect(logInstruction((context, rectangle) => {
+                    instructionSet.execute(context, rectangle);
                 })).toMatchSnapshot();
             });
         });

@@ -3,7 +3,7 @@ import {isTransformationEventKey, isPointerEventKey, PointerEventMap, DrawEventM
 import { EventCollection, EventListenerCollection } from './event-collection';
 import {Config, InfiniteCanvas} from "../../api-surface/infinite-canvas";
 import {Transformer} from "../../transformer/transformer";
-import { CanvasRectangle } from '../../rectangle/canvas-rectangle';
+import { RectangleManager } from '../../rectangle/rectangle-manager';
 import { DrawEventCollection } from './draw-event-collection';
 import { DrawingIterationProviderWithCallback } from '../../drawing-iteration-provider-with-callback';
 import { TransformationEventCollection } from './transformation-event-collection';
@@ -73,38 +73,38 @@ export class InfiniteCanvasEventCollection implements EventCollection<EventMap>{
     public static create(
         canvas: EventListenerCollection<HTMLElementEventMap>,
         transformer: Transformer,
-        rectangle: CanvasRectangle,
+        rectangleManager: RectangleManager,
         infiniteCanvas: InfiniteCanvas,
         config: Config,
         drawingIterationProvider: DrawingIterationProviderWithCallback): InfiniteCanvasEventCollection{
-            const drawEventCollection: EventCollection<DrawEventMap> = new DrawEventCollection(drawingIterationProvider, rectangle, infiniteCanvas);
-            const transformationEventCollection: EventCollection<TransformationEventMap> = new TransformationEventCollection(transformer, rectangle, infiniteCanvas);
+            const drawEventCollection: EventCollection<DrawEventMap> = new DrawEventCollection(drawingIterationProvider, rectangleManager, infiniteCanvas);
+            const transformationEventCollection: EventCollection<TransformationEventMap> = new TransformationEventCollection(transformer, rectangleManager, infiniteCanvas);
             const handledOrFilteredEventCollection: EventCollection<HandledOrFilteredEventMap> = new HandledOrFilteredEventCollection(canvas,
                 transformer,
-                rectangle,
+                rectangleManager,
                 infiniteCanvas,
                 config);
             const pointerEventCollection: EventCollection<PointerEventMap> = new PointerEventCollection(
                 handledOrFilteredEventCollection,
                 new MappingPointerEventCollection(
-                    new MappingEventCollection(canvas, (e) => new InternalMouseEvent(e), rectangle, infiniteCanvas),
+                    new MappingEventCollection(canvas, (e) => new InternalMouseEvent(e), rectangleManager, infiniteCanvas),
                     new MappingEventCollection(canvas, (e) => {
                         const touches = toTouchesArray(e.targetTouches);
                         const changedTouches = toTouchesArray(e.changedTouches);
                         return InternalTouchEvent.create(
-                            rectangle,
+                            rectangleManager.rectangle,
                             e,
                             touches,
                             changedTouches
                         )
-                    }, rectangle, infiniteCanvas),
-                    new MappingEventCollection(canvas, (e) => new InternalPointerEvent(e), rectangle, infiniteCanvas),
-                    new MappingEventCollection(canvas, (e) => new InternalDragEvent(e), rectangle, infiniteCanvas))
+                    }, rectangleManager, infiniteCanvas),
+                    new MappingEventCollection(canvas, (e) => new InternalPointerEvent(e), rectangleManager, infiniteCanvas),
+                    new MappingEventCollection(canvas, (e) => new InternalDragEvent(e), rectangleManager, infiniteCanvas))
                 );
             return new InfiniteCanvasEventCollection(
                 drawEventCollection,
                 transformationEventCollection,
                 pointerEventCollection,
-                new MappingEventCollection(canvas, (e) => new InternalUnmappedEvent(e), rectangle, infiniteCanvas));
+                new MappingEventCollection(canvas, (e) => new InternalUnmappedEvent(e), rectangleManager, infiniteCanvas));
     }
 }

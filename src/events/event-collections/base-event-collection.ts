@@ -1,4 +1,4 @@
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
+import { RectangleManager } from "../../rectangle/rectangle-manager";
 import { EventSource } from "../../event-utils/event-source";
 import { map } from "../../event-utils/map";
 import { addListenerToInfiniteCanvasEventSource, InfiniteCanvasEventSource, removeListenerFromInfiniteCanvasEventSource } from "../infinite-canvas-event-source";
@@ -9,7 +9,7 @@ import { EventCollection } from "./event-collection";
 
 export abstract class BaseEventCollection<TKey extends keyof TEventMap, TEventMap extends {[K in keyof TEventMap]: Event}> implements EventCollection<TEventMap>{
     protected cache: {[K in keyof TEventMap]?: InfiniteCanvasEventSource<TEventMap[K]>};
-    constructor(protected readonly rectangle: CanvasRectangle, private readonly infiniteCanvas: InfiniteCanvas){
+    constructor(protected readonly rectangleManager: RectangleManager, private readonly infiniteCanvas: InfiniteCanvas){
         this.cache = {};
     }
     protected abstract getEventSource(type: TKey): InfiniteCanvasEventSource<TEventMap[TKey]>;
@@ -17,7 +17,7 @@ export abstract class BaseEventCollection<TKey extends keyof TEventMap, TEventMa
     protected map<TSource, TTarget extends Event>(
         source: EventSource<TSource>,
         mapFn: (ev: TSource) => MappableInternalEvent<TTarget>): InfiniteCanvasEventSource<TTarget>{
-        return createStoppableInfiniteCanvasEvent(map(source, mapFn), this.rectangle, this.infiniteCanvas);
+        return createStoppableInfiniteCanvasEvent(map(source, mapFn), this.rectangleManager, this.infiniteCanvas);
     }
     public setOn(type: TKey, listener: (this: InfiniteCanvas, ev: TEventMap[keyof TEventMap]) => any): void{
         if(listener){

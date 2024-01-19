@@ -1,11 +1,11 @@
-import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { CssLengthConverter } from "../../css-length-converter";
 import { Point } from "../../geometry/point";
 import { Transformation } from "../../transformation";
+import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 
 interface TransformableFilterPart{
     stringRepresentation: string
-    toTransformedString(rectangle: CanvasRectangle): string
+    toTransformedString(coordinates: CanvasRectangle): string
     getShadowOffset(): Point | null
 }
 
@@ -43,8 +43,8 @@ class BlurFilter implements TransformableFilterPart{
         public readonly stringRepresentation: string,
         private readonly size: number){
     }
-    public toTransformedString(rectangle: CanvasRectangle): string{
-        const blurTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.size, 0))
+    public toTransformedString(coordinates: CanvasRectangle): string{
+        const blurTranslation = coordinates.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.size, 0))
         const transformedBlurRadius = blurTranslation.apply(Point.origin).mod();
         return `blur(${transformedBlurRadius}px)`
     }
@@ -68,11 +68,11 @@ class DropShadowFilter implements TransformableFilterPart{
         private readonly blurRadius: number,
         private readonly color: string){
     }
-    public toTransformedString(rectangle: CanvasRectangle): string{
-        const bitmapTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.offsetX, this.offsetY));
+    public toTransformedString(coordinates: CanvasRectangle): string{
+        const bitmapTranslation = coordinates.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.offsetX, this.offsetY));
         const {x: transformedOffsetX, y: transformedOffsetY} = bitmapTranslation.apply(Point.origin);
         if(this.blurRadius !== null){
-            const blurTranslation = rectangle.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.blurRadius, 0))
+            const blurTranslation = coordinates.translateInfiniteCanvasContextTransformationToBitmapTransformation(Transformation.translation(this.blurRadius, 0))
             const transformedBlurRadius = blurTranslation.apply(Point.origin).mod();
             if(this.color){
                 return `drop-shadow(${transformedOffsetX}px ${transformedOffsetY}px ${transformedBlurRadius}px ${this.color})`
@@ -135,8 +135,8 @@ export class TransformableFilter{
     public toString(): string{
         return this.parts.map(p => p.stringRepresentation).join(' ');
     }
-    public toTransformedString(rectangle: CanvasRectangle): string{
-        return this.parts.map(p => p.toTransformedString(rectangle)).join(' ');
+    public toTransformedString(coordinates: CanvasRectangle): string{
+        return this.parts.map(p => p.toTransformedString(coordinates)).join(' ');
     }
     public getShadowOffset(): Point | null{
         for(const part of this.parts){

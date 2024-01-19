@@ -16,7 +16,7 @@ export class WheelEventPropertiesImpl extends MouseEventPropertiesImpl implement
     }
     public toInfiniteCanvasCoordinates(rectangle: CanvasRectangle): WheelEventPropertiesImpl{
         const {offsetX, offsetY, movementX, movementY } = super.toInfiniteCanvasCoordinates(rectangle);
-        const {x: deltaX, y: deltaY} = rectangle.inverseInfiniteCanvasContextBase.untranslated().apply(new Point(this.deltaX, this.deltaY));
+        const {x: deltaX, y: deltaY} = rectangle.infiniteCanvasContext.inverseBase.untranslated().apply(new Point(this.deltaX, this.deltaY));
         return new WheelEventPropertiesImpl(
             offsetX,
             offsetY,

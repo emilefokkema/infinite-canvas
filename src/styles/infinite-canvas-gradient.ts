@@ -1,6 +1,7 @@
 import {InfiniteCanvasFillStrokeStyle} from "./infinite-canvas-fill-stroke-style";
 import { Transformation } from "../transformation";
 import { Instruction } from "../instructions/instruction";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export abstract class InfiniteCanvasGradient extends InfiniteCanvasFillStrokeStyle implements CanvasGradient{
     private colorStops: {offset: number; color: string}[] = [];
@@ -15,7 +16,8 @@ export abstract class InfiniteCanvasGradient extends InfiniteCanvasFillStrokeSty
         this.colorStops.push({offset, color});
     }
     public getInstructionToSetTransformed(propName: "fillStyle" | "strokeStyle"): Instruction{
-        return (context: CanvasRenderingContext2D, transformation: Transformation) => {
+        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+            const transformation = rectangle.userTransformation;
             context[propName] = this.createTransformedGradient(transformation);
         };
     }

@@ -2,7 +2,6 @@ import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { Area } from "../areas/area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
-import { Transformation } from "../transformation";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class ClippedPaths {
@@ -35,17 +34,17 @@ export class ClippedPaths {
         }
         return false;
     }
-    public getInstructionToRecreate(rectangle: CanvasRectangle): Instruction{
-        const instructionToRecreateLatest: Instruction = (context: CanvasRenderingContext2D, transformation: Transformation) => {
-            this.latestClippedPath.execute(context, transformation);
+    public getInstructionToRecreate(): Instruction{
+        const instructionToRecreateLatest: Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+            this.latestClippedPath.execute(context, rectangle);
         };
         if(this.previouslyClippedPaths){
-            const instructionToRecreatePrevious: Instruction = this.previouslyClippedPaths.getInstructionToRecreate(rectangle);
-            const instructionToConvertToLatest: Instruction = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState, rectangle);
-            return (context: CanvasRenderingContext2D, transformation: Transformation) => {
-                instructionToRecreatePrevious(context, transformation);
-                instructionToConvertToLatest(context, transformation);
-                instructionToRecreateLatest(context, transformation);
+            const instructionToRecreatePrevious: Instruction = this.previouslyClippedPaths.getInstructionToRecreate();
+            const instructionToConvertToLatest: Instruction = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState);
+            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
+                instructionToRecreatePrevious(context, rectangle);
+                instructionToConvertToLatest(context, rectangle);
+                instructionToRecreateLatest(context, rectangle);
             };
         }
         return instructionToRecreateLatest;

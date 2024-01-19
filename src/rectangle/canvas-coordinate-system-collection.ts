@@ -6,29 +6,27 @@ export class CanvasCoordinateSystemCollection implements CoordinateSystemCollect
     public userCoordinatesInsideCanvasBitmap: CoordinateSystem;
     public icContextFromCanvasBitmap: CoordinateSystem;
     public infiniteCanvasContext: CoordinateSystem;
-    private virtualBitmapBase: Transformation;
+    
     public initialBitmapTransformation: Transformation;
     constructor(
         public userCoordinates: CoordinateSystem,
-        public canvasBitmap: CoordinateSystem){
-            this.virtualBitmapBase = canvasBitmap.base;
-
+        public canvasBitmap: CoordinateSystem,
+        private virtualBitmapBase: Transformation){
             this.setDerivedProperties();
     }
-    public setCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): void{
+
+    public withCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): CanvasCoordinateSystemCollection{
         const additionalBitmapDistortion = this.canvasBitmap.representBase(canvasBitmapDistortion);
         const seenFromUserTransformation = this.userCoordinates.representSimilarTransformation(additionalBitmapDistortion);
         const newVirtualBitmapBase = this.virtualBitmapBase.before(seenFromUserTransformation);
-        this.virtualBitmapBase = newVirtualBitmapBase;
-
-        this.canvasBitmap = new CoordinateSystem(canvasBitmapDistortion)
-
-        this.setDerivedProperties();
+        const newCanvasBitmap = new CoordinateSystem(canvasBitmapDistortion)
+        return new CanvasCoordinateSystemCollection(this.userCoordinates, newCanvasBitmap, newVirtualBitmapBase);
     }
-    public setUserTransformation(userTransformation: Transformation): void{
-        this.userCoordinates = new CoordinateSystem(userTransformation);
-        this.setDerivedProperties();
+
+    public withUserTransformation(userTransformation: Transformation): CanvasCoordinateSystemCollection{
+        return new CanvasCoordinateSystemCollection(new CoordinateSystem(userTransformation), this.canvasBitmap, this.virtualBitmapBase);
     }
+
     private setDerivedProperties(): void{
         this.infiniteCanvasContext = new CoordinateSystem(this.virtualBitmapBase.before(this.userCoordinates.base))
         this.userCoordinatesInsideCanvasBitmap = new CoordinateSystem(this.userCoordinates.base.before(this.canvasBitmap.base))

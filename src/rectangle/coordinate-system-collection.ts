@@ -8,6 +8,6 @@ export interface CoordinateSystemCollection {
     readonly initialBitmapTransformation: Transformation;
     readonly icContextFromCanvasBitmap: CoordinateSystem;
     readonly userCoordinatesInsideCanvasBitmap: CoordinateSystem;
-    setUserTransformation(userTransformation: Transformation): void;
-    setCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): void;
+    withUserTransformation(userTransformation: Transformation): CoordinateSystemCollection;
+    withCanvasBitmapDistortion(canvasBitmapDistortion: Transformation): CoordinateSystemCollection;
 }

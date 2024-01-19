@@ -16,7 +16,7 @@ import InfiniteCanvas from 'ef-infinite-canvas'
 Alternatively, add a `<script>` tag to your web page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.2/dist/infinite-canvas.umd.cjs" />
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@---VERSION---/dist/infinite-canvas.umd.cjs" />
 ```
 
 That script will make a variable named `InfiniteCanvas` globally available.

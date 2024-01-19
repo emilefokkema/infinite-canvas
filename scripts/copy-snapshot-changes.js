@@ -4,7 +4,8 @@ import { exec } from 'child_process'
 import { fileURLToPath } from 'url'
 
 const updatedSnapshotsDir = fileURLToPath(new URL('../.updated-snapshots/', import.meta.url))
-const snapshotsDir = fileURLToPath(new URL('../test-e2e/__image_snapshots__/', import.meta.url))
+const snapshotsDir = fileURLToPath(new URL('../test-e2e/__snapshots__/', import.meta.url))
+const imageSnapshotsDir = fileURLToPath(new URL('../test-e2e/__image_snapshots__/', import.meta.url))
 
 async function exists(path){
     try{
@@ -13,6 +14,16 @@ async function exists(path){
     }catch{
         return false;
     }
+}
+
+function pathIsDirectChildOfAny(parentPaths, childPath) {
+    for(const parentPath of parentPaths){
+        const relativeDirName = path.dirname(path.relative(parentPath, childPath));
+        if(relativeDirName === '.'){
+            return true;
+        }
+    }
+    return false;
 }
 
 async function getChangedOrAddedSnapshotPaths(){
@@ -32,8 +43,7 @@ async function getChangedOrAddedSnapshotPaths(){
         if(!path.extname(changedPath)){
             continue;
         }
-        const relativeDirName = path.dirname(path.relative(snapshotsDir, changedPath));
-        if(relativeDirName !== '.'){
+        if(!pathIsDirectChildOfAny([snapshotsDir, imageSnapshotsDir], changedPath)){
             continue;
         }
         result.push(changedPath)

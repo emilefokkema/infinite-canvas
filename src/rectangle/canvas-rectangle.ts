@@ -1,22 +1,25 @@
-import { TransformationRepresentation } from "../api-surface/transformation-representation";
 import { ConvexPolygon } from "../areas/polygons/convex-polygon";
 import { Point } from "../geometry/point";
+import { CoordinateSystem } from "./coordinate-system";
+import { CanvasMeasurement } from "./canvas-measurement";
 import { Transformation } from "../transformation";
+import { TransformationRepresentation } from "../api-surface/transformation-representation";
+import { Units } from "../api-surface/units";
 
-export interface CanvasRectangle {
-    viewboxWidth: number;
-    viewboxHeight: number;
-    polygon: ConvexPolygon;
-    readonly infiniteCanvasContextBase: Transformation;
-    readonly inverseInfiniteCanvasContextBase: Transformation;
-    readonly transformation: Transformation;
-    setTransformation(transformation: TransformationRepresentation): void;
-    measure(): void;
-    getCSSPosition(clientX: number, clientY: number): Point;
-    getTransformationForInstruction(toTransformation: TransformationRepresentation): Transformation;
-    translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;
-    getInitialTransformation(): Transformation;
-    getBitmapTransformationToInfiniteCanvasContext(): Transformation;
-    getBitmapTransformationToTransformedInfiniteCanvasContext(): Transformation;
+export interface CanvasRectangle{
+    readonly viewboxWidth: number;
+    readonly viewboxHeight: number;
+    readonly polygon: ConvexPolygon;
+    readonly userTransformation: Transformation;
+    readonly infiniteCanvasContext: CoordinateSystem;
+    readonly initialBitmapTransformation: Transformation;
     addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void;
+    getCSSPosition(clientX: number, clientY: number): Point;
+    getTransformationForInstruction(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;
+    translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;
+    getBitmapTransformationToTransformedInfiniteCanvasContext(): Transformation;
+    getBitmapTransformationToInfiniteCanvasContext(): Transformation;
+    withMeasurement(measurement: CanvasMeasurement): CanvasRectangle
+    withTransformation(transformation: TransformationRepresentation): CanvasRectangle
+    withUnits(units: Units): CanvasRectangle
 }

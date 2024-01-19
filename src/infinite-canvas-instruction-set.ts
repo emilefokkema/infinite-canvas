@@ -6,7 +6,6 @@ import { CurrentPath } from "./interfaces/current-path";
 import { InstructionsWithPath } from "./instructions/instructions-with-path";
 import { PathInstruction } from "./interfaces/path-instruction";
 import { TransformationKind } from "./transformation-kind";
-import { Transformation } from "./transformation";
 import { Area } from "./areas/area";
 import { empty } from "./areas/empty";
 import { Position } from "./geometry/position"
@@ -14,22 +13,22 @@ import { rectangleHasArea } from "./geometry/rectangle-has-area";
 import { rectangleIsPlane } from "./geometry/rectangle-is-plane";
 import { plane } from "./areas/plane";
 import { ConvexPolygon } from "./areas/polygons/convex-polygon";
-import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 import { ExecutableInstructionWithState } from "./instructions/executable-instruction-with-state";
 import { InstructionsWithPositiveDrawnArea } from "./instructions/instructions-with-positive-drawn-area";
 import { ExecutableStateChangingInstructionSet } from "./interfaces/executable-state-changing-instruction-set";
 import { DrawingInstruction } from './drawing-instruction'
+import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 
 export class InfiniteCanvasInstructionSet{
     private currentInstructionsWithPath: CurrentPath;
     private previousInstructionsWithPath: PreviousInstructions;
     public state: InfiniteCanvasState;
-    constructor(private readonly onChange: () => void, private readonly rectangle: CanvasRectangle){
-        this.previousInstructionsWithPath = PreviousInstructions.create(rectangle);
+    constructor(private readonly onChange: () => void){
+        this.previousInstructionsWithPath = PreviousInstructions.create();
         this.state = this.previousInstructionsWithPath.state;
     }
     public beginPath(): void{
-        const newCurrentPath = InstructionsWithPath.create(this.state, this.rectangle);
+        const newCurrentPath = InstructionsWithPath.create(this.state);
         newCurrentPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
         this.currentInstructionsWithPath = newCurrentPath;
     }
@@ -69,7 +68,7 @@ export class InfiniteCanvasInstructionSet{
     }
     public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
         const drawingInstruction = DrawingInstruction.forFillingPath(instruction, this.state, (state) => {
-            const result = InstructionsWithPath.create(state, this.rectangle);
+            const result = InstructionsWithPath.create(state);
             result.rect(x, y, w, h, state);
             return result;
         })
@@ -78,7 +77,7 @@ export class InfiniteCanvasInstructionSet{
 
     public strokeRect(x: number, y: number, w: number, h: number): void{
         const drawingInstruction = DrawingInstruction.forStrokingPath((context) => {context.stroke();}, this.state, (state) => {
-            const result = InstructionsWithPath.create(state, this.rectangle);
+            const result = InstructionsWithPath.create(state);
             result.rect(x, y, w, h, state);
             return result;
         })
@@ -103,7 +102,7 @@ export class InfiniteCanvasInstructionSet{
                 instruction,
                 area,
                 (instruction) => {
-                    return ExecutableInstructionWithState.create(state, instruction, this.rectangle)
+                    return ExecutableInstructionWithState.create(state, instruction)
                 },
                 takeClippingRegionIntoAccount,
                 transformationKind,
@@ -123,7 +122,7 @@ export class InfiniteCanvasInstructionSet{
         if(area === empty){
             return;
         }
-        const modifiedInstruction = instruction.getModifiedInstruction(this.rectangle);
+        const modifiedInstruction = instruction.getModifiedInstruction();
         if(this.currentInstructionsWithPath){
             const recreated = this.currentInstructionsWithPath.recreatePath();
             this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
@@ -213,9 +212,9 @@ export class InfiniteCanvasInstructionSet{
 		this.onChange();
     }
     
-    public execute(context: CanvasRenderingContext2D, transformation: Transformation){
+    public execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle){
         if(this.previousInstructionsWithPath.length){
-            this.previousInstructionsWithPath.execute(context, transformation);
+            this.previousInstructionsWithPath.execute(context, rectangle);
         }
         const latestVisibleState: InfiniteCanvasState = this.previousInstructionsWithPath.state;
         const stackLength = latestVisibleState.stack.length;

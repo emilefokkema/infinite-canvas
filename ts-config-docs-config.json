@@ -4,8 +4,9 @@
         "composite": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "module": "ES2020"
+        "module": "ES2020",
+        "resolveJsonModule": true
     },
-    "include": ["docs/.vitepress/**/*", "docs/**/*paths.ts", "examples/backend/**/*", "examples/shared/**/*"],
+    "include": ["docs/.vitepress/**/*", "docs/**/*paths.ts", "examples/backend/**/*", "examples/shared/**/*", "package.json"],
     "exclude": ["docs/.vitepress/theme/**/*"]
 }

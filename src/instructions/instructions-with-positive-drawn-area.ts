@@ -4,8 +4,8 @@ import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-
 import { PositiveDrawingAreaImpl } from "../areas/positive-drawing-area-impl";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
-import { Transformation } from "../transformation";
 import { StateChangingInstructionSetWithPositiveArea } from "../interfaces/state-changing-instruction-set-with-positive-area";
+import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
 export class InstructionsWithPositiveDrawnArea implements StateChangingInstructionSetWithPositiveArea{
     public drawingArea: PositiveDrawingArea
@@ -26,7 +26,7 @@ export class InstructionsWithPositiveDrawnArea implements StateChangingInstructi
     public addClippedPath(clippedPath: InstructionsToClip): void {
         this.instructions.addClippedPath(clippedPath)
     }
-    public execute(context: CanvasRenderingContext2D, transformation: Transformation): void{
-        this.instructions.execute(context, transformation);
+    public execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void{
+        this.instructions.execute(context, rectangle);
     }
 }

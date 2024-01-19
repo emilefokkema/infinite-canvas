@@ -3,20 +3,19 @@ import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-
 import { InstructionWithState } from "./instruction-with-state";
 import { Instruction } from "./instruction";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
-import { Transformation } from "../transformation";
 
 export class ExecutableInstructionWithState extends InstructionWithState implements ExecutableStateChangingInstructionSet{
-    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, protected instruction: Instruction, stateConversion: Instruction, rectangle: CanvasRectangle){
-        super(initialState, state, rectangle);
+    constructor(initialState: InfiniteCanvasState, state: InfiniteCanvasState, protected instruction: Instruction, stateConversion: Instruction){
+        super(initialState, state);
         this.stateConversion = stateConversion;
     }
-    public execute(context: CanvasRenderingContext2D, transformation: Transformation): void{
+    public execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void{
         if(this.stateConversion){
-            this.stateConversion(context, transformation);
+            this.stateConversion(context, rectangle);
         }
-        this.instruction(context, transformation);
+        this.instruction(context, rectangle);
     }
-    public static create(state: InfiniteCanvasState, instruction: Instruction, rectangle: CanvasRectangle): ExecutableInstructionWithState{
-        return new ExecutableInstructionWithState(state, state, instruction, () => {}, rectangle);
+    public static create(state: InfiniteCanvasState, instruction: Instruction): ExecutableInstructionWithState{
+        return new ExecutableInstructionWithState(state, state, instruction, () => {});
     }
 }

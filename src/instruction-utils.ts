@@ -1,5 +1,4 @@
 import { Instruction } from "./instructions/instruction";
-import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 import { TransformationKind } from "./transformation-kind";
 
 export function sequence<TArgs extends unknown[]>(...fns: ((...args: TArgs) => void)[]): (...args: TArgs) => void{
@@ -14,22 +13,22 @@ export function useTempState(instruction: Instruction, tempStateInstruction: Ins
     if(!tempStateInstruction){
         return instruction;
     }
-    return (context, transformation) => {
+    return (context, rectangle) => {
         context.save();
-        tempStateInstruction(context, transformation);
-        instruction(context, transformation);
+        tempStateInstruction(context, rectangle);
+        instruction(context, rectangle);
         context.restore();
     }
 }
 
-export function getTempStateFnFromTransformationKind(transformationKind: TransformationKind, rectangle: CanvasRectangle): Instruction{
+export function getTempStateFnFromTransformationKind(transformationKind: TransformationKind): Instruction{
     if(transformationKind === TransformationKind.Relative){
-        return (context) => {
+        return (context, rectangle) => {
             const {a, b, c, d, e, f} = rectangle.getBitmapTransformationToTransformedInfiniteCanvasContext();
             context.transform(a, b, c, d, e, f)
         }
     }else if(transformationKind === TransformationKind.Absolute){
-        return (context) => {
+        return (context, rectangle) => {
             const {a, b, c, d, e, f} = rectangle.getBitmapTransformationToInfiniteCanvasContext();
             context.setTransform(a, b, c, d, e, f)
         }

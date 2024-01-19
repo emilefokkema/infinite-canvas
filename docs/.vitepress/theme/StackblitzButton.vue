@@ -22,7 +22,7 @@ function openProjectInStackBlitz(): void{
         name: projectValue.id,
         version: "0.0.0",
         private: true,
-        dependencies: {'ef-infinite-canvas': '^0.6.2'}
+        dependencies: {'ef-infinite-canvas': '^---VERSION---'}
     }
     sdk.openProject({
         title: projectValue.title,

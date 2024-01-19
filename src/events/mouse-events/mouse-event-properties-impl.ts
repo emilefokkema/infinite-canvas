@@ -12,8 +12,8 @@ export class MouseEventPropertiesImpl implements MouseEventProperties, Translata
 
     }
     public toInfiniteCanvasCoordinates(rectangle: CanvasRectangle): MouseEventPropertiesImpl{
-        const {x: offsetX, y: offsetY} = rectangle.inverseInfiniteCanvasContextBase.apply(new Point(this.offsetX, this.offsetY));
-        const {x: movementX, y: movementY} = rectangle.inverseInfiniteCanvasContextBase.untranslated().apply(new Point(this.movementX, this.movementY));
+        const {x: offsetX, y: offsetY} = rectangle.infiniteCanvasContext.inverseBase.apply(new Point(this.offsetX, this.offsetY));
+        const {x: movementX, y: movementY} = rectangle.infiniteCanvasContext.inverseBase.untranslated().apply(new Point(this.movementX, this.movementY));
         return new MouseEventPropertiesImpl(offsetX, offsetY, movementX, movementY);
     }
     public static create(ev: MouseEvent){
