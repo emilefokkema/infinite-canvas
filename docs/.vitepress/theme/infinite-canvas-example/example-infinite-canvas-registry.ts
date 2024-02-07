@@ -48,7 +48,10 @@ export class ExampleInfiniteCanvasRegistry{
     public subscribeToExampleInfiniteCanvases(iFrame: HTMLIFrameElement): ExampleInfiniteCanvasesSubscription{
         return ExampleInfiniteCanvasesSubscription.create(this.windowMessages, iFrame);
     }
-    public static create(): ExampleInfiniteCanvasRegistry{
+    public static create(): ExampleInfiniteCanvasRegistry | undefined{
+        if(typeof window === 'undefined' || !window){
+            return undefined;
+        }
         return new ExampleInfiniteCanvasRegistry(fromEvent<MessageEvent>(window, 'message'));
     }
 }
