@@ -5,13 +5,17 @@ import { getExampleDir, findExampleDirs, findTestCaseFiles, type TestCaseFile } 
 
 export interface ExamplesOptions{
     external?: ExamplesExternalOptions
+    infiniteCanvasPath?: string
 }
 
 export interface ExamplesExternalOptions{
     publicPath?: string
 }
 
-function buildExamples(): PluginOption{
+const infiniteCanvasPath = fileURLToPath(new URL('../../../src/infinite-canvas.ts', import.meta.url))
+
+function buildExamples(options: ExamplesOptions): PluginOption{
+    const efInfiniteCanvasPath = options?.infiniteCanvasPath || infiniteCanvasPath;
     return {
         name: 'vite-plugin-infinite-canvas-examples',
         config: async (config, env) => {
@@ -25,8 +29,8 @@ function buildExamples(): PluginOption{
             return {
                 resolve: {
                     alias: {
-                        'ef-infinite-canvas': fileURLToPath(new URL('../../../src/infinite-canvas.ts', import.meta.url)),
-                        'infinite-canvas': fileURLToPath(new URL('../../../src/infinite-canvas.ts', import.meta.url))
+                        'ef-infinite-canvas': efInfiniteCanvasPath,
+                        'infinite-canvas': infiniteCanvasPath
                     }
                 },
                 build: input ? {
@@ -65,7 +69,7 @@ function buildExamples(): PluginOption{
     }; 
 }
 
-function addExamplesExternal(options: ExamplesExternalOptions): PluginOption{
+function addExamplesExternal(options: ExamplesOptions, externalOptions: ExamplesExternalOptions): PluginOption{
     let outDir: string | undefined = undefined;
     const otherRoot = fileURLToPath(new URL('../../catalog', import.meta.url))
     let otherServer: ViteDevServer | undefined = undefined;
@@ -79,15 +83,15 @@ function addExamplesExternal(options: ExamplesExternalOptions): PluginOption{
             if(!!otherServer){
                 return;
             }
-            otherServer = await createServer({root: otherRoot, plugins: [buildExamples(), addTestCases()], server: {middlewareMode: true}, base: options.publicPath});
-            server.middlewares.use(options.publicPath, otherServer.middlewares);
+            otherServer = await createServer({root: otherRoot, plugins: [buildExamples(options), addTestCases()], server: {middlewareMode: true}, base: externalOptions.publicPath});
+            server.middlewares.use(externalOptions.publicPath, otherServer.middlewares);
         },
         writeBundle: async () => {
             if(examplesWritten){
                 return;
             }
-            const examplesOutDir = path.resolve(outDir, options.publicPath.replace(/^\//,''))
-            await build({root: otherRoot, plugins: [buildExamples()], base: options.publicPath, build: {outDir: examplesOutDir, emptyOutDir: false}})
+            const examplesOutDir = path.resolve(outDir, externalOptions.publicPath.replace(/^\//,''))
+            await build({root: otherRoot, plugins: [buildExamples(options)], base: externalOptions.publicPath, build: {outDir: examplesOutDir, emptyOutDir: false}})
             examplesWritten = true;
             
         }
@@ -132,8 +136,8 @@ export function addTestCases(): PluginOption{
 
 export function addExamples(options?: ExamplesOptions): PluginOption{
     if(options && options.external){
-        return addExamplesExternal(options.external);
+        return addExamplesExternal(options, options.external);
     }else{
-        return buildExamples();
+        return buildExamples(options);
     }
 }

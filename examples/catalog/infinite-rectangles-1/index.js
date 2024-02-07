@@ -1,4 +1,4 @@
-import InfiniteCanvas from './example-infinite-canvas.js';
+import InfiniteCanvas from 'ef-infinite-canvas';
 import './index.css';
 
 const infCanvas = new InfiniteCanvas(document.getElementById('canvas'))
