@@ -8,6 +8,7 @@
   "types": "./dist/types/infinite-canvas.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/infinite-canvas.d.ts",
       "import": "./dist/infinite-canvas.js",
       "require": "./dist/infinite-canvas.umd.cjs"
     }
