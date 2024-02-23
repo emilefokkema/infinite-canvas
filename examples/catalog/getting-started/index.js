@@ -1,4 +1,4 @@
-import InfiniteCanvas from './example-infinite-canvas.js';
+import InfiniteCanvas from 'ef-infinite-canvas';
 import './index.css'
 
 // assuming there is a <canvas> element that has id 'canvas'

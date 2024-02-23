@@ -1,13 +1,14 @@
 {
   "name": "ef-infinite-canvas",
   "type": "module",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "An infinite version of the html canvas",
   "main": "./dist/infinite-canvas.umd.cjs",
   "module": "./dist/infinite-canvas.js",
   "types": "./dist/types/infinite-canvas.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/infinite-canvas.d.ts",
       "import": "./dist/infinite-canvas.js",
       "require": "./dist/infinite-canvas.umd.cjs"
     }

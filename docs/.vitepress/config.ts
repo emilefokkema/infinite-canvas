@@ -4,6 +4,8 @@ import { addExamples } from '../../examples/backend/vite-plugin'
 import addApi from './api-docs/serve-plugin'
 import replaceVersion from './replace-version'
 
+const exampleInfiniteCanvasPath = fileURLToPath(new URL('./theme/infinite-canvas-example/example-infinite-canvas', import.meta.url))
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "InfiniteCanvas",
@@ -49,7 +51,12 @@ export default defineConfig({
       }
     },
     plugins: [
-      addExamples({external: {publicPath: '/examples'}}),
+      addExamples({
+        external: {
+          publicPath: '/examples'
+        },
+        infiniteCanvasPath: exampleInfiniteCanvasPath
+      }),
       addApi(),
       replaceVersion()
     ]

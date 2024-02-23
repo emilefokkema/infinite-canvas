@@ -28,15 +28,14 @@ export async function addExample(request: CreateExampleRequest): Promise<string>
     const title = request.title.trim();
     const id = createExampleId(title, dirs);
     const indexHtml = `<canvas id='canvas'></canvas>`;
-    const indexJs = `import InfiniteCanvas from './example-infinite-canvas.js';\nimport './index.css';\n\nconst infCanvas = new InfiniteCanvas(document.getElementById('canvas'))`;
+    const indexJs = `import InfiniteCanvas from 'ef-infinite-canvas';\nimport './index.css';\n\nconst infCanvas = new InfiniteCanvas(document.getElementById('canvas'))`;
     const indexCss = `#canvas{border: 1px solid #000}`;
     const exampleJson: ExampleJson = {
         title,
         files: {
             'index.html': 'index.html',
             'index.js': 'index.js',
-            'index.css': 'index.css',
-            'example-infinite-canvas.js': '../example-infinite-canvas.js'
+            'index.css': 'index.css'
         }
     }
     const exampleDirName = path.resolve(catalogPath, id);

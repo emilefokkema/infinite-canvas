@@ -1,4 +1,4 @@
-<template>
+exampleInfiniteCanvasRegistryInjectionKeyExampleInfiniteCanvasRegistry<template>
     <div class="example-container language-infinite-canvas">
         <div class="iframe-container">
             <div 
@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref, onBeforeUnmount } from 'vue'
+import { onMounted, ref, inject } from 'vue'
 import StackblitzButton from './StackblitzButton.vue'
-import { exampleRegistryInjectionKey } from './constants';
-import type { ExampleRegistry, ExamplePageInfiniteCanvasProxy } from './example-registry'
+import { exampleInfiniteCanvasRegistryInjectionKey } from './constants';
+import type { ExampleInfiniteCanvasRegistry } from './infinite-canvas-example/parent-example-infinite-canvas-registry';
 
 const props = defineProps({
     exampleId: {
@@ -36,21 +36,11 @@ const props = defineProps({
         default: 250
     }
 })
-const registry = inject(exampleRegistryInjectionKey) as ExampleRegistry
+const registry = inject(exampleInfiniteCanvasRegistryInjectionKey) as ExampleInfiniteCanvasRegistry
 const iFrame = ref<HTMLIFrameElement | null>(null)
 const overlayActive = ref<boolean>(false);
 const overlayDisappearing = ref<boolean>(false)
 const overlayMessage = ref<string | null>(null)
-
-function onExampleInfiniteCanvasInitialized(source: MessageEventSource, proxy: ExamplePageInfiniteCanvasProxy): void{
-    const iFrameValue = iFrame.value;
-    if(!iFrameValue || source !== iFrameValue.contentWindow){
-        return;
-    }
-    proxy.disableGreedyGestureHandling();
-    proxy.addWheelIgnoredListener(onWheelIgnored)
-    proxy.addTouchIgnoredListener(onTouchIgnored)
-}
 
 async function displayOverlay(message: string): Promise<void>{
     if(overlayActive.value){
@@ -65,24 +55,16 @@ async function displayOverlay(message: string): Promise<void>{
     overlayDisappearing.value = false;
 }
 
-function onWheelIgnored(): void{
-    displayOverlay('Use Ctrl + scroll to zoom');
-}
-
-function onTouchIgnored(): void{
-    displayOverlay('Use two fingers to move')
-}
 onMounted(() => {
     const iFrameValue = iFrame.value;
     if(!iFrameValue){
         return;
     }
     const url = new URL(`/examples/${props.exampleId}/`, location.href).toString();
-    registry.addInitializedListener(onExampleInfiniteCanvasInitialized);
+    const subscription = registry.subscribeToExampleInfiniteCanvases(iFrameValue);
+    subscription.wheelIgnored.subscribe(() => displayOverlay('Use Ctrl + scroll to zoom'))
+    subscription.touchIgnored.subscribe(() => displayOverlay('Use two fingers to move'))
     iFrameValue.src = url;
-})
-onBeforeUnmount(() => {
-    registry.removeInitializedListener(onExampleInfiniteCanvasInitialized, iFrame.value ? iFrame.value.contentWindow || undefined : undefined);
 })
 </script>
 

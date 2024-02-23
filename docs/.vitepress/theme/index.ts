@@ -2,11 +2,11 @@
 import Theme from 'vitepress/theme'
 import MyLayout from './my-layout.vue';
 import type { EnhanceAppContext } from 'vitepress'
-import Example from './example.vue';
+import Example from './example.vue'
 import { data } from '../shared/examples.data';
-import { exampleDataInjectionKey, exampleRegistryInjectionKey } from './constants';
-import { createExampleRegistry } from './example-registry'
+import { exampleDataInjectionKey, exampleInfiniteCanvasRegistryInjectionKey } from './constants';
 import './style.css'
+import { ExampleInfiniteCanvasRegistry } from './infinite-canvas-example/example-infinite-canvas-registry';
 
 export default {
   extends: Theme,
@@ -15,6 +15,6 @@ export default {
     // ...
     app.component('inf-example', Example);
     app.provide(exampleDataInjectionKey, data);
-    app.provide(exampleRegistryInjectionKey, createExampleRegistry())
+    app.provide(exampleInfiniteCanvasRegistryInjectionKey, ExampleInfiniteCanvasRegistry.create())
   }
 }
