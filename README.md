@@ -23,7 +23,7 @@ var context = infiniteCanvas.getContext("2d");
 Include `InfiniteCanvas` in your web page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.3/dist/infinite-canvas.umd.cjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/ef-infinite-canvas@0.6.4/dist/infinite-canvas.umd.cjs"></script>
 ```
 
 or install it using npm:
