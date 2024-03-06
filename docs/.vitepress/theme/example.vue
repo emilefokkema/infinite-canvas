@@ -1,4 +1,4 @@
-exampleInfiniteCanvasRegistryInjectionKeyExampleInfiniteCanvasRegistry<template>
+<template>
     <div class="example-container language-infinite-canvas">
         <div class="iframe-container">
             <div 
@@ -18,7 +18,7 @@ exampleInfiniteCanvasRegistryInjectionKeyExampleInfiniteCanvasRegistry<template>
 import { onMounted, ref, inject } from 'vue'
 import StackblitzButton from './StackblitzButton.vue'
 import { exampleInfiniteCanvasRegistryInjectionKey } from './constants';
-import type { ExampleInfiniteCanvasRegistry } from './infinite-canvas-example/parent-example-infinite-canvas-registry';
+import type { ExampleInfiniteCanvasRegistry } from './infinite-canvas-example/example-infinite-canvas-registry';
 
 const props = defineProps({
     exampleId: {
