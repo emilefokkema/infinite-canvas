@@ -2,7 +2,7 @@ import {DrawingIterationProvider} from "./interfaces/drawing-iteration-provider"
 
 export class AnimationFrameDrawingIterationProvider implements DrawingIterationProvider{
     private animationFrameRequested: boolean = false;
-    public provideDrawingIteration(draw: () => void): void {
+    public provideDrawingIteration(draw: () => boolean): void {
         if(this.animationFrameRequested){
             return;
         }

@@ -1,3 +1,3 @@
 export interface DrawingIterationProvider{
-    provideDrawingIteration(draw: () => void): void;
+    provideDrawingIteration(draw: () => boolean): void;
 }
