@@ -36,7 +36,7 @@ describe('without greedy gesture handling', () => {
         await getResultAfter(async () => {
             firstTouch = await touchCollection.start(100, 100);
             await firstTouch.move(200, 100);
-        }, () => waitForConsoleMessage(page, m => m.type() === 'warning' && m.text() === 'use two fingers to move'))
+        }, [() => waitForConsoleMessage(page, m => m.type() === 'warning' && m.text() === 'use two fingers to move')])
         await firstTouch.end();
     });
 
@@ -46,7 +46,7 @@ describe('without greedy gesture handling', () => {
             firstTouch = await touchCollection.start(100, 100);
             secondTouch = await touchCollection.start(200, 100);
             await secondTouch.move(200, 200);
-        }, () => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000))
+        }, [() => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000)])
         await secondTouch.end();
         await firstTouch.end();
     })
@@ -83,7 +83,7 @@ describe('without greedy gesture handling and when touchstart is default-prevent
         await getResultAfter(async () => {
             firstTouch = await touchCollection.start(100, 100);
             await firstTouch.move(200, 100);
-        }, () => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000))
+        }, [() => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000)])
         await firstTouch.end();
     })
 

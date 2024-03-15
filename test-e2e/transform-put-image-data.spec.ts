@@ -66,10 +66,10 @@ describe('when using a filter with blur and drop-shadow', () => {
         const secondTouch = await touchCollection.start(50, 50);
         await getResultAfter(async () => {
             await secondTouch.move(80, 80);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         await getResultAfter(async () => {
             await firstTouch.move(0, 100);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await firstTouch.end();
         await secondTouch.end();

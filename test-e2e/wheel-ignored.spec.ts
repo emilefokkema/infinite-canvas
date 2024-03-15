@@ -33,7 +33,7 @@ describe('without greedy gesture handling', () => {
         await page.mouse.move(100, 100);
         await getResultAfter(async () => {
             await page.mouse.wheel({deltaY: 50});
-        }, () => waitForConsoleMessage(page, m => m.type() === 'warning' && m.text() === 'use ctrl + scroll to zoom'))
+        }, [() => waitForConsoleMessage(page, m => m.type() === 'warning' && m.text() === 'use ctrl + scroll to zoom')])
     });
 
     it('should not display a console warning if zooming occurs', async () => {
@@ -41,7 +41,7 @@ describe('without greedy gesture handling', () => {
         await page.keyboard.down('ControlLeft');
         await getResultAfter(async () => {
             await page.mouse.wheel({deltaY: 50});
-        }, () => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000))
+        }, [() => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000)])
         await page.keyboard.up('ControlLeft');
     });
 
@@ -57,7 +57,7 @@ describe('without greedy gesture handling', () => {
             await page.mouse.move(100, 100);
             await getResultAfter(async () => {
                 await page.mouse.wheel({deltaY: 50});
-            }, () => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000))
+            }, [() => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000)])
         });
 
         afterAll(async () => {
@@ -94,7 +94,7 @@ describe('without greedy gesture handling and when wheel is default-prevented', 
         await page.mouse.move(100, 100);
         await getResultAfter(async () => {
             await page.mouse.wheel({deltaY: 50});
-        }, () => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000))
+        }, [() => ensureNoConsoleMessage(page, m => m.type() === 'warning', 1000)])
     });
 
     afterAll(async () => {

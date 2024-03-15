@@ -1,4 +1,5 @@
 import type { InfiniteCanvas, InfiniteCanvasCtr } from 'infinite-canvas-api'
+import type { ResizeEvent, ResizeEvents } from './resize-events'
 import { CanvasElementInitialization, InfiniteCanvasInitialization } from './configuration';
 import { CanvasElementWrapper, AttachedEventListener } from './wrappers';
 import { EventTarget } from './event-target'
@@ -23,10 +24,19 @@ export interface TestPageLib{
         TEventTarget extends EventTarget<TEventType, TEventName>
         >(target: TEventTarget, name: TEventName, capture: boolean | undefined, eventListenerId: string): AttachedEventListener<TEventType>
     makeSerializableTextMetrics(textMetrics: TextMetrics): TextMetrics
+    getResizeEvents(element: Element): ResizeEvents
 }
 
 export interface TestCaseLib{
     drawTestCase(testCaseFile: string): Promise<void>
 }
 
-export type { CanvasElementInitialization, InfiniteCanvasInitialization, CanvasElementWrapper, EventTarget, AttachedEventListener }
+export type { 
+    CanvasElementInitialization,
+    InfiniteCanvasInitialization,
+    CanvasElementWrapper,
+    EventTarget,
+    AttachedEventListener,
+    ResizeEvent,
+    ResizeEvents
+}

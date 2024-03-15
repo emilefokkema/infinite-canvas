@@ -1,4 +1,13 @@
-import { type EventTarget, type CanvasElementWrapper, type CanvasElementInitialization, type InfiniteCanvasInitialization, type AttachedEventListener, EVENT_LISTENER_DATA } from '../api'
+import { 
+    type EventTarget,
+    type CanvasElementWrapper,
+    type CanvasElementInitialization,
+    type InfiniteCanvasInitialization,
+    type AttachedEventListener,
+    type ResizeEvents,
+    type ResizeEvent,
+    EVENT_LISTENER_DATA 
+} from '../api'
 import InfiniteCanvasCtr from 'infinite-canvas';
 import type { InfiniteCanvas } from 'infinite-canvas-api';
 import { openTestingMessagePort } from '../../testing-message-ports/open-testing-message-port';
@@ -144,6 +153,43 @@ function addEventListener<
         return { setHandler, remove };
 }
 
+function getResizeEvents(element: Element): ResizeEvents{
+    const observer = new ResizeObserver(([entry]) => {
+        notifyListeners(createResizeEvent(entry));
+    });
+    const listeners: ((e: ResizeEvent) => void)[] = [];
+    return {
+        addEventListener(type, listener){
+            if(listeners.length === 0){
+                observer.observe(element);
+            }
+            listeners.push(listener);
+        },
+        removeEventListener(type, listener){
+            const index = listeners.indexOf(listener);
+            if(index === -1){
+                return;
+            }
+            listeners.splice(index, 1);
+            if(listeners.length === 0){
+                observer.disconnect();
+            }
+        }
+    }
+    function createResizeEvent({contentRect: {width, height}}: ResizeObserverEntry): ResizeEvent{
+        if(width === 0 || height === 0){
+            return {positiveSize: false}
+        }
+        return {positiveSize: true}
+    }
+    function notifyListeners(event: ResizeEvent): void{
+        const listenersToNotify = listeners.slice();
+        for(const listener of listenersToNotify){
+            listener(event);
+        }
+    }
+}
+
 function makeSerializableTextMetrics(textMetrics: TextMetrics): TextMetrics{
     const { 
         actualBoundingBoxAscent,
@@ -169,5 +215,6 @@ window.TestPageLib = {
     initializeInfiniteCanvas,
     openMessagePort,
     addEventListener,
-    makeSerializableTextMetrics
+    makeSerializableTextMetrics,
+    getResizeEvents
 };

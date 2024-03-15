@@ -56,7 +56,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
 
         beforeAll(async () => {
             secondTouch = await touchCollection.start(100, 100);
-            await getResultAfter(() => secondTouch.move(100, 200), () => drawn.getNext());
+            await getResultAfter(() => secondTouch.move(100, 200), [() => drawn.getNext()]);
         });
 
         it('should look like this', async () => {
@@ -67,7 +67,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
 
             beforeAll(async () => {
                 await firstTouch.end();
-                await getResultAfter(() => secondTouch.move(200, 200), () => drawn.getNext());
+                await getResultAfter(() => secondTouch.move(200, 200), [() => drawn.getNext()]);
             });
 
             it('should look like this', async () => {
@@ -80,7 +80,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
                 beforeAll(async () => {
                     await secondTouch.end();
                     thirdTouch = await touchCollection.start(200, 200);
-                    await getResultAfter(() => thirdTouch.move(100, 200), () => drawn.getNext());
+                    await getResultAfter(() => thirdTouch.move(100, 200), [() => drawn.getNext()]);
                 });
 
                 it('should look like this', async () => {

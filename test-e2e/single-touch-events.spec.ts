@@ -41,7 +41,7 @@ describe('when the canvas is touched', () => {
     it('should dispatch a touchstart event', async () => {
         const [touchEvent] = await getResultAfter(async () => {
             firstTouch = await touchCollection.start(120, 100)
-        }, () => touchStarted.getNext())
+        }, [() => touchStarted.getNext()])
         expect(touchEvent.touches.length).toBe(1)
         expect(touchEvent.targetTouches.length).toBe(1)
         expect(touchEvent.changedTouches.length).toBe(1)
@@ -59,7 +59,7 @@ describe('when the canvas is touched', () => {
     });
 
     it('should dispatch a touchmove event', async () => {
-        const [touchEvent] = await getResultAfter(() => firstTouch.move(100, 100), () => touchMoved.getNext());
+        const [touchEvent] = await getResultAfter(() => firstTouch.move(100, 100), [() => touchMoved.getNext()]);
         expect(touchEvent.touches.length).toBe(1)
         expect(touchEvent.targetTouches.length).toBe(1)
         expect(touchEvent.changedTouches.length).toBe(1)
@@ -77,7 +77,7 @@ describe('when the canvas is touched', () => {
     });
 
     it('should dispatch a touchend event', async () => {
-        const [touchEvent] = await getResultAfter(() => firstTouch.end(), () => touchEnded.getNext());
+        const [touchEvent] = await getResultAfter(() => firstTouch.end(), [() => touchEnded.getNext()]);
         expect(touchEvent.touches.length).toBe(0)
         expect(touchEvent.targetTouches.length).toBe(0)
         expect(touchEvent.changedTouches.length).toBe(1)

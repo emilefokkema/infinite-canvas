@@ -28,7 +28,7 @@ describe('when the mouse interacts with the canvas', () => {
         const [{
             offsetX: pointerEnterOffsetX,
             offsetY: pointerEnterOffsetY,
-        }] = await getResultAfter(() => page.mouse.move(100, 100), () => pointerEnter.getNext());
+        }] = await getResultAfter(() => page.mouse.move(100, 100), [() => pointerEnter.getNext()]);
         expect(pointerEnterOffsetX).toBeCloseTo(100);
         expect(pointerEnterOffsetY).toBeCloseTo(100);
 
@@ -45,7 +45,7 @@ describe('when the mouse interacts with the canvas', () => {
             isTrusted,
             bubbles,
             eventPhase,
-            type }] = await getResultAfter(() => page.mouse.down({button: 'left'}), () => mouseDown.getNext());
+            type }] = await getResultAfter(() => page.mouse.down({button: 'left'}), [() => mouseDown.getNext()]);
         expect(offsetX).toBeCloseTo(100);
         expect(offsetY).toBeCloseTo(100);
         expect(clientX).toBeCloseTo(100);
@@ -68,9 +68,9 @@ describe('when the mouse interacts with the canvas', () => {
         const mouseMove = await addEventListenerInPage(infCanvas, 'mousemove')
         const pointerMove = await addEventListenerInPage(infCanvas, 'pointermove')
         await getResultAfter(() => page.mouse.move(200, 200),
-            () => drawn.getNext(),
+            [() => drawn.getNext(),
             () => mouseMove.ensureNoNext(300),
-            () => pointerMove.ensureNoNext(300));
+            () => pointerMove.ensureNoNext(300)]);
         await pointerMove.remove();
         await mouseMove.remove();
         await drawn.remove();
@@ -86,7 +86,7 @@ describe('when the mouse interacts with the canvas', () => {
             ctrlKey,
             button,
             cancelable,
-            type }] = await getResultAfter(() => page.mouse.up({button: 'left'}), () => mouseUp.getNext());
+            type }] = await getResultAfter(() => page.mouse.up({button: 'left'}), [() => mouseUp.getNext()]);
         expect(offsetX).toBeCloseTo(100);
         expect(offsetY).toBeCloseTo(100);
         expect(clientX).toBeCloseTo(200);
@@ -117,7 +117,7 @@ describe('when the mouse interacts with the canvas', () => {
                 clientY: pointerMoveClientY,
                 ctrlKey: pointerMoveCtrlKey,
                 type: pointerMoveType
-            }] = await getResultAfter(() => page.mouse.move(100, 100), () => mouseMove.getNext(), () => pointerMove.getNext());
+            }] = await getResultAfter(() => page.mouse.move(100, 100), [() => mouseMove.getNext(), () => pointerMove.getNext()] as const);
         expect(mouseMoveOffsetX).toBeCloseTo(0);
         expect(mouseMoveOffsetY).toBeCloseTo(0);
         expect(mouseMoveClientX).toBeCloseTo(100);
@@ -144,7 +144,7 @@ describe('when the mouse interacts with the canvas', () => {
             clientX,
             clientY,
             ctrlKey,
-            button }] = await getResultAfter(() => page.mouse.down({button: 'right'}), () => mouseDown.getNext());
+            button }] = await getResultAfter(() => page.mouse.down({button: 'right'}), [() => mouseDown.getNext()]);
         expect(offsetX).toBeCloseTo(0);
         expect(offsetY).toBeCloseTo(0);
         expect(clientX).toBeCloseTo(100);
@@ -165,7 +165,7 @@ describe('when the mouse interacts with the canvas', () => {
             clientY,
             ctrlKey,
             button,
-            type }] = await getResultAfter(() => page.mouse.click(100, 100), () => click.getNext());
+            type }] = await getResultAfter(() => page.mouse.click(100, 100), [() => click.getNext()]);
         expect(offsetX).toBeCloseTo(0);
         expect(offsetY).toBeCloseTo(0);
         expect(clientX).toBeCloseTo(100);
@@ -184,7 +184,7 @@ describe('when the mouse interacts with the canvas', () => {
         const transformationEnded: InPageEventListener<TransformationEvent> = await addEventListenerInPage(infCanvas, 'transformationend');
         const [[transformationStart, transformationChange, transformationEnd]] = await getResultAfter(
             () => page.mouse.move(200, 200),
-            () => getNextInTurn(transformationStarted, transformationChanged, transformationEnded));
+            [() => getNextInTurn(transformationStarted, transformationChanged, transformationEnded)]);
         let {transformation, inverseTransformation, type} = transformationStart;
         expect(transformation).toBeCloseToTransformation({a: 1, b: 0, c: 0, d: 1, e: -200, f: -200})
         expect(inverseTransformation).toBeCloseToTransformation({a: 1, b: 0, c: 0, d: 1, e: 200, f: 200})
@@ -213,7 +213,7 @@ describe('when the mouse interacts with the canvas', () => {
             clientY,
             ctrlKey,
             button,
-            type }] = await getResultAfter(() => page.mouse.wheel({deltaY: initialDeltaY}), () => wheel.getNext());
+            type }] = await getResultAfter(() => page.mouse.wheel({deltaY: initialDeltaY}), [() => wheel.getNext()]);
         expect(offsetX).toBeCloseTo(0);
         expect(offsetY).toBeCloseTo(0);
         expect(clientX).toBeCloseTo(200);

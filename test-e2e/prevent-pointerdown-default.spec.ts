@@ -57,20 +57,20 @@ describe('when default is prevented for pointerdown', () => {
         }))
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(250, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(250, 150), [() => drawn.ensureNoNext(300)]);
         await page.mouse.up({button: 'left'});
         await page.mouse.move(50, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 150), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(200, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'left'});
         await page.mouse.move(300, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(150, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(150, 150), [() => drawn.ensureNoNext(300)]);
         await page.mouse.up({button: 'left'});
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(50, 150), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(50, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
     });
 
@@ -86,10 +86,10 @@ describe('when default is prevented for pointerdown', () => {
         }))
         const touches: TouchCollection = await getTouchCollection(page)
         let touch = await touches.start(150, 150);
-        await getResultAfter(() => touch.move(250, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => touch.move(250, 150), [() => drawn.ensureNoNext(300)]);
         await touch.end();
         touch = await touches.start(50, 150);
-        await getResultAfter(() => touch.move(200, 150), () => drawn.getNext());
+        await getResultAfter(() => touch.move(200, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
     });
 

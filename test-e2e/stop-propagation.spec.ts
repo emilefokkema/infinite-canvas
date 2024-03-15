@@ -34,7 +34,7 @@ describe('when propagation of a mousedown event is stopped on capture on the inf
     it('the canvas should still pan because default was not prevented', async () => {
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(150, 150), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(150, 150), [() => drawn.getNext()]);
     });
 
     afterAll(async () => {

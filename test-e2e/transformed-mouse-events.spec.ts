@@ -55,18 +55,18 @@ describe('after transforming', () => {
         const secondTouch = await touchCollection.start(200, 100);
         await getResultAfter(async () => {
             await secondTouch.move(300, 100);
-        }, () => firstValueFrom(debouncedDrawn))
+        }, [() => firstValueFrom(debouncedDrawn)])
         await secondTouch.end();
         await firstTouch.end();
     })
 
     it('should emit a mousemove event that is properly transformed', async () => {
-        await getResultAfter(() => page.mouse.move(120, 120), () => mouseMoved.getNext());
+        await getResultAfter(() => page.mouse.move(120, 120), [() => mouseMoved.getNext()]);
         const [{
             offsetX,
             offsetY,
             movementX,
-            movementY }] = await getResultAfter(() => page.mouse.move(130, 130), () => mouseMoved.getNext());
+            movementY }] = await getResultAfter(() => page.mouse.move(130, 130), [() => mouseMoved.getNext()]);
         expect(offsetX).toBeCloseTo(115);
         expect(offsetY).toBeCloseTo(115);
         expect(movementX).toBeCloseTo(5);
@@ -77,7 +77,7 @@ describe('after transforming', () => {
         const [{
             offsetX,
             offsetY,
-            deltaX }] = await getResultAfter(() => page.mouse.wheel({deltaY: 100 }), () => wheeled.getNext());
+            deltaX }] = await getResultAfter(() => page.mouse.wheel({deltaY: 100 }), [() => wheeled.getNext()]);
         expect(offsetX).toBeCloseTo(115);
         expect(offsetY).toBeCloseTo(115);
         expect(deltaX).toBeCloseTo(0);
