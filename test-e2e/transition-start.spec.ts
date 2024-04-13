@@ -1,10 +1,8 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
+import { describe, it, beforeAll, afterAll } from 'vitest'
 import type { Page } from 'puppeteer'
-import { debounceTime, firstValueFrom, type MonoTypeOperatorFunction, type Observable } from 'rxjs'
 import { 
     getPage,
     getResultAfter,
-    fromSource,
     type EventListenerAdder,
     type InPageEventListener
 } from './utils'
@@ -45,7 +43,7 @@ describe('when we add an event listener for a non-pointer-related event', () => 
     })
 
     it('should emit a transitionstarted event', async () => {
-        await getResultAfter(() => page.mouse.move(100,100), () => transitionStarted.getNext());
+        await getResultAfter(() => page.mouse.move(100,100), [() => transitionStarted.getNext()]);
     });
 
     afterAll(async () => {

@@ -2562,6 +2562,21 @@ exports[`an infinite canvas context > that draws a line without calling 'moveTo'
 ]
 `;
 
+exports[`an infinite canvas context > that draws a path at infinity with four points and fills it > should have filled the entire plane 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.rect(0,0,200,200)",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context > that draws a path, fills it and then adds to the path > and then strokes the path > should have executed the last path modification only once 1`] = `
 [
   "context.restore()",

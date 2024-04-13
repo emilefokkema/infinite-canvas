@@ -88,7 +88,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this.instructionSet.rect(x, y, w, h);
 	}
 	public currentPathCanBeFilled(): boolean{
-		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathContainsFinitePoint();
+		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathSurroundsFinitePoint();
 	}
 	public fillPath(instruction: Instruction): void{
 		this.instructionSet.fillPath(instruction);
@@ -134,13 +134,14 @@ export class InfiniteCanvasViewBox implements ViewBox{
 				this.rectangleManager.measure();
 			}
 			if(!this.rectangleManager.rectangle){
-				return;
+				return false;
 			}
 			this.context.restore();
 			this.context.save();
 			this.context.clearRect(0, 0, this.width, this.height);
 			this.setInitialTransformation();
 			this.instructionSet.execute(this.context, this.rectangleManager.rectangle);
+			return true;
 		});
 	}
 	private setInitialTransformation(): void{

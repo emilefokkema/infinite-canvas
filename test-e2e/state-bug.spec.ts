@@ -42,10 +42,10 @@ describe('when state is saved and a rectangle drawn', () => {
         const touch = await touchCollection.start(20, 20)
         await getResultAfter(async () => {
             await touch.move(20, 150);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         await getResultAfter(async () => {
             await touch.move(200, 150);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
 
         await touch.end();

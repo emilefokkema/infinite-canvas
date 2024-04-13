@@ -5,11 +5,7 @@ import {
     getScreenshot,
     getResultAfter,
     getTouchCollection,
-    waitForConsoleMessage,
-    ensureNoConsoleMessage,
     type EventListenerAdder,
-    type TouchCollection,
-    type Touch,
     type InPageEventListener
 } from './utils'
 import '../test-utils/expect-extensions'
@@ -67,10 +63,10 @@ describe('when using these particular fill and stroke styles', () => {
         const secondTouch = await touchCollection.start(50, 50);
         await getResultAfter(async () => {
             await secondTouch.move(120, 120);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         await getResultAfter(async () => {
             await firstTouch.move(-10, -10);
-        }, () => drawn.getNext());
+        }, [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'fill-stroke-styles-2', dependsOnEnvironments: ['gitpod', 'CI']})
         await firstTouch.end();
         await secondTouch.end();

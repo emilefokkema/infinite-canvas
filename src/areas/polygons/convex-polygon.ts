@@ -107,44 +107,79 @@ export class ConvexPolygon implements Area{
         return this.vertices.map(v => v.point);
     }
     public expandToIncludePoint(point: Point): ConvexPolygon{
-        if(this.containsPoint(point)){
+        if(this.vertices.length === 0){
+            const newHalfPlanes = this.halfPlanes.map(p => p.expandToIncludePoint(point))
+            return new ConvexPolygon(newHalfPlanes);
+        }
+        const leftHps: Set<HalfPlane> = new Set();
+        const rightHps: Set<HalfPlane> = new Set();
+        let vertexKeepingLeftHalfPlane: PolygonVertex | null = null
+        let vertexKeepingRightHalfPlane: PolygonVertex | null = null
+        const verticesToKeep: PolygonVertex[] = [];
+        const halfPlanesToKeep: Set<HalfPlane> = new Set();
+        for(const vertex of this.vertices){
+            const left = vertex.leftHalfPlane;
+            if(rightHps.has(left)){
+                rightHps.delete(left)
+            }else{
+                leftHps.add(left)
+            }
+            const right = vertex.rightHalfPlane;
+            if(leftHps.has(right)){
+                leftHps.delete(right)
+            }else{
+                rightHps.add(right)
+            }
+            if(left.containsPoint(point)){
+                halfPlanesToKeep.add(left)
+                if(right.containsPoint(point)){
+                    halfPlanesToKeep.add(right)
+                    verticesToKeep.push(vertex)
+                    continue;
+                }
+                vertexKeepingLeftHalfPlane = vertex;
+                continue;
+            }
+            if(right.containsPoint(point)){
+                halfPlanesToKeep.add(right)
+                vertexKeepingRightHalfPlane = vertex;
+            }
+        }
+        if(verticesToKeep.length === this.vertices.length){
             return this;
         }
-        const newHalfPlanesSet: Set<HalfPlane> = new Set<HalfPlane>(this.halfPlanes);
-        for(const halfPlane of this.halfPlanes){
-            if(!this.hasAtMostOneVertex(halfPlane) || halfPlane.containsPoint(point)){
-                continue;
+        let newLeftHalfPlane: HalfPlane;
+        let newRightHalfPlane: HalfPlane
+        if(vertexKeepingLeftHalfPlane === null){
+            const leftHalfPlane = [...leftHps][0]
+            if(!leftHalfPlane){
+                return this;
             }
-            const replacement = halfPlane.expandToIncludePoint(point);
-            newHalfPlanesSet.delete(halfPlane)
-            newHalfPlanesSet.add(replacement)
+            newLeftHalfPlane = leftHalfPlane.expandToIncludePoint(point)
+        }else{
+            newLeftHalfPlane = vertexKeepingLeftHalfPlane.getContainingHalfPlaneThroughPoint(point)
+            if(newLeftHalfPlane !== vertexKeepingLeftHalfPlane.leftHalfPlane){
+                verticesToKeep.push(vertexKeepingLeftHalfPlane.replaceRightHalfPlane(newLeftHalfPlane))
+            }
         }
-        for(const vertex of this.vertices){
-            const firstContainsPoint = vertex.halfPlane1.containsPoint(point);
-            const secondContainsPoint = vertex.halfPlane2.containsPoint(point);
-            if(firstContainsPoint && secondContainsPoint){
-                continue;
+        if(vertexKeepingRightHalfPlane === null){
+            const rightHalfPlane = [...rightHps][0]
+            if(!rightHalfPlane){
+                return this;
             }
-            if(!firstContainsPoint){
-                newHalfPlanesSet.delete(vertex.halfPlane1)
+            newRightHalfPlane = rightHalfPlane.expandToIncludePoint(point)
+        }else{
+            newRightHalfPlane = vertexKeepingRightHalfPlane.getContainingHalfPlaneThroughPoint(point);
+            if(newRightHalfPlane !== vertexKeepingRightHalfPlane.rightHalfPlane){
+                verticesToKeep.push(vertexKeepingRightHalfPlane.replaceLeftHalfPlane(newRightHalfPlane))
             }
-            if(!secondContainsPoint){
-                newHalfPlanesSet.delete(vertex.halfPlane2)
-            }
-            if(!firstContainsPoint && !secondContainsPoint){
-                continue;
-            }
-            let newNormal = point.minus(vertex.point).getPerpendicular();
-            if(!vertex.isContainedByHalfPlaneWithNormal(newNormal)){
-                newNormal = newNormal.scale(-1);
-            }
-            const replacement = new HalfPlane(point, newNormal);
-            newHalfPlanesSet.add(replacement)
         }
-        const newHalfPlanes: HalfPlane[] = [];
-        newHalfPlanesSet.forEach((v) => newHalfPlanes.push(v))
-        return new ConvexPolygon(ConvexPolygon.getHalfPlanesNotContainingAnyOther(newHalfPlanes))
+        halfPlanesToKeep.add(newLeftHalfPlane)
+        halfPlanesToKeep.add(newRightHalfPlane)
+        verticesToKeep.push(new PolygonVertex(point, newLeftHalfPlane, newRightHalfPlane))
+        return new ConvexPolygon([...halfPlanesToKeep], verticesToKeep)
     }
+
     public expandToIncludeInfinityInDirection(direction: Point): Area{
         if(this.containsInfinityInDirection(direction)){
             return this;
@@ -247,7 +282,7 @@ export class ConvexPolygon implements Area{
     private getVerticesOnHalfPlane(halfPlane: HalfPlane): PolygonVertex[]{
         const result: PolygonVertex[] = [];
         for(let vertex of this.vertices){
-            if(vertex.halfPlane1 === halfPlane || vertex.halfPlane2 === halfPlane){
+            if(vertex.leftHalfPlane === halfPlane || vertex.rightHalfPlane === halfPlane){
                 result.push(vertex);
             }
         }
@@ -256,7 +291,7 @@ export class ConvexPolygon implements Area{
     private hasAtMostOneVertex(halfPlane: HalfPlane): boolean{
         let count: number = 0;
         for(let vertex of this.vertices){
-            if(vertex.halfPlane1 === halfPlane || vertex.halfPlane2 === halfPlane){
+            if(vertex.leftHalfPlane === halfPlane || vertex.rightHalfPlane === halfPlane){
                 count++;
                 if(count > 1){
                     return false;
@@ -309,11 +344,11 @@ export class ConvexPolygon implements Area{
     private static getHalfPlanes(vertices: PolygonVertex[]): HalfPlane[]{
         const result: HalfPlane[] = [];
         for(let vertex of vertices){
-            if(result.indexOf(vertex.halfPlane1) === -1){
-                result.push(vertex.halfPlane1);
+            if(result.indexOf(vertex.leftHalfPlane) === -1){
+                result.push(vertex.leftHalfPlane);
             }
-            if(result.indexOf(vertex.halfPlane2) === -1){
-                result.push(vertex.halfPlane2);
+            if(result.indexOf(vertex.rightHalfPlane) === -1){
+                result.push(vertex.rightHalfPlane);
             }
         }
         return result;
@@ -377,13 +412,19 @@ export class ConvexPolygon implements Area{
         const result: PolygonVertex[] = [];
         for(let i: number = 0; i < halfPlanes.length; i++){
             for(let j: number = i + 1; j < halfPlanes.length; j++){
-                if(halfPlanes[i].complement().isContainedByHalfPlane(halfPlanes[j])){
+                const firstOneForVertex = halfPlanes[i]
+                const secondOneForVertex = halfPlanes[j]
+                if(firstOneForVertex.complement().isContainedByHalfPlane(secondOneForVertex)){
                     continue;
                 }
-                const candidate: PolygonVertex = halfPlanes[i].getIntersectionWith(halfPlanes[j]);
+                const candidate: PolygonVertex = firstOneForVertex.getIntersectionWith(secondOneForVertex);
                 let include: boolean = true;
                 for(let k: number = 0; k < halfPlanes.length; k++){
-                    if(k !== i && k !== j && !halfPlanes[k].containsPoint(candidate.point)){
+                    if(k === i || k === j){
+                        continue;
+                    }
+                    const otherHalfPlane = halfPlanes[k];
+                    if(!otherHalfPlane.containsPoint(candidate.point)){
                         include = false;
                         break;
                     }

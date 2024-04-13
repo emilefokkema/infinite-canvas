@@ -59,20 +59,20 @@ describe('when default is prevented', () => {
         
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(250, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(250, 150), [() => drawn.ensureNoNext(300)]);
         await page.mouse.up({button: 'left'});
         await page.mouse.move(50, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 150), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(200, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'left'});
         await page.mouse.move(300, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(150, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(150, 150), [() => drawn.ensureNoNext(300)]);
         await page.mouse.up({button: 'left'});
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(50, 150), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(50, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
 
         await drawn.remove();
@@ -92,7 +92,7 @@ describe('when default is prevented', () => {
         const scrolled = fromSource(await addEventListenerInPage(windowHandle, 'scroll')).pipe(debounceTime(300))
         await page.mouse.move(150, 150);
         const deltaY: number = 80;
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY}), () => firstValueFrom(scrolled));
+        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY}), [() => firstValueFrom(scrolled)]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         expect(await page.evaluate(() => window.scrollY)).toEqual(deltaY);
     });
@@ -108,7 +108,7 @@ describe('when default is prevented', () => {
             }
         }))
         await page.mouse.move(150, 150);
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), [() => drawn.ensureNoNext(300)]);
         expect(await page.evaluate(() => window.scrollY)).toEqual(0);
     });
 
@@ -124,7 +124,7 @@ describe('when default is prevented', () => {
             }
         }))
         await page.mouse.move(150, 150);
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), [() => drawn.ensureNoNext(300)]);
         expect(await page.evaluate(() => window.scrollY)).toEqual(0);
     });
 
@@ -144,10 +144,10 @@ describe('when default is prevented', () => {
         }))
         const touches: TouchCollection = await getTouchCollection(page);
         let touch = await touches.start(150, 150);
-        await getResultAfter(() => touch.move(250, 150), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => touch.move(250, 150), [() => drawn.ensureNoNext(300)]);
         await touch.end();
         touch = await touches.start(50, 150);
-        await getResultAfter(() => touch.move(200, 150), () => drawn.getNext());
+        await getResultAfter(() => touch.move(200, 150), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
     });
 
@@ -167,7 +167,7 @@ describe('when default is prevented', () => {
         }))
         const touches: TouchCollection = await getTouchCollection(page);
         let touch = await touches.start(150, 150);
-        await getResultAfter(() => touch.move(150, 50), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => touch.move(150, 50), [() => drawn.ensureNoNext(300)]);
         await touch.end();
         expect(await page.evaluate(() => window.scrollY)).toEqual(0);
     });
@@ -188,9 +188,9 @@ describe('when default is prevented', () => {
         }))
         const touches: TouchCollection = await getTouchCollection(page);
         const touch = await touches.start(120, 120);
-        await getResultAfter(() => touch.move(120, 140), () => drawn.getNext());
+        await getResultAfter(() => touch.move(120, 140), [() => drawn.getNext()]);
         const secondTouch = await touches.start(180, 140);
-        await getResultAfter(() => secondTouch.move(200, 140), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => secondTouch.move(200, 140), [() => drawn.ensureNoNext(300)]);
         await touch.end();
         await secondTouch.end();
     });
@@ -213,7 +213,7 @@ describe('when default is prevented', () => {
         const touches: TouchCollection = await getTouchCollection(page);
         const firstTouch = await touches.start(150, 150);
         const secondTouch = await touches.start(50, 150);
-        await getResultAfter(() => secondTouch.move(50, 250), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => secondTouch.move(50, 250), [() => drawn.ensureNoNext(300)]);
         await firstTouch.end();
         await secondTouch.end();
     });
@@ -238,7 +238,7 @@ describe('when default is prevented', () => {
         const firstTouchDeltaY: number = -40;
         const touch = await touchCollection.start(120, firstTouchInitialY);
         const secondTouch = await touchCollection.start(180, secondTouchInitialY);
-        const [{touches, changedTouches, targetTouches}] = await getResultAfter(() => touch.move(120, firstTouchInitialY + firstTouchDeltaY), () => touchMoved.getNext());
+        const [{touches, changedTouches, targetTouches}] = await getResultAfter(() => touch.move(120, firstTouchInitialY + firstTouchDeltaY), [() => touchMoved.getNext()]);
         expect(touches.length).toBe(2);
         expect(changedTouches.length).toBe(1);
         expect(targetTouches.length).toBe(2);

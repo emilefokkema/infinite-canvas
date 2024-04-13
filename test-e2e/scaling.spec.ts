@@ -70,7 +70,7 @@ describe('when scaling', () => {
         await setSize(page, 400, 600);
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(120, 100), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(120, 100), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'middle'});
 
@@ -84,7 +84,7 @@ describe('when scaling', () => {
         const touchCollection: TouchCollection = await getTouchCollection(page)
         const touch1: Touch = await touchCollection.start(100, 100);
         const touch2: Touch = await touchCollection.start(200, 100);
-        await getResultAfter(() => touch2.move(200, 200), () => drawn.getNext());
+        await getResultAfter(() => touch2.move(200, 200), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await touch1.end();
         await touch2.end();
@@ -95,11 +95,11 @@ describe('when scaling', () => {
     it('should respond to resize in case of css units', async () => {
         const infCanvas = await initializeInfiniteCanvas(page, 'boundingclientrect', 'boundingclientrect', undefined, undefined, Units.CSS);
         const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        await getResultAfter(() => setSize(page, 400, 600), () => drawn.getNext());
+        await getResultAfter(() => setSize(page, 400, 600), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(120, 100), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(120, 100), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'middle'});
 
@@ -112,7 +112,7 @@ describe('when scaling', () => {
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(120, 100), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(120, 100), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom({dependsOnEnvironments: ['gitpod', 'CI']})
         await page.mouse.up({button: 'middle'});
 
@@ -125,7 +125,7 @@ describe('when scaling', () => {
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(120, 100), () => drawn.getNext());
+        await getResultAfter(() => page.mouse.move(120, 100), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'middle'});
 

@@ -45,7 +45,7 @@ describe('when propagation of a mousedown event is stopped on capture on the can
         const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw')
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 200), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(200, 200), [() => drawn.ensureNoNext(300)]);
 
         await mouseDown.remove();
         await drawn.remove();
@@ -69,7 +69,7 @@ describe('when propagation of a mousedown event is stopped on capture on the can
         const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw')
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 200), () => drawn.ensureNoNext(300));
+        await getResultAfter(() => page.mouse.move(200, 200), [() => drawn.ensureNoNext(300)]);
 
         await mouseDown.remove();
         await drawn.remove();

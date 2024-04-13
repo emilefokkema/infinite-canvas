@@ -19,7 +19,7 @@ describe('given a page', () => {
                 const c = new InfiniteCanvas(document.createElement("canvas"))
                 c.getContext('2d').fillRect(0, 0, 10, 10)
             })
-        }, () => ensureNoError(page, 500))
+        }, [() => ensureNoError(page, 500)])
     })
 
     afterAll(async () => {

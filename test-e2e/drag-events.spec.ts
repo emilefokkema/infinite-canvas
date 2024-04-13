@@ -29,7 +29,7 @@ describe('when we transform the canvas', () => {
         const mouse = page.mouse;
         await mouse.move(100, 100);
         await mouse.down({button: 'left'});
-        await getResultAfter(() => mouse.move(150, 100), () => drawn.getNext());
+        await getResultAfter(() => mouse.move(150, 100), [() => drawn.getNext()]);
         await mouse.up({button: 'left'})
 
     })
@@ -44,7 +44,7 @@ describe('when we transform the canvas', () => {
             const dragStartEv = await addEventListenerInPage(infCanvasHandle, 'dragstart');
             await getResultAfter(async () => {
                 await page.mouse.drag({x: 150, y: 100}, {x: 150, y: 150})
-             }, () => dragStartEv.getNext());
+             }, [() => dragStartEv.getNext()]);
         })
     })
 

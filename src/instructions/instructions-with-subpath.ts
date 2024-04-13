@@ -45,8 +45,8 @@ export class InstructionsWithSubpath extends StateChangingInstructionSequence<Co
         }
         return result;
     }
-    public containsFinitePoint(): boolean{
-        return this.pathInstructionBuilder.containsFinitePoint();
+    public surroundsFinitePoint(): boolean{
+        return this.pathInstructionBuilder.surroundsFinitePoint();
     }
     public isClosable(): boolean{
         return this.pathInstructionBuilder.isClosable();

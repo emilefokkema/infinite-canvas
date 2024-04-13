@@ -2,7 +2,7 @@ import { DrawingIterationProvider } from "./interfaces/drawing-iteration-provide
 import { DrawingLock } from "./drawing-lock";
 
 export class LockableDrawingIterationProvider implements DrawingIterationProvider{
-    private _draw: () => void;
+    private _draw: () => boolean;
     private _locks: DrawingLock[] = [];
     constructor(private readonly drawingIterationProvider: DrawingIterationProvider){
 
@@ -14,7 +14,7 @@ export class LockableDrawingIterationProvider implements DrawingIterationProvide
             this.drawingIterationProvider.provideDrawingIteration(this._draw);
         }
     }
-    public provideDrawingIteration(draw: () => void): void{
+    public provideDrawingIteration(draw: () => boolean): void{
         if(this._locks.length){
             this._draw = draw;
         }else{

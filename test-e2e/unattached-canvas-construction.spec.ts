@@ -18,7 +18,7 @@ describe('given a page', () => {
                 const InfiniteCanvas: InfiniteCanvasCtr = window.TestPageLib.InfiniteCanvas;
                 const c = new InfiniteCanvas(document.createElement("canvas"))
             })
-        }, () => ensureNoError(page, 500))
+        }, [() => ensureNoError(page, 500)])
     })
 
     afterAll(async () => {

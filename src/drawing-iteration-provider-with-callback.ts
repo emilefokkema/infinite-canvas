@@ -8,10 +8,13 @@ export class DrawingIterationProviderWithCallback implements DrawingIterationPro
     constructor(private readonly drawingIterationProvider: DrawingIterationProvider){
 
     }
-    public provideDrawingIteration(draw: () => void): void{
+    public provideDrawingIteration(draw: () => boolean): void{
         this.drawingIterationProvider.provideDrawingIteration(() => {
-            draw();
-            this._drawHappened.dispatch();
+            const didDraw = draw();
+            if(didDraw){
+                this._drawHappened.dispatch();
+            }
+            return didDraw;
         });
     }
 }

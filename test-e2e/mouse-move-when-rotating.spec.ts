@@ -26,12 +26,12 @@ describe('when the mouse interacts with the canvas', () => {
 
     it('should emit a mousemove when rotating with the mouse', async () => {
         const mouse = page.mouse;
-        await getResultAfter(async () => await mouse.move(100, 100), () => mouseMoved.getNext())
+        await getResultAfter(async () => await mouse.move(100, 100), [() => mouseMoved.getNext()])
         await mouse.down({button: 'middle'});
         const [{offsetX, offsetY, movementX, movementY}] = await getResultAfter(async () => {
             // A horizontal difference of 50 leads to a rotation of 90 degrees, cf src/transformer/rotate.ts
             await mouse.move(150, 100)
-        }, () => mouseMoved.getNext());
+        }, [() => mouseMoved.getNext()]);
         expect(offsetX).toBeCloseTo(100);
         expect(offsetY).toBeCloseTo(150);
         expect(movementX).toBeCloseTo(0);

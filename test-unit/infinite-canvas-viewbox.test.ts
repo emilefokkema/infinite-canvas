@@ -3785,4 +3785,20 @@ describe("an infinite canvas context", () => {
 			})
 		})
 	})
+
+	describe('that draws a path at infinity with four points and fills it', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveToInfinityInDirection(0, -1)
+			infiniteContext.lineToInfinityInDirection(1, 1)
+			infiniteContext.lineToInfinityInDirection(-1, 1)
+			infiniteContext.lineToInfinityInDirection(-1, -1)
+			infiniteContext.fill()
+		})
+
+		it("should have filled the entire plane", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
 })

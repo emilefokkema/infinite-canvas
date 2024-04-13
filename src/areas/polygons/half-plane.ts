@@ -54,7 +54,7 @@ export class HalfPlane {
     }
     public getIntersectionWith(other: HalfPlane): PolygonVertex{
         const halfPlaneLineIntersection: HalfPlaneLineIntersection = this.intersectWithLine(other.base, other.normalTowardInterior.getPerpendicular());
-        return new PolygonVertex(halfPlaneLineIntersection.point, this, other);
+        return PolygonVertex.create(halfPlaneLineIntersection.point, this, other);
     }
     public static throughPointsAndContainingPoint(throughPoint1: Point, throughPoint2: Point, containingPoint: Point): HalfPlane{
         const throughPoints: HalfPlane[] = HalfPlane.withBorderPoints(throughPoint1, throughPoint2);

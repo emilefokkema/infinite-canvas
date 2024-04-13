@@ -12,7 +12,7 @@ export interface CurrentPath extends StateChangingInstructionSet{
     area: Area
     allSubpathsAreClosable(): boolean;
     currentSubpathIsClosable(): boolean;
-    containsFinitePoint(): boolean;
+    surroundsFinitePoint(): boolean;
     drawPath(instruction: Instruction, state: InfiniteCanvasState, drawnPathProperties: DrawnPathProperties): ExecutableStateChangingInstructionSet
     clipPath(instruction: Instruction, state: InfiniteCanvasState): void;
     addPathInstruction(pathInstruction: PathInstruction, state: InfiniteCanvasState): void;

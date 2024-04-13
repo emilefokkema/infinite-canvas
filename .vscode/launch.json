@@ -11,7 +11,7 @@
             "autoAttachChildProcesses": true,
             "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
             "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
-            "args": ["run", "${relativeFile}", "--test-timeout=3600000", "--config", "vitest.config.ts"]
+            "args": ["run", "${relativeFile}", "--test-timeout=3600000", "--config", "vitest-unit.config.ts"]
         }
     ]
 }

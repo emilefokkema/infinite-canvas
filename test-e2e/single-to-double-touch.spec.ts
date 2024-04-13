@@ -40,7 +40,7 @@ describe('when two touches start', () => {
     })
 
     it('should rotate-zoom', async () => {
-        await getResultAfter(() => secondTouch.move(200, 200), () => drawn.getNext());
+        await getResultAfter(() => secondTouch.move(200, 200), [() => drawn.getNext()]);
         expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'single-to-double-touch-1'})
     });
 
@@ -51,7 +51,7 @@ describe('when two touches start', () => {
         });
 
         it('should pan', async () => {
-            await getResultAfter(() => firstTouch.move(100, 50), () => drawn.getNext());
+            await getResultAfter(() => firstTouch.move(100, 50), [() => drawn.getNext()]);
             expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'single-to-double-touch-2'})
         });
 
@@ -63,7 +63,7 @@ describe('when two touches start', () => {
             });
 
             it('should rotate-zoom again', async () => {
-                await getResultAfter(() => thirdTouch.move(200, 50), () => drawn.getNext());
+                await getResultAfter(() => thirdTouch.move(200, 50), [() => drawn.getNext()]);
                 expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'single-to-double-touch-3'})
             });
         });

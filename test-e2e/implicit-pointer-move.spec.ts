@@ -42,7 +42,7 @@ describe('when a pointer starts and default is not prevented', () => {
             async () => {
                 firstTouch = await touchCollection.start(150, firstTouchInitialY)
             },
-            () => pointerDown.getNext())
+            [() => pointerDown.getNext()])
     })
 
     describe('and then a second pointer starts and default is prevented', () => {
@@ -54,7 +54,7 @@ describe('when a pointer starts and default is not prevented', () => {
             secondTouchInitialY = 150;
             ([{pointerId: secondPointerId}] = await getResultAfter(async () => {
                 secondTouch = await touchCollection.start(150, secondTouchInitialY);
-            }, () => pointerDown.getNext()));
+            }, [() => pointerDown.getNext()]));
         });
 
         afterAll(async () => {
@@ -69,8 +69,8 @@ describe('when a pointer starts and default is not prevented', () => {
                 deltaY = 100;
 
                 ([pointerMoveEvent] = await getResultAfter(() => firstTouch.move(150, firstTouchInitialY - deltaY),
-                    () => pointerMove.getNext(),
-                    () => drawn.getNext()));
+                    [() => pointerMove.getNext(),
+                    () => drawn.getNext()] as const));
             });
 
             it('should emit a pointermove for the second touch', async () => {

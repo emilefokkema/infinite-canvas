@@ -16,7 +16,7 @@ export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstruct
         super(shape);
     }
     protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity{
-        if(shape.containsFinitePoint){
+        if(shape.surroundsFinitePoint){
             return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context, rectangle)
         }
         return () => {};
@@ -41,16 +41,19 @@ export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstruct
         return !isPointAtInfinity(position) || !position.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
     }
     public containsFinitePoint(): boolean{
-        return this.shape.containsFinitePoint;
+        return false;
+    }
+    public surroundsFinitePoint(): boolean{
+        return this.shape.surroundsFinitePoint;
     }
     public isClosable(): boolean{
         return true;
     }
     public addPosition(position: Position): PathInstructionBuilder{
         if(isPointAtInfinity(position)){
-            const newDirectionOnSameSideAsOrigin: boolean = position.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction, this.shape.currentPosition.direction);
-            const newContainsFinitePoint: boolean = newDirectionOnSameSideAsOrigin ? this.shape.containsFinitePoint : !this.shape.containsFinitePoint;
-            return this.pathBuilderProvider.atInfinity(new AtInfinity(this.shape.initialPosition, newContainsFinitePoint, this.shape.positionsSoFar.concat([position]), position));
+            const newDirectionOnSameSideOfOrigin: boolean = position.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction, this.shape.currentPosition.direction);
+            const newSurroundsFinitePoint: boolean = newDirectionOnSameSideOfOrigin ? this.shape.surroundsFinitePoint : !this.shape.surroundsFinitePoint;
+            return this.pathBuilderProvider.atInfinity(new AtInfinity(this.shape.initialPosition, newSurroundsFinitePoint, this.shape.positionsSoFar.concat([position]), position));
         }
         return this.pathBuilderProvider.fromPointAtInfinityToPoint(new FromPointAtInfinityToPoint(this.shape.initialPosition, position, position));
     }

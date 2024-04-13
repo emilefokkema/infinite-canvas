@@ -9,5 +9,6 @@ export interface PathInstructionBuilder{
     addPosition(position: Position): PathInstructionBuilder;
     isClosable(): boolean;
     containsFinitePoint(): boolean;
+    surroundsFinitePoint(): boolean;
     readonly currentPosition: Position;
 }

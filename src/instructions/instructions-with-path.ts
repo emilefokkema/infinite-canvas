@@ -26,9 +26,9 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         super(_initiallyWithState);
     }
     public get area(): Area{return this.areaBuilder.area;}
-    public containsFinitePoint(): boolean{
+    public surroundsFinitePoint(): boolean{
         for(const subpath of this.added){
-            if(subpath.containsFinitePoint()){
+            if(subpath.surroundsFinitePoint()){
                 return true;
             }
         }

@@ -32,6 +32,9 @@ export class PathInstructionBuilderFromPointAtInfinityToPointAtInfinity extends 
     public containsFinitePoint(): boolean{
         return true;
     }
+    public surroundsFinitePoint(): boolean{
+        return true;
+    }
     public isClosable(): boolean{
         return !this.shape.initialPosition.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
     }
