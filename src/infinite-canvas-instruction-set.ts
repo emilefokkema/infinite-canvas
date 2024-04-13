@@ -44,8 +44,8 @@ export class InfiniteCanvasInstructionSet{
     public allSubpathsAreClosable(): boolean{
         return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.allSubpathsAreClosable();
     }
-    public currentPathContainsFinitePoint(): boolean{
-        return this.currentInstructionsWithPath && this.currentInstructionsWithPath.containsFinitePoint();
+    public currentPathSurroundsFinitePoint(): boolean{
+        return this.currentInstructionsWithPath && this.currentInstructionsWithPath.surroundsFinitePoint();
     }
     public currentSubpathIsClosable(): boolean{
         return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.currentSubpathIsClosable();

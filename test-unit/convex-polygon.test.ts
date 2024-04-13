@@ -32,6 +32,26 @@ describe('this convex polygon', () => {
     })
 })
 
+describe('this convex polygon', () => {
+    let convexPolygon: ConvexPolygon;
+
+    beforeEach(() => {
+        convexPolygon = p(p => p
+            .with(hp => hp.base(-291.25684509421893, 78.40000915527344).normal(0.6952000122070245, 0))
+            .with(hp => hp.base(-285.59999084472656, 779.2568756117971).normal(0, -1.0735999755859211))
+            .with(hp => hp.base(-271.25684509421893, 52.74315490578105).normal(19.999999999999993, 20))
+            .with(hp => hp.base(813.6568389907034, 52.74315490578105).normal(-0, 1084.9136840849224))
+            .with(hp => hp.base(813.6568389907034, 759.2568756117971).normal(-20, -20.000000000000227))
+            .with(hp => hp.base(813.6568389907034, 759.2568756117971).normal(-706.5137207060161, 0)))
+    })
+
+    it('should result in such a polygon when expanded to include this point', () => {
+        const result = convexPolygon.expandToIncludePoint(new Point(100, 52.74315490578104))
+        expect(result.halfPlanes.length).toBe(7)
+        expect(result.vertices.length).toBe(7)
+    })
+})
+
 describe("this other convex polygon", () => {
     let convexPolygon: ConvexPolygon;
 
@@ -92,8 +112,8 @@ describe("a rectangle", () => {
             const halfPlanes: HalfPlane[] = expansion.halfPlanes;
             const vertices: PolygonVertex[] = expansion.vertices;
             for(let vertex of vertices){
-                expect(halfPlanes.indexOf(vertex.halfPlane1) > -1).toBe(true);
-                expect(halfPlanes.indexOf(vertex.halfPlane2) > -1).toBe(true);
+                expect(halfPlanes.indexOf(vertex.leftHalfPlane) > -1).toBe(true);
+                expect(halfPlanes.indexOf(vertex.rightHalfPlane) > -1).toBe(true);
             }
         });
     });
@@ -454,7 +474,11 @@ describe("a convex polygon with three half planes and two vertices", () => {
             .with(hp => hp.base(0, 0).normal(1, -1)))],
         [new Point(0, 1), p(p => p
             .with(hp => hp.base(0, 1).normal(-1, -1))
-            .with(hp => hp.base(0, 1).normal(1, -1)))]
+            .with(hp => hp.base(0, 1).normal(1, -1)))],
+        [new Point(0, -2), p(p => p
+            .with(hp => hp.base(0, -1).normal(0, -1))
+            .with(hp => hp.base(-2, -2).normal(1, -1))
+            .with(hp => hp.base(2, -2).normal(-1, -1)))]
     ])("should result in the correct expansions with a point", (expandWith: Point, expectedExpansion: ConvexPolygon) => {
         expectPolygonsToBeEqual(convexPolygon.expandToIncludePoint(expandWith), expectedExpansion);
     });

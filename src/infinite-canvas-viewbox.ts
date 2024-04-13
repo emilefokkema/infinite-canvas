@@ -88,7 +88,7 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this.instructionSet.rect(x, y, w, h);
 	}
 	public currentPathCanBeFilled(): boolean{
-		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathContainsFinitePoint();
+		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathSurroundsFinitePoint();
 	}
 	public fillPath(instruction: Instruction): void{
 		this.instructionSet.fillPath(instruction);

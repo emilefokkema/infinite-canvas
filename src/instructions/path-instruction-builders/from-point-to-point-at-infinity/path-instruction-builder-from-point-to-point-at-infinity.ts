@@ -30,6 +30,9 @@ export class PathInstructionBuilderFromPointToPointAtInfinity extends InfiniteCa
     public containsFinitePoint(): boolean{
         return true;
     }
+    public surroundsFinitePoint(): boolean{
+        return true;
+    }
     public isClosable(): boolean{
         return true;
     }

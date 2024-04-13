@@ -13,6 +13,7 @@ function halfPlanesAreEqual(one: HalfPlane, other: HalfPlane): boolean{
 }
 function expectPolygonsToBeEqual(one: ConvexPolygon, other: ConvexPolygon): void{
     expect(one.halfPlanes.length).toBe(other.halfPlanes.length);
+    expect(one.vertices.length).toBe(other.vertices.length)
     for(let oneHalfPlane of one.halfPlanes){
         expect(!!other.halfPlanes.find(p => halfPlanesAreEqual(oneHalfPlane, p))).toBe(true);
     }

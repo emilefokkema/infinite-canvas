@@ -32,6 +32,9 @@ export class PathInstructionBuilderFromPointToPoint extends InfiniteCanvasPathIn
     public containsFinitePoint(): boolean{
         return true;
     }
+    public surroundsFinitePoint(): boolean{
+        return true;
+    }
     public isClosable(): boolean{
         return true;
     }
