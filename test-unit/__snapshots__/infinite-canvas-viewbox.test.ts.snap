@@ -2732,7 +2732,10 @@ exports[`an infinite canvas context > that draws an arc > should draw an arc 1`]
   "context.clearRect(0,0,200,200)",
   "context.beginPath()",
   "context.moveTo(60,30)",
-  "context.arc(30,30,30,0,6.28318531,)",
+  "context.save()",
+  "context.transform(1,0,0,1,30,30)",
+  "context.arc(0,0,30,0,6.28318531,)",
+  "context.restore()",
   "context.lineWidth = 1",
   "context.fill()",
 ]

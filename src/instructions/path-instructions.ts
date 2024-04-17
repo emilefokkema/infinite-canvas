@@ -13,9 +13,12 @@ export class PathInstructions{
     public static arc(_x: number, _y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
         const instruction: Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
             const transformation = rectangle.userTransformation;
-            const transformationAngle: number = transformation.getRotationAngle();
             const {x, y} = transformation.apply(new Point(_x, _y));
-            context.arc(x, y, radius * transformation.scale, startAngle + transformationAngle, endAngle + transformationAngle, anticlockwise);
+            const {a, b, c, d, e, f} = transformation.untranslated().before(Transformation.translation(x, y))
+            context.save();
+            context.transform(a, b, c, d, e, f)
+            context.arc(0, 0, radius, startAngle, endAngle, anticlockwise);
+            context.restore();
         };
         const changeArea: AreaChange = (builder: AreaBuilder) => {
             builder.addPosition(new Point(_x - radius, _y - radius));
