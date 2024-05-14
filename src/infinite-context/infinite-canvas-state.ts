@@ -8,4 +8,7 @@ export class InfiniteCanvasState implements CanvasState{
 	public save(): void{
 		this.viewBox.saveState();
 	}
+	public reset(): void{
+		this.viewBox.resetState();
+	}
 }

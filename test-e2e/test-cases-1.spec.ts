@@ -15,9 +15,11 @@ describe('the test cases', () => {
         ({page, cleanup} = await getPageInBrowser(browser, '/test-case/'));
     })
 
-    it.each(testCases)('$title', async ({id, dependsOnEnvironments}) => {
-        await page.evaluate((id) => window.TestCaseLib.drawTestCase(id), id)
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: id.replace(/\.mjs$/,''), dependsOnEnvironments})
+    describe.each(testCases)('$title', ({id, dependsOnEnvironments, skip}) => {
+        it.skipIf(skip)('', async () => {
+            await page.evaluate((id) => window.TestCaseLib.drawTestCase(id), id)
+            expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: id.replace(/\.mjs$/,''), dependsOnEnvironments})
+        })
     })
 
     afterAll(async () => {

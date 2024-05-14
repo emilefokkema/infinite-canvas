@@ -7,10 +7,8 @@ exports[`a set of instructions that describe a rectangle path that is drawn > an
   "context.lineTo(1,0)",
   "context.lineTo(1,1)",
   "context.lineTo(0,1)",
-  "context.lineTo(0,0)",
   "context.closePath()",
   "context.moveTo(0,0)",
-  "context.fill()",
   "context.fillStyle = \\"#f00\\"",
   "context.fill()",
 ]
@@ -34,8 +32,6 @@ exports[`a set of instructions that is also about a path > that receives a chang
   "context.beginPath()",
   "context.fillStyle = \\"#f00\\"",
   "context.moveTo(0,0)",
-  "context.fillStyle = \\"#00f\\"",
-  "context.fill()",
   "context.fillStyle = \\"#ff0\\"",
   "context.fill()",
 ]

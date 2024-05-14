@@ -13,7 +13,7 @@ export class WheelEventImpl extends MouseEventImpl<WheelEvent> implements WheelE
     }
     public get deltaMode(): number{return this.event.deltaMode;}
     public get deltaZ(): number{return this.event.deltaZ;}
-    public get DOM_DELTA_LINE(): number{return this.event.DOM_DELTA_LINE;}
-    public get DOM_DELTA_PAGE(): number{return this.event.DOM_DELTA_PAGE;}
-    public get DOM_DELTA_PIXEL(): number{return this.event.DOM_DELTA_PIXEL;}
+    public DOM_DELTA_LINE = 1 as const
+    public DOM_DELTA_PAGE = 2 as const
+    public DOM_DELTA_PIXEL = 0 as const
 }

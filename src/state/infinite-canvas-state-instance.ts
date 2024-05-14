@@ -12,6 +12,7 @@ import { sequence } from "../instruction-utils";
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
+    public readonly fontKerning: CanvasFontKerning;
     public readonly lineWidth: number;
     public readonly lineDash: number[];
     public readonly lineCap: CanvasLineCap;
@@ -38,6 +39,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         props: StateInstanceProperties
     ){
         this.fillStyle = props.fillStyle;
+        this.fontKerning = props.fontKerning;
         this.lineWidth = props.lineWidth;
         this.lineCap = props.lineCap;
         this.lineJoin = props.lineJoin;
@@ -63,6 +65,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     }
     public changeProperty<K extends keyof StateInstanceProperties>(property: K, newValue: StateInstanceProperties[K]): InfiniteCanvasStateInstance{
         const {fillStyle,
+            fontKerning,
             lineWidth,
             lineDash,
             lineCap,
@@ -87,6 +90,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             shadowBlur} = this;
         const newProps: StateInstanceProperties = {
             fillStyle,
+            fontKerning,
             lineWidth,
             lineDash,
             lineCap,
@@ -167,6 +171,7 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
 
     public static default: InfiniteCanvasStateInstance = new InfiniteCanvasStateInstance({
         fillStyle: '#000',
+        fontKerning: 'auto',
         lineWidth: 1,
         lineDash: [],
         lineCap: 'butt',

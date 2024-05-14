@@ -1,11 +1,11 @@
-import {Config} from "./config";
+import type {Config} from "./config";
 import { Units } from "./units";
-import {InfiniteCanvasRenderingContext2D} from "./infinite-canvas-rendering-context-2d";
-import {EventMap} from "./event-map";
-import { TransformationEvent } from "./transformation-event";
-import { Transformed } from './transformed';
+import type {InfiniteCanvasRenderingContext2D} from "./infinite-canvas-rendering-context-2d";
+import type {EventMap} from "./event-map";
+import type { TransformationEvent } from "./transformation-event";
+import type { Transformed } from './transformed';
 
-export interface InfiniteCanvasEventHandlers extends DocumentAndElementEventHandlers, GlobalEventHandlers {
+export interface InfiniteCanvasEventHandlers extends GlobalEventHandlers {
     /**
      * The [event handler property](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_handler_properties) for the {@link EventMap.transformationstart} event
      */

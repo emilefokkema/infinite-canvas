@@ -1,7 +1,7 @@
-import { DrawEvent } from "./draw-event";
-import { InfiniteCanvasEventWithDefaultBehavior } from "./infinite-canvas-event-with-default-behavior";
-import { InfiniteCanvasTouchEvent } from "./infinite-canvas-touch-event";
-import { TransformationEvent } from "./transformation-event";
+import type { DrawEvent } from "./draw-event";
+import type { InfiniteCanvasEventWithDefaultBehavior } from "./infinite-canvas-event-with-default-behavior";
+import type { InfiniteCanvasTouchEvent } from "./infinite-canvas-touch-event";
+import type { TransformationEvent } from "./transformation-event";
 export interface EventMap extends HTMLElementEventMap {
     /**
      * Emitted when {@link InfiniteCanvas} begins transforming (for example when the user begins to pan)

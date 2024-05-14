@@ -2,9 +2,9 @@ import fs from 'fs/promises'
 import { fileURLToPath } from 'url';
 import type { PluginOption } from 'vite'
 
-async function getTestCaseByPath(dirUrl: URL, id: string): Promise<{title: string, id: string, dependsOnEnvironments: string[] | undefined}>{
-    const {default: {title, dependsOnEnvironments}} = await import(new URL(id, dirUrl).toString())
-    return {id, title, dependsOnEnvironments};
+async function getTestCaseByPath(dirUrl: URL, id: string): Promise<{title: string, id: string, dependsOnEnvironments: string[] | undefined, skip?: boolean}>{
+    const {default: {title, dependsOnEnvironments, skip}} = await import(new URL(id, dirUrl).toString())
+    return {id, title, dependsOnEnvironments, skip};
 }
 
 export function resolveTestCases(): PluginOption{

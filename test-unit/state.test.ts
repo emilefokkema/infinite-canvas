@@ -9,6 +9,7 @@ import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-styl
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { Point } from "../src/geometry/point";
 import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
+import { getRectStrategy } from '../src/rect/get-rect-strategy';
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);
@@ -24,7 +25,7 @@ describe("a state with a clipped path", () => {
         currentState = defaultState;
         currentPath = InstructionsWithPath.create(defaultState);
         currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
-        currentPath.rect(0, 0, 3, 3, currentState);
+        getRectStrategy(0, 0, 3, 3).addSubpaths(currentPath, currentState)
         currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
         currentState = currentPath.state;
         stateWithOneClippedPath = currentState;
@@ -276,6 +277,7 @@ describe("a default state", () => {
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same
                 clippedPaths: undefined,                                //same
+                fontKerning: 'auto',                                    //same
                 fillAndStrokeStylesTransformed: false,
                 shadowOffset: Point.origin,
                 shadowColor: 'rgba(0, 0, 0, 0)',

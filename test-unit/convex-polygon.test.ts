@@ -12,6 +12,7 @@ import { p, ls, hp, r, l } from "./builders";
 import { expectPolygonsToBeEqual, expectAreasToBeEqual } from "./expectations";
 import { Ray } from "../src/areas/line/ray";
 import { Line } from "../src/areas/line/line";
+import { createRectangle } from './create-rectangle';
 
 describe('this convex polygon', () => {
     let convexPolygon: ConvexPolygon;
@@ -98,7 +99,7 @@ describe("a rectangle", () => {
     let rectangle: ConvexPolygon;
 
     beforeEach(() => {
-        rectangle = ConvexPolygon.createRectangle(0, 0, 1, 1);
+        rectangle = createRectangle(0, 0, 1, 1);
     });
 
     describe("when it is expanded to include a point", () => {
@@ -118,7 +119,7 @@ describe("a rectangle", () => {
         });
     });
 
-    it.each([[ConvexPolygon.createRectangle(2, 2, 1, 1), p(p => p
+    it.each([[createRectangle(2, 2, 1, 1), p(p => p
         .with(hp => hp.base(0, 0).normal(0, 1))
         .with(hp => hp.base(0, 0).normal(1, 0))
         .with(hp => hp.base(3, 3).normal(0, -1))

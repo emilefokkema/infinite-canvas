@@ -1,4 +1,4 @@
-import { TransformationRepresentation } from "./transformation-representation";
+import type { TransformationRepresentation } from "./transformation-representation";
 
 export interface Transformed{
     /**

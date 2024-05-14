@@ -9,15 +9,14 @@ import { TransformationKind } from "./transformation-kind";
 import { Area } from "./areas/area";
 import { empty } from "./areas/empty";
 import { Position } from "./geometry/position"
-import { rectangleHasArea } from "./geometry/rectangle-has-area";
-import { rectangleIsPlane } from "./geometry/rectangle-is-plane";
-import { plane } from "./areas/plane";
-import { ConvexPolygon } from "./areas/polygons/convex-polygon";
 import { ExecutableInstructionWithState } from "./instructions/executable-instruction-with-state";
 import { InstructionsWithPositiveDrawnArea } from "./instructions/instructions-with-positive-drawn-area";
 import { ExecutableStateChangingInstructionSet } from "./interfaces/executable-state-changing-instruction-set";
 import { DrawingInstruction } from './drawing-instruction'
 import { CanvasRectangle } from "./rectangle/canvas-rectangle";
+import { roundRect } from "./rect/round-rect";
+import { getRectStrategy} from "./rect/get-rect-strategy";
+import { Rect } from './rect/rect'
 
 export class InfiniteCanvasInstructionSet{
     private currentInstructionsWithPath: CurrentPath;
@@ -40,6 +39,12 @@ export class InfiniteCanvasInstructionSet{
     }
     public restoreState(): void{
         this.state = this.state.restored();
+    }
+    public resetState(): void{
+        this.previousInstructionsWithPath = PreviousInstructions.create();
+        this.state = this.previousInstructionsWithPath.state;
+        this.currentInstructionsWithPath = undefined;
+        this.onChange();
     }
     public allSubpathsAreClosable(): boolean{
         return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.allSubpathsAreClosable();
@@ -66,21 +71,19 @@ export class InfiniteCanvasInstructionSet{
         this.state = drawingInstruction.state;
         this.incorporateDrawingInstruction(drawingInstruction)
     }
-    public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
-        const drawingInstruction = DrawingInstruction.forFillingPath(instruction, this.state, (state) => {
-            const result = InstructionsWithPath.create(state);
-            result.rect(x, y, w, h, state);
-            return result;
-        })
+    public fillRect(rect: Rect, instruction: Instruction): void{
+        const drawingInstruction = rect.fill(this.state, instruction)
+        if(!drawingInstruction){
+            return
+        }
         this.incorporateDrawingInstruction(drawingInstruction);
     }
 
-    public strokeRect(x: number, y: number, w: number, h: number): void{
-        const drawingInstruction = DrawingInstruction.forStrokingPath((context) => {context.stroke();}, this.state, (state) => {
-            const result = InstructionsWithPath.create(state);
-            result.rect(x, y, w, h, state);
-            return result;
-        })
+    public strokeRect(rect: Rect): void{
+        const drawingInstruction = rect.stroke(this.state, (context) => {context.stroke();})
+        if(!drawingInstruction){
+            return
+        }
         this.incorporateDrawingInstruction(drawingInstruction);
     }
 
@@ -123,13 +126,8 @@ export class InfiniteCanvasInstructionSet{
             return;
         }
         const modifiedInstruction = instruction.getModifiedInstruction();
-        if(this.currentInstructionsWithPath){
-            const recreated = this.currentInstructionsWithPath.recreatePath();
-            this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
-            recreated.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
-            this.currentInstructionsWithPath = recreated;
-        }else{
-            this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
+        this.addToPreviousInstructions(modifiedInstruction, area, instruction.build);
+        if(!this.currentInstructionsWithPath){
             this.state = this.previousInstructionsWithPath.state;
         }
         this.onChange();
@@ -177,10 +175,20 @@ export class InfiniteCanvasInstructionSet{
             this.currentInstructionsWithPath.lineTo(position, this.state);
         }
     }
-    public rect(x: number, y: number, w: number, h: number): void{
-        if(this.currentInstructionsWithPath){
-            this.currentInstructionsWithPath.rect(x, y, w, h, this.state);
+    public rect(rect: Rect): void{
+        if(!this.currentInstructionsWithPath){
+            return;
         }
+        rect.addSubpaths(this.currentInstructionsWithPath, this.state)
+    }
+    public roundRect(
+        rect: Rect,
+		radii: number | DOMPointInit | Iterable<number | DOMPointInit> | undefined
+    ): void{
+        if(!this.currentInstructionsWithPath){
+            return;
+        }
+        roundRect(this.currentInstructionsWithPath, rect, radii, this.state);
     }
     private intersects(area: Area): boolean{
         return this.previousInstructionsWithPath.intersects(area);
@@ -194,10 +202,11 @@ export class InfiniteCanvasInstructionSet{
     }
 
     public clearArea(x: number, y: number, width: number, height: number): void{
-        if(!rectangleHasArea(x, y, width, height)){
-			return;
-		}
-		const rectangle: Area = rectangleIsPlane(x, y, width, height) ? plane : ConvexPolygon.createRectangle(x, y, width, height);
+        const rectStrategy = getRectStrategy(x, y, width, height)
+		const rectangle: Area = rectStrategy.getArea();
+        if(!rectangle){
+            return;
+        }
         const transformedRectangle: Area = rectangle.transform(this.state.current.transformation)
         if(!this.intersects(transformedRectangle)){
             return;

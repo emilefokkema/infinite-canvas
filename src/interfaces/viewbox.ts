@@ -36,4 +36,11 @@ export interface ViewBox extends Transformable, CurrentState{
     moveTo(position: Position): void;
     lineTo(position: Position): void;
     rect(x: number, y: number, w: number, h: number): void;
+    roundRect(
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		radii?: number | DOMPointInit | Iterable<number | DOMPointInit>
+	): void;
 }

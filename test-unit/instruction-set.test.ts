@@ -3,6 +3,7 @@ import { logInstruction } from "./log-instruction";
 import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
 import { Point } from "../src/geometry/point";
+import { getRectStrategy } from '../src/rect/get-rect-strategy';
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -60,7 +61,7 @@ describe("an instruction set", () => {
 
         beforeEach(() => {
             instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
-            instructionSet.fillRect(0, 0, 1, 1, (context: CanvasRenderingContext2D) => {
+            instructionSet.fillRect(getRectStrategy(0, 0, 1, 1), (context: CanvasRenderingContext2D) => {
                 context.fill();
             });
         });
@@ -109,7 +110,7 @@ describe("an instruction set", () => {
 
             beforeEach(() => {
                 instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
-                instructionSet.fillRect(2, 0, 1, 1, (context: CanvasRenderingContext2D) => {
+                instructionSet.fillRect(getRectStrategy(2, 0, 1, 1), (context: CanvasRenderingContext2D) => {
                     context.fill();
                 });
             });

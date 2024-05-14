@@ -1476,7 +1476,7 @@ describe("an infinite canvas context", () => {
 			});
 			createImageBitmapSpy = vi.spyOn(window, 'createImageBitmap').mockImplementation(() => imageBitmapPromise);
 			const array: Uint8ClampedArray = new Uint8ClampedArray(4 * width * height);
-			imageData = {data: array, height: height, width: width};
+			imageData = {data: array, height: height, width: width, colorSpace: "srgb"};
 		});
 
 		afterEach(() => {
@@ -1631,6 +1631,19 @@ describe("an infinite canvas context", () => {
 				expect(contextMock.getLog()).toMatchSnapshot();
 			});
 		});
+
+		describe('and then uses it to fill the entire plane', () => {
+
+			beforeEach(() => {
+				infiniteContext.fillStyle = pattern;
+				contextMock.clear();
+				infiniteContext.fillRect(-Infinity, -Infinity, Infinity, Infinity);
+			});
+
+			it("should wrap the fill command in a transform", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		})
 	});
 
 	describe("that clips and then puts image data", () => {
@@ -1653,7 +1666,7 @@ describe("an infinite canvas context", () => {
 			const imageBitmap: ImageBitmap = {width: imageDataWidth, height: imageDataHeight, close(){}};
 			createImageBitmapSpy = vi.spyOn(window, 'createImageBitmap').mockImplementation(() => new Promise<ImageBitmap>((res) => {resolveImageBitmap = res;}));
 			const array: Uint8ClampedArray = new Uint8ClampedArray(4 * width * height);
-			const imageData: ImageData = {data: array, height: height, width: width};
+			const imageData: ImageData = {data: array, height: height, width: width, colorSpace: "srgb"};
 			infiniteContext.putImageData(imageData, 0, 0);
 			resolveImageBitmap(imageBitmap);
 			await new Promise<void>((done) => {
@@ -2755,6 +2768,12 @@ describe("an infinite canvas context", () => {
 			}).toThrow();
 		});
 
+		it("should get an error if it tries to add a round rect with x and y that do not determine a direction", () => {
+			expect(() => {
+				infiniteContext.roundRect(-Infinity, -Infinity, Infinity, Infinity, 2);
+			}).toThrow();
+		});
+
 		describe("and then adds a rect that has no area", () => {
 
 			beforeEach(() => {
@@ -2870,6 +2889,18 @@ describe("an infinite canvas context", () => {
 		it("should fill the entire viewbox", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
+
+		describe('and then clears the entire plane', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(-Infinity, -Infinity, Infinity, Infinity)
+			})
+
+			it("should have cleared the plane", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		})
 	});
 
 	describe("that fills a rect with negative infinite width and a finite height", () => {
@@ -3800,5 +3831,111 @@ describe("an infinite canvas context", () => {
 		it("should have filled the entire plane", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
+	})
+
+	describe('that draws a round rect', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.roundRect(10, 10, 40, 40, 5)
+			infiniteContext.stroke();
+		})
+
+		it("should have given these instructions", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
+	describe('that draws a round rect with a radius that is zero', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.roundRect(10, 10, 40, 40, [0, 5])
+			infiniteContext.stroke();
+		})
+
+		it("should have given these instructions", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
+	describe('that draws a round rect with big radii', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.roundRect(30, 30, 80, 30, [15, 30, 30, 15]);
+			infiniteContext.stroke();
+		})
+
+		it("should have scaled the radii", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
+	describe('that draws a round rect with big radii on invisible corners', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.roundRect(30, 30, Infinity, 30, [15, 30, 30, 15]);
+			infiniteContext.stroke();
+		})
+
+		it("should not have scaled the radii", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
+	it.each([
+		[20, 20],
+		[75, 45],
+		[100, 100],
+		[Infinity, 20],
+		[Infinity, -20],
+		[-Infinity, 20],
+		[-Infinity, -20],
+		[20, Infinity],
+		[20, -Infinity],
+		[-20, Infinity],
+		[-20, -Infinity],
+		[Infinity, Infinity],
+		[Infinity, -Infinity],
+		[-Infinity, Infinity],
+		[-Infinity, -Infinity]
+	])('should have drawn round rect like this', (w: number, h: number) => {
+		const radii = [15, {x: 60, y: 30}, 15, {x: 60, y: 30}]
+
+		infiniteContext.beginPath();
+		infiniteContext.roundRect(100, 100, w, h, radii)
+		infiniteContext.stroke();
+
+		expect(contextMock.getLog()).toMatchSnapshot();
+	})
+
+	describe('that makes a drawing and then resets', () => {
+
+		beforeEach(() => {
+			infiniteContext.fillStyle = '#f00'
+			infiniteContext.beginPath();
+			infiniteContext.rect(0, 0, 10, 10)
+			infiniteContext.fill();
+			contextMock.clear();
+			infiniteContext.reset();
+		})
+
+		it("should have no drawing anymore", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+
+		describe('and then calls fill', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.fill();
+			})
+
+			it("should have done nothing", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		})
 	})
 })

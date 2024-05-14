@@ -4,6 +4,7 @@ import { CoordinateSystem } from "../src/rectangle/coordinate-system";
 import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
 import { Transformation } from "../src/transformation";
 import { Point } from '../src/geometry/point'
+import { createRectangle } from "./create-rectangle";
 
 export class MockRectangle implements CanvasRectangle{
     public viewboxWidth: number = 200;
@@ -14,7 +15,7 @@ export class MockRectangle implements CanvasRectangle{
     public initialBitmapTransformation: Transformation = Transformation.identity;
 
     constructor(){
-        this.polygon = ConvexPolygon.createRectangle(0, 0, this.viewboxWidth, this.viewboxHeight);
+        this.polygon = createRectangle(0, 0, this.viewboxWidth, this.viewboxHeight);
     }
 
     public addPathAroundViewbox(): void{
