@@ -1,4 +1,4 @@
-import { InfiniteCanvasTouchList } from "./infinite-canvas-touch-list";
+import type { InfiniteCanvasTouchList } from "./infinite-canvas-touch-list";
 
 export interface InfiniteCanvasTouchEvent extends TouchEvent{
     readonly targetTouches: InfiniteCanvasTouchList;

@@ -9,34 +9,26 @@ import { positionsAreEqual } from "../geometry/positions-are-equal";
 import { PathInstructionBuilder } from "./path-instruction-builders/path-instruction-builder";
 import { InfiniteCanvasPathInstructionBuilderProvider } from "./path-instruction-builders/infinite-canvas-path-instruction-builder-provider";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
-import { CopyableInstructionWithState } from "./copyable-instruction-with-state";
+import { PreExecutableInstructionWithState } from "./pre-executable-instruction-with-state";
 import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
 import { InstructionUsingInfinity } from "./instruction-using-infinity";
-import { CopyableInstructionSet } from "../interfaces/copyable-instruction-set";
+import { PreExecutableInstructionSet } from "../interfaces/pre-executable-instruction-set";
 import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 import { ExecutableStateChangingInstructionSequence } from "./executable-state-changing-instruction-sequence";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
-export class InstructionsWithSubpath extends StateChangingInstructionSequence<CopyableInstructionSet>{
+export class InstructionsWithSubpath extends StateChangingInstructionSequence<PreExecutableInstructionSet>{
     constructor(private readonly _initiallyWithState: PathInstructionWithState, private pathInstructionBuilder: PathInstructionBuilder){
         super(_initiallyWithState);
     }
     public get currentPosition(): Position{return this.pathInstructionBuilder.currentPosition;}
-    public addInstruction(instruction: CopyableInstructionWithState): void{
+    public addInstruction(instruction: PreExecutableInstructionWithState): void{
         instruction.setInitialState(this.state);
         this.add(instruction);
     }
     public closePath(): void{
-        const toAdd: CopyableInstructionWithState = CopyableInstructionWithState.create(this.state, (context: CanvasRenderingContext2D) => {context.closePath();})
-        toAdd.setInitialState(this.state);
+        const toAdd: PreExecutableInstructionWithState = PreExecutableInstructionWithState.create(this.state, (context: CanvasRenderingContext2D) => {context.closePath();})
         this.add(toAdd);
-    }
-    public copy(): InstructionsWithSubpath{
-        const result: InstructionsWithSubpath = new InstructionsWithSubpath(this._initiallyWithState.copy(), this.pathInstructionBuilder);
-        for(const added of this.added){
-            result.add(added.copy());
-        }
-        return result;
     }
     public makeExecutable(infinityProvider: PathInfinityProvider): ExecutableStateChangingInstructionSet{
         const result = new ExecutableStateChangingInstructionSequence<ExecutableStateChangingInstructionSet>(this._initiallyWithState.makeExecutable(infinityProvider));
@@ -71,7 +63,7 @@ export class InstructionsWithSubpath extends StateChangingInstructionSequence<Co
         toAdd.setInitialState(this.state);
         this.add(toAdd);
     }
-    public addPathInstruction(pathInstruction: PathInstruction, pathInstructionWithState: CopyableInstructionWithState, state: InfiniteCanvasState): void{
+    public addPathInstruction(pathInstruction: PathInstruction, pathInstructionWithState: PreExecutableInstructionWithState, state: InfiniteCanvasState): void{
         if(pathInstruction.initialPoint && !positionsAreEqual(this.pathInstructionBuilder.currentPosition, pathInstruction.initialPoint)){
             this.lineTo(pathInstruction.initialPoint, state);
         }

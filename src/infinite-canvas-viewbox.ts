@@ -13,11 +13,10 @@ import { TransformationKind } from "./transformation-kind";
 import { InfiniteCanvasInstructionSet } from "./infinite-canvas-instruction-set";
 import { Area } from "./areas/area";
 import { Position } from "./geometry/position"
-import {rectangleHasArea} from "./geometry/rectangle-has-area";
-import {rectangleIsPlane} from "./geometry/rectangle-is-plane";
 import { RectangleManager } from "./rectangle/rectangle-manager";
 import { InfiniteCanvasConicGradient } from "./styles/infinite-canvas-conic-gradient";
 import { textDrawingStylesDimensions } from "./state/dimensions/all-dimensions";
+import { getRectStrategy } from "./rect/get-rect-strategy";
 
 export class InfiniteCanvasViewBox implements ViewBox{
 	private instructionSet: InfiniteCanvasInstructionSet;
@@ -57,6 +56,9 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	public restoreState(): void{
 		this.instructionSet.restoreState();
 	}
+	public resetState(): void{
+		this.instructionSet.resetState();
+	}
 	public beginPath(): void{
 		this.instructionSet.beginPath();
 	}
@@ -85,7 +87,18 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		}
 	}
 	public rect(x: number, y: number, w: number, h: number): void{
-		this.instructionSet.rect(x, y, w, h);
+		const rectStrategy = getRectStrategy(x, y, w, h)
+		this.instructionSet.rect(rectStrategy);
+	}
+	public roundRect(
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		radii?: number | DOMPointInit | Iterable<number | DOMPointInit>
+	): void{
+		const rectStrategy = getRectStrategy(x, y, w, h)
+		this.instructionSet.roundRect(rectStrategy, radii)
 	}
 	public currentPathCanBeFilled(): boolean{
 		return this.instructionSet.allSubpathsAreClosable() && this.instructionSet.currentPathSurroundsFinitePoint();
@@ -97,16 +110,12 @@ export class InfiniteCanvasViewBox implements ViewBox{
 		this.instructionSet.strokePath();
 	}
 	public fillRect(x: number, y: number, w: number, h: number, instruction: Instruction): void{
-		if(!rectangleHasArea(x, y, w, h)){
-			return;
-		}
-		this.instructionSet.fillRect(x, y, w, h, instruction);
+		const rectStrategy = getRectStrategy(x, y, w, h)
+		this.instructionSet.fillRect(rectStrategy, instruction);
 	}
 	public strokeRect(x: number, y: number, w: number, h: number): void{
-		if(!rectangleHasArea(x, y, w, h) || rectangleIsPlane(x, y, w, h)){
-			return;
-		}
-		this.instructionSet.strokeRect(x, y, w, h);
+		const rectStrategy = getRectStrategy(x, y, w, h)
+		this.instructionSet.strokeRect(rectStrategy);
 	}
 	public clipPath(instruction: Instruction): void{
 		this.instructionSet.clipPath(instruction);

@@ -5,6 +5,7 @@ import { TransformableFilter } from "./dimensions/transformable-filter";
 
 export interface StateInstanceProperties {
     fillStyle: string | CanvasGradient | CanvasPattern;
+    fontKerning: CanvasFontKerning,
     lineWidth: number;
     lineCap: CanvasLineCap;
     lineJoin: CanvasLineJoin;

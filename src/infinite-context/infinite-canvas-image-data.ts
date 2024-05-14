@@ -2,8 +2,8 @@ import { ViewBox } from "../interfaces/viewbox";
 import { sliceImageData } from "./slice-image-data";
 import { DrawingLock } from "../drawing-lock";
 import { TransformationKind } from "../transformation-kind";
-import {ConvexPolygon} from "../areas/polygons/convex-polygon";
 import { InfiniteCanvasStateInstance } from "../state/infinite-canvas-state-instance";
+import { getRectStrategy } from "../rect/get-rect-strategy";
 
 export class InfiniteCanvasImageData implements CanvasImageData{
 	constructor(private viewBox: ViewBox){
@@ -24,7 +24,7 @@ export class InfiniteCanvasImageData implements CanvasImageData{
 			context.translate(dx, dy);
 			context.fillStyle = pattern;
 			context.fillRect(0, 0, imagedata.width, imagedata.height);
-		}, ConvexPolygon.createRectangle(dx, dy, imagedata.width, imagedata.height), TransformationKind.Absolute, false, state => state
+		}, getRectStrategy(dx, dy, imagedata.width, imagedata.height).getArea(), TransformationKind.Absolute, false, state => state
 			.changeProperty('shadowColor', InfiniteCanvasStateInstance.default.shadowColor)
 			.changeProperty('shadowOffset', InfiniteCanvasStateInstance.default.shadowOffset)
 			.changeProperty('shadowBlur', InfiniteCanvasStateInstance.default.shadowBlur)

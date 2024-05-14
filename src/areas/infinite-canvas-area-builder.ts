@@ -58,7 +58,4 @@ export class InfiniteCanvasAreaBuilder {
     public transformedWith(transformation: Transformation): AreaBuilder{
         return new TransformedAreaBuilder(this, transformation);
     }
-    public copy(): InfiniteCanvasAreaBuilder{
-        return new InfiniteCanvasAreaBuilder(this._area, this.firstPoint, this.subsetOfLineAtInfinity);
-    }
 }

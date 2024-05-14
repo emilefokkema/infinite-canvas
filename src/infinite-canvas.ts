@@ -157,6 +157,18 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
 	public get ontouchignored(): (this: InfiniteCanvasInterface, event: Event) => any{
 		return this.eventCollection.getOn('touchignored');
 	}
+    public set onbeforeinput(value: (this: InfiniteCanvasInterface, event: InputEvent) => any){
+        this.eventCollection.setOn('beforeinput', value);
+    }
+    public get onbeforeinput(): (this: InfiniteCanvasInterface, event: InputEvent) => any{
+        return this.eventCollection.getOn('beforeinput');
+    }
+    public set oncancel(value: (this: InfiniteCanvasInterface, event: Event) => any){
+        this.eventCollection.setOn('cancel', value);
+    }
+    public get oncancel(): (this: InfiniteCanvasInterface, event: Event) => any{
+        return this.eventCollection.getOn('cancel');
+    }
     public set oncopy(value: (this: InfiniteCanvasInterface, event: ClipboardEvent) => any){
         this.eventCollection.setOn('copy', value);
     }
@@ -264,6 +276,12 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
     }
     public set ondblclick(value: (this: InfiniteCanvasInterface, event: MouseEvent) => any){
         this.eventCollection.setOn('dblclick', value);
+    }
+    public get onscrollend(): (this: InfiniteCanvasInterface, event: Event) => any{
+        return this.eventCollection.getOn('scrollend');
+    }
+    public set onscrollend(value: (this: InfiniteCanvasInterface, event: Event) => any){
+        this.eventCollection.setOn('scrollend', value);
     }
     public get ondrag(): (this: InfiniteCanvasInterface, event: DragEvent) => any{
         return this.eventCollection.getOn('drag');

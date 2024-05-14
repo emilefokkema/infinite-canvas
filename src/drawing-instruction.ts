@@ -7,9 +7,9 @@ import { Point } from "./geometry/point"
 import { Transformation } from "./transformation"
 import { getTempStateFnFromTransformationKind, sequence, useTempState } from "./instruction-utils"
 import { DrawnPathProperties } from "./interfaces/drawn-path-properties"
-import { CurrentPath } from "./interfaces/current-path"
+import { DrawablePath } from "./interfaces/drawable-path"
 
-function getAreaOfPath(path: CurrentPath, drawnPathProperties: DrawnPathProperties): Area{
+function getAreaOfPath(path: DrawablePath, drawnPathProperties: DrawnPathProperties): Area{
     let newlyDrawnArea: Area = path.area
     if(newlyDrawnArea && drawnPathProperties.lineWidth > 0){
         newlyDrawnArea = newlyDrawnArea.expandByDistance(drawnPathProperties.lineWidth / 2)
@@ -48,20 +48,20 @@ export class DrawingInstruction{
     public static forStrokingPath(
         instruction: Instruction,
         state: InfiniteCanvasState,
-        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+        getPath: (state: InfiniteCanvasState) => DrawablePath): DrawingInstruction{
             return DrawingInstruction.forPath(instruction, state, getDrawnPathPropertiesWhenStroked, getPath);
     }
     public static forFillingPath(
         instruction: Instruction,
         state: InfiniteCanvasState,
-        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+        getPath: (state: InfiniteCanvasState) => DrawablePath): DrawingInstruction{
             return DrawingInstruction.forPath(instruction, state, getDrawnPathPropertiesWhenFilled, getPath);
     }
-    public static forPath(
+    private static forPath(
         instruction: Instruction,
         state: InfiniteCanvasState,
         getDrawnPathProperties: (state: InfiniteCanvasState) => DrawnPathProperties,
-        getPath: (state: InfiniteCanvasState) => CurrentPath): DrawingInstruction{
+        getPath: (state: InfiniteCanvasState) => DrawablePath): DrawingInstruction{
             const stateIsTransformable: boolean = state.current.isTransformable();
             const transformationKind = stateIsTransformable ? TransformationKind.None : TransformationKind.Relative;
             const stateToDrawWith: InfiniteCanvasState = state.currentlyTransformed(stateIsTransformable);

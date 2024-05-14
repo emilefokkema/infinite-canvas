@@ -37,4 +37,13 @@ export class InfiniteCanvasPath implements CanvasPath{
 	public rect(x: number, y: number, w: number, h: number): void{
 		this.viewBox.rect(x, y, w, h);
 	}
+	public roundRect(
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		radii?: number | DOMPointInit | Iterable<number | DOMPointInit>
+	): void{
+		this.viewBox.roundRect(x, y, w, h, radii)
+	}
 }

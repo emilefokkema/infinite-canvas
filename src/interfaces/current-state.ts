@@ -6,4 +6,5 @@ export interface CurrentState{
     changeState(change: (state: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): void;
     saveState(): void;
     restoreState(): void;
+    resetState(): void
 }

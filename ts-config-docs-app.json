@@ -4,9 +4,11 @@
         "rootDir": ".",
         "composite": true,
         "moduleResolution": "node",
+        "baseUrl": ".",
         "paths": {
             "infinite-canvas": ["src/api-surface/infinite-canvas.ts"]
-        }
+        },
+        "noEmit": true
     },
     "include": ["docs/.vitepress/theme/**/*.*", "docs/.vitepress/shared/**/*", "examples/shared/**/*", "utils/**/*", "src/api-surface/**/*"]
 }

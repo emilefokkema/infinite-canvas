@@ -3,10 +3,8 @@ import { Application, TSConfigReader, type TypeDocOptions } from 'typedoc'
 
 export const outDir = fileURLToPath(new URL('./.temp', import.meta.url));
 
-export async function createApplication(): Promise<Application>{
-    const application = new Application();
-    application.options.addReader(new TSConfigReader())
-    await application.bootstrapWithPlugins({
+export async function createApplication(): Promise<Application>{    
+    const application = await Application.bootstrapWithPlugins({
         entryPoints: [fileURLToPath(new URL('../../../src/api-surface/infinite-canvas.ts', import.meta.url))],
         entryPointStrategy: 'expand',
         tsconfig: fileURLToPath(new URL('../../../ts-config-types.json', import.meta.url)),
@@ -19,6 +17,7 @@ export async function createApplication(): Promise<Application>{
         readme: 'none',
         entryDocument: 'index.md'
     } as Partial<TypeDocOptions>)
+    application.options.addReader(new TSConfigReader())
     return application;
 }
 

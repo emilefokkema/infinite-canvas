@@ -2,7 +2,7 @@ import { ViewBox } from "../interfaces/viewbox";
 import { Instruction } from "../instructions/instruction";
 import { TransformationKind } from "../transformation-kind";
 import {Area} from "../areas/area";
-import {ConvexPolygon} from "../areas/polygons/convex-polygon";
+import { getRectStrategy } from "../rect/get-rect-strategy";
 
 export class InfiniteCanvasText implements CanvasText{
 	constructor(private readonly viewBox: ViewBox){}
@@ -33,6 +33,6 @@ export class InfiniteCanvasText implements CanvasText{
 		}
 		const height: number = measured.actualBoundingBoxAscent !== undefined ? measured.actualBoundingBoxAscent + measured.actualBoundingBoxDescent : 1;
 		const ascent: number = measured.actualBoundingBoxAscent !== undefined ? measured.actualBoundingBoxAscent : 0;
-		return ConvexPolygon.createRectangle(x, y - ascent, width, height);
+		return getRectStrategy(x, y - ascent, width, height).getArea();
 	}
 }

@@ -7,6 +7,7 @@ import { TransformationRepresentation } from "../api-surface/transformation-repr
 import { Transformation } from "../transformation";
 import { Units } from "../api-surface/units";
 import { CoordinateSystem } from './coordinate-system';
+import { getRectWithFourEdges } from '../rect/get-rect-strategy';
 
 function measurementsAreOfEqualSize(one: CanvasMeasurement, other: CanvasMeasurement): boolean{
     if(!one){
@@ -49,7 +50,7 @@ export class CanvasRectangleImpl implements CanvasRectangle{
             return this;
         }
         const {viewboxWidth, viewboxHeight} = measurement;
-        const polygon = ConvexPolygon.createRectangle(0, 0, viewboxWidth, viewboxHeight);
+        const polygon = getRectWithFourEdges(0, 0, viewboxWidth, viewboxHeight).getArea();
         const coordinatesSwitch = this.coordinates.withCanvasMeasurement(measurement);
         return new CanvasRectangleImpl(coordinatesSwitch, measurement, polygon)
     }
@@ -86,7 +87,7 @@ export class CanvasRectangleImpl implements CanvasRectangle{
 
     public static create(measurement: CanvasMeasurement, units: Units): CanvasRectangleImpl{
         const {viewboxWidth, viewboxHeight} = measurement;
-        const polygon = ConvexPolygon.createRectangle(0, 0, viewboxWidth, viewboxHeight);
+        const polygon = getRectWithFourEdges(0, 0, viewboxWidth, viewboxHeight).getArea();
         const coordinates = CoordinatesSwitch.create(units, measurement);
         return new CanvasRectangleImpl(coordinates, measurement, polygon)
     }

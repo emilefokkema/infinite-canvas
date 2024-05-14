@@ -6,6 +6,8 @@ import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
 import { CurrentPath } from '../src/interfaces/current-path';
 import { Point } from "../src/geometry/point";
+import { getRectStrategy } from '../src/rect/get-rect-strategy';
+import { ExecutableStateChangingInstructionSet } from '../src/interfaces/executable-state-changing-instruction-set';
 
 function drawAndLog(instructionsWithPath: CurrentPath, state: InfiniteCanvasState): string[]{
     const result = instructionsWithPath.drawPath(
@@ -72,7 +74,7 @@ describe("a set of instructions that is also about a path", () => {
     });
 
     describe("that describes a path that is drawn, altered and then recreated", () => {
-        let recreatedPath: CurrentPath;
+        let recreatedPath: ExecutableStateChangingInstructionSet;
 
         beforeEach(() => {
             instructionsWithPath.moveTo(new Point(0, 0), currentState);
@@ -81,11 +83,10 @@ describe("a set of instructions that is also about a path", () => {
             instructionsWithPath.lineTo(new Point(0, 10), currentState);
             currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#00f"));
             instructionsWithPath.lineTo(new Point(5, 5), currentState);
-            recreatedPath = instructionsWithPath.recreatePath();
-        });
-
-        it("should have the same area", () => {
-            expect(recreatedPath.getInstructionsToClip().area).toEqual(instructionsWithPath.getInstructionsToClip().area);
+            recreatedPath = instructionsWithPath.drawPath(
+                (context) => context.fill(),
+                currentState,
+                {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []});
         });
 
         describe("and then the recreated path changes state", () => {
@@ -108,7 +109,8 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
     beforeEach(() => {
         currentState = defaultState;
         instructionsWithPath = InstructionsWithPath.create(currentState);
-        instructionsWithPath.rect(0, 0, 1, 1, currentState);
+        
+        getRectStrategy(0, 0, 1, 1).addSubpaths(instructionsWithPath, currentState)
         instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
             context.fill();
         }, currentState, {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []})

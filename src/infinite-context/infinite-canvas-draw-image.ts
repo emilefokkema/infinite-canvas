@@ -2,7 +2,24 @@ import { ViewBox } from "../interfaces/viewbox";
 import { Instruction } from "../instructions/instruction";
 import { TransformationKind } from "../transformation-kind";
 import {Area} from "../areas/area";
-import {ConvexPolygon} from "../areas/polygons/convex-polygon";
+import { getRectStrategy } from "../rect/get-rect-strategy";
+
+function isVideoFrame(image: CanvasImageSource): image is VideoFrame{
+	return typeof (image as VideoFrame).duration !== 'undefined'
+}
+
+function getWidthAndHeight(image: CanvasImageSource): {width: number | SVGAnimatedLength, height: number| SVGAnimatedLength}{
+	if(isVideoFrame(image)){
+		return {
+			width: image.displayWidth,
+			height: image.displayHeight
+		}
+	}
+	return {
+		width: image.width,
+		height: image.height
+	}
+}
 
 export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 	constructor(private readonly viewBox: ViewBox){}
@@ -22,9 +39,10 @@ export class InfiniteCanvasDrawImage implements CanvasDrawImage{
 		}else{
 			[image, sx, sy, sw, sh, dx, dy, dw, dh] = argumentsArray;
 		}
-		const drawnWidth: number = this.getDrawnLength(image.width, sx, sw, dw);
-		const drawnHeight: number = this.getDrawnLength(image.height, sy, sh, dh);
-		const drawnRectangle: Area = ConvexPolygon.createRectangle(dx, dy, drawnWidth, drawnHeight);
+		const { width, height } = getWidthAndHeight(image)
+		const drawnWidth: number = this.getDrawnLength(width, sx, sw, dw);
+		const drawnHeight: number = this.getDrawnLength(height, sy, sh, dh);
+		const drawnRectangle: Area = getRectStrategy(dx, dy, drawnWidth, drawnHeight).getArea()
 		const drawingInstruction: Instruction = this.getDrawImageInstruction(arguments.length, image, sx, sy, sw, sh, dx, dy, dw, dh);
 		this.viewBox.addDrawing(drawingInstruction, drawnRectangle, TransformationKind.Relative, true);
 	}

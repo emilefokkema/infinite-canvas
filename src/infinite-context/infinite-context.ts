@@ -62,6 +62,9 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public restore(): void{
 		this.canvasState.restore();
 	}
+	public reset(): void{
+		this.canvasState.reset();
+	}
 	public getTransform(): DOMMatrix{
 		return this.canvasTransform.getTransform();
 	}
@@ -215,6 +218,9 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public set textBaseline(value: CanvasTextBaseline){
 		this.canvasTextDrawingStyles.textBaseline = value;
 	}
+	public set fontKerning(value: CanvasFontKerning){
+		this.canvasTextDrawingStyles.fontKerning = value;
+	}
 	public arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{
 		this.canvasPath.arc(x, y, radius, startAngle, endAngle, anticlockwise);
 	}
@@ -246,9 +252,15 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 		this.canvasPath.quadraticCurveTo(cpx, cpy, x, y);
 	}
 	public rect(x: number, y: number, w: number, h: number): void{
-		if(!Number.isFinite(x) && !Number.isFinite(y)){
-			throw new Error(`The starting coordinates provided (${x} and ${y}) do not determine a direction.`)
-		}
 		this.canvasPath.rect(x, y, w, h);
+	}
+	public roundRect(
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		radii?: number | DOMPointInit | Iterable<number | DOMPointInit>
+	): void{
+		this.canvasPath.roundRect(x, y, w, h, radii);
 	}
 }
