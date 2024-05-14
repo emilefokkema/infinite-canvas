@@ -1,7 +1,7 @@
 {
   "name": "ef-infinite-canvas",
   "type": "module",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "An infinite version of the html canvas",
   "main": "./dist/infinite-canvas.umd.cjs",
   "module": "./dist/infinite-canvas.js",
