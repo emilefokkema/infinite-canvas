@@ -1,0 +1,491 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`an infinite canvas context > saves, changes state, begins drawing a path > and then fills a rect, restores to the previous state and then fills the path > should end up with an equal number of saves and restores 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.save()",
+  "context.fillStyle = "#00f"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.fill()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(10,0)",
+  "context.lineTo(10,10)",
+  "context.lineTo(0,10)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > saves, changes state, begins drawing a path > and then restores to the previous state, fills a rect and then fills the path > should end up with an equal number of saves and restores 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.fill()",
+  "context.lineWidth = 1",
+  "context.save()",
+  "context.fillStyle = "#00f"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(10,0)",
+  "context.lineTo(10,10)",
+  "context.lineTo(0,10)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that does this > should have done this 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.setTransform(1,0,0,1,10,10)",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(25,0)",
+  "context.lineTo(25,25)",
+  "context.lineTo(0,25)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.setTransform(1,0,0,1,60,10)",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(25,0)",
+  "context.lineTo(25,25)",
+  "context.lineTo(0,25)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a path, transforms and then strokes > should have kept that order 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(110,10)",
+  "context.lineTo(110,110)",
+  "context.lineTo(10,110)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.lineWidth = 6",
+  "context.setTransform(0.2,0,0,1,0,0)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a square by translating > and then fully clears the drawn square > should not have added a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > that draws a square by translating > and then partly clears the drawn square > should have added a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.setTransform(1,0,0,1,1,0)",
+  "context.moveTo(0,0)",
+  "context.setTransform(1,0,0,1,1,1)",
+  "context.lineTo(0,0)",
+  "context.setTransform(1,0,0,1,0,1)",
+  "context.lineTo(0,0)",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0.5,0,2,2)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a square by translating > should have called transform before each move 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.setTransform(1,0,0,1,1,0)",
+  "context.moveTo(0,0)",
+  "context.setTransform(1,0,0,1,1,1)",
+  "context.lineTo(0,0)",
+  "context.setTransform(1,0,0,1,0,1)",
+  "context.lineTo(0,0)",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that saves and fills a rect > should call restore() after drawing 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(30,10)",
+  "context.lineTo(30,30)",
+  "context.lineTo(10,30)",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.fill()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > that saves state, begins a path, restores state and fills a rect > should end up with an equal number of saves and restores 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that saves, begins a path, begins another path, fills it, restores and then fills a rect > should end up with an equal number of saves and restores 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that saves, creates a path, fills two rects, restores and strokes > should have the same number of saves and restores 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.save()",
+  "context.setTransform(1,0,0,1,1,1)",
+  "context.save()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(1,0)",
+  "context.lineTo(1,1)",
+  "context.lineTo(0,1)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then changes the state and clears part of the drawing and draws something else > should have drawn using the state from before the clearing 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+  "context.fillStyle = "#00f"",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(2,0,4,4)",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(3,1)",
+  "context.lineTo(4,1)",
+  "context.lineTo(4,2)",
+  "context.lineTo(3,2)",
+  "context.closePath()",
+  "context.moveTo(3,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then clears an area containing that instruction > and which then draws something else > should have cleared a rect only once more and should not have executed the old instruction again 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#00f"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then clears an area containing that instruction > and which then draws something else without changing the state > should have cleared a rect only once more and should still use the old state 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then clears an area containing that instruction > should have cleared a rectangle 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then draws something else > and which then clears the first part > should have remembered the state for the second part 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(4,1)",
+  "context.lineTo(6,1)",
+  "context.lineTo(6,3)",
+  "context.lineTo(4,3)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then draws something else > and which then clears the first part and part of the second > should have remembered the state for the second part 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(4,1)",
+  "context.lineTo(6,1)",
+  "context.lineTo(6,3)",
+  "context.lineTo(4,3)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,0,4.5,4)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and which then draws something else > should not have altered the state 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(4,1)",
+  "context.lineTo(6,1)",
+  "context.lineTo(6,3)",
+  "context.lineTo(4,3)",
+  "context.closePath()",
+  "context.moveTo(4,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and who changes state, draws something, changes state back and draws something again > and who then clears a rect containing the second drawing > should only have set the remaining state 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(9,1)",
+  "context.lineTo(11,1)",
+  "context.lineTo(11,3)",
+  "context.lineTo(9,3)",
+  "context.closePath()",
+  "context.moveTo(9,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > and who changes state, draws something, changes state back and draws something again > should have set a new state three times 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+  "context.fillStyle = "#00f"",
+  "context.beginPath()",
+  "context.moveTo(5,1)",
+  "context.lineTo(7,1)",
+  "context.lineTo(7,3)",
+  "context.lineTo(5,3)",
+  "context.closePath()",
+  "context.moveTo(5,1)",
+  "context.fill()",
+  "context.fillStyle = "#f00"",
+  "context.beginPath()",
+  "context.moveTo(9,1)",
+  "context.lineTo(11,1)",
+  "context.lineTo(11,3)",
+  "context.lineTo(9,3)",
+  "context.closePath()",
+  "context.moveTo(9,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > whose state is changed and who draws something > should have modified the context correctly 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+]
+`;

@@ -1,0 +1,467 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`an infinite canvas context > should have drawn round rect like this 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(104,100)",
+  "context.lineTo(104,100)",
+  "context.ellipse(104,108,16,8,0,4.71238898,0,false)",
+  "context.lineTo(120,116)",
+  "context.save()",
+  "context.transform(1,0,0,1,116,116)",
+  "context.arc(0,0,4,0,1.57079633,false)",
+  "context.restore()",
+  "context.lineTo(116,120)",
+  "context.ellipse(116,112,16,8,0,1.57079633,3.14159265,false)",
+  "context.lineTo(100,104)",
+  "context.save()",
+  "context.transform(1,0,0,1,104,104)",
+  "context.arc(0,0,4,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 2`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(115,100)",
+  "context.lineTo(115,100)",
+  "context.lineTo(115,100)",
+  "context.ellipse(115,130,60,30,0,4.71238898,0,false)",
+  "context.lineTo(175,130)",
+  "context.save()",
+  "context.transform(1,0,0,1,160,130)",
+  "context.arc(0,0,15,0,1.57079633,false)",
+  "context.restore()",
+  "context.lineTo(160,145)",
+  "context.ellipse(160,115,60,30,0,1.57079633,3.14159265,false)",
+  "context.lineTo(100,115)",
+  "context.save()",
+  "context.transform(1,0,0,1,115,115)",
+  "context.arc(0,0,15,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 3`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(115,100)",
+  "context.lineTo(140,100)",
+  "context.ellipse(140,130,60,30,0,4.71238898,0,false)",
+  "context.lineTo(200,185)",
+  "context.save()",
+  "context.transform(1,0,0,1,185,185)",
+  "context.arc(0,0,15,0,1.57079633,false)",
+  "context.restore()",
+  "context.lineTo(160,200)",
+  "context.ellipse(160,170,60,30,0,1.57079633,3.14159265,false)",
+  "context.lineTo(100,115)",
+  "context.save()",
+  "context.transform(1,0,0,1,115,115)",
+  "context.arc(0,0,15,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 4`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(106.66666667,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,120)",
+  "context.lineTo(126.66666667,120)",
+  "context.ellipse(126.66666667,106.66666667,26.66666667,13.33333333,0,1.57079633,3.14159265,false)",
+  "context.lineTo(100,106.66666667)",
+  "context.save()",
+  "context.transform(1,0,0,1,106.66666667,106.66666667)",
+  "context.arc(0,0,6.66666667,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 5`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(106.66666667,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,80)",
+  "context.lineTo(126.66666667,80)",
+  "context.ellipse(126.66666667,93.33333333,26.66666667,13.33333333,0,4.71238898,3.14159265,true)",
+  "context.lineTo(100,93.33333333)",
+  "context.save()",
+  "context.transform(1,0,0,1,106.66666667,93.33333333)",
+  "context.arc(0,0,6.66666667,3.14159265,1.57079633,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 6`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(93.33333333,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineTo(-1.41421356,120)",
+  "context.lineTo(73.33333333,120)",
+  "context.ellipse(73.33333333,106.66666667,26.66666667,13.33333333,0,1.57079633,0,true)",
+  "context.lineTo(100,106.66666667)",
+  "context.save()",
+  "context.transform(1,0,0,1,93.33333333,106.66666667)",
+  "context.arc(0,0,6.66666667,0,4.71238898,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 7`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(93.33333333,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineTo(-1.41421356,80)",
+  "context.lineTo(73.33333333,80)",
+  "context.ellipse(73.33333333,93.33333333,26.66666667,13.33333333,0,4.71238898,0,false)",
+  "context.lineTo(100,93.33333333)",
+  "context.save()",
+  "context.transform(1,0,0,1,93.33333333,93.33333333)",
+  "context.arc(0,0,6.66666667,0,1.57079633,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 8`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(104,100)",
+  "context.lineTo(104,100)",
+  "context.ellipse(104,108,16,8,0,4.71238898,0,false)",
+  "context.lineTo(120,201.41421356)",
+  "context.lineTo(104,201.41421356)",
+  "context.lineTo(100,201.41421356)",
+  "context.lineTo(100,104)",
+  "context.save()",
+  "context.transform(1,0,0,1,104,104)",
+  "context.arc(0,0,4,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 9`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(104,100)",
+  "context.lineTo(104,100)",
+  "context.ellipse(104,92,16,8,0,1.57079633,0,true)",
+  "context.lineTo(120,-1.41421356)",
+  "context.lineTo(104,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,96)",
+  "context.save()",
+  "context.transform(1,0,0,1,104,96)",
+  "context.arc(0,0,4,3.14159265,1.57079633,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 10`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(96,100)",
+  "context.lineTo(96,100)",
+  "context.ellipse(96,108,16,8,0,4.71238898,3.14159265,true)",
+  "context.lineTo(80,201.41421356)",
+  "context.lineTo(96,201.41421356)",
+  "context.lineTo(100,201.41421356)",
+  "context.lineTo(100,104)",
+  "context.save()",
+  "context.transform(1,0,0,1,96,104)",
+  "context.arc(0,0,4,0,4.71238898,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 11`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(96,100)",
+  "context.lineTo(96,100)",
+  "context.ellipse(96,92,16,8,0,1.57079633,3.14159265,false)",
+  "context.lineTo(80,-1.41421356)",
+  "context.lineTo(96,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,96)",
+  "context.save()",
+  "context.transform(1,0,0,1,96,96)",
+  "context.arc(0,0,4,0,1.57079633,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 12`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(115,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,201.41421356)",
+  "context.lineTo(115,201.41421356)",
+  "context.lineTo(100,201.41421356)",
+  "context.lineTo(100,115)",
+  "context.save()",
+  "context.transform(1,0,0,1,115,115)",
+  "context.arc(0,0,15,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 13`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(115,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,-1.41421356)",
+  "context.lineTo(115,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,85)",
+  "context.save()",
+  "context.transform(1,0,0,1,115,85)",
+  "context.arc(0,0,15,3.14159265,1.57079633,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 14`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(85,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineTo(-1.41421356,201.41421356)",
+  "context.lineTo(85,201.41421356)",
+  "context.lineTo(100,201.41421356)",
+  "context.lineTo(100,115)",
+  "context.save()",
+  "context.transform(1,0,0,1,85,115)",
+  "context.arc(0,0,15,0,4.71238898,true)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > should have drawn round rect like this 15`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(85,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineTo(-1.41421356,-1.41421356)",
+  "context.lineTo(85,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,85)",
+  "context.save()",
+  "context.transform(1,0,0,1,85,85)",
+  "context.arc(0,0,15,0,1.57079633,false)",
+  "context.restore()",
+  "context.moveTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a round rect > should have given these instructions 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(15,10)",
+  "context.lineTo(45,10)",
+  "context.save()",
+  "context.transform(1,0,0,1,45,15)",
+  "context.arc(0,0,5,4.71238898,0,false)",
+  "context.restore()",
+  "context.lineTo(50,45)",
+  "context.save()",
+  "context.transform(1,0,0,1,45,45)",
+  "context.arc(0,0,5,0,1.57079633,false)",
+  "context.restore()",
+  "context.lineTo(15,50)",
+  "context.save()",
+  "context.transform(1,0,0,1,15,45)",
+  "context.arc(0,0,5,1.57079633,3.14159265,false)",
+  "context.restore()",
+  "context.lineTo(10,15)",
+  "context.save()",
+  "context.transform(1,0,0,1,15,15)",
+  "context.arc(0,0,5,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(10,10)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a round rect with a radius that is zero > should have given these instructions 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(45,10)",
+  "context.save()",
+  "context.transform(1,0,0,1,45,15)",
+  "context.arc(0,0,5,4.71238898,0,false)",
+  "context.restore()",
+  "context.lineTo(50,50)",
+  "context.lineTo(15,50)",
+  "context.save()",
+  "context.transform(1,0,0,1,15,45)",
+  "context.arc(0,0,5,1.57079633,3.14159265,false)",
+  "context.restore()",
+  "context.closePath()",
+  "context.moveTo(10,10)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a round rect with big radii > should have scaled the radii 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(37.5,30)",
+  "context.lineTo(95,30)",
+  "context.save()",
+  "context.transform(1,0,0,1,95,45)",
+  "context.arc(0,0,15,4.71238898,0,false)",
+  "context.restore()",
+  "context.lineTo(110,45)",
+  "context.save()",
+  "context.transform(1,0,0,1,95,45)",
+  "context.arc(0,0,15,0,1.57079633,false)",
+  "context.restore()",
+  "context.lineTo(37.5,60)",
+  "context.save()",
+  "context.transform(1,0,0,1,37.5,52.5)",
+  "context.arc(0,0,7.5,1.57079633,3.14159265,false)",
+  "context.restore()",
+  "context.lineTo(30,37.5)",
+  "context.save()",
+  "context.transform(1,0,0,1,37.5,37.5)",
+  "context.arc(0,0,7.5,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(30,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a round rect with big radii on invisible corners > should not have scaled the radii 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(45,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineTo(201.41421356,60)",
+  "context.lineTo(45,60)",
+  "context.save()",
+  "context.transform(1,0,0,1,45,45)",
+  "context.arc(0,0,15,1.57079633,3.14159265,false)",
+  "context.restore()",
+  "context.lineTo(30,45)",
+  "context.save()",
+  "context.transform(1,0,0,1,45,45)",
+  "context.arc(0,0,15,3.14159265,4.71238898,false)",
+  "context.restore()",
+  "context.moveTo(30,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;

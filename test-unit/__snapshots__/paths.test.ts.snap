@@ -1,0 +1,201 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`an infinite canvas context > that creates a rectangular path, fills another rectangle and then fills the created path > should have filled both rectangles 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(100,50)",
+  "context.lineTo(100,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.fill()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(50,0)",
+  "context.lineTo(50,50)",
+  "context.lineTo(0,50)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that creates a rectangular path, strokes another rectangle and then strokes the created path > should have stroked both rectangles 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.strokeStyle = "#f00"",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(100,50)",
+  "context.lineTo(100,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.stroke()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(50,0)",
+  "context.lineTo(50,50)",
+  "context.lineTo(0,50)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a line without calling 'moveTo' > should draw a line 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(20,10)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a path, fills it and then adds to the path > and then strokes the path > should have executed the last path modification only once 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(30,100)",
+  "context.lineTo(100,100)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(30,100)",
+  "context.lineTo(100,100)",
+  "context.lineWidth = 1",
+  "context.lineTo(100,30)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rectangle, creates a path inside it, clears a rectangle inside the first rectangle and then fills the created path > should have executed everything 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.closePath()",
+  "context.moveTo(0,0)",
+  "context.fill()",
+  "context.fillStyle = "#00f"",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,0,75,75)",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(50,0)",
+  "context.lineTo(50,50)",
+  "context.lineTo(0,50)",
+  "context.lineTo(0,0)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that makes a path, fills it and then fills an overlapping rect > and then fills the path again > should not have forgotten the previous path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.fillStyle = "#00f"",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+  "context.fillStyle = "#f00"",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.fillStyle = "#00f"",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that makes a path, fills it and then fills an overlapping rect > should draw the two rectangles in the right order 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.fillStyle = "#f00"",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(2,0)",
+  "context.lineTo(2,2)",
+  "context.lineTo(0,2)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.fillStyle = "#00f"",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(3,1)",
+  "context.lineTo(3,3)",
+  "context.lineTo(1,3)",
+  "context.closePath()",
+  "context.moveTo(1,1)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that makes a path, fills it, clears it completely with a clearRect, expands it and strokes it > should no longer fill the path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(1,1)",
+  "context.lineTo(1,2)",
+  "context.lineTo(2,2)",
+  "context.lineWidth = 1",
+  "context.lineTo(2,1)",
+  "context.stroke()",
+]
+`;
