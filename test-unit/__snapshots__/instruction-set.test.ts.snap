@@ -17,7 +17,7 @@ exports[`an instruction set > that begins drawing a path > and then fills it > a
 
 exports[`an instruction set > that changes state and draws a rectangle > and changes state and draws another rectangle > should have recorded everything in the right order 1`] = `
 [
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",
@@ -27,7 +27,7 @@ exports[`an instruction set > that changes state and draws a rectangle > and cha
   "context.closePath()",
   "context.moveTo(0,0)",
   "context.fill()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.beginPath()",
   "context.moveTo(2,0)",
   "context.lineTo(3,0)",
@@ -43,7 +43,7 @@ exports[`an instruction set > that changes state and draws a rectangle > and the
 
 exports[`an instruction set > that changes state and draws a rectangle > and then partially clears that rectangle > should end up with a rectangle followed by a clearRect 1`] = `
 [
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.lineWidth = 1",
   "context.beginPath()",
   "context.moveTo(0,0)",

@@ -10,7 +10,7 @@ exports[`a clipped paths > and another one > containing one more clipped path > 
   "context.lineTo(0,1)",
   "context.clip()",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(1,1)",
   "context.clip()",
 ]
