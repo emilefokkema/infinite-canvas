@@ -1,7 +1,9 @@
 import { fileURLToPath } from 'url'
 import path from 'path';
+import {default as express, text, type Router} from 'express'
 import { build, createServer, type PluginOption, type ViteDevServer } from 'vite'
 import { getExampleDir, findExampleDirs, findTestCaseFiles, type TestCaseFile } from '../retrieval/retrieve-examples'
+import { testCasesStaticPath } from '../retrieval/constants'
 
 export interface ExamplesOptions{
     external?: ExamplesExternalOptions
@@ -104,6 +106,9 @@ export function addTestCases(): PluginOption{
     let testCaseFiles: TestCaseFile[];
     return {
         name: 'vite-plugin-add-test-cases',
+        configureServer(server){
+            server.middlewares.use('/static', express.static(testCasesStaticPath))
+        },
         async resolveId(id: string){
             if(id === virtualModuleId){
                 return '\0' + virtualModuleId
