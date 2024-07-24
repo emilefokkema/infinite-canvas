@@ -1,19 +1,10 @@
 import InfiniteCanvas from 'infinite-canvas'
-import type { InfiniteCanvasRenderingContext2D } from 'infinite-canvas-api';
+import type { TestCase } from '../../../../test-cases/frontend/test-case'
 import './index.css'
 
-interface TestCase{
-    code: (ctx: InfiniteCanvasRenderingContext2D) => void
-    distortion?: {
-        screenWidth: string
-        screenHeight: string
-        viewboxWidth: number,
-        viewboxHeight: number
-    }
-}
 
-async function drawTestCase(testCaseFile: string): Promise<void>{
-    const path = `/test-cases/${testCaseFile}`;
+async function drawTestCase(testCaseId: string): Promise<void>{
+    const path = `/test-cases/${testCaseId}.mjs`;
     const {default: testCase}: {default: TestCase} = await import(path)
     const canvasEl = document.getElementById('canvas') as HTMLCanvasElement;
     if(testCase.distortion){

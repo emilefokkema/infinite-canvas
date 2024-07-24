@@ -1,12 +1,12 @@
 <template>
-    <div class="example-container language-infinite-canvas">
+    <div class="example-container language-infinite-canvas" :class="{'dark': isDark}" ref="exampleContainer">
         <div class="iframe-container">
             <div 
                 class="overlay"
                 :class="{'active': overlayActive, 'disappearing': overlayDisappearing}">
                 <div class="overlay-message">{{ overlayMessage }}</div>
             </div>
-            <iframe :style="{'height': height + 'px'}" ref="iFrame" :class="{'no-overflow': overflowHidden}" :scrolling="overflowHidden ? 'no' : 'yes'"></iframe>
+            <iframe :style="{'height': height + 'px'}" ref="iFrame" :src="darkExampleUrl" :class="{'no-overflow': overflowHidden}" :scrolling="overflowHidden ? 'no' : 'yes'"></iframe>
         </div>
         <div class="example-footer">
             <stackblitz-button :example-id="exampleId"/>
@@ -15,11 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, inject } from 'vue'
+import { ref, onMounted, toRefs, computed, watchEffect } from 'vue'
+import { useData } from 'vitepress';
 import StackblitzButton from './StackblitzButton.vue'
-import { exampleInfiniteCanvasRegistryInjectionKey } from './constants';
-import type { ExampleInfiniteCanvasRegistry } from './infinite-canvas-example/example-infinite-canvas-registry';
+import { messages } from './infinite-canvas-example/constants'
+import { useDarkIframeUrl } from '../../../utils/dark-theme/frontend/vue-plugin'
+import type { ViteContentType } from '../../../utils/dark-theme/frontend/shared/vite-content-type';
 
+const viteContentType: ViteContentType = import.meta.env.MODE === 'development' ? 'served' : 'built';
 const props = defineProps({
     exampleId: {
         type: String,
@@ -36,11 +39,25 @@ const props = defineProps({
         default: 250
     }
 })
-const registry = inject(exampleInfiniteCanvasRegistryInjectionKey) as ExampleInfiniteCanvasRegistry
+const { exampleId } = toRefs(props)
 const iFrame = ref<HTMLIFrameElement | null>(null)
+const exampleContainer = ref<HTMLDivElement | null>(null)
+const { isDark } = useData();
 const overlayActive = ref<boolean>(false);
 const overlayDisappearing = ref<boolean>(false)
 const overlayMessage = ref<string | null>(null)
+const exampleUrl = computed(() => {
+    if(typeof window === 'undefined' || !window || !window.location){
+        return undefined;
+    }
+    return new URL(`/examples/${exampleId.value}/`, window.location.href).toString()
+})
+const darkExampleUrl = useDarkIframeUrl({
+    iFrame,
+    viteContentType,
+    dark: isDark,
+    url: exampleUrl
+})
 
 async function displayOverlay(message: string): Promise<void>{
     if(overlayActive.value){
@@ -55,17 +72,46 @@ async function displayOverlay(message: string): Promise<void>{
     overlayDisappearing.value = false;
 }
 
-onMounted(() => {
+watchEffect((onCleanup) => {
+    if(typeof window === 'undefined' || !window){
+        return;
+    }
     const iFrameValue = iFrame.value;
     if(!iFrameValue){
         return;
     }
-    const url = new URL(`/examples/${props.exampleId}/`, location.href).toString();
-    const subscription = registry.subscribeToExampleInfiniteCanvases(iFrameValue);
-    subscription.wheelIgnored.subscribe(() => displayOverlay('Use Ctrl + scroll to zoom'))
-    subscription.touchIgnored.subscribe(() => displayOverlay('Use two fingers to move'))
-    iFrameValue.src = url;
+    const iFrameWindow = iFrameValue.contentWindow;
+    if(!iFrameWindow){
+        return;
+    }
+    const touchIgnoredListener = messages.createMessageListener(
+        iFrameWindow,
+        'touchignored', () => displayOverlay('Use two fingers to move')
+    )
+    const wheelIgnoredListener = messages.createMessageListener(
+        iFrameWindow,
+        'wheelignored',
+        () => displayOverlay('Use Ctrl + scroll to zoom')
+    )
+    window.addEventListener('message', wheelIgnoredListener);
+    window.addEventListener('message', touchIgnoredListener)
+    onCleanup(() => {
+        window.removeEventListener('message', wheelIgnoredListener)
+        window.removeEventListener('message', touchIgnoredListener)
+    })
 })
+
+onMounted(() => {
+    const iFrameValue = iFrame.value;
+    if(iFrameValue){
+        iFrameValue.src = darkExampleUrl.value || '';
+    }
+    const exampleContainerValue = exampleContainer.value;
+    if(exampleContainerValue && isDark.value){
+        exampleContainerValue.classList.add('dark')
+    }
+})
+
 </script>
 
 <style scoped lang="css">
@@ -80,10 +126,13 @@ iframe{
     display: none;
     opacity: .7;
     position: absolute;
-    background-color: #000000;
+    background-color: #fff;
     width: 100%;
     height: 100%;
     
+}
+.example-container.dark .overlay{
+    background-color: #000;
 }
 .overlay.active{
     display: initial;

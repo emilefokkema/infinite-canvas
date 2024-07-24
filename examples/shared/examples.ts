@@ -1,10 +1,6 @@
-export interface ExampleDescription{
-    title: string
+export interface ExampleProject {
     id: string,
-    kind: 'use-case' | 'test-case'
-}
-
-export interface ExampleProject extends ExampleDescription{
+    title: string
     files: {[name: string]: string}
 }
 

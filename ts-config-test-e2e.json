@@ -15,6 +15,9 @@
         },
         "lib": ["dom"]
     },
-    "include": ["test-e2e/**/*.*","src/api-surface/**/*", "utils/**/*", "test-utils/**/*"],
+    "references": [
+        {"path": "./test-cases/tsconfig.node.json"}
+    ],
+    "include": ["test-e2e/**/*.*","src/api-surface/**/*", "test-utils/**/*"],
     "exclude": ["test-e2e/setup.ts", "test-e2e/resolve-test-cases.ts", "test-e2e/test-page-lib/impl/**/*"]
 }

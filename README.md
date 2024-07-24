@@ -49,4 +49,9 @@ npm run test-e2e
 ```
 which will start a server that serves pages in which `InfiniteCanvas` is used, and which will then run `jest` tests that use [Puppeteer](https://pptr.dev/) to manipulate those pages and [`jest-image-snapshot`](https://github.com/americanexpress/jest-image-snapshot#readme) to compare screenshots.
 
+## Local development
+
+First run `npm run dev-app:build` once. Then `npm run dev` will run an app that displays all manner of use cases for InfiniteCanvas, served by Vite.
+
+
 *Even though not much has happened in this repository lately, I have not forgotten about it. Quite to the contrary, there are a lot more features I'm planning to add in the not-too-distant future.*

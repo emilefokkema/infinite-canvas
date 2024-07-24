@@ -1,0 +1,9 @@
+:root{
+    background-color: #333;
+    --light: #bbb;
+    color: var(--light);
+    
+}
+.canvas-container{
+    border-color: var(--light)
+}

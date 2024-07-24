@@ -4,10 +4,11 @@
     {"path": "./ts-config-test-e2e.json"},
     {"path": "./ts-config-e2e-test-page.json"},
     {"path": "./ts-config-test.json"},
-    {"path": "./ts-config-examples-catalog.json"},
-    {"path": "./ts-config-examples-backend.json"},
     {"path": "./ts-config-docs-config.json"},
-    {"path": "./ts-config-docs-app.json"}
+    {"path": "./ts-config-docs-app.json"},
+    {"path": "./dev-app/frontend/tsconfig.json"},
+    {"path": "./dev-app/backend/tsconfig.json"},
+    {"path": "./dev-app/examples-runner/test-case/tsconfig.json"}
   ],
   "files": [],
   "compilerOptions": {

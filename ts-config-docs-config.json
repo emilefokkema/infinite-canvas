@@ -7,6 +7,14 @@
         "module": "ES2020",
         "resolveJsonModule": true
     },
-    "include": ["docs/.vitepress/**/*", "docs/**/*paths.ts", "examples/backend/**/*", "examples/shared/**/*", "package.json"],
+    "references": [
+        {"path": "examples/tsconfig.node.json"}
+    ],
+    "include": [
+        "docs/.vitepress/**/*",
+        "docs/**/*paths.ts",
+        "package.json",
+        "utils/vite/**/*"
+    ],
     "exclude": ["docs/.vitepress/theme/**/*"]
 }

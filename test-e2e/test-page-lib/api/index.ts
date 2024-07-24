@@ -28,7 +28,7 @@ export interface TestPageLib{
 }
 
 export interface TestCaseLib{
-    drawTestCase(testCaseFile: string): Promise<void>
+    drawTestCase(testCaseId: string): Promise<void>
 }
 
 export type { 

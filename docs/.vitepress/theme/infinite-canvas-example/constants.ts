@@ -1,4 +1,8 @@
-export const EXAMPLE_INFINITE_CANVAS_INITIALIZED = 'EXAMPLE_INFINITE_CANVAS_INITIALIZED'
-export const EXAMPLE_INFINITE_CANVAS_REGISTERED = 'EXAMPLE_INFINITE_CANVAS_REGISTERED'
-export const WHEEL_IGNORED = 'WHEEL_IGNORED'
-export const TOUCH_IGNORED = 'TOUCH_IGNORED'
+import { getMessages } from '../../../../utils/window-messages'
+
+export interface ExampleCanvasEventMap{
+    'wheelignored': {}
+    'touchignored': {}
+}
+
+export const messages = getMessages<ExampleCanvasEventMap>()

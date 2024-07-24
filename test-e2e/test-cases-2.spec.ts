@@ -1,6 +1,8 @@
+/// <reference types="../test-cases/backend/test-case-metadata-list"/>
+
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
 import type { Page, Browser } from 'puppeteer'
-import testCases from 'virtual:test-cases-2'
+import testCases from 'virtual:test-cases-metadata-3-1'
 import { getPageInBrowser, getScreenshot, launchBrowser } from './utils'
 import '../test-utils/expect-extensions'
 

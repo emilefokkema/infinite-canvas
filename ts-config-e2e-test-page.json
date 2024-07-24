@@ -15,6 +15,9 @@
         },
         "lib": ["dom"]
     },
+    "references": [
+        {"path": "test-cases/tsconfig.frontend.json"}
+    ],
     "include": [
         "test-e2e/test-page-lib/impl/**/*",
         "test-e2e/test-page-lib/api/**/*",

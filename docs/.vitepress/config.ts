@@ -1,10 +1,22 @@
 import { fileURLToPath } from 'url'
 import { defineConfig } from 'vitepress'
-import { addExamples } from '../../examples/backend/vite-plugin'
+import { createViteConfig as createExamplesViteConfig } from '../../examples/runner/create-vite-config'
+import { serveOther, buildOther, OtherOptions } from '../../utils/vite'
 import addApi from './api-docs/serve-plugin'
 import replaceVersion from './replace-version'
 
 const exampleInfiniteCanvasPath = fileURLToPath(new URL('./theme/infinite-canvas-example/example-infinite-canvas', import.meta.url))
+const infiniteCanvasPath = fileURLToPath(new URL('../../src/infinite-canvas.ts', import.meta.url));
+const examplesOptions: OtherOptions = {
+  id: 'examples',
+  path: '/examples',
+  config: createExamplesViteConfig({
+    infiniteCanvasPath: exampleInfiniteCanvasPath,
+    alias: {
+      'infinite-canvas': infiniteCanvasPath
+    }
+  })
+};
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -45,18 +57,22 @@ export default defineConfig({
     build: {
       emptyOutDir: false
     },
+    clearScreen: false,
+    server: {
+      port: 5173,
+      strictPort: true
+    },
     resolve: {
       alias: {
-        'infinite-canvas': fileURLToPath(new URL('../../src/infinite-canvas.ts', import.meta.url))
+        'infinite-canvas': infiniteCanvasPath
       }
     },
     plugins: [
-      addExamples({
-        external: {
-          publicPath: '/examples'
-        },
-        infiniteCanvasPath: exampleInfiniteCanvasPath
+      serveOther({
+        ...examplesOptions,
+        server: {port: 5173}
       }),
+      buildOther(examplesOptions),
       addApi(),
       replaceVersion()
     ]
