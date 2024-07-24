@@ -48,7 +48,7 @@ export function addIndexDarkToInput(): PluginOption{
                 addInputForIndexDark(root, 'root-index-dark');
             }
             for(const {input, alias} of findExistingInputs(existingInput)){
-                if(!input || !/\/index\.html$/.test(input)){
+                if(!input || !/[\\/]index\.html$/.test(input)){
                     continue;
                 }
                 const directory = path.dirname(input)
@@ -71,13 +71,13 @@ export function addIndexDarkToInput(): PluginOption{
             }
         },
         resolveId(id){
-            if(!/\/index-dark\.html/.test(id)){
+            if(!/[\\/]index-dark\.html/.test(id)){
                 return;
             }
             return id;
         },
         async load(id){
-            if(!/\/index-dark\.html/.test(id)){
+            if(!/[\\/]index-dark\.html/.test(id)){
                 return;
             }
             const directory = path.dirname(id);

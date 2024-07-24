@@ -1,7 +1,6 @@
 import { fileURLToPath } from "url"
 import path from 'path'
 import fs from 'fs'
-import { readFile } from 'fs/promises'
 import { PluginOption, HtmlTagDescriptor, build } from "vite"
 import { DARK_THEME_STYLE_ID, DARK_THEME_CSS_CONTENT_ID } from '../shared/constants'
 
@@ -21,12 +20,11 @@ function isDarkRequested(fileName: string, originalUrl: string | undefined): boo
     if(originalUrl){
         return new URL(originalUrl, 'http://www.example.com').searchParams.get('dark') === 'true'
     }
-    return /\/index-dark\.html/.test(fileName);
+    return /[\\/]index-dark\.html/.test(fileName);
 }
 
 export function addDarkCssLoader(): PluginOption{
     const loadDarkThemePath = fileURLToPath(new URL('../frontend/shared/load-dark-theme.ts', import.meta.url))
-    //const loadDarkThemeModuleId = 'dark-theme-plugin-load-dark-theme';
     let root: string
     let base: string;
     let outDir: string;
