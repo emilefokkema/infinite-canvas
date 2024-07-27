@@ -1,12 +1,7 @@
 import path from 'path'
 import { readFile } from "fs/promises"
 import { getExamplesDirs } from "./get-examples-dirs"
-
-export interface ExampleMetadata{
-    dirPath: string
-    dirName: string
-    title: string
-}
+import { ExampleMetadata } from './example-metadata'
 
 interface ExampleJson{
     title: string

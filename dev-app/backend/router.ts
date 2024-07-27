@@ -2,6 +2,7 @@ import { default as express, type Express, type Request, type Response, json } f
 import { ExampleDescription } from '../shared';
 import { createExample, getExamplesMetadata } from '../../examples/access'
 import { getTestCasesMetadata } from '../../test-cases/backend'
+import { CreateExampleRequest } from '../../examples/shared';
 
 function logRequest(req: Request, res: Response): void{
     console.log(`responding with ${res.statusCode} to ${req.path}`)
@@ -26,8 +27,13 @@ export function createRouter(): Express{
         next()
     }, logRequest)
     app.post('/examples/create', async (req, res) => {
-        const id = await createExample(req.body)
-        res.status(200).send(id)
+        const {dirName, title} = await createExample(req.body)
+        const newDescription: ExampleDescription = {
+            id: dirName,
+            title,
+            kind: 'use-case'
+        };
+        res.json(newDescription)
     })
     return app;
 }
