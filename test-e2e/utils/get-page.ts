@@ -1,6 +1,5 @@
 import crypto from 'crypto'
 import { connect, type Page, type Browser, type JSHandle, type EvaluateFuncWith } from 'puppeteer'
-import fetch from 'node-fetch'
 import {default as WebSocket, type MessageEvent} from 'ws'
 import { type EventTarget, type AttachedEventListener, EVENT_LISTENER_DATA } from 'test-page-lib'
 import { openTestingMessagePort } from '../testing-message-ports/open-testing-message-port';
