@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url'
 import { defineConfig } from 'vitest/config'
-import { resolveTestCases } from './test-e2e/resolve-test-cases'
+import { addTestCasesMetadataList } from './test-cases/vite-plugins/add-test-cases-metadata-list'
 
 export default defineConfig({
   test: {
@@ -9,7 +9,7 @@ export default defineConfig({
     hookTimeout: 120000,
     testTimeout: 120000,
   },
-  plugins: [resolveTestCases()],
+  plugins: [addTestCasesMetadataList()],
   resolve: {
     alias: {
       'test-page-lib': fileURLToPath(new URL('./test-e2e/test-page-lib/api', import.meta.url)),

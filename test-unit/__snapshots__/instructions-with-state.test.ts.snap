@@ -2,14 +2,14 @@
 
 exports[`a set of intructions that is only about state > that receives a change > and then receives a change on a different property > should now contain two instructions 1`] = `
 [
-  "context.fillStyle = \\"#000\\"",
-  "context.strokeStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
+  "context.strokeStyle = "#000"",
 ]
 `;
 
 exports[`a set of intructions that is only about state > that receives a change > and then receives a change on the same property > should still contain only one instruction 1`] = `
 [
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
 ]
 `;
 
@@ -17,6 +17,6 @@ exports[`a set of intructions that is only about state > that receives a change 
 
 exports[`a set of intructions that is only about state > that receives a change > should have recorded the change 1`] = `
 [
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
 ]
 `;

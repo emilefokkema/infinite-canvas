@@ -4,7 +4,6 @@ import fetch from 'node-fetch'
 import {default as WebSocket, type MessageEvent} from 'ws'
 import { type EventTarget, type AttachedEventListener, EVENT_LISTENER_DATA } from 'test-page-lib'
 import { openTestingMessagePort } from '../testing-message-ports/open-testing-message-port';
-import { EventDispatcher } from '../../utils';
 import { getNext, ensureNoNext, fromSource } from './next';
 
 export type EventListenerAdder = <
@@ -17,6 +16,25 @@ interface PageUtils{
     page: Page
     cleanup(): Promise<void>
     addEventListenerInPage: EventListenerAdder
+}
+
+class EventDispatcher<T extends unknown[]>{
+    private listeners: ((...args: T) => void)[] = [];
+    public addListener(listener: (...args: T) => void): void{
+        this.listeners.push(listener)
+    }
+    public removeListener(listener: (...args: T) => void){
+        const index = this.listeners.indexOf(listener);
+        if(index === -1){
+            return;
+        }
+        this.listeners.splice(index, 1);
+    }
+    public dispatch(...args: T): void{
+        for(let listener of this.listeners.slice()){
+            listener(...args)
+        }
+    }
 }
 
 export interface InPageEventListener<TEventType>{

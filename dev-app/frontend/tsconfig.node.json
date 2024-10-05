@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "include": [
+      "vite.config.ts",
+      "../backend/**/*.ts",
+      "../shared/**/*.ts",
+      "../examples-runner/**/*.ts",
+      "../../utils/vite/**/*.ts"
+    ],
+    "exclude": ["../examples-runner/test-case/src/**/*.ts"],
+    "compilerOptions": {
+      "composite": true,
+      "noEmit": true,
+      "rootDir": "../.."
+    }
+  }

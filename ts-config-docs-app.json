@@ -10,5 +10,15 @@
         },
         "noEmit": true
     },
-    "include": ["docs/.vitepress/theme/**/*.*", "docs/.vitepress/shared/**/*", "examples/shared/**/*", "utils/**/*", "src/api-surface/**/*"]
+    "references": [
+        {"path": "examples/tsconfig.frontend.json"},
+        {"path": "examples/tsconfig.node.json"},
+        {"path": "utils/dark-theme/tsconfig.frontend.json"},
+        {"path": "utils/window-messages/tsconfig.json"}
+    ],
+    "include": [
+        "docs/.vitepress/theme/**/*.*",
+        "docs/.vitepress/shared/**/*",
+        "src/api-surface/**/*"
+    ]
 }

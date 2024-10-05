@@ -1,9 +1,0 @@
-{
-    "title": "Example 1",
-    "files": {
-        "index.html": "./index.html",
-        "index.js": "./index.js",
-        "style.css": "./style.css",
-        "shared-logic.js": "../shared-logic.js"
-    }
-}

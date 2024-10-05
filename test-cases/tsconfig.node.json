@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.node.json",
+    "compilerOptions": {
+        "composite": true,
+        "paths": {
+            "test-case-metadata": ["./backend/test-case-metadata.ts"]
+        }
+    },
+    "include": [
+        "backend/**/*",
+        "vite-plugins/**/*"
+    ]
+}

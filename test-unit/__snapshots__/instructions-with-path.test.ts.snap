@@ -9,7 +9,7 @@ exports[`a set of instructions that describe a rectangle path that is drawn > an
   "context.lineTo(0,1)",
   "context.closePath()",
   "context.moveTo(0,0)",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.fill()",
 ]
 `;
@@ -21,7 +21,7 @@ exports[`a set of instructions that is also about a path > that describes a path
   "context.lineTo(10,0)",
   "context.lineTo(10,10)",
   "context.lineTo(0,10)",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.lineTo(5,5)",
   "context.fill()",
 ]
@@ -30,9 +30,9 @@ exports[`a set of instructions that is also about a path > that describes a path
 exports[`a set of instructions that is also about a path > that receives a change of state > and then receives an instruction that modifies the path > and then receives a change of state on the same property as the previous change of state > and then draws the path and receives another change of state on the same property > should have recorded three changes of state 1`] = `
 [
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
-  "context.fillStyle = \\"#ff0\\"",
+  "context.fillStyle = "#ff0"",
   "context.fill()",
 ]
 `;
@@ -40,9 +40,9 @@ exports[`a set of instructions that is also about a path > that receives a chang
 exports[`a set of instructions that is also about a path > that receives a change of state > and then receives an instruction that modifies the path > and then receives a change of state on the same property as the previous change of state > should not have replaced the previous change of state 1`] = `
 [
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.fill()",
 ]
 `;
@@ -50,7 +50,7 @@ exports[`a set of instructions that is also about a path > that receives a chang
 exports[`a set of instructions that is also about a path > that receives a change of state > and then receives an instruction that modifies the path > should contain an instruction to begin a path, change the state and modify the path 1`] = `
 [
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
   "context.fill()",
 ]

@@ -3,7 +3,7 @@
 exports[`a default state > that changes and saves > and is then converted to another that also changed and saved > should have created intructions to restore, change and save 1`] = `
 [
   "context.restore()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.save()",
 ]
 `;
@@ -11,16 +11,16 @@ exports[`a default state > that changes and saves > and is then converted to ano
 exports[`a default state > that changes and saves > and is then converted to another that changed, saved and then changed again > should have created intructions to restore, change, save and change again 1`] = `
 [
   "context.restore()",
-  "context.fillStyle = \\"#00f\\"",
+  "context.fillStyle = "#00f"",
   "context.save()",
-  "context.fillStyle = \\"#ff0\\"",
+  "context.fillStyle = "#ff0"",
 ]
 `;
 
 exports[`a default state > that changes and saves > and then changes in two different ways > and then one way is converted to the other way > should result in instructions that change the state, but no restoring 1`] = `
 [
-  "context.fillStyle = \\"#00f\\"",
-  "context.strokeStyle = \\"#000\\"",
+  "context.fillStyle = "#00f"",
+  "context.strokeStyle = "#000"",
 ]
 `;
 
@@ -28,9 +28,9 @@ exports[`a default state > that is changed to a non-default state that differs o
 [
   "context.setLineDash([1,2])",
   "context.lineWidth = 2",
-  "context.strokeStyle = \\"#f00\\"",
+  "context.strokeStyle = "#f00"",
   "context.setTransform(2,0,0,2,0,0)",
-  "context.font = \\"12px sans-serif\\"",
+  "context.font = "12px sans-serif"",
 ]
 `;
 
@@ -38,15 +38,15 @@ exports[`a default state > that sets the fill style > and then sets it again on 
 
 exports[`a default state > that sets the fill style > should have created an instruction 1`] = `
 [
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
 ]
 `;
 
 exports[`a state with a clipped path > and another one with another clipped path that is based on the same path > when the one with one clipped path is converted (including clipped paths) to the one with another clipped path > should result in the right instructions 1`] = `
 [
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
   "context.lineTo(3,3)",
@@ -63,9 +63,9 @@ exports[`a state with a clipped path > and another one with, higher up its stack
 [
   "context.save()",
   "context.restore()",
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
   "context.lineTo(3,3)",
@@ -77,7 +77,7 @@ exports[`a state with a clipped path > and another one with, higher up its stack
   "context.moveTo(0,0)",
   "context.clip()",
   "context.save()",
-  "context.fillStyle = \\"#ff0\\"",
+  "context.fillStyle = "#ff0"",
 ]
 `;
 
@@ -85,9 +85,9 @@ exports[`a state with a clipped path > and another one with, higher up its stack
 [
   "context.save()",
   "context.restore()",
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
   "context.lineTo(3,3)",
@@ -103,9 +103,9 @@ exports[`a state with a clipped path > and another one with, higher up its stack
 
 exports[`a state with a clipped path > and another one without a clipped path > when the one without is converted (including clipped paths) to the one with clipped paths > should 1`] = `
 [
-  "context.fillStyle = \\"#000\\"",
+  "context.fillStyle = "#000"",
   "context.beginPath()",
-  "context.fillStyle = \\"#f00\\"",
+  "context.fillStyle = "#f00"",
   "context.moveTo(0,0)",
   "context.lineTo(3,0)",
   "context.lineTo(3,3)",
@@ -118,7 +118,7 @@ exports[`a state with a clipped path > and another one without a clipped path > 
 
 exports[`a state with a clipped path > that is saved and then changed in two ways, leading to two states > should, when one is converted to the other without clipping paths, result in a change of state in that property alone 1`] = `
 [
-  "context.fillStyle = \\"#0f0\\"",
+  "context.fillStyle = "#0f0"",
 ]
 `;
 

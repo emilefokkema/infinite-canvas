@@ -1,0 +1,219 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`an infinite canvas context > that begins a path > and then adds a rect that has no area > and then adds a line to a finite point and strokes it > should have drawn a ray from the position of the rect without area 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(-1.41421356,100)",
+  "context.lineTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with finite width and negative infinite height > should fill a rect that extends to outside of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(20,20)",
+  "context.lineTo(50,20)",
+  "context.lineTo(50,0)",
+  "context.lineTo(20,0)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with finite width and positive infinite height > should fill a rect that extends to outside of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(20,20)",
+  "context.lineTo(50,20)",
+  "context.lineTo(50,200)",
+  "context.lineTo(20,200)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with negative infinite width and a finite height > should fill a rect that extends to outside of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(20,20)",
+  "context.lineTo(0,20)",
+  "context.lineTo(0,50)",
+  "context.lineTo(20,50)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with only a right edge > should fill a rect that fills the left half of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(100,0)",
+  "context.lineTo(0,0)",
+  "context.lineTo(0,200)",
+  "context.lineTo(100,200)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,0)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with only a top edge > should fill a rect that fills the bottom half of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,100)",
+  "context.lineTo(0,100)",
+  "context.lineTo(200,100)",
+  "context.lineTo(200,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,100)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect with positive infinite width and a finite height > should fill a rect that extends to outside of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(20,20)",
+  "context.lineTo(200,20)",
+  "context.lineTo(200,50)",
+  "context.lineTo(20,50)",
+  "context.closePath()",
+  "context.moveTo(20,20)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect without area > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that fills a rect without bottom edge with negative infinite height and a finite width > should fill a rect that extends to the top and bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,200)",
+  "context.lineTo(50,0)",
+  "context.lineTo(50,0)",
+  "context.lineTo(20,0)",
+  "context.lineTo(20,0)",
+  "context.lineTo(20,200)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect without left edge with positive infinite width and a finite height > should fill a rect that extends to the left and right of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(0,20)",
+  "context.lineTo(0,20)",
+  "context.lineTo(200,20)",
+  "context.lineTo(200,50)",
+  "context.lineTo(0,50)",
+  "context.lineTo(0,50)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect without right edge with negative infinite width and a finite height > should fill a rect that extends to the left and right of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(200,20)",
+  "context.lineTo(0,20)",
+  "context.lineTo(0,20)",
+  "context.lineTo(0,50)",
+  "context.lineTo(0,50)",
+  "context.lineTo(200,50)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills a rect without top edge with positive infinite height and a finite width > should fill a rect that extends to the top and bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,0)",
+  "context.lineTo(50,0)",
+  "context.lineTo(50,200)",
+  "context.lineTo(20,200)",
+  "context.lineTo(20,0)",
+  "context.lineTo(20,0)",
+  "context.closePath()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills the entire plane > and then clears the entire plane > should have cleared the plane 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > that fills the entire plane > should fill the entire viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.rect(0,0,200,200)",
+  "context.restore()",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that strokes a rect without area > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that strokes the entire plane > should do nothing 1`] = `[]`;

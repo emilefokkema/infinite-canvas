@@ -16,3 +16,4 @@ test-e2e/test-page-lib/impl/dist
 .updated-snapshots
 **/dist/**/*
 !dist
+*.tsbuildinfo

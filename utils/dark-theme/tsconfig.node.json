@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "include": [
+        "vite-plugin/**/*",
+        "shared/**/*"
+    ]
+}

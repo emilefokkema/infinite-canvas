@@ -1,0 +1,1000 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line back from infinity to a point and then strokes > should draw the right line back to the point 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineTo(201.41421356,60)",
+  "context.lineTo(30,60)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line back and fills > should draw a path that ends coming from the correct direction 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(60,200)",
+  "context.lineTo(60,60)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with finite height but located at negative infinity horizontally > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with finite height but located at positive infinity horizontally > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with finite width but located at negative infinity vertically > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with finite width but located at positive infinity vertically > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with finite width, infinite height and no top > should clear a rect extending to the top and bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,0,50,200)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with infinite height but located infinitely far down > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with infinite width, infinite height and no left > should clear a rect extending to the left and right and bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,50,200,150)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with infinite width, infinite height and no top > should clear a rect extending to the top and bottom and right of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,0,150,200)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with infinite width, negative infinite height and no bottom > should clear a rect extending to the top and bottom and right of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,200,150,-200)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with negative infinite height > should clear a rectangle extending to the top of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,50,50,-50)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with negative infinite width > should clear a rectangle extending to the left side of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,50,-50,50)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with negative infinite width, infinite height and no right > should clear a rect extending to the left and right and bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(200,50,-200,150)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with positive infinite height > should clear a rectangle extending to the bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,50,50,150)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with positive infinite width > should clear a rectangle extending to the right side of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,50,150,50)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears a rect with positive infinite width and positive infinite height > should clear a rect extending to the right and to the bottom of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(50,50,150,150)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears the entire plane > should clear everything 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > and then clears the entire plane differently > should clear everything 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then draws a line to a third point at infinity (not in the same half plane) and then fills > should draw the correct path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineTo(0,200)",
+  "context.lineTo(0,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then fills > should create a path that covers the correct section of the view box 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then fills the path and clears a rect not overlapping the drawn area > should not add a clearRect 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to another point at infinity > and then fills the path and clears a rect overlapping the drawn area > should add a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(200,30)",
+  "context.lineTo(200,200)",
+  "context.lineTo(30,200)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(40,40,60,60)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then draws a line to the opposite point at infinity and strokes > should still have drawn only a ray 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the path > should draw a line to the right border of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears a rect not overlapping the ray > should not have added a clearRect 1`] = `[]`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears a rect overlapping the entire ray > should forget about the drawn path and not add a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears a rect overlapping the ray > should have added a clearRect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,0,60,60)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears a rect overlapping the ray > should have added a clearRect 2`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(300,0,60,60)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears an infinite rectangle partially overlapping the ray > and then the viewbox transformation scales > should clear a rectangle extending to the edge of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(60,60)",
+  "context.lineTo(202.82842712,60)",
+  "context.lineWidth = 2",
+  "context.stroke()",
+  "context.save()",
+  "context.transform(2,0,0,2,0,0)",
+  "context.clearRect(40,20,60,20)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears an infinite rectangle partially overlapping the ray > and then the viewbox transformation translates > should clear a rectangle extending to the edge of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(20,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.save()",
+  "context.transform(1,0,0,1,-10,0)",
+  "context.clearRect(40,20,170,20)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > draws a line to infinity > and then strokes the ray and clears an infinite rectangle partially overlapping the ray > should clear a rectangle extending to the edge of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(201.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(40,20,160,20)",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line back to the first point at infinity > and then strokes > should add a moveTo 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineTo(201.41421356,200)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line to the point at infinity opposite the starting point > and then adds a line back to the original point at infinity > and then fills > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line to the point at infinity opposite the starting point > and then adds a new subpath that is closable and closes it > and then strokes > should close the second subpath but not the first 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineTo(-1.41421356,200)",
+  "context.moveTo(150,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,50)",
+  "context.closePath()",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line to the point at infinity opposite the starting point > and then closes the path and strokes > should have stroked but not closed the path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineTo(-1.41421356,200)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line to the point at infinity opposite the starting point > and then fills > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then adds a line to the point at infinity opposite the starting point > and then transforms and adds a line back to the original point at infinity > and then fills > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then strokes > and then adds a line to another finite point > and then strokes > should have created two paths 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,200)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,300)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineWidth = 1",
+  "context.lineTo(100,300)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different finite point > and then strokes > should begin with a moveTo and a lineTo 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,200)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(100,200)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different point at infinity > and then adds a line to a finite point > and then strokes > should have drawn the correct path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,150)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(50,201.41421356)",
+  "context.lineTo(50,201.41421356)",
+  "context.lineTo(50,150)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different point at infinity > and then adds a line to yet a different point at infinity > and then strokes > should draw the correct path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(-26.41421356,23.58578644)",
+  "context.lineTo(-1.41421356,-1.41421356)",
+  "context.lineTo(201.41421356,-1.41421356)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(50,201.41421356)",
+  "context.lineTo(-1.41421356,201.41421356)",
+  "context.lineTo(-26.41421356,23.58578644)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different point at infinity > and then strokes > should begin a path with a move to and then draw a line around a corner of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,201.41421356)",
+  "context.lineTo(201.41421356,201.41421356)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(50,201.41421356)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to a different point at infinity > and then strokes the path using a line dash > should draw a path whose length is a multiple of the line dash period 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,201.41421356)",
+  "context.lineTo(201.41421356,201.41421356)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(202.5,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(203.20710678,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(50,201.41421356)",
+  "context.lineTo(50,203.20710678)",
+  "context.lineTo(50,201.41421356)",
+  "context.setLineDash([3,2])",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then adds a line to the opposite point at infinity > and then strokes > should have added a moveTo 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then strokes > and then lines to a different finite point > and then strokes > should have created two paths 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,200)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineWidth = 1",
+  "context.lineTo(100,200)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then strokes > should have added a moveTo 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to a finite point > and then strokes the line using a line dash > should draw a line whose length is a multiple of the line dash period 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(203.20710678,100)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.setLineDash([3,2])",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to another point at infinity > and then adds a line to a finite point > and then fills > should have drawn the right path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(200,100)",
+  "context.lineTo(200,200)",
+  "context.lineTo(100,200)",
+  "context.lineTo(100,100)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to another point at infinity > and then adds a line to a third point at infinity that is not in the same half plane > and then fills > should draw a path around the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.rect(0,0,200,200)",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that begins a path and moves to infinity > and then adds a line to another point at infinity > and then fills > should do nothing 1`] = `[]`;
+
+exports[`an infinite canvas context > that creates a rect that extends to infinity and strokes it > and then changes the line width and strokes the rectangle again > should have taken a different line width into account this time 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(201.41421356,50)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(205.65685425,50)",
+  "context.lineTo(205.65685425,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.lineWidth = 4",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that creates a rect that extends to infinity and strokes it > should have taken the current line width into account 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(201.41421356,50)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a line > and then draws a line to infinity in a different direction and fills the path > should have filled the right shape 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,20)",
+  "context.lineTo(200,20)",
+  "context.lineTo(200,10)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a line > and then draws a line to infinity in the opposite direction and fills the path > should not have drawn more lines than necessary 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,20)",
+  "context.lineTo(10,0)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a line > and then draws a line to infinity in the same direction and fills the path > should not have drawn more lines than necessary 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(10,10)",
+  "context.lineTo(10,20)",
+  "context.lineTo(10,200)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that draws a path at infinity with four points and fills it > should have filled the entire plane 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.rect(0,0,200,200)",
+  "context.restore()",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that makes a path extending to infinity and fills it > and then strokes it > should take the line width into account for the stroked path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.moveTo(0,100)",
+  "context.lineTo(0,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,0)",
+  "context.lineTo(100,100)",
+  "context.lineTo(0,100)",
+  "context.lineWidth = 1",
+  "context.fill()",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(-1.41421356,100)",
+  "context.lineTo(-1.41421356,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,-1.41421356)",
+  "context.lineTo(100,100)",
+  "context.lineTo(-1.41421356,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that strokes a path using a line dash > should draw a path whose length is a multiple of the line dash period 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setLineDash([3,2])",
+  "context.beginPath()",
+  "context.moveTo(100,-50)",
+  "context.lineTo(100,-50)",
+  "context.lineTo(50,-1.41421356)",
+  "context.lineTo(50,-1.55528844)",
+  "context.lineTo(50,-1.41421356)",
+  "context.lineTo(50,-3.20710678)",
+  "context.lineTo(50,-1.41421356)",
+  "context.lineTo(50,100)",
+  "context.setLineDash([3,2])",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that strokes a rect that extends to infinity > and then changes the line width and strokes another rect that extends to infinity > should have taken a different line width into account for the second rectangle 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(201.41421356,50)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.stroke()",
+  "context.lineWidth = 4",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(205.65685425,50)",
+  "context.lineTo(205.65685425,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that strokes a rect that extends to infinity > should have taken the current line width into account 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(201.41421356,50)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that transforms, begins a path, draws line from a point to infinity, rotates, draws a line to infinity and strokes > should 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setTransform(1,1,0,1,50,50)",
+  "context.beginPath()",
+  "context.moveTo(0,0)",
+  "context.lineTo(76.36145268,76.36145268)",
+  "context.setTransform(0.92387953,1.30656296,-0.38268343,0.5411961,50,50)",
+  "context.lineTo(119.64203051,119.64203051)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that translates > and then draws a line to inifinity > should draw a line to the right border of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setTransform(1,0,0,1,30,60)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(171.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that translates > and then rotates > and then draws a line to inifinity > should draw a line to the right border of the viewbox 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setTransform(0,1,-1,0,30,60)",
+  "context.beginPath()",
+  "context.moveTo(30,30)",
+  "context.lineTo(141.41421356,30)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that translates and draws this shape using a line dash > should make sure the length of the drawn path is a multiple of the line dash period 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setLineDash([2,2])",
+  "context.setTransform(1,0,0,1,20,20)",
+  "context.beginPath()",
+  "context.moveTo(250,50)",
+  "context.lineTo(250,50)",
+  "context.lineTo(181.41421356,100)",
+  "context.lineTo(182.97599346,100)",
+  "context.lineTo(181.41421356,100)",
+  "context.lineTo(182.70710678,100)",
+  "context.lineTo(181.41421356,100)",
+  "context.lineTo(100,100)",
+  "context.setLineDash([2,2])",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that translates, begins a path, moves to infinity, and then lines to a point > and then lines to a different point > and then strokes > should move to and line to the correct points 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setTransform(1,0,0,1,0,100)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,200)",
+  "context.lineTo(201.41421356,100)",
+  "context.lineTo(100,100)",
+  "context.lineTo(100,200)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;
+
+exports[`an infinite canvas context > that translates, begins a path, moves to infinity, and then lines to a point > and then strokes > should move to and line to the correct points 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.setTransform(1,0,0,1,0,100)",
+  "context.beginPath()",
+  "context.moveTo(201.41421356,100)",
+  "context.lineTo(100,100)",
+  "context.lineWidth = 1",
+  "context.stroke()",
+]
+`;

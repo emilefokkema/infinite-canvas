@@ -1,0 +1,14 @@
+{
+    "extends": "../tsconfig.node.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        {"path": "../utils/dark-theme/tsconfig.node.json"}
+    ],
+    "include": [
+        "access/**/*",
+        "shared/**/*",
+        "runner/**/*"
+    ]
+}

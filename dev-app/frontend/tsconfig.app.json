@@ -1,0 +1,17 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "rootDir": "../..",
+        "composite": true,
+        "noEmit": true
+    },
+    "references": [
+        {"path": "../../examples/tsconfig.frontend.json"},
+        {"path": "../../utils/dark-theme/tsconfig.frontend.json"}
+    ],
+    "include": [
+        "src/**/*.*", "src/**/*.vue",
+        "../shared/**/*.ts",
+        "../../utils/frontend/**/*",
+        "env.d.ts"]
+}

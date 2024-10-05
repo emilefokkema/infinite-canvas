@@ -1,0 +1,1 @@
+export  * from './frontend-vite-plugin'

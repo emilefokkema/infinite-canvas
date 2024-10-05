@@ -68,12 +68,14 @@ export default async function startServer(){
         }
     })
     const distDir = path.resolve(root, 'dist')
-    const testCasesDir = path.resolve(root, '../../test-cases')
+    const testCasesDir = fileURLToPath(new URL('../test-cases/catalog', import.meta.url))
+    const testCasesStaticDir = fileURLToPath(new URL('../test-cases/catalog/static', import.meta.url))
     const app = express();
     app.use(text())
     const { api: testBrowserApi, cleanup: cleanupTestBrowserApi } = createBrowserPoolApi();
     app.use(express.static(distDir));
     app.use('/test-cases', express.static(testCasesDir))
+    app.use('/static', express.static(testCasesStaticDir))
     app.use('/test-browser', testBrowserApi)
     const server = http.createServer(app);
     connectTestingMessagePorts(server);
