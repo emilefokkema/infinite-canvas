@@ -201,6 +201,9 @@ export class HandledOrFilteredEventCollection extends BaseEventCollection<keyof 
     private transformUsingPointer(mouseEv: MouseEvent, pointerEv: PointerEvent): void{
         this.rectangleManager.measure();
         const anchor: PointerAnchor = this.anchorSet.getAnchorForPointerEvent(pointerEv);
+        if(!anchor){
+            return;
+        }
         if(pointerEv.button === 1 && this.config.rotationEnabled){
             mouseEv.preventDefault();
             this.transformer.addRotationAnchor(anchor.anchor)
