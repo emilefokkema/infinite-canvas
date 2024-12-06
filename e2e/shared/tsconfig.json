@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true,
+        "outDir": "./dist"
+    },
+    "references": [
+        {"path": "../../e2e-test-utils/page-factory/shared"},
+        {"path": "../../e2e-test-utils/runtime-event-target/shared"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}

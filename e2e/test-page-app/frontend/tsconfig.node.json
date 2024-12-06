@@ -1,0 +1,17 @@
+{
+    "extends": "../../../tsconfig.node.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        {"path": "../../../e2e-test-utils/runtime-event-target/frontend/lib/tsconfig.node.json"},
+        {"path": "../../shared"},
+        {"path": "../../../src"}
+    ],
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "src/**/*"
+    ]
+}
