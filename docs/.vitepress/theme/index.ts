@@ -3,7 +3,7 @@ import Theme from 'vitepress/theme'
 import MyLayout from './my-layout.vue';
 import type { EnhanceAppContext } from 'vitepress'
 import Example from './example.vue'
-import { data } from '../shared/examples.data';
+import { data } from './examples.data';
 import { exampleDataInjectionKey } from './constants';
 import './style.css'
 

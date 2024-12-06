@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "compilerOptions": {
+        "rootDir": "../..",
+        "composite": true
+    },
+    "references": [
+        {"path": "../../examples/tsconfig.node.json"},
+        {"path": "../../src/tsconfig.json"}
+    ],
+    "include": [
+        "**/*",
+        "../../utils/vite/**/*"
+    ],
+    "exclude": ["theme/**/*"] 
+}

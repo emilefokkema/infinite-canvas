@@ -1,0 +1,22 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "infinite-canvas": ["../../../src/api/infinite-canvas.ts"]
+        },
+        "noEmit": true
+    },
+    "references": [
+        {"path": "../../../examples/tsconfig.frontend.json"},
+        {"path": "../../../examples/tsconfig.node.json"},
+        {"path": "../../../utils/dark-theme/tsconfig.frontend.json"},
+        {"path": "../../../utils/window-messages/tsconfig.json"},
+        {"path": "../../../src/api/tsconfig.json"}
+    ],
+    "include": [
+        "**/*.*",
+    ]
+}

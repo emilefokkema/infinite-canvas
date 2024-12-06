@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.node.json",
+    "include": [
+        "**/*"
+    ],
+    "references": [
+        {"path": ".vitepress/tsconfig.json"}
+    ],
+    "exclude": [".vitepress/**/*"]
+}
