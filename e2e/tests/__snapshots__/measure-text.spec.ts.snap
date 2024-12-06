@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`when we measure text > and then a transformation happens > should return this text measurement > CI 1`] = `
+exports[`when we measure text > and then a transformation happens > should return this text measurement > codespaces 1`] = `
 {
-  "actualBoundingBoxAscent": 9,
+  "actualBoundingBoxAscent": 10,
   "actualBoundingBoxDescent": 0,
-  "actualBoundingBoxLeft": 0,
-  "actualBoundingBoxRight": 62.125,
+  "actualBoundingBoxLeft": -1,
+  "actualBoundingBoxRight": 68.001953125,
   "fontBoundingBoxAscent": 11,
   "fontBoundingBoxDescent": 3,
-  "width": 61.798828125,
+  "width": 68.619140625,
 }
 `;
 
@@ -24,7 +24,7 @@ exports[`when we measure text > and then a transformation happens > should retur
 }
 `;
 
-exports[`when we measure text > and then a transformation happens > should return this text measurement > gitpod 1`] = `
+exports[`when we measure text > and then the font is changed > should return this text measurement > codespaces 1`] = `
 {
   "actualBoundingBoxAscent": 10,
   "actualBoundingBoxDescent": 0,
@@ -33,18 +33,6 @@ exports[`when we measure text > and then a transformation happens > should retur
   "fontBoundingBoxAscent": 11,
   "fontBoundingBoxDescent": 3,
   "width": 68.619140625,
-}
-`;
-
-exports[`when we measure text > and then the font is changed > should return this text measurement > CI 1`] = `
-{
-  "actualBoundingBoxAscent": 9,
-  "actualBoundingBoxDescent": 0,
-  "actualBoundingBoxLeft": 0,
-  "actualBoundingBoxRight": 62.125,
-  "fontBoundingBoxAscent": 11,
-  "fontBoundingBoxDescent": 3,
-  "width": 61.798828125,
 }
 `;
 
@@ -60,27 +48,15 @@ exports[`when we measure text > and then the font is changed > should return thi
 }
 `;
 
-exports[`when we measure text > and then the font is changed > should return this text measurement > gitpod 1`] = `
+exports[`when we measure text > should return this text measurement > codespaces 1`] = `
 {
-  "actualBoundingBoxAscent": 10,
-  "actualBoundingBoxDescent": 0,
-  "actualBoundingBoxLeft": -1,
-  "actualBoundingBoxRight": 68.001953125,
-  "fontBoundingBoxAscent": 11,
-  "fontBoundingBoxDescent": 3,
-  "width": 68.619140625,
-}
-`;
-
-exports[`when we measure text > should return this text measurement > CI 1`] = `
-{
-  "actualBoundingBoxAscent": 7,
+  "actualBoundingBoxAscent": 8,
   "actualBoundingBoxDescent": 0,
   "actualBoundingBoxLeft": 0,
-  "actualBoundingBoxRight": 51.9375,
+  "actualBoundingBoxRight": 56.8349609375,
   "fontBoundingBoxAscent": 9,
   "fontBoundingBoxDescent": 2,
-  "width": 51.4990234375,
+  "width": 57.1826171875,
 }
 `;
 
@@ -93,17 +69,5 @@ exports[`when we measure text > should return this text measurement > default 1`
   "fontBoundingBoxAscent": 9,
   "fontBoundingBoxDescent": 2,
   "width": 51.4990234375,
-}
-`;
-
-exports[`when we measure text > should return this text measurement > gitpod 1`] = `
-{
-  "actualBoundingBoxAscent": 8,
-  "actualBoundingBoxDescent": 0,
-  "actualBoundingBoxLeft": 0,
-  "actualBoundingBoxRight": 56.8349609375,
-  "fontBoundingBoxAscent": 9,
-  "fontBoundingBoxDescent": 2,
-  "width": 57.1826171875,
 }
 `;
