@@ -26,5 +26,6 @@ export async function getTestCasesMetadata(): Promise<TestCaseMetadata[]>{
         const fullPath = path.resolve(catalogPath, file.name)
         result.push(await getTestCaseMetadata(file.name, fullPath))
     }
+    result.sort((a, b) => a.id > b.id ? 1 : -1)
     return result;
 }

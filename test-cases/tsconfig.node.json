@@ -4,7 +4,9 @@
         "composite": true,
         "paths": {
             "test-case-metadata": ["./backend/test-case-metadata.ts"]
-        }
+        },
+        "outDir": "./dist",
+        "emitDeclarationOnly": true
     },
     "include": [
         "backend/**/*",
