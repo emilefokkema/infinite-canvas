@@ -1,30 +1,22 @@
-import { describe, it, beforeAll, afterAll, beforeEach, expect } from 'vitest'
-import type { Page, JSHandle, Browser } from 'puppeteer'
-import { debounceTime, firstValueFrom } from 'rxjs'
-import type { InfiniteCanvas } from 'infinite-canvas'
-import { 
-    getTouchCollection,
-    getPageInBrowser,
-    launchBrowser,
-    getScreenshot,
-    getResultAfter,
-    fromSource,
-    type EventListenerAdder,
-    type TouchCollection,
-    type Touch
-} from './utils'
-import '../test-utils/expect-extensions'
+import { describe, it, beforeAll, afterAll, afterEach, beforeEach, expect } from 'vitest'
+import { TestPageInfiniteCanvas } from './test-page/test-page-infinite-canvas'
+import { nextEvent, noEvent } from './utils/next-event';
+import { fromEvent, debounceTime, firstValueFrom, from } from 'rxjs';
 
-function initializeInfiniteCanvas(page: Page, greedyGestureHandling?: boolean, rotationEnabled?: boolean): Promise<JSHandle<InfiniteCanvas>>{
-    return page.evaluateHandle((greedyGestureHandling, rotationEnabled) => window.TestPageLib.initializeInfiniteCanvas({
-        styleWidth: '400px',
-        styleHeight: '400px',
-        canvasWidth: 400,
-        canvasHeight: 400,
-        spaceBelowCanvas: 2000,
-        greedyGestureHandling,
-        rotationEnabled,
-        drawing: (ctx: any) => {
+async function initializeInfiniteCanvas(
+    greedyGestureHandling?: boolean,
+    rotationEnabled?: boolean): Promise<TestPageInfiniteCanvas>{
+        const result = await page.createCanvasElement({
+            styleWidth: '400px',
+            styleHeight: '400px',
+            canvasWidth: 400,
+            canvasHeight: 400,
+            spaceBelowCanvas: 2000,
+        }).then(c => page.createInfiniteCanvas(c, {
+            greedyGestureHandling,
+            rotationEnabled
+        }))
+        await result.draw(d => d(ctx => {
             ctx.beginPath();
             ctx.moveToInfinityInDirection(-1, 0);
             ctx.lineTo(100, 100);
@@ -38,158 +30,184 @@ function initializeInfiniteCanvas(page: Page, greedyGestureHandling?: boolean, r
             ctx.beginPath();
             ctx.arc(200, 100, 25, 0, 2 * Math.PI);
             ctx.fill();
-        }
-    }), greedyGestureHandling, rotationEnabled)
+        }))
+        return result;
 }
-
 describe('when transforming', () => {
-    let page: Page;
-    let browser: Browser;
-    let cleanup: () => Promise<void>;
-    let cleanupBrowser: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
+    let infCanvas: TestPageInfiniteCanvas
 
-    beforeAll(async () => {
-        ({browser, cleanup: cleanupBrowser} = await launchBrowser());
-    })
-    
-    beforeEach(async () => {
-        if(cleanup){
-            await cleanup();
-        }
-        ({page, cleanup, addEventListenerInPage} = await getPageInBrowser(browser));
+    afterEach(async () => {
+        await infCanvas.eventTarget.destroy();
+        await page.reload();
     })
 
     it('should pan', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
+        infCanvas = await initializeInfiniteCanvas();
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(150, 150), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            page.mouse.move(150, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await page.mouse.up({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 200), [() => drawn.ensureNoNext(500)]);
-    });
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 500),
+            page.mouse.move(200, 200)
+        ])
+    })
 
-     it('should stop panning when mouse leaves canvas', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
+    it('should stop panning when mouse leaves canvas', async () => {
+        infCanvas = await initializeInfiniteCanvas();
         await page.mouse.move(300, 50);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(350, 50), [() => drawn.getNext()]);
-        await getResultAfter(() => page.mouse.move(450, 50), [() => drawn.ensureNoNext(500)]);
-        await getResultAfter(() => page.mouse.move(300, 50), [() => drawn.ensureNoNext(500)]);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            page.mouse.move(350, 50)
+        ])
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 500),
+            page.mouse.move(450, 50)
+        ])
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 500),
+            page.mouse.move(300, 50)
+        ])
         await page.mouse.up({button: 'left'});
-    });
+    })
 
     it('should rotate', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
+        infCanvas = await initializeInfiniteCanvas();
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(125, 100), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom({dependsOnEnvironments: ['gitpod', 'CI']})
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            page.mouse.move(125, 100)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({dependsOnEnvironment: true})
         await page.mouse.up({button: 'middle'})
-        await getResultAfter(() => page.mouse.move(150, 100), [() => drawn.ensureNoNext(500)]);
-    });
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 500),
+            page.mouse.move(150, 100)
+        ])
+    })
 
     it('should zoom on wheel with control key', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
+        infCanvas = await initializeInfiniteCanvas();
         await page.mouse.move(100, 100);
         await page.keyboard.down('ControlLeft');
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: -75 }), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        expect(await page.evaluate(() => window.scrollY)).toEqual(0);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            page.mouse.wheel({deltaX: 0, deltaY: -75 })
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(0);
         await page.keyboard.up('ControlLeft');
-    });
+    })
 
     it('should not zoom on only wheel', async () => {
-        await initializeInfiniteCanvas(page);
-        const windowHandle = await page.evaluateHandle(() => window);
-        const scrolled = fromSource(await addEventListenerInPage(windowHandle, 'scroll')).pipe(debounceTime(300))
+        infCanvas = await initializeInfiniteCanvas();
+        const windowHandle = await page.page.evaluateHandle(() => window);
+        const windowEvents = await page
+            .createEventTarget<GlobalEventHandlersEventMap>(windowHandle)
+            .then(e => e.emitEvents({scroll: {}}))
+        const scrolled = fromEvent(windowEvents, 'scroll').pipe(debounceTime(300));
         await page.mouse.move(100, 100);
         const deltaY: number = 80;
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY}), [() => firstValueFrom(scrolled)]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        expect(await page.evaluate(() => window.scrollY)).toEqual(deltaY);
-    });
+        await Promise.all([
+            firstValueFrom(scrolled),
+            page.mouse.wheel({deltaX: 0, deltaY})
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(deltaY);
+        await page.page.evaluate(() => window.scrollTo(0, 0))
+    })
 
     it('should zoom on only wheel with greedyGestureHandling', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const debouncedDrawn = fromSource(drawn).pipe(debounceTime(300))
+        infCanvas = await initializeInfiniteCanvas(true);
+        const debouncedDrawn = fromEvent(infCanvas.eventTarget, 'draw').pipe(debounceTime(300));
         await page.mouse.move(100, 100);
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: -75 }), [() => firstValueFrom(debouncedDrawn)]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        expect(await page.evaluate(() => window.scrollY)).toEqual(0);
-    });
+        await Promise.all([
+            firstValueFrom(debouncedDrawn),
+            page.mouse.wheel({deltaX: 0, deltaY: -75 })
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(0);
+    })
 
     it('should not rotate', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, undefined, false);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
+        infCanvas = await initializeInfiniteCanvas(undefined, false);
         await page.mouse.move(100, 100);
         await page.mouse.down({button: 'middle'});
-        await getResultAfter(() => page.mouse.move(125, 100), [() => drawn.ensureNoNext(300)]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        await page.mouse.up({button: 'middle'});
-    });
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 300),
+            page.mouse.move(125, 100)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+    })
 
     it('should pan on single moving touch if greedy gesture handling enabled', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const touchCollection: TouchCollection = await getTouchCollection(page);
-        const touch: Touch = await touchCollection.start(100, 100);
-        await getResultAfter(() => touch.move(150, 150), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        infCanvas = await initializeInfiniteCanvas(true);
+        const touch = await page.touchscreen.touchStart(100, 100);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch.move(150, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await touch.end();
-    });
+    })
 
     it('should not pan on single moving touch if greedy gesture handling not enabled', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const touchCollection: TouchCollection = await getTouchCollection(page);
-        const touch: Touch = await touchCollection.start(200, 200);
-        await getResultAfter(() => touch.move(200, 100), [() => drawn.ensureNoNext(300)]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        infCanvas = await initializeInfiniteCanvas();
+        const touch = await page.touchscreen.touchStart(200, 200);
+        await Promise.all([
+            noEvent(infCanvas.eventTarget, 'draw', 300),
+            touch.move(200, 100)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await touch.end();
-        expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-    });
+        expect(await page.page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+        await page.page.evaluate(() => window.scrollTo(0, 0))
+    })
 
     it('should zoom and rotate', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const touchCollection: TouchCollection = await getTouchCollection(page);
-        const touch1: Touch = await touchCollection.start(100, 100);
-        const touch2: Touch = await touchCollection.start(200, 100);
-        await getResultAfter(() => touch2.move(200, 200), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        await getResultAfter(() => touch1.move(100, 0), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        infCanvas = await initializeInfiniteCanvas();
+        const touch1 = await page.touchscreen.touchStart(100, 100);
+        const touch2 = await page.touchscreen.touchStart(200, 100);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch2.move(200, 200)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch1.move(100, 0)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await touch1.end();
-        await getResultAfter(() => touch2.move(150, 200), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        await touch2.end();
-    });
-
-    it('should zoom but not rotate on two touches if rotation not enabled', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, undefined, false);
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const touchCollection: TouchCollection = await getTouchCollection(page);
-        const touch1: Touch = await touchCollection.start(100, 100);
-        const touch2: Touch = await touchCollection.start(200, 100);
-        await getResultAfter(() => touch2.move(200, 200), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        await touch1.end();
-        await getResultAfter(() => touch2.move(100, 200), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch2.move(150, 200)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await touch2.end();
     })
 
-    afterAll(async () => {
-        if(cleanup){
-            await cleanup();
-        }
-        await cleanupBrowser();
+    it('should zoom but not rotate on two touches if rotation not enabled', async () => {
+        infCanvas = await initializeInfiniteCanvas(undefined, false);
+        const touch1 = await page.touchscreen.touchStart(100, 100);
+        const touch2 = await page.touchscreen.touchStart(200, 100);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch2.move(200, 200)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        await touch1.end();
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch2.move(100, 200)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        await touch2.end();
     })
 })

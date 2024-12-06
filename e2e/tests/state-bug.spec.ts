@@ -1,58 +1,42 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { Page, JSHandle } from 'puppeteer'
-import { type InfiniteCanvas, Units } from 'infinite-canvas'
-import { 
-    getScreenshot,
-    getPage,
-    getResultAfter,
-    getTouchCollection,
-    type EventListenerAdder
-} from './utils'
-import '../test-utils/expect-extensions'
+import { describe, beforeAll, it, expect } from 'vitest'
+import { Units } from '../../src/api/units'
+import { nextEvent } from './utils/next-event'
+import { TestPageInfiniteCanvas } from './test-page/test-page-infinite-canvas'
 
 describe('when state is saved and a rectangle drawn', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
-    let infCanvas: JSHandle<InfiniteCanvas>
+    let infCanvas: TestPageInfiniteCanvas
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage} = await getPage());
-        infCanvas = await page.evaluateHandle((cssUnits) => window.TestPageLib.initializeInfiniteCanvas({
+        infCanvas = await page.createCanvasElement({
             styleWidth: '400px',
             styleHeight: '400px',
             canvasWidth: 300,
             canvasHeight: 150,
-            units: cssUnits,
-            greedyGestureHandling: true,
-            drawing: (ctx: any) => {
-                ctx.save();
-                ctx.fillRect(20, 20, 80, 80)
-            }
-        }), Units.CSS)
+        }).then(c => page.createInfiniteCanvas(c, {
+            units: Units.CSS,
+            greedyGestureHandling: true
+        }))
+        await infCanvas.draw(d => d(ctx => {
+            ctx.save();
+            ctx.fillRect(20, 20, 80, 80)
+        }))
     })
 
     it('should look like this', async () => {
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom()
     })
 
     it('should look like this when panned twice', async () => {
-        const drawn = await addEventListenerInPage(infCanvas, 'draw')
-        const touchCollection = await getTouchCollection(page)
-        const touch = await touchCollection.start(20, 20)
-        await getResultAfter(async () => {
-            await touch.move(20, 150);
-        }, [() => drawn.getNext()]);
-        await getResultAfter(async () => {
-            await touch.move(200, 150);
-        }, [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-
+        const touch = await page.touchscreen.touchStart(20, 20)
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch.move(20, 150)
+        ])
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            touch.move(200, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom()
         await touch.end();
-        await drawn.remove();
-    })
-
-    afterAll(async () => {
-        await cleanup();
     })
 })

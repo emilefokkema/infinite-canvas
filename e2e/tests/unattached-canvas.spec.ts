@@ -1,66 +1,59 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { JSHandle, Page } from 'puppeteer'
-import type { InfiniteCanvasCtr, InfiniteCanvas, DrawEvent } from 'infinite-canvas'
-import { getPage, getScreenshot, getResultAfter, InPageEventListener, EventListenerAdder, fromSource } from './utils'
-import '../test-utils/expect-extensions'
-import { ResizeEvent } from 'test-page-lib'
-import { filter, firstValueFrom } from 'rxjs'
+import { describe, it, beforeAll, expect } from 'vitest'
+import { RuntimeEventTarget } from '@runtime-event-target/test';
+import { EventMap, InfiniteCanvas } from 'api';
+import { nextEvent, noEvent } from './utils/next-event';
+import { JSHandle } from 'puppeteer';
+import { DetachableCanvasElement } from '../test-page-app/api/detachable-canvas-element';
+import { ResizeEvent } from '../test-page-app/api/resize-event';
+import { Observable, filter, firstValueFrom, fromEvent } from 'rxjs';
 
 describe('given a page where the canvas is not attached yet and a drawing is made', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let detachHandle: JSHandle<{attach(): void, detach(): void}>
-    let infCanvasHandle: JSHandle<InfiniteCanvas>
-    let drawEventListener: InPageEventListener<DrawEvent>
-    let canvasElResizeEventListener: InPageEventListener<ResizeEvent>
-    let addEventListenerInPage: EventListenerAdder
+    let detachableCanvas: JSHandle<DetachableCanvasElement>
+    let infCanvasEvents: RuntimeEventTarget<unknown, {
+        draw: {}
+    }>;
+    let canvasResizeEvents: RuntimeEventTarget<unknown, {
+        resize: ResizeEvent
+    }>
+    let infCanvas: JSHandle<InfiniteCanvas>
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage } = await getPage());
-        const fullHandle = await page.evaluateHandle(() => {
-            const container = document.createElement('div')
-            document.body.appendChild(container)
-            const InfiniteCanvas: InfiniteCanvasCtr = window.TestPageLib.InfiniteCanvas;
-            const canvasEl = document.createElement('canvas')
-            const infCanvas = new InfiniteCanvas(canvasEl, {units: InfiniteCanvas.CANVAS_UNITS})
-            const canvasResizeEvents = window.TestPageLib.getResizeEvents(canvasEl);
-            infCanvas.getContext('2d').fillRect(0, 0, 10, 10)
-            function attach(){
-                container.appendChild(canvasEl)
-            }
-            function detach(){
-                canvasEl.remove();
-            }
-            return {attach, detach, infCanvas, canvasResizeEvents}
-        })
-        infCanvasHandle = await fullHandle.evaluateHandle(h => h.infCanvas)
-        drawEventListener = await addEventListenerInPage(infCanvasHandle, 'draw')
-        canvasElResizeEventListener = await addEventListenerInPage(await fullHandle.evaluateHandle(h => h.canvasResizeEvents), 'resize')
-        detachHandle = fullHandle
+        detachableCanvas = await page.page.evaluateHandle(() => window.TestPageLib.createDetachableCanvasElement());
+        infCanvas = await page.page.evaluateHandle(
+            (detachableCanvas) => window.TestPageLib.createInfiniteCanvas(detachableCanvas.canvas),
+            detachableCanvas
+        );
+        await infCanvas.evaluate(c => c.getContext('2d').fillRect(0, 0, 10, 10))
+        infCanvasEvents = await page
+            .createEventTarget<EventMap>(infCanvas)
+            .then(t => t.emitEvents({draw: {}}))
+        canvasResizeEvents = await page
+            .createEventTarget<{resize: ResizeEvent}>(detachableCanvas)
+            .then(t => t.emitEvents({resize: { positiveSize: true}}))
+
     })
 
     it('should draw as soon as the canvas is attached', async () => {
-        await getResultAfter(() => detachHandle.evaluate(h => h.attach()), [() => drawEventListener.getNext()])
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'draw-after-reattach'})
+        await Promise.all([
+            nextEvent(infCanvasEvents, 'draw'),
+            detachableCanvas.evaluate(c => c.attach())
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({identifier: 'draw-after-reattach'})
     })
 
     it('should draw again when canvas is attached again', async () => {
-        await getResultAfter(
-            () => detachHandle.evaluate(h => h.detach()),
-            [() => firstValueFrom(fromSource(canvasElResizeEventListener).pipe(filter(e => !e.positiveSize)))],
-            {message: 'did not receive notifiation that canvas had no size anymore'})
-        await getResultAfter(
-            () => infCanvasHandle.evaluate(ic => ic.getContext('2d').fillRect(0, 40, 10, 10)),
-            [() => drawEventListener.ensureNoNext(1000)])
-        await getResultAfter(
-            () => detachHandle.evaluate(h => h.attach()),
-            [() => drawEventListener.getNext()],
-            {message: 'did not receive a draw event', timeout: 5000})
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'draw-after-reattach2'})
-    })
-
-    afterAll(async () => {
-        await cleanup();
+        await Promise.all([
+            firstValueFrom((fromEvent(canvasResizeEvents, 'resize') as Observable<ResizeEvent>).pipe(filter(e => !e.positiveSize))),
+            detachableCanvas.evaluate(c => c.detach())
+        ])
+        await Promise.all([
+            noEvent(infCanvasEvents, 'draw', 1000),
+            infCanvas.evaluate(c => c.getContext('2d').fillRect(0, 40, 10, 10))
+        ])
+        await Promise.all([
+            nextEvent(infCanvasEvents, 'draw'),
+            detachableCanvas.evaluate(c => c.attach())
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({identifier: 'draw-after-reattach2'})
     })
 })
-

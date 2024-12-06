@@ -1,138 +1,130 @@
-import { describe, it, beforeAll, afterAll, beforeEach, expect } from 'vitest'
-import type { Page, JSHandle, Browser } from 'puppeteer'
-import { debounceTime, firstValueFrom } from 'rxjs'
-import type { DrawEvent, InfiniteCanvas, InfiniteCanvasEventWithDefaultBehavior, InfiniteCanvasTouchEvent } from 'infinite-canvas'
-import { 
-    getTouchCollection,
-    fromSource,
-    getPageInBrowser,
-    launchBrowser,
-    getScreenshot,
-    getResultAfter,
-    type InPageEventListener,
-    type EventListenerAdder,
-    type TouchCollection
-} from './utils'
-import '../test-utils/expect-extensions'
+import { describe, it, expect, afterEach } from 'vitest'
+import { fromEvent, debounceTime, firstValueFrom } from 'rxjs'
+import { nextEvent, noEvent } from './utils/next-event'
+import { TestPageInfiniteCanvas } from './test-page/test-page-infinite-canvas'
+import { touchEventMap } from './utils/touch-event-types'
 
-function initializeInfiniteCanvas(page: Page, greedyGestureHandling: boolean = false): Promise<JSHandle<InfiniteCanvas>>{
-    return page.evaluateHandle((greedyGestureHandling) => window.TestPageLib.initializeInfiniteCanvas({
-        styleWidth: '400px',
-        styleHeight: '400px',
-        canvasWidth: 400,
-        canvasHeight: 400,
-        greedyGestureHandling,
-        spaceBelowCanvas: 2000,
-        drawing: (ctx: any) => {
-            ctx.fillRect(100, 100, 100, 100);
-        }
-    }), greedyGestureHandling)
-}
 describe('when default is prevented', () => {
-    let browser: Browser;
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let cleanupBrowser: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
+    let infCanvas: TestPageInfiniteCanvas
 
-    beforeAll(async () => {
-        ({browser, cleanup: cleanupBrowser} = await launchBrowser());
-    })
-
-    beforeEach(async () => {
-        if(cleanup){
-            await cleanup();
-        }
-        ({page, cleanup, addEventListenerInPage} = await getPageInBrowser(browser));
+    afterEach(async () => {
+        await infCanvas.eventTarget.destroy();
+        await page.reload()
     })
 
     it('should not begin to pan when mousedown default is prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        const mouseDown: InPageEventListener<MouseEvent> = await addEventListenerInPage(infCanvas, 'mousedown');
-        mouseDown.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas();
+        const events = await infCanvas.eventTarget.emitEvents({
+            mousedown: {}
+        })
+        await events.handleEvents('mousedown', h => h(ev => {
             const isInArea = ev.offsetX >= 100 && ev.offsetX <= 200 && ev.offsetY >= 100 && ev.offsetY <= 200;
             if(isInArea){
                 ev.preventDefault();
             }
         }))
-        
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(250, 150), [() => drawn.ensureNoNext(300)]);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            page.mouse.move(250, 150)
+        ])
         await page.mouse.up({button: 'left'});
         await page.mouse.move(50, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(200, 150), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        await Promise.all([
+            nextEvent(events, 'draw'),
+            page.mouse.move(200, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await page.mouse.up({button: 'left'});
         await page.mouse.move(300, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(150, 150), [() => drawn.ensureNoNext(300)]);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            page.mouse.move(150, 150)
+        ])
         await page.mouse.up({button: 'left'});
         await page.mouse.move(150, 150);
         await page.mouse.down({button: 'left'});
-        await getResultAfter(() => page.mouse.move(50, 150), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-
-        await drawn.remove();
-        await mouseDown.remove();
-    });
+        await Promise.all([
+            nextEvent(events, 'draw'),
+            page.mouse.move(50, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+    })
 
     it('should not zoom when wheel default is prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const wheel: InPageEventListener<WheelEvent> = await addEventListenerInPage(infCanvas, 'wheel')
-        await wheel.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas();
+        const events = await infCanvas.eventTarget.emitEvents({
+            wheel: {}
+        })
+        await events.handleEvents('wheel', h => h(ev => {
             const isInArea = ev.offsetX >= 100 && ev.offsetX <= 200 && ev.offsetY >= 100 && ev.offsetY <= 200;
             if(isInArea){
                 ev.preventDefault();
             }
         }))
-        const windowHandle = await page.evaluateHandle(() => window);
-        const scrolled = fromSource(await addEventListenerInPage(windowHandle, 'scroll')).pipe(debounceTime(300))
+        const windowEvents = await page.createEventTarget<GlobalEventHandlersEventMap>(
+            await page.page.evaluateHandle(() => window)
+        ).then(e => e.emitEvents({scroll: {}}))
+        const scrolled = fromEvent(windowEvents, 'scroll').pipe(debounceTime(300))
         await page.mouse.move(150, 150);
         const deltaY: number = 80;
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY}), [() => firstValueFrom(scrolled)]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-        expect(await page.evaluate(() => window.scrollY)).toEqual(deltaY);
-    });
+        await Promise.all([
+            firstValueFrom(scrolled),
+            page.mouse.wheel({deltaX: 0, deltaY})
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(deltaY);
+        await page.page.evaluate(() => window.scrollTo(0, 0))
+        await windowEvents.destroy();
+    })
 
     it('in case of greedy gesture handling should neither zoom nor scroll when both defaults are prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        const wheel: InPageEventListener<WheelEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'wheel')
-        await wheel.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas(true);
+        const events = await infCanvas.eventTarget.emitEvents({
+            wheel: {}
+        })
+        await events.handleEvents('wheel', h => h(ev => {
             const isInArea = ev.offsetX >= 100 && ev.offsetX <= 200 && ev.offsetY >= 100 && ev.offsetY <= 200;
             if(isInArea){
                 ev.preventDefault(true);
             }
         }))
         await page.mouse.move(150, 150);
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), [() => drawn.ensureNoNext(300)]);
-        expect(await page.evaluate(() => window.scrollY)).toEqual(0);
-    });
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            page.mouse.wheel({deltaX: 0, deltaY: 80})
+        ])
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(0);
+    })
 
     it('in case of no greedy gesture handling should neither zoom nor scroll when native default is prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-
-        const wheel: InPageEventListener<WheelEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'wheel')
-        await wheel.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas();
+        const events = await infCanvas.eventTarget.emitEvents({
+            wheel: {}
+        })
+        await events.handleEvents('wheel', h => h(ev => {
             const isInArea = ev.offsetX >= 100 && ev.offsetX <= 200 && ev.offsetY >= 100 && ev.offsetY <= 200;
             if(isInArea){
                 ev.preventDefault(true);
             }
         }))
         await page.mouse.move(150, 150);
-        await getResultAfter(() => page.mouse.wheel({deltaX: 0, deltaY: 80}), [() => drawn.ensureNoNext(300)]);
-        expect(await page.evaluate(() => window.scrollY)).toEqual(0);
-    });
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            page.mouse.wheel({deltaX: 0, deltaY: 80})
+        ])
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(0);
+    })
 
     it('should not pan if touchstart default is prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'touchstart')
-        touchStart.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas(true)
+        const events = await infCanvas.eventTarget.emitEvents({
+            touchstart: {}
+        })
+        await events.handleEvents('touchstart', h => h(ev => {
             if(ev.changedTouches.length !== 1){
                 return;
             }
@@ -142,20 +134,27 @@ describe('when default is prevented', () => {
                 ev.preventDefault();
             }
         }))
-        const touches: TouchCollection = await getTouchCollection(page);
-        let touch = await touches.start(150, 150);
-        await getResultAfter(() => touch.move(250, 150), [() => drawn.ensureNoNext(300)]);
+        let touch = await page.touchscreen.touchStart(150, 150);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            touch.move(250, 150)
+        ])
         await touch.end();
-        touch = await touches.start(50, 150);
-        await getResultAfter(() => touch.move(200, 150), [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
-    });
+        touch = await page.touchscreen.touchStart(50, 150);
+        await Promise.all([
+            nextEvent(events, 'draw'),
+            touch.move(200, 150)
+        ])
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
+        await touch.end();
+    })
 
     it('should neither pan nor scroll if native default is also prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'touchstart')
-        touchStart.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas(true)
+        const events = await infCanvas.eventTarget.emitEvents({
+            touchstart: {}
+        })
+        await events.handleEvents('touchstart', h => h(ev => {
             if(ev.changedTouches.length !== 1){
                 return;
             }
@@ -165,18 +164,21 @@ describe('when default is prevented', () => {
                 ev.preventDefault(true);
             }
         }))
-        const touches: TouchCollection = await getTouchCollection(page);
-        let touch = await touches.start(150, 150);
-        await getResultAfter(() => touch.move(150, 50), [() => drawn.ensureNoNext(300)]);
+        const touch = await page.touchscreen.touchStart(150, 150);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            touch.move(150, 50)
+        ])
         await touch.end();
-        expect(await page.evaluate(() => window.scrollY)).toEqual(0);
-    });
+        expect(await page.page.evaluate(() => window.scrollY)).toEqual(0);
+    })
 
     it('should not zoom if second started touch is default-prevented', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'touchstart')
-        touchStart.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas(true)
+        const events = await infCanvas.eventTarget.emitEvents({
+            touchstart: {}
+        })
+        await events.handleEvents('touchstart', h => h(ev => {
             if(ev.changedTouches.length !== 1 || ev.targetTouches.length === 1){
                 return;
             }
@@ -186,21 +188,26 @@ describe('when default is prevented', () => {
                 ev.preventDefault();
             }
         }))
-        const touches: TouchCollection = await getTouchCollection(page);
-        const touch = await touches.start(120, 120);
-        await getResultAfter(() => touch.move(120, 140), [() => drawn.getNext()]);
-        const secondTouch = await touches.start(180, 140);
-        await getResultAfter(() => secondTouch.move(200, 140), [() => drawn.ensureNoNext(300)]);
+        const touch = await page.touchscreen.touchStart(120, 120);
+        await Promise.all([
+            nextEvent(events, 'draw'),
+            touch.move(120, 140)
+        ])
+        const secondTouch = await page.touchscreen.touchStart(180, 140);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            secondTouch.move(200, 140)
+        ])
         await touch.end();
         await secondTouch.end();
-    });
+    })
 
     it('should not do anything if first touch was default-prevented and the second was not', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page);
-        const drawn: InPageEventListener<DrawEvent> = await addEventListenerInPage(infCanvas, 'draw');
-        //await infCanvas.addTouchEventListener('touchstart', changedTouchIsInArea);
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'touchstart')
-        touchStart.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas();
+        const events = await infCanvas.eventTarget.emitEvents({
+            touchstart: {}
+        })
+        await events.handleEvents('touchstart', h => h(ev => {
             if(ev.changedTouches.length !== 1){
                 return;
             }
@@ -210,18 +217,24 @@ describe('when default is prevented', () => {
                 ev.preventDefault(true);
             }
         }))
-        const touches: TouchCollection = await getTouchCollection(page);
-        const firstTouch = await touches.start(150, 150);
-        const secondTouch = await touches.start(50, 150);
-        await getResultAfter(() => secondTouch.move(50, 250), [() => drawn.ensureNoNext(300)]);
+        const firstTouch = await page.touchscreen.touchStart(150, 150);
+        const secondTouch = await page.touchscreen.touchStart(50, 150);
+        await Promise.all([
+            noEvent(events, 'draw', 300),
+            secondTouch.move(50, 250)
+        ])
         await firstTouch.end();
         await secondTouch.end();
-    });
+    })
 
     it('should emit touchmove when touch moves relative to infinitecanvas because the latter moves', async () => {
-        const infCanvas = await initializeInfiniteCanvas(page, true);
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent & InfiniteCanvasEventWithDefaultBehavior> = await addEventListenerInPage(infCanvas, 'touchstart')
-        touchStart.modify(l => l.setHandler(ev => {
+        await setupInfiniteCanvas(true)
+
+        const events = await infCanvas.eventTarget.emitEvents({
+            touchstart: touchEventMap,
+            touchmove: touchEventMap
+        })
+        await events.handleEvents('touchstart', h => h(ev => {
             if(ev.changedTouches.length !== 1 || ev.targetTouches.length === 1){
                 return;
             }
@@ -231,44 +244,80 @@ describe('when default is prevented', () => {
                 ev.preventDefault();
             }
         }))
-        const touchMoved: InPageEventListener<InfiniteCanvasTouchEvent> = await addEventListenerInPage(infCanvas, 'touchmove')
-        const touchCollection: TouchCollection = await getTouchCollection(page)
         const firstTouchInitialY = 150;
         const secondTouchInitialY = 150;
         const firstTouchDeltaY: number = -40;
-        const touch = await touchCollection.start(120, firstTouchInitialY);
-        const secondTouch = await touchCollection.start(180, secondTouchInitialY);
-        const [{touches, changedTouches, targetTouches}] = await getResultAfter(() => touch.move(120, firstTouchInitialY + firstTouchDeltaY), [() => touchMoved.getNext()]);
-        expect(touches.length).toBe(2);
-        expect(changedTouches.length).toBe(1);
-        expect(targetTouches.length).toBe(2);
-        const [{
-            infiniteCanvasX: firstTargetTouchInfiniteCanvasX,
-            infiniteCanvasY: firstTargetTouchInfiniteCanvasY
-        }, {identifier: targetTouchIdentifier2}] = targetTouches;
-        const {
-            identifier: changedTouchIdentifier,
-            infiniteCanvasX,
-            infiniteCanvasY
-        } = changedTouches[0];
-        
-        // the first touch has moved, but not relative to InfiniteCanvas
-        expect(firstTargetTouchInfiniteCanvasX).toBeCloseTo(120);
-        expect(firstTargetTouchInfiniteCanvasY).toBeCloseTo(firstTouchInitialY);
-
-        // because moving the first touch panned InfiniteCanvas upward, the second touch moved downward relative to InfiniteCanvas
-        expect(changedTouchIdentifier).toBe(targetTouchIdentifier2);
-        expect(infiniteCanvasX).toBeCloseTo(180);
-        expect(infiniteCanvasY).toBeCloseTo(secondTouchInitialY - firstTouchDeltaY);
-
+        const touch = await page.touchscreen.touchStart(120, firstTouchInitialY);
+        const secondTouch = await page.touchscreen.touchStart(180, secondTouchInitialY);
+        const [touchMove] = await Promise.all([
+            nextEvent(events, 'touchmove'),
+            touch.move(120, firstTouchInitialY + firstTouchDeltaY)
+        ])
+        expect(touchMove).toEqual({
+            touches: [
+                {
+                    identifier: expect.anything(),
+                    // the first touch has moved, but not relative to InfiniteCanvas
+                    infiniteCanvasX: expect.closeTo(120),
+                    infiniteCanvasY: expect.closeTo(firstTouchInitialY),
+                    radiusX: expect.closeTo(.5),
+                    radiusY: expect.closeTo(.5),
+                    rotationAngle: expect.closeTo(0)
+                },
+                {
+                    identifier: expect.anything(),
+                    // because moving the first touch panned InfiniteCanvas upward, the second touch moved downward relative to InfiniteCanvas
+                    infiniteCanvasX: expect.closeTo(180),
+                    infiniteCanvasY: expect.closeTo(secondTouchInitialY - firstTouchDeltaY),
+                    radiusX: expect.closeTo(.5),
+                    radiusY: expect.closeTo(.5),
+                    rotationAngle: expect.closeTo(0)
+                }
+            ],
+            targetTouches: [
+                {
+                    identifier: expect.anything(),
+                    infiniteCanvasX: expect.closeTo(120),
+                    infiniteCanvasY: expect.closeTo(firstTouchInitialY),
+                    radiusX: expect.closeTo(.5),
+                    radiusY: expect.closeTo(.5),
+                    rotationAngle: expect.closeTo(0)
+                },
+                {
+                    identifier: expect.anything(),
+                    infiniteCanvasX: expect.closeTo(180),
+                    infiniteCanvasY: expect.closeTo(secondTouchInitialY - firstTouchDeltaY),
+                    radiusX: expect.closeTo(.5),
+                    radiusY: expect.closeTo(.5),
+                    rotationAngle: expect.closeTo(0)
+                }
+            ],
+            changedTouches: [
+                {
+                    identifier: expect.anything(),
+                    infiniteCanvasX: expect.closeTo(180),
+                    infiniteCanvasY: expect.closeTo(secondTouchInitialY - firstTouchDeltaY),
+                    radiusX: expect.closeTo(.5),
+                    radiusY: expect.closeTo(.5),
+                    rotationAngle: expect.closeTo(0)
+                }
+            ]
+        })
+        expect(touchMove.changedTouches[0].identifier).toEqual(touchMove.targetTouches[1].identifier);
         await touch.end();
         await secondTouch.end();
     })
 
-    afterAll(async () => {
-        if(cleanup){
-            await cleanup();
-        }
-        await cleanupBrowser();
-    })
+    async function setupInfiniteCanvas(greedyGestureHandling: boolean = false): Promise<void>{
+        infCanvas = await page.createCanvasElement({
+            styleWidth: '400px',
+            styleHeight: '400px',
+            canvasWidth: 400,
+            canvasHeight: 400,
+            spaceBelowCanvas: 2000,
+        }).then(c => page.createInfiniteCanvas(c, {greedyGestureHandling}))
+        await infCanvas.draw(d => d(ctx => {
+            ctx.fillRect(100, 100, 100, 100);
+        }))
+    }
 })

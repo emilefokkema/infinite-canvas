@@ -1,82 +1,64 @@
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { Page } from 'puppeteer'
-import { 
-    getPage,
-    getScreenshot,
-    getResultAfter,
-    getTouchCollection,
-    type EventListenerAdder,
-    type InPageEventListener
-} from './utils'
-import '../test-utils/expect-extensions'
-import type { DrawEvent } from 'infinite-canvas'
+import { TestPageInfiniteCanvas } from './test-page/test-page-infinite-canvas'
+import { nextEvent } from './utils/next-event';
 
 describe('when using a filter with blur and drop-shadow', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
-    let drawn: InPageEventListener<DrawEvent>
+    let infCanvas: TestPageInfiniteCanvas;
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage } = await getPage());
-        const infCanvas = await page.evaluateHandle(() => window.TestPageLib.initializeInfiniteCanvas({
+        infCanvas = await page.createCanvasElement({
             styleWidth: '400px',
             styleHeight: '400px',
             canvasWidth: 300,
             canvasHeight: 150,
-            drawing: (ctx: any) => {
-                var width = 60;
-                var height = 60;
-                var centerX = 5;
-                var centerY = 5;
-                var radiusSq = 25;
-                var array = new Uint8ClampedArray(4 * width * height);
-                for(var j=0;j<height;j++){
-                    for(var i=0;i<width;i++){
-                        var dx = i - centerX;
-                        var dy = j - centerY;
-                        var index = 4 * j * width + 4 * i;
-                        var inside = dx * dx + dy * dy < radiusSq;
-                        array[index] = inside ? 255:0;
-                        array[index + 3] = 255;
-                    }
+        }).then(c => page.createInfiniteCanvas(c));
+        await infCanvas.draw(d => d(ctx => {
+            const width = 60;
+            const height = 60;
+            const centerX = 5;
+            const centerY = 5;
+            const radiusSq = 25;
+            const array = new Uint8ClampedArray(4 * width * height);
+            for(let j=0;j<height;j++){
+                for(let i=0;i<width;i++){
+                    const dx = i - centerX;
+                    const dy = j - centerY;
+                    const index = 4 * j * width + 4 * i;
+                    const inside = dx * dx + dy * dy < radiusSq;
+                    array[index] = inside ? 255:0;
+                    array[index + 3] = 255;
                 }
-                var imageData = new ImageData(array, width);
-                ctx.translate(80, 30);
-                ctx.filter = 'brightness(60%)'
-                ctx.globalAlpha = .5
-                ctx.shadowColor = '#00f'
-                ctx.shadowOffsetX = 20
-                ctx.shadowBlur = 4
-                ctx.fillStyle = "#f00";
-                ctx.fillRect(0, 0, 40, 40);
-                ctx.putImageData(imageData, 20, 20);
             }
+            const imageData = new ImageData(array, width);
+            ctx.translate(80, 30);
+            ctx.filter = 'brightness(60%)'
+            ctx.globalAlpha = .5
+            ctx.shadowColor = '#00f'
+            ctx.shadowOffsetX = 20
+            ctx.shadowBlur = 4
+            ctx.fillStyle = "#f00";
+            ctx.fillRect(0, 0, 40, 40);
+            ctx.putImageData(imageData, 20, 20);
         }))
-        drawn = await addEventListenerInPage(infCanvas, 'draw')
     })
 
     it('should look like this', async () => {
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom()
     })
 
     it('should look like this when transformed', async () => {
-        const touchCollection = await getTouchCollection(page);
-        const firstTouch = await touchCollection.start(10, 10);
-        const secondTouch = await touchCollection.start(50, 50);
-        await getResultAfter(async () => {
-            await secondTouch.move(80, 80);
-        }, [() => drawn.getNext()]);
-        await getResultAfter(async () => {
-            await firstTouch.move(0, 100);
-        }, [() => drawn.getNext()]);
-        expect(await getScreenshot(page)).toMatchImageSnapshotCustom()
+        const firstTouch = await page.touchscreen.touchStart(10, 10);
+        const secondTouch = await page.touchscreen.touchStart(50, 50);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            secondTouch.move(80, 80)
+        ]);
+        await Promise.all([
+            nextEvent(infCanvas.eventTarget, 'draw'),
+            firstTouch.move(0, 100)
+        ]);
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await firstTouch.end();
         await secondTouch.end();
-    })
-
-    afterAll(async  () => {
-        await drawn.remove();
-        await cleanup();
     })
 })

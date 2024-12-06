@@ -1,31 +1,20 @@
-/// <reference types="../test-cases/backend/test-case-metadata-list"/>
-
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { Page, Browser } from 'puppeteer'
+import { describe, it, expect, beforeAll } from 'vitest'
+import { SERVER_BASE_URL } from '../shared/constants'
 import testCases from 'virtual:test-cases-metadata-3-0'
-import { getPageInBrowser, getScreenshot, launchBrowser } from './utils'
-import '../test-utils/expect-extensions'
 
 describe('the test cases', () => {
-    let page: Page;
-    let browser: Browser;
-    let cleanupBrowser: () => Promise<void>;
-    let cleanup: () => Promise<void>;
 
     beforeAll(async () => {
-        ({browser, cleanup: cleanupBrowser} = await launchBrowser());
-        ({page, cleanup} = await getPageInBrowser(browser, '/test-case/'));
+        await page.page.goto(new URL('test-case/', SERVER_BASE_URL).toString(), {waitUntil: 'domcontentloaded'})
     })
 
     describe.each(testCases)('$title', ({id, dependsOnEnvironments, skip}) => {
         it.skipIf(skip)('', async () => {
-            await page.evaluate((id) => window.TestCaseLib.drawTestCase(id), id)
-            expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: id.replace(/\.mjs$/,''), dependsOnEnvironments})
+            await page.page.evaluate((id) => window.TestCasesLib.drawTestCase(id), id);
+            expect(await page.getScreenshot()).toMatchImageSnapshotCustom({
+                identifier: id,
+                dependsOnEnvironment: !!dependsOnEnvironments || undefined
+            })
         })
-    })
-
-    afterAll(async () => {
-        await cleanup();
-        await cleanupBrowser();
     })
 })

@@ -1,30 +1,21 @@
-import { describe, it, beforeAll, afterAll } from 'vitest'
-import type { Page } from 'puppeteer'
-import { 
-    getPage,
-    getResultAfter,
-    type EventListenerAdder,
-    type InPageEventListener
-} from './utils'
-import '../test-utils/expect-extensions'
-import type { DrawEvent } from 'infinite-canvas'
+import { describe, it, beforeAll } from 'vitest'
+import { RuntimeEventTarget } from '@runtime-event-target/test'
+import { nextEvent } from './utils/next-event'
 
 describe('when we add an event listener for a non-pointer-related event', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
-    let transitionStarted: InPageEventListener<Event>;
+    let infCanvasEvents: RuntimeEventTarget<unknown, {
+        transitionstart: {}
+    }>
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage } = await getPage());
-        const infCanvas = await page.evaluateHandle(() => window.TestPageLib.initializeInfiniteCanvas({
+        const infCanvas = await page.createCanvasElement({
             styleWidth: '400px',
             styleHeight: '400px',
             canvasWidth: 400,
             canvasHeight: 400,
-            drawing: (ctx: any) => {
-                ctx.fillRect(100, 100, 200, 100);
-            }
+        }).then(c => page.createInfiniteCanvas(c));
+        await infCanvas.draw(d => d(ctx => {
+            ctx.fillRect(100, 100, 200, 100);
         }))
         const styleText = `canvas{
             border:1px solid #000;
@@ -34,19 +25,20 @@ describe('when we add an event listener for a non-pointer-related event', () => 
         canvas:hover{
             border-bottom-color:#f00;
         }`;
-        await page.evaluate((styleText) => {
+        await page.page.evaluate((styleText) => {
             const el = document.createElement('style');
             document.head.appendChild(el);
             el.innerHTML = styleText;
-        }, styleText)
-        transitionStarted = await addEventListenerInPage(infCanvas, 'transitionstart')
+        }, styleText);
+        infCanvasEvents = await infCanvas.eventTarget.emitEvents({
+            transitionstart: {}
+        })
     })
 
     it('should emit a transitionstarted event', async () => {
-        await getResultAfter(() => page.mouse.move(100,100), [() => transitionStarted.getNext()]);
-    });
-
-    afterAll(async () => {
-        await cleanup();
+        await Promise.all([
+            nextEvent(infCanvasEvents, 'transitionstart'),
+            page.mouse.move(100,100)
+        ])
     })
 })

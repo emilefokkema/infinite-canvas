@@ -1,44 +1,45 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { Page, JSHandle } from 'puppeteer'
-import { getPage, getResultAfter, type InPageEventListener, type EventListenerAdder } from './utils'
-import type { InfiniteCanvas } from 'infinite-canvas'
+import { describe, it, expect, beforeAll } from 'vitest'
+import { RuntimeEventTarget } from '@runtime-event-target/test'
+import { EventMap } from 'api'
+import { nextEvent } from './utils/next-event'
 
 describe('when the mouse interacts with the canvas', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
-    let infCanvas: JSHandle<InfiniteCanvas>;
-    let mouseMoved: InPageEventListener<MouseEvent>
+    let infCanvasEvents: RuntimeEventTarget<EventMap, {
+        mousemove: {
+            offsetX: number, offsetY: number, movementX: number, movementY: number
+        }
+    }>
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage} = await getPage());
-        infCanvas = await page.evaluateHandle(() => window.TestPageLib.initializeInfiniteCanvas({
+        const infCanvas = await page.createCanvasElement({
             styleWidth: '400px',
             styleHeight: '400px',
             canvasWidth: 400,
             canvasHeight: 400,
-            drawing: (ctx: any) => {
-                ctx.fillRect(100, 100, 200, 100);
-            }
+        }).then(c => page.createInfiniteCanvas(c))
+        await infCanvas.draw(d => d(ctx => {
+            ctx.fillRect(100, 100, 200, 100);
         }))
-        mouseMoved = await addEventListenerInPage(infCanvas, 'mousemove');
+        infCanvasEvents = await infCanvas.eventTarget.emitEvents({
+            mousemove: {offsetX: true, offsetY: true, movementX: true, movementY: true}
+        })
     })
 
     it('should emit a mousemove when rotating with the mouse', async () => {
-        const mouse = page.mouse;
-        await getResultAfter(async () => await mouse.move(100, 100), [() => mouseMoved.getNext()])
-        await mouse.down({button: 'middle'});
-        const [{offsetX, offsetY, movementX, movementY}] = await getResultAfter(async () => {
-            // A horizontal difference of 50 leads to a rotation of 90 degrees, cf src/transformer/rotate.ts
-            await mouse.move(150, 100)
-        }, [() => mouseMoved.getNext()]);
-        expect(offsetX).toBeCloseTo(100);
-        expect(offsetY).toBeCloseTo(150);
-        expect(movementX).toBeCloseTo(0);
-        expect(movementY).toBeCloseTo(50);
-    })
-
-    afterAll(async () => {
-        await cleanup();
+        await Promise.all([
+            nextEvent(infCanvasEvents, 'mousemove'),
+            page.mouse.move(100, 100)
+        ])
+        await page.mouse.down({button: 'middle'});
+        const [mouseMove] = await Promise.all([
+            nextEvent(infCanvasEvents, 'mousemove'),
+            page.mouse.move(150, 100)
+        ])
+        expect(mouseMove).toEqual({
+            offsetX: expect.closeTo(100),
+            offsetY: expect.closeTo(150),
+            movementX: expect.closeTo(0),
+            movementY: expect.closeTo(50)
+        })
     })
 })

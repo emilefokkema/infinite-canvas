@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true,
+        "outDir": "./dist",
+        "emitDeclarationOnly": true,
+        "types": [],
+        "paths": {
+            "@runtime-event-target/test": ["../../e2e-test-utils/runtime-event-target/test/index.ts"],
+            "api": ["../../src/api/infinite-canvas.ts"]
+        }
+    },
+    "references": [
+        {"path": "../shared"},
+        {"path": "../../e2e-test-utils/page-factory/test"},
+        {"path": "../../e2e-test-utils/runtime-event-target/test"},
+        {"path": "../../e2e-test-utils/runtime-event-target/shared"},
+        {"path": "../test-page-app/api"},
+        {"path": "../../src/api"},
+        {"path": "../../test-cases/tsconfig.node.json"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}

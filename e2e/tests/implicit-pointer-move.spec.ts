@@ -1,87 +1,94 @@
-import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import type { Page } from 'puppeteer'
-import { getPage, getScreenshot, getTouchCollection, getResultAfter, type InPageEventListener, type Touch, type TouchCollection, type EventListenerAdder } from './utils'
-import '../test-utils/expect-extensions'
-import { InfiniteCanvasTouchEvent, DrawEvent } from 'infinite-canvas'
+import { describe, it, beforeAll, expect, afterAll } from 'vitest'
+import { TouchHandle } from 'puppeteer';
+import { RuntimeEventTarget } from '@runtime-event-target/test';
+import { EventMap } from 'api';
+import { nextEvent } from './utils/next-event';
 
 describe('when a pointer starts and default is not prevented', () => {
-    let page: Page;
-    let cleanup: () => Promise<void>;
-    let addEventListenerInPage: EventListenerAdder;
     let firstTouchInitialY: number;
-    let drawn: InPageEventListener<DrawEvent>
-    let pointerDown: InPageEventListener<PointerEvent>
-    let pointerMove: InPageEventListener<PointerEvent>
-    let touchCollection: TouchCollection;
-    let firstTouch: Touch;
+    let infCanvasEvents: RuntimeEventTarget<EventMap, {
+        draw: {},
+        touchstart: {},
+        pointerdown: {
+            pointerId: number
+        },
+        pointermove: {
+            pointerId: number
+            offsetY: number
+        }
+    }>;
+    let firstTouch: TouchHandle;
 
     beforeAll(async () => {
-        ({page, cleanup, addEventListenerInPage} = await getPage());
         firstTouchInitialY = 150;
-        const infCanvas = await page.evaluateHandle(() => window.TestPageLib.initializeInfiniteCanvas({
+        const infCanvas = await page.createCanvasElement({
             styleWidth: '400px',
             styleHeight: '400px',
             canvasWidth: 400,
             canvasHeight: 400,
-            greedyGestureHandling: true,
-            drawing: (ctx: any) => {
-                ctx.fillRect(100, 100, 100, 100);
-            }
+        }).then(c => page.createInfiniteCanvas(c, { greedyGestureHandling: true}));
+        await infCanvas.draw(d => d(ctx => {
+            ctx.fillRect(100, 100, 100, 100);
         }))
-        const touchStart: InPageEventListener<InfiniteCanvasTouchEvent> = await addEventListenerInPage(infCanvas, 'touchstart');
-        await touchStart.modify(t => t.setHandler((e) => {
+        infCanvasEvents = await infCanvas.eventTarget.emitEvents({
+            touchstart: {},
+            pointerdown: {
+                pointerId: true
+            },
+            pointermove: {
+                pointerId: true,
+                offsetY: true
+            }
+        })
+        await infCanvasEvents.handleEvents('touchstart', h => h(e => {
             if(e.targetTouches.length > 1){
                 e.preventDefault();
             }
         }))
-        drawn = await addEventListenerInPage(infCanvas, 'draw');
-        pointerDown = await addEventListenerInPage(infCanvas, 'pointerdown');
-        pointerMove = await addEventListenerInPage(infCanvas, 'pointermove');
-        touchCollection = await getTouchCollection(page);
-        await getResultAfter(
-            async () => {
-                firstTouch = await touchCollection.start(150, firstTouchInitialY)
-            },
-            [() => pointerDown.getNext()])
+        await Promise.all([
+            page.touchscreen.touchStart(150, firstTouchInitialY).then(t => firstTouch = t),
+            nextEvent(infCanvasEvents, 'pointerdown')
+        ])
     })
 
     describe('and then a second pointer starts and default is prevented', () => {
-        let secondTouch: Touch;
+        let secondTouch: TouchHandle;
         let secondPointerId: number;
         let secondTouchInitialY: number;
 
         beforeAll(async () => {
             secondTouchInitialY = 150;
-            ([{pointerId: secondPointerId}] = await getResultAfter(async () => {
-                secondTouch = await touchCollection.start(150, secondTouchInitialY);
-            }, [() => pointerDown.getNext()]));
-        });
-
-        afterAll(async () => {
-            await secondTouch.end();
-        });
+            ([{pointerId: secondPointerId}, secondTouch] = await Promise.all([
+                nextEvent(infCanvasEvents, 'pointerdown'),
+                page.touchscreen.touchStart(150, secondTouchInitialY)
+            ]))
+        })
 
         describe('and then the first touch moves, panning', () => {
-            let pointerMoveEvent: PointerEvent;
+            let pointerMoveEvent: {
+                pointerId: number,
+                offsetY: number
+            };
             let deltaY: number;
 
             beforeAll(async () => {
                 deltaY = 100;
-
-                ([pointerMoveEvent] = await getResultAfter(() => firstTouch.move(150, firstTouchInitialY - deltaY),
-                    [() => pointerMove.getNext(),
-                    () => drawn.getNext()] as const));
-            });
+                ([pointerMoveEvent] = await Promise.all([
+                    nextEvent(infCanvasEvents, 'pointermove'),
+                    nextEvent(infCanvasEvents, 'draw'),
+                    firstTouch.move(150, firstTouchInitialY - deltaY)
+                ]));
+            })
 
             it('should emit a pointermove for the second touch', async () => {
-                expect(await getScreenshot(page)).toMatchImageSnapshotCustom({identifier: 'implicit-pointer-move-1'})
+                expect(await page.getScreenshot()).toMatchImageSnapshotCustom({identifier: 'implicit-pointer-move-1'})
                 expect(pointerMoveEvent.pointerId).toBe(secondPointerId);
                 expect(pointerMoveEvent.offsetY).toBeCloseTo(secondTouchInitialY + deltaY)
             });
         })
-    })
 
-    afterAll(async () => {
-        await cleanup();
+        afterAll(async () => {
+            await secondTouch.end();
+        });
     })
 })
