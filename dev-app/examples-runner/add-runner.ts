@@ -1,32 +1,29 @@
 import { PluginOption } from 'vite'
-import { fileURLToPath } from "url";
-import { createViteConfig as createExamplesViteConfig, ExampleRunnerOptions } from '../../examples/runner'
+import { createViteConfig as createExamplesViteConfig } from '../../examples/runner'
 import { serveOther, OtherServerOptions } from '../../utils/vite';
-import { TestCaseRunnerOptions } from './test-case/options';
 import { createViteConfig as createTestCasesViteConfig } from './test-case/create-vite-config'
 
-function serveTestCases(options: TestCaseRunnerOptions, server: OtherServerOptions): PluginOption{
+function serveTestCases(server: OtherServerOptions): PluginOption{
     return serveOther({
         id: 'test-cases',
         path: '/test-case',
-        config: createTestCasesViteConfig(options),
+        config: createTestCasesViteConfig(),
         server
     })
 }
 
-function serveExamples(options: ExampleRunnerOptions, server: OtherServerOptions): PluginOption{
+function serveExamples(server: OtherServerOptions): PluginOption{
     return serveOther({
         id: 'examples',
         path: '/examples',
-        config: createExamplesViteConfig(options),
+        config: createExamplesViteConfig(),
         server
     })
 }
 
 export function addRunner(server: OtherServerOptions): PluginOption[]{
-    const infiniteCanvasPath = fileURLToPath(new URL('../../src/infinite-canvas.ts', import.meta.url))
     return [
-        serveExamples({infiniteCanvasPath}, server),
-        serveTestCases({infiniteCanvasPath}, server),
+        serveExamples(server),
+        serveTestCases(server),
     ]
 }

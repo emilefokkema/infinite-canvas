@@ -7,6 +7,10 @@
       "../examples-runner/**/*.ts",
       "../../utils/vite/**/*.ts"
     ],
+    "references": [
+      {"path": "../../test-cases/tsconfig.node.json"},
+      {"path": "../../src/tsconfig.json"}
+    ],
     "exclude": ["../examples-runner/test-case/src/**/*.ts"],
     "compilerOptions": {
       "composite": true,
