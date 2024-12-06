@@ -3,9 +3,9 @@ import path from 'path'
 import { exec } from 'child_process'
 import { fileURLToPath } from 'url'
 
-const updatedSnapshotsDir = fileURLToPath(new URL('../.updated-snapshots/', import.meta.url))
-const snapshotsDir = fileURLToPath(new URL('../test-e2e/__snapshots__/', import.meta.url))
-const imageSnapshotsDir = fileURLToPath(new URL('../test-e2e/__image_snapshots__/', import.meta.url))
+const updatedSnapshotsDir = fileURLToPath(new URL('../updated-snapshots/', import.meta.url))
+const snapshotsDir = fileURLToPath(new URL('../e2e/tests/__snapshots__/', import.meta.url))
+const imageSnapshotsDir = fileURLToPath(new URL('../e2e/tests/__image_snapshots__/', import.meta.url))
 
 async function exists(path){
     try{
