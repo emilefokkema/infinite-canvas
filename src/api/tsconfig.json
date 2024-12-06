@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "outDir": "../../dist/types",
+        "composite": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "lib": [
+            "DOM",
+        ],
+    },
+    "include": [
+        "**/*"
+    ]
+}
