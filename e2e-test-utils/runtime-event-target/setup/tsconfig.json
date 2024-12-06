@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true
+    },
+    "references": [
+        {"path": "../shared"},
+        {"path": "../frontend/lib/tsconfig.node.json"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}

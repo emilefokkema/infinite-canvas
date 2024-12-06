@@ -1,0 +1,14 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "composite": true,
+        "noEmit": true
+    },
+    "references": [
+        {"path": "../api"},
+        {"path": "../../shared"}
+    ],
+    "include": [
+        "src/**/*"
+    ]
+}

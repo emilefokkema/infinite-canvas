@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true,
+        "outDir": "./dist",
+        "emitDeclarationOnly": true
+    },
+    "references": [
+        {"path": "../shared"},
+        {"path": "../frontend/api"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}
