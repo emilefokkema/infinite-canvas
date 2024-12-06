@@ -1,7 +1,5 @@
 import { expect } from 'vitest';
-import { toMatchImageSnapshot as toMatchImageSnapshotOriginal, type MatchImageSnapshotOptions } from 'jest-image-snapshot'
-import { TransformationRepresentation } from '../src/api-surface/transformation-representation';
-import { getEnvironmentSuffix } from './get-environment-suffix'
+import { TransformationRepresentation } from '../src/api/transformation-representation';
 
 type TransformationDimension = 'a' | 'b' | 'c' | 'd' | 'e' | 'f'
 
@@ -11,11 +9,6 @@ interface ValueComparisonResult{
     dimension: TransformationDimension,
     pass: boolean
     difference: number
-}
-
-interface CustomImageSnapshotMatchOptions{
-    identifier?: string
-    dependsOnEnvironments?: string[]
 }
 
 function valuesAreClose(dimension: TransformationDimension, actual: TransformationRepresentation, transformation: TransformationRepresentation): ValueComparisonResult{
@@ -78,38 +71,8 @@ function toMatchStringWithNumbersCloseTo(actual: string, numberMatcher: RegExp, 
     };
 }
 
-function toMatchImageSnapshotCustom(received: any, options?: CustomImageSnapshotMatchOptions): { message(): string; pass: boolean }{
-    const identifier = options?.identifier;
-    const dependsOnEnvironments = options?.dependsOnEnvironments;
-    const suffix = dependsOnEnvironments ? getEnvironmentSuffix(dependsOnEnvironments) : '';
-    const originalOptions: MatchImageSnapshotOptions = {
-        customDiffConfig: {threshold: 0.1},
-        failureThresholdType: 'percent',
-        failureThreshold: 0.005,
-        customSnapshotIdentifier({ defaultIdentifier }){
-            let result = defaultIdentifier;
-            if(identifier !== undefined){
-                result = identifier
-            }
-            return result + (suffix ? `-${suffix}` : '');
-        }
-    };
-    return toMatchImageSnapshotOriginal.apply(this, [received, originalOptions]);
-}
-
 expect.extend({
     toBeCloseToTransformation,
-    toMatchStringWithNumbersCloseTo,
-    toMatchImageSnapshotCustom
+    toMatchStringWithNumbersCloseTo
 })
 
-interface CustomMatchers<R = unknown> {
-    toBeCloseToTransformation(transformation: TransformationRepresentation): R
-    toMatchStringWithNumbersCloseTo(numberMatcher: RegExp, ...expected: number[]): R
-    toMatchImageSnapshotCustom(options?: CustomImageSnapshotMatchOptions): R
-}
-
-declare module 'vitest' {
-    interface Assertion<T = any> extends CustomMatchers<T> {}
-    interface AsymmetricMatchersContaining extends CustomMatchers {}
-}
