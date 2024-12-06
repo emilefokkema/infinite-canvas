@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { ExampleRunnerOptions } from './options'
 import { getExamplesDirs } from '../access'
 import { addDarkTheme } from '../../utils/dark-theme/vite-plugin'
+import { addInfiniteCanvas } from '../../src/add-infinite-canvas'
 
 function addIndexJsToIndexHtml(): PluginOption{
     return {
@@ -36,16 +37,34 @@ function resolveEntryPoints(): PluginOption{
     }
 }
 
-export function createViteConfig({infiniteCanvasPath, alias}: ExampleRunnerOptions): UserConfig{
+function addExampleInfiniteCanvas(infiniteCanvasPath?: string): PluginOption{
+    return {
+        name: 'vite-plugin-add-example-infinite-canvas',
+        resolveId: {
+            order: 'pre',
+            async handler(source, importer, options){
+                if(source !== 'ef-infinite-canvas'){
+                    return;
+                }
+                if(infiniteCanvasPath){
+                    return infiniteCanvasPath;
+                }
+                return this.resolve('infinite-canvas', importer, options)
+            }
+        }
+    }
+}
+
+export function createViteConfig(options?: ExampleRunnerOptions): UserConfig{
     const root = fileURLToPath(new URL('../catalog', import.meta.url))
     return {
         root,
-        resolve: {
-            alias: {
-                'ef-infinite-canvas': infiniteCanvasPath,
-                ...(alias || {})
-            }
-        },
-        plugins: [addIndexJsToIndexHtml(), resolveEntryPoints(), addDarkTheme()]
+        plugins: [
+            addIndexJsToIndexHtml(),
+            resolveEntryPoints(),
+            addDarkTheme(),
+            addInfiniteCanvas(),
+            addExampleInfiniteCanvas(options?.infiniteCanvasPath)
+        ]
     }
 }
