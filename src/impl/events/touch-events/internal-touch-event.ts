@@ -1,7 +1,7 @@
 import { EventBasedInternalEvent } from "../internal-events/event-based-internal-event";
 import { TouchEventPropertiesImpl } from "./touch-event-properties-impl";
-import { InfiniteCanvasTouchEvent } from "../../api-surface/infinite-canvas-touch-event";
-import { InfiniteCanvasEventWithDefaultBehavior } from "../../api-surface/infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasTouchEvent } from "api/infinite-canvas-touch-event";
+import { InfiniteCanvasEventWithDefaultBehavior } from "api/infinite-canvas-event-with-default-behavior";
 import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { TouchEventImpl } from "./touch-event-impl";
 

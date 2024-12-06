@@ -1,7 +1,7 @@
 import { EventBasedInternalEvent } from "../internal-events/event-based-internal-event";
 import { WheelEventPropertiesImpl } from "./wheel-event-properties-impl";
 import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
-import { InfiniteCanvasEventWithDefaultBehavior } from "../../api-surface/infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasEventWithDefaultBehavior } from "api/infinite-canvas-event-with-default-behavior";
 import { WheelEventImpl } from "./wheel-event-impl";
 
 export class InternalWheelEvent extends EventBasedInternalEvent<WheelEvent, WheelEvent & InfiniteCanvasEventWithDefaultBehavior>{

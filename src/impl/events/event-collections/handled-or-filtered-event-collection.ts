@@ -1,10 +1,10 @@
 import { BaseEventCollection } from "./base-event-collection";
 import { EventListenerCollection } from "./event-collection";
 import {Transformer} from "../../transformer/transformer";
-import { InfiniteCanvas } from "../../api-surface/infinite-canvas";
+import { InfiniteCanvas } from "api/infinite-canvas";
 import { InfiniteCanvasEventSource } from "../infinite-canvas-event-source";
 import { RectangleManager } from "../../rectangle/rectangle-manager";
-import { Config } from "../../api-surface/config";
+import { Config } from "api/config";
 import { fromType } from "./from-type";
 import { EventSource } from "../../event-utils/event-source";
 import { map } from "../../event-utils/map";

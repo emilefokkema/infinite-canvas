@@ -1,4 +1,4 @@
-import {InfiniteCanvas} from "../api-surface/infinite-canvas";
+import {InfiniteCanvas} from "api/infinite-canvas";
 import { isEventListenerObject } from "../event-utils/accept-event-listener-objects";
 
 interface InfiniteCanvasEventSourceForEventListenerObjects{

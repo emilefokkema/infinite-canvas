@@ -1,4 +1,4 @@
-import { TransformationRepresentation } from "./api-surface/transformation-representation";
+import { TransformationRepresentation } from "api/transformation-representation";
 import { Point } from "./geometry/point"
 import { PointAtInfinity } from "./geometry/point-at-infinity";
 

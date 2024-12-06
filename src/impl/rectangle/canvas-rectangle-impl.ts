@@ -3,9 +3,9 @@ import { CoordinatesSwitch } from './coordinates-switch';
 import { CanvasMeasurement } from "./canvas-measurement";
 import { ConvexPolygon } from "../areas/polygons/convex-polygon";
 import { Point } from "../geometry/point";
-import { TransformationRepresentation } from "../api-surface/transformation-representation";
+import { TransformationRepresentation } from "api/transformation-representation";
 import { Transformation } from "../transformation";
-import { Units } from "../api-surface/units";
+import { Units } from "api/units";
 import { CoordinateSystem } from './coordinate-system';
 import { getRectWithFourEdges } from '../rect/get-rect-strategy';
 

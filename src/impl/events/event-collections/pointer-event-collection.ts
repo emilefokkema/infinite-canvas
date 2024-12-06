@@ -1,5 +1,5 @@
 import { EventCollection } from "./event-collection";
-import { InfiniteCanvas } from "../../api-surface/infinite-canvas";
+import { InfiniteCanvas } from "api/infinite-canvas";
 
 import { isHandledOrFilteredEventKey, PointerEventMap, MappedPointerEventMap, HandledOrFilteredEventMap } from "../infinite-canvas-event-map";
 

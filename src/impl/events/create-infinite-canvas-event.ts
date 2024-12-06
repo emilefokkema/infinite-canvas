@@ -1,7 +1,7 @@
 import {EventSource} from "../event-utils/event-source";
 import {InfiniteCanvasEventSource} from "./infinite-canvas-event-source";
 import {once} from "../event-utils/once";
-import {InfiniteCanvas} from "../api-surface/infinite-canvas";
+import {InfiniteCanvas} from "api/infinite-canvas";
 import {
     acceptEventListenerObjects,
     EventSourceThatAcceptsEventListenerObjects

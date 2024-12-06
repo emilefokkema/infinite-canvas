@@ -1,7 +1,7 @@
 import { CanvasMeasurement } from "./canvas-measurement";
 import { Transformation } from "../transformation";
-import { TransformationRepresentation } from "../api-surface/transformation-representation";
-import { Units } from "../api-surface/units";
+import { TransformationRepresentation } from "api/transformation-representation";
+import { Units } from "api/units";
 import { CanvasCoordinateSystemCollection } from "./canvas-coordinate-system-collection";
 import { CoordinateSystemCollection } from './coordinate-system-collection'
 import { CssCoordinateSystemCollection } from "./css-coordinate-system-collection";

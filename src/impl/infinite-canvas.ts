@@ -1,27 +1,27 @@
-import {InfiniteCanvasRenderingContext2D} from "./api-surface/infinite-canvas-rendering-context-2d"
+import {InfiniteCanvasRenderingContext2D} from "api/infinite-canvas-rendering-context-2d"
 import {InfiniteContext} from "./infinite-context/infinite-context"
 import {ViewBox} from "./interfaces/viewbox";
 import {InfiniteCanvasViewBox} from "./infinite-canvas-viewbox";
 import {InfiniteCanvasTransformer} from "./transformer/infinite-canvas-transformer";
-import {Config} from "./api-surface/config";
+import {Config} from "api/config";
 import {AnimationFrameDrawingIterationProvider} from "./animation-frame-drawing-iteration-provider";
-import { EventMap } from './api-surface/event-map';
+import { EventMap } from 'api/event-map';
 import {DrawingIterationProviderWithCallback} from "./drawing-iteration-provider-with-callback";
 import {LockableDrawingIterationProvider} from "./lockable-drawing-iteration-provider";
 import { RectangleManager } from "./rectangle/rectangle-manager";
 import {RectangleManagerImpl} from "./rectangle/rectangle-manager-impl";
 import {HtmlCanvasMeasurementProvider} from "./rectangle/html-canvas-measurement-provider";
-import {Units} from "./api-surface/units";
+import {Units} from "api/units";
 import {representTransformation} from "./transformer/represent-transformation";
-import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from './api-surface/infinite-canvas'
+import {InfiniteCanvas as InfiniteCanvasInterface, InfiniteCanvasCtr} from 'api/infinite-canvas'
 import {InfiniteCanvasEventCollection} from "./events/event-collections/infinite-canvas-event-collection";
-import {TransformationRepresentation} from "./api-surface/transformation-representation";
+import {TransformationRepresentation} from "api/transformation-representation";
 import { EventSource } from "./event-utils/event-source";
 import { EventCollection } from './events/event-collections/event-collection';
-import { TransformationEvent } from "./api-surface/transformation-event";
-import { DrawEvent } from "./api-surface/draw-event";
-import { InfiniteCanvasEventWithDefaultBehavior } from "./api-surface/infinite-canvas-event-with-default-behavior";
-import { InfiniteCanvasTouchEvent } from "./api-surface/infinite-canvas-touch-event";
+import { TransformationEvent } from "api/transformation-event";
+import { DrawEvent } from "api/draw-event";
+import { InfiniteCanvasEventWithDefaultBehavior } from "api/infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasTouchEvent } from "api/infinite-canvas-touch-event";
 import { CssLengthConverterImpl } from "./css-length-converter-impl";
 import { CssLengthConverterFactory } from "./css-length-converter-factory";
 import { CanvasResizes } from "./canvas-resize-observer-impl";

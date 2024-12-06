@@ -1,4 +1,4 @@
-import { InfiniteCanvasRenderingContext2D } from "../api-surface/infinite-canvas-rendering-context-2d"
+import { InfiniteCanvasRenderingContext2D } from "api/infinite-canvas-rendering-context-2d"
 import { InfiniteCanvasState } from "./infinite-canvas-state"
 import { InfiniteCanvasTransform } from "./infinite-canvas-transform"
 import { InfiniteCanvasCompositing } from "./infinite-canvas-compositing"

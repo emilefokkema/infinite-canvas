@@ -3,7 +3,7 @@ import { Anchor } from "./anchor";
 import { Gesture } from "./gesture";
 import { Rotate } from "./rotate";
 import { Zoom } from "./zoom";
-import { Config } from "../api-surface/config";
+import { Config } from "api/config";
 import { Transformation } from "../transformation";
 import { Translate } from "./translate";
 import { TranslateZoom } from "./translate-zoom";

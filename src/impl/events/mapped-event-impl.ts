@@ -1,5 +1,5 @@
 import { EventImpl } from "./event-impl";
-import {InfiniteCanvasEventWithDefaultBehavior} from "../api-surface/infinite-canvas-event-with-default-behavior";
+import {InfiniteCanvasEventWithDefaultBehavior} from "api/infinite-canvas-event-with-default-behavior";
 import {InternalEvent} from "./internal-events/internal-event";
 import { MappedEventPreventableDefault } from "./preventable-default/mapped-event-preventable-default";
 

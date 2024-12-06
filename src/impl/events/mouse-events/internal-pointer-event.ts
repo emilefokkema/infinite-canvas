@@ -1,5 +1,5 @@
 import { EventBasedInternalEvent } from "../internal-events/event-based-internal-event";
-import { InfiniteCanvasEventWithDefaultBehavior } from "../../api-surface/infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasEventWithDefaultBehavior } from "api/infinite-canvas-event-with-default-behavior";
 import { PointerEventPropertiesImpl } from "./pointer-event-properties-impl";
 import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { PointerEventImpl } from "./pointer-event-impl";

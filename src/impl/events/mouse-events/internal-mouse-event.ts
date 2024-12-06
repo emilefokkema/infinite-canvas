@@ -1,6 +1,6 @@
 import { EventBasedInternalEvent } from "../internal-events/event-based-internal-event";
 import { MouseEventPropertiesImpl } from "./mouse-event-properties-impl";
-import { InfiniteCanvasEventWithDefaultBehavior } from "../../api-surface/infinite-canvas-event-with-default-behavior";
+import { InfiniteCanvasEventWithDefaultBehavior } from "api/infinite-canvas-event-with-default-behavior";
 import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 import { MouseEventImpl } from "./mouse-event-impl";
 

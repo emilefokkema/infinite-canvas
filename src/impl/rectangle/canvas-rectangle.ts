@@ -3,8 +3,8 @@ import { Point } from "../geometry/point";
 import { CoordinateSystem } from "./coordinate-system";
 import { CanvasMeasurement } from "./canvas-measurement";
 import { Transformation } from "../transformation";
-import { TransformationRepresentation } from "../api-surface/transformation-representation";
-import { Units } from "../api-surface/units";
+import { TransformationRepresentation } from "api/transformation-representation";
+import { Units } from "api/units";
 
 export interface CanvasRectangle{
     readonly viewboxWidth: number;

@@ -1,4 +1,4 @@
-import { InfiniteCanvasTouch } from "../../api-surface/infinite-canvas-touch";
+import { InfiniteCanvasTouch } from "api/infinite-canvas-touch";
 import { TouchProperties } from "./touch-properties";
 
 export class TouchImpl implements InfiniteCanvasTouch{

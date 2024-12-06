@@ -1,14 +1,14 @@
 import { StaticEventCollection } from './static-event-collection';
-import { DrawEvent } from '../../api-surface/draw-event';
+import { DrawEvent } from 'api/draw-event';
 import {InfiniteCanvasEventSource} from "../infinite-canvas-event-source";
 import { DrawingIterationProviderWithCallback } from "../../drawing-iteration-provider-with-callback";
 import {representTransformation} from "../../transformer/represent-transformation";
 import { RectangleManager } from '../../rectangle/rectangle-manager';
 import { CanvasRectangle } from '../../rectangle/canvas-rectangle';
 import { CustomEventImpl } from '../custom-event-impl';
-import { TransformationRepresentation } from '../../api-surface/transformation-representation';
+import { TransformationRepresentation } from 'api/transformation-representation';
 import {DrawEventMap} from "../infinite-canvas-event-map";
-import { InfiniteCanvas } from '../../api-surface/infinite-canvas';
+import { InfiniteCanvas } from 'api/infinite-canvas';
 import { PreventableDefault } from '../preventable-default/preventable-default';
 import { SimpleInternalEvent } from '../internal-events/simple-internal-event';
 

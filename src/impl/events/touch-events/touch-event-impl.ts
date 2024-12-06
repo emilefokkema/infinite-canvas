@@ -1,10 +1,10 @@
 import { MappedUIEventImpl } from "../mapped-ui-event-impl";
-import { InfiniteCanvasTouchEvent } from "../../api-surface/infinite-canvas-touch-event";
+import { InfiniteCanvasTouchEvent } from "api/infinite-canvas-touch-event";
 import { TouchEventProperties } from "./touch-event-properties";
 import { InternalEvent } from "../internal-events/internal-event";
-import { InfiniteCanvasTouchList } from "../../api-surface/infinite-canvas-touch-list";
+import { InfiniteCanvasTouchList } from "api/infinite-canvas-touch-list";
 import { TouchProperties } from "./touch-properties";
-import { InfiniteCanvasTouch } from "../../api-surface/infinite-canvas-touch";
+import { InfiniteCanvasTouch } from "api/infinite-canvas-touch";
 import { TouchImpl } from "./touch-impl";
 import { MappedEventPreventableDefault } from "../preventable-default/mapped-event-preventable-default";
 

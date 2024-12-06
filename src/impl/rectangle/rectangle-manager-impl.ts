@@ -1,8 +1,8 @@
 import { CanvasMeasurementProvider } from "./canvas-measurement-provider";
 import { RectangleManager } from "./rectangle-manager";
-import { Config } from "../api-surface/config";
-import { TransformationRepresentation } from "../api-surface/transformation-representation";
-import { Units } from "../api-surface/units";
+import { Config } from "api/config";
+import { TransformationRepresentation } from "api/transformation-representation";
+import { Units } from "api/units";
 import { CanvasRectangle } from "./canvas-rectangle";
 import { CanvasRectangleImpl } from './canvas-rectangle-impl'
 import { Transformation } from "../transformation";

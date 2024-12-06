@@ -1,5 +1,5 @@
 import { EventCollection } from "./event-collection";
-import { InfiniteCanvas } from "../../api-surface/infinite-canvas";
+import { InfiniteCanvas } from "api/infinite-canvas";
 import { isMappedMouseEventKey, isMappedTouchEventKey, isMappedOnlyPointerEventKey, isMappedDragEventKey, MappedMouseEventMap, MappedPointerEventMap, MappedTouchEventMap, MappedOnlyPointerEventMap, MappedDragEventMap } from "../infinite-canvas-event-map";
 
 export class MappingPointerEventCollection implements EventCollection<MappedPointerEventMap>{

@@ -1,4 +1,4 @@
-import { EventMap } from "../api-surface/event-map";
+import { EventMap } from "api/event-map";
 
 type KeysOfPropertiesOfType<TType, TProp> = {[K in keyof TType]: TType[K] extends TProp ? K : never}[keyof TType];
 type KeysOfPropertiesOfExactlyType<TType, TProp> = {[K in keyof TType]: TType[K] extends TProp ? TProp extends TType[K] ? K : never: never}[keyof TType]
@@ -124,9 +124,4 @@ export function isMappedDragEventKey(key: keyof MappedPointerEventMap): key is k
 export function isMappedTouchEventKey(key: keyof PointerEventMap): key is keyof MappedTouchEventMap{
     return mappedTouchEventKeyCollection.hasOwnProperty(key);
 }
-
-
-export * from '../api-surface/draw-event'
-export * from '../api-surface/transformation-event'
-export * from '../api-surface/transformation-representation'
 

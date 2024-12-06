@@ -1,7 +1,7 @@
-import { EventMap } from '../../api-surface/event-map'
+import { EventMap } from 'api/event-map'
 import {isTransformationEventKey, isPointerEventKey, PointerEventMap, DrawEventMap, TransformationEventMap, UnmappedEventMap, HandledOrFilteredEventMap} from "../infinite-canvas-event-map";
 import { EventCollection, EventListenerCollection } from './event-collection';
-import {Config, InfiniteCanvas} from "../../api-surface/infinite-canvas";
+import {Config, InfiniteCanvas} from "api/infinite-canvas";
 import {Transformer} from "../../transformer/transformer";
 import { RectangleManager } from '../../rectangle/rectangle-manager';
 import { DrawEventCollection } from './draw-event-collection';

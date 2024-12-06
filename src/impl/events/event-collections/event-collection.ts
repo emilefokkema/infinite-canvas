@@ -1,4 +1,4 @@
-import { InfiniteCanvas } from '../../api-surface/infinite-canvas';
+import { InfiniteCanvas } from 'api/infinite-canvas';
 
 export interface EventListenerCollection<TEventMap, TThis = any>{
     addEventListener(type: keyof TEventMap, listener: ((this: TThis, ev: TEventMap[keyof TEventMap]) => any) | EventListenerObject, options?: boolean | AddEventListenerOptions): void;
