@@ -1,5 +1,5 @@
-import { CanvasMeasurement } from "../src/rectangle/canvas-measurement";
-import { CanvasMeasurementProvider } from "../src/rectangle/canvas-measurement-provider";
+import { CanvasMeasurement } from "src/rectangle/canvas-measurement";
+import { CanvasMeasurementProvider } from "src/rectangle/canvas-measurement-provider";
 
 export class MockCanvasMeasurementProvider implements CanvasMeasurementProvider{
     public measurement: CanvasMeasurement;

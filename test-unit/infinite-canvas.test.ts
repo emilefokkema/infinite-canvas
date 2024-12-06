@@ -1,9 +1,9 @@
-import { beforeEach, beforeAll, describe, expect, it, vi, type Mock } from 'vitest'
-import InfiniteCanvas from "../src/infinite-canvas"
-import { InfiniteCanvas as InfiniteCanvasInterface } from '../src/api-surface/infinite-canvas';
-import { InfiniteCanvasRenderingContext2D } from "../src/api-surface/infinite-canvas-rendering-context-2d"
+import { beforeEach, beforeAll, describe, expect, it, vi, type Mock} from 'vitest'
+import InfiniteCanvas from "src/infinite-canvas"
+import { InfiniteCanvas as InfiniteCanvasInterface } from 'api/infinite-canvas';
+import { InfiniteCanvasRenderingContext2D } from "api/infinite-canvas-rendering-context-2d"
 import { CanvasContextMock } from "./canvas-context-mock";
-import { DrawEvent, EventMap } from "../src/api-surface/event-map";
+import { DrawEvent, EventMap } from "api/event-map";
 
 class MockResizeObserver implements ResizeObserver{
 	public disconnect(): void {
@@ -598,7 +598,7 @@ describe("an infinite canvas", () => {
 	});
 
 	describe("that registers a listener to 'draw'", () => {
-		let drawCallbackSpy: Mock<[DrawEvent],void>;
+		let drawCallbackSpy: Mock<(ev: DrawEvent) => void>;
 
 		beforeEach(() => {
 			

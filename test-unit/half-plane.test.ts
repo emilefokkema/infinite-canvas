@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import { HalfPlane } from "../src/areas/polygons/half-plane";
-import { Point } from "../src/geometry/point";
-import { PolygonVertex } from "../src/areas/polygons/polygon-vertex";
+import { HalfPlane } from "src/areas/polygons/half-plane";
+import { Point } from "src/geometry/point";
+import { PolygonVertex } from "src/areas/polygons/polygon-vertex";
 
 describe("a half plane", () => {
     let halfPlane: HalfPlane;

@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import { ConvexPolygon } from "../src/areas/polygons/convex-polygon";
-import { HalfPlane } from "../src/areas/polygons/half-plane";
-import { Point } from "../src/geometry/point";
-import { PolygonVertex } from "../src/areas/polygons/polygon-vertex";
-import { Area } from "../src/areas/area";
-import { plane } from "../src/areas/plane";
-import { Transformation } from "../src/transformation";
-import { empty } from "../src/areas/empty";
-import { LineSegment } from "../src/areas/line/line-segment";
+import { ConvexPolygon } from "src/areas/polygons/convex-polygon";
+import { HalfPlane } from "src/areas/polygons/half-plane";
+import { Point } from "src/geometry/point";
+import { PolygonVertex } from "src/areas/polygons/polygon-vertex";
+import { Area } from "src/areas/area";
+import { plane } from "src/areas/plane";
+import { Transformation } from "src/transformation";
+import { empty } from "src/areas/empty";
+import { LineSegment } from "src/areas/line/line-segment";
 import { p, ls, hp, r, l } from "./builders";
 import { expectPolygonsToBeEqual, expectAreasToBeEqual } from "./expectations";
-import { Ray } from "../src/areas/line/ray";
-import { Line } from "../src/areas/line/line";
+import { Ray } from "src/areas/line/ray";
+import { Line } from "src/areas/line/line";
 import { createRectangle } from './create-rectangle';
 
 describe('this convex polygon', () => {

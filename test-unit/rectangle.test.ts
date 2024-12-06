@@ -1,10 +1,12 @@
+/// <reference types="../test-utils/custom-matchers"/>
+
 import { beforeEach, describe, it, expect} from 'vitest'
 import '../test-utils/expect-extensions';
-import { Units } from "../src/api-surface/units";
-import { RectangleManager } from '../src/rectangle/rectangle-manager';
-import { CanvasMeasurementProvider } from '../src/rectangle/canvas-measurement-provider';
-import { TransformationRepresentation } from '../src/api-surface/transformation-representation';
-import { RectangleManagerImpl } from '../src/rectangle/rectangle-manager-impl';
+import { Units } from "api/units";
+import { RectangleManager } from 'src/rectangle/rectangle-manager';
+import { CanvasMeasurementProvider } from 'src/rectangle/canvas-measurement-provider';
+import { TransformationRepresentation } from 'api/transformation-representation';
+import { RectangleManagerImpl } from 'src/rectangle/rectangle-manager-impl';
 
 const identity: TransformationRepresentation = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 

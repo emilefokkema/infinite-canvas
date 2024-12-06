@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi, type Mock} from 'vitest'
 import { logInstruction } from "./log-instruction";
-import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
-import { InfiniteCanvasInstructionSet } from "../src/infinite-canvas-instruction-set";
-import { Point } from "../src/geometry/point";
-import { getRectStrategy } from '../src/rect/get-rect-strategy';
+import { fillStyle } from "src/state/dimensions/fill-stroke-style";
+import { InfiniteCanvasInstructionSet } from "src/infinite-canvas-instruction-set";
+import { Point } from "src/geometry/point";
+import { getRectStrategy } from 'src/rect/get-rect-strategy';
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;

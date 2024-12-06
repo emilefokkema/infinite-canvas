@@ -1,15 +1,15 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { InfiniteCanvasStateInstance } from "../src/state/infinite-canvas-state-instance";
+import { InfiniteCanvasStateInstance } from "src/state/infinite-canvas-state-instance";
 import { logInstruction } from "./log-instruction";
-import { Instruction } from "../src/instructions/instruction";
-import { Transformation } from "../src/transformation";
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
-import { defaultState } from "../src/state/default-state";
-import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
-import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
-import { Point } from "../src/geometry/point";
-import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
-import { getRectStrategy } from '../src/rect/get-rect-strategy';
+import { Instruction } from "src/instructions/instruction";
+import { Transformation } from "src/transformation";
+import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
+import { defaultState } from "src/state/default-state";
+import { fillStyle, strokeStyle } from "src/state/dimensions/fill-stroke-style";
+import { InstructionsWithPath } from "src/instructions/instructions-with-path";
+import { Point } from "src/geometry/point";
+import { TransformableFilter } from "src/state/dimensions/transformable-filter";
+import { getRectStrategy } from 'src/rect/get-rect-strategy';
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);

@@ -1,9 +1,9 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { CssLengthConverter } from "../src/css-length-converter";
-import { TransformableFilter } from "../src/state/dimensions/transformable-filter";
-import { Transformation } from '../src/transformation'
+import { CssLengthConverter } from "src/css-length-converter";
+import { TransformableFilter } from "src/state/dimensions/transformable-filter";
+import { Transformation } from 'src/transformation'
 import '../test-utils/expect-extensions'
-import { CanvasRectangle } from '../src/rectangle/canvas-rectangle';
+import { CanvasRectangle } from 'src/rectangle/canvas-rectangle';
 
 function createMockCoordinates(userTransformation: Transformation): CanvasRectangle{
     return {

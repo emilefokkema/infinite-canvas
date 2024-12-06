@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { Transformation } from "../src/transformation"
-import { Point } from "../src/geometry/point"
+import { Transformation } from "src/transformation"
+import { Point } from "src/geometry/point"
 
 function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
 	const actualTransformedPoint: Point = transformation.apply(point);

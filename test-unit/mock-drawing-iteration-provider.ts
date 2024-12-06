@@ -1,4 +1,4 @@
-import { DrawingIterationProvider } from "../src/interfaces/drawing-iteration-provider";
+import { DrawingIterationProvider } from "src/interfaces/drawing-iteration-provider";
 
 export class MockDrawingIterationProvider implements DrawingIterationProvider{
     private latestDrawCall: () => void;

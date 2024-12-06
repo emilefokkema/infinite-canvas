@@ -1,15 +1,15 @@
-import { Mock, SpyInstance, vi } from 'vitest'
-import { DrawingLock } from "../src/drawing-lock";
+import { Mock, MockInstance, vi } from 'vitest'
+import { DrawingLock } from "src/drawing-lock";
 import { MockCanvasMeasurementProvider } from './mock-canvas-measurement-provider';
 import { CanvasContextMock } from './canvas-context-mock';
-import { Config } from '../src/api-surface/config';
+import { Config } from 'api/config';
 import { MockDrawingIterationProvider } from './mock-drawing-iteration-provider';
-import { CssLengthConverterFactory } from '../src/css-length-converter-factory';
-import { InfiniteCanvasViewBox } from '../src/infinite-canvas-viewbox';
-import { RectangleManagerImpl } from '../src/rectangle/rectangle-manager-impl';
-import { InfiniteContext } from '../src/infinite-context/infinite-context';
-import { ViewBox } from '../src/interfaces/viewbox';
-import { InfiniteCanvasRenderingContext2D } from '../src/api-surface/infinite-canvas-rendering-context-2d';
+import { CssLengthConverterFactory } from 'src/css-length-converter-factory';
+import { InfiniteCanvasViewBox } from 'src/infinite-canvas-viewbox';
+import { RectangleManagerImpl } from 'src/rectangle/rectangle-manager-impl';
+import { InfiniteContext } from 'src/infinite-context/infinite-context';
+import { ViewBox } from 'src/interfaces/viewbox';
+import { InfiniteCanvasRenderingContext2D } from 'api/infinite-canvas-rendering-context-2d';
 
 
 function setupGlobals(){
@@ -34,8 +34,8 @@ function setupGlobals(){
 export interface InfiniteCanvasTestFixture{
     width: number
     height: number
-    releaseDrawingLockSpy: SpyInstance<[], void>
-    getDrawingLockSpy: Mock<[], DrawingLock>
+    releaseDrawingLockSpy: MockInstance<()=>void>
+    getDrawingLockSpy: MockInstance<()=>DrawingLock>
     measurementProvider: MockCanvasMeasurementProvider
     contextMock: CanvasContextMock
     config: Partial<Config>
@@ -48,7 +48,7 @@ export function createInfiniteCanvasTestFixture(): InfiniteCanvasTestFixture{
     setupGlobals();
     const drawingLock: DrawingLock = {release(){}};
     const releaseDrawingLockSpy = vi.spyOn(drawingLock, 'release');
-    const getDrawingLockSpy = vi.fn<[], DrawingLock>().mockReturnValue(drawingLock)
+    const getDrawingLockSpy = vi.fn<()=>DrawingLock>().mockReturnValue(drawingLock)
     const width = 200;
     const height = 200;
     const measurementProvider = new MockCanvasMeasurementProvider(width, height);
