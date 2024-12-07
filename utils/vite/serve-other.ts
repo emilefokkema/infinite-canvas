@@ -1,19 +1,14 @@
-import http from 'http'
-import { InlineConfig, PluginOption, createServer, ViteDevServer, UserConfig } from 'vite'
+import { PluginOption, createServer, ViteDevServer, UserConfig, HttpServer } from 'vite'
 import { ServeOtherOptions } from './serve-other-options';
 
-function findServer(server: http.Server | undefined, viteDevServer: ViteDevServer | undefined): http.Server | undefined{
+function findServer(server: HttpServer | undefined, viteDevServer: ViteDevServer | undefined): HttpServer | undefined{
     if(server){
         return server;
     }
     if(!viteDevServer){
         return undefined;
     }
-    const devServerServer = viteDevServer.httpServer;
-    if(devServerServer instanceof http.Server){
-        return devServerServer;
-    }
-    return undefined;
+    return viteDevServer.httpServer || undefined;
 }
 
 export function serveOther({id, path, config, server: {port, server}}: ServeOtherOptions): PluginOption{

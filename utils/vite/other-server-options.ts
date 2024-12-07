@@ -1,6 +1,6 @@
-import http from 'http'
+import { HttpServer } from 'vite'
 
 export interface OtherServerOptions{
     port: number
-    server?: http.Server
+    server?: HttpServer
 }
