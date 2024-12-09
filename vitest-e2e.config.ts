@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config'
-import { addTestCasesMetadataList } from './test-cases/vite-plugins/add-test-cases-metadata-list'
+import { addTestCasesMetadataList } from './test-cases/vite-plugins'
 
 export default defineConfig({
   test: {

@@ -2,6 +2,7 @@ import { PluginOption } from 'vite'
 import { createViteConfig as createExamplesViteConfig } from '../../examples/runner'
 import { serveOther, OtherServerOptions } from '../../utils/vite';
 import { createViteConfig as createTestCasesViteConfig } from './test-case/create-vite-config'
+import { serveStaticContent as serveTestCasesStaticContent } from '../../test-cases/vite-plugins'
 
 function serveTestCases(server: OtherServerOptions): PluginOption{
     return serveOther({
@@ -25,5 +26,6 @@ export function addRunner(server: OtherServerOptions): PluginOption[]{
     return [
         serveExamples(server),
         serveTestCases(server),
+        serveTestCasesStaticContent()
     ]
 }
