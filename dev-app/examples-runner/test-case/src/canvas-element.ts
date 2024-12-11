@@ -1,27 +1,34 @@
 import type { TestCaseDistortion } from "test-case";
 
 export interface CanvasElement{
-    ctx: CanvasRenderingContext2D;
     el: HTMLCanvasElement;
     applyDistortion(distortion: TestCaseDistortion): void
     reset(): void
 }
 
-export function createCanvasElement(el: HTMLCanvasElement): CanvasElement{
-    const width = el.width;
-    const height = el.height;
-    const ctx = el.getContext('2d') as CanvasRenderingContext2D;
-    function reset(): void{
-        el.width = width;
-        el.height = height;
-        el.style.removeProperty('width')
-        el.style.removeProperty('height')
+export function createCanvasElement(parentId: string): CanvasElement{
+    const parent = document.getElementById(parentId) as HTMLElement;
+    let el = createCanvasElement();
+
+    function createCanvasElement(): HTMLCanvasElement {
+        const result = document.createElement('canvas');
+        result.setAttribute('width', '400');
+        result.setAttribute('height', '400');
+        parent.appendChild(result);
+        return result;
     }
+
+    function reset(): void {
+        el.remove();
+        el = createCanvasElement();
+    }
+
     function applyDistortion(distortion: TestCaseDistortion): void{
         el.style.width = distortion.screenWidth;
         el.style.height = distortion.screenHeight;
         el.width = distortion.viewboxWidth;
         el.height = distortion.viewboxHeight;
     }
-    return { el, ctx, reset, applyDistortion }
+
+    return { get el(){return el;}, reset, applyDistortion }
 }
