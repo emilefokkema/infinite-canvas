@@ -1,7 +1,7 @@
 import { InlineConfig, HttpServer } from "vite";
 import { fileURLToPath } from "url";
 import { addRunner } from './add-runner'
-import { PORT } from "../backend/constants";
+import { PORT } from "../shared/constants";
 
 export function createViteConfig(server: HttpServer): InlineConfig{
     const root = fileURLToPath(new URL('.', import.meta.url));

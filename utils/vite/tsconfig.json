@@ -3,8 +3,5 @@
     "compilerOptions": {
         "outDir": "dist"
     },
-    "include": [
-        "vite-plugin/**/*",
-        "shared/**/*"
-    ]
+    "include": ["**/*.ts"]
 }

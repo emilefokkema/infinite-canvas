@@ -1,20 +1,17 @@
 {
     "extends": "../../tsconfig.node.json",
     "include": [
-      "vite.config.ts",
-      "../backend/**/*.ts",
-      "../shared/**/*.ts",
-      "../examples-runner/**/*.ts",
-      "../../utils/vite/**/*.ts"
+      "*.ts"
     ],
     "references": [
       {"path": "../../test-cases/tsconfig.node.json"},
-      {"path": "../../src/tsconfig.json"}
+      {"path": "../../src/tsconfig.json"},
+      {"path": "../shared"},
+      {"path": "../examples-runner"},
+      {"path": "../../utils/vite"},
+      {"path": "../backend"}
     ],
-    "exclude": ["../examples-runner/test-case/src/**/*.ts"],
     "compilerOptions": {
-      "composite": true,
-      "noEmit": true,
-      "rootDir": "../.."
+      "outDir": "dist"
     }
   }

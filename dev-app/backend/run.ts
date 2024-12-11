@@ -4,7 +4,7 @@ import { createServer } from 'vite'
 import express from 'express'
 import { fileURLToPath } from 'url'
 import { createRouter } from './router';
-import { PORT } from './constants';
+import { PORT } from '../shared/constants';
 import { createViteConfig } from '../examples-runner/create-vite-config';
 
 async function run(){

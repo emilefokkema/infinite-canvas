@@ -1,8 +1,12 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
         "types": ["node"],
-        "target": "ESNext"
-    }
+        "outDir": "dist-types"
+    },
+    "references": [
+        {"path": "./test-cases/tsconfig.node.json"},
+        {"path": "./src"}
+    ],
+    "include": ["*.ts", "package.json"]
 }

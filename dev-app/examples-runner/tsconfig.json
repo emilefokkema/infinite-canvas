@@ -1,0 +1,13 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "include": ["*.ts"],
+    "references": [
+        {"path": "../shared"},
+        {"path": "../../utils/vite"},
+        {"path": "../../examples/tsconfig.node.json"},
+        {"path": "./test-case/tsconfig.node.json"}
+    ]
+}

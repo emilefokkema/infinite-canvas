@@ -1,17 +1,14 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "../../tsconfig.frontend.json",
     "compilerOptions": {
-        "rootDir": "../..",
-        "composite": true,
-        "noEmit": true
+        "outDir": "dist"
     },
     "references": [
         {"path": "../../examples/tsconfig.frontend.json"},
-        {"path": "../../utils/dark-theme/tsconfig.frontend.json"}
+        {"path": "../../utils/dark-theme/tsconfig.frontend.json"},
+        {"path": "../shared"}
     ],
     "include": [
         "src/**/*.*", "src/**/*.vue",
-        "../shared/**/*.ts",
-        "../../utils/frontend/**/*",
         "env.d.ts"]
 }

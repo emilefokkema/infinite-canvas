@@ -1,7 +1,8 @@
 import { readdir, readFile } from "fs/promises"
 import path from 'path'
 import { ExampleProject } from "../shared";
-import { ExampleMetadata, getExamplesMetadata } from "./get-examples-metadata";
+import { getExamplesMetadata } from "./get-examples-metadata";
+import { ExampleMetadata } from './example-metadata'
 
 async function getExampleProject(metadata: ExampleMetadata): Promise<ExampleProject>{
     const filesList: {[name: string]: string} = {};

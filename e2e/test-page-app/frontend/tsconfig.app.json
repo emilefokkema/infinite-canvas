@@ -1,8 +1,7 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "../../../tsconfig.frontend.json",
     "compilerOptions": {
-        "composite": true,
-        "noEmit": true,
+        "outDir": "dist-types",
         "paths": {
             "infinite-canvas": ["../../../src/api/infinite-canvas.ts"]
         }

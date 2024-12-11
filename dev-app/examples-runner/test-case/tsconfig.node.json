@@ -1,0 +1,12 @@
+{
+    "extends": "../../../tsconfig.node.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "references": [
+        {"path": "../../../utils/dark-theme/tsconfig.node.json"},
+        {"path": "../../../test-cases/tsconfig.node.json"},
+        {"path": "../../../src"}
+    ],
+    "include": ["*.ts"]
+}

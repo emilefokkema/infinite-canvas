@@ -1,18 +1,7 @@
 {
+    "extends": "../tsconfig.frontend.json",
     "compilerOptions": {
-        "composite": true,
-        "lib": [
-            "ES2020",
-            "DOM",
-            "DOM.Iterable"
-        ],
-        "types": [],
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "target": "ESNext",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true
+        "outDir": "dist"
     },
     "include": [
         "shared/**/*"

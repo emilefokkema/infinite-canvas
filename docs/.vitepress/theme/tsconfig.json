@@ -1,13 +1,10 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "../../../tsconfig.frontend.json",
     "compilerOptions": {
-        "rootDir": ".",
-        "moduleResolution": "node",
-        "baseUrl": ".",
+        "outDir": "dist",
         "paths": {
             "infinite-canvas": ["../../../src/api/infinite-canvas.ts"]
-        },
-        "noEmit": true
+        }
     },
     "references": [
         {"path": "../../../examples/tsconfig.frontend.json"},
