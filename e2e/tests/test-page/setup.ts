@@ -10,7 +10,7 @@ import type { Config } from 'api'
 import { createInfiniteCanvas } from './create-infinite-canvas'
 import '../utils/image-snapshots/expect-extensions'
 import { EventTargetLike } from '../../../e2e-test-utils/runtime-event-target/shared/event-target-like';
-import { RuntimeEventTarget } from '@runtime-event-target/test';
+import { RuntimeEventTarget, EventTargetFactory } from '@runtime-event-target/test';
 
 declare global{
     var page: TestPage
@@ -22,18 +22,16 @@ beforeAll(async () => {
     }
     const pageFactoryOptions = inject('pageFactoryOptions')
     const runtimeEventTargetOptions = inject('runtimeEventTargetOptions')
-    const {page, close: closePage } = await getPage(pageFactoryOptions)
-    await page.goto(SERVER_BASE_URL, {waitUntil: 'domcontentloaded'})
-    await setSize(600, 600)
-    let eventTargetFactory = await initializeEventTargetFactory(page, runtimeEventTargetOptions)
+    const pageFactoryPage = await getPage(pageFactoryOptions)
+    let { eventTargetFactory } = await preparePage();
     globalThis.page = {
-        page,
+        get page(){return pageFactoryPage.page},
         setSize,
-        get mouse(){return page.mouse;},
-        get touchscreen(){return page.touchscreen;},
-        get keyboard(){return page.keyboard},
+        get mouse(){return pageFactoryPage.page.mouse;},
+        get touchscreen(){return pageFactoryPage.page.touchscreen;},
+        get keyboard(){return pageFactoryPage.page.keyboard},
         async getScreenshot(){
-            const array = await page.screenshot({
+            const array = await pageFactoryPage.page.screenshot({
                 clip: {
                     x: 0,
                     y: 0,
@@ -47,10 +45,10 @@ beforeAll(async () => {
             return eventTargetFactory.createEventTarget(target);
         },
         disableTouchAction(): Promise<void>{
-            return page.evaluate(() => window.TestPageLib.disableTouchAction());
+            return pageFactoryPage.page.evaluate(() => window.TestPageLib.disableTouchAction());
         },
         createCanvasElement: (config: CanvasElementInitialization) => {
-            return page.evaluateHandle((config) => window.TestPageLib.createCanvasElement(config), config)
+            return pageFactoryPage.page.evaluateHandle((config) => window.TestPageLib.createCanvasElement(config), config)
         },
         createInfiniteCanvas: (canvasElement: JSHandle<HTMLCanvasElement>, config?: Partial<Config>) => {
             return createInfiniteCanvas(canvasElement, eventTargetFactory, config)
@@ -62,13 +60,22 @@ beforeAll(async () => {
             return canvas.evaluate((c, text) => window.TestPageLib.measureText(c, text), text)
         },
         async reload(){
-            await page.reload({waitUntil: 'domcontentloaded'})
-            await setSize(600, 600)
-            eventTargetFactory = await initializeEventTargetFactory(page, runtimeEventTargetOptions)
+            await pageFactoryPage.reload();
+            ({eventTargetFactory} = await preparePage());
         }
     }
+    async function preparePage(): Promise<{eventTargetFactory: EventTargetFactory}>{
+        const page = pageFactoryPage.page;
+        await page.goto(SERVER_BASE_URL, {waitUntil: 'domcontentloaded'})
+        await setSize(600, 600)
+        const eventTargetFactory = await initializeEventTargetFactory(page, runtimeEventTargetOptions);
+        return { eventTargetFactory }
+    }
+    async function closePage(): Promise<void>{
+        await pageFactoryPage.close();
+    }
     function setSize(width: number, height: number): Promise<void>{
-        return page.setViewport({width, height, deviceScaleFactor: 1, hasTouch: true});
+        return pageFactoryPage.page.setViewport({width, height, deviceScaleFactor: 1, hasTouch: true});
     }
     return async () => {
         await closePage();

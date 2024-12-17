@@ -1,2 +1,2 @@
 export const FRONTEND_PATH = 'frontend'
-export const CONNECTIONS_PATH = 'connections'
+export const sendEventFunctionName = 'runtimeEventTargetSendEvent' as const

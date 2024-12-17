@@ -3,13 +3,14 @@ import type { EventMessage } from '../../../shared/messages';
 import type { ChartMap, SerializablePropertyChart } from '../../../shared/serializable-types';
 import type { RuntimeEventTarget } from '../../api/runtime-event-target'
 import type { Connection } from './connection';
+import type { MessageTarget } from './message-target';
 import { serializeEvent } from './serialize-event';
 
 class TargetEventListener<TMap, TType extends keyof TMap>{
     private readonly additionalHandlers: ((e: TMap[TType]) => void)[] = []
     private readonly listener: (e: TMap[TType]) => void
     public constructor(
-        socket: WebSocket,
+        messageTarget: MessageTarget,
         private readonly eventTargetLike: EventTargetLike<TMap>,
         private readonly type: TType,
         chart: SerializablePropertyChart<TMap[TType]>
@@ -23,7 +24,7 @@ class TargetEventListener<TMap, TType extends keyof TMap>{
                 eventType: type,
                 serializedEvent: serializeEvent(e, chart)
             };
-            socket.send(JSON.stringify(message))
+            messageTarget.send(message)
         }
         eventTargetLike.addEventListener(type, listener);
     }
@@ -46,14 +47,14 @@ export class RuntimeEventTargetImpl<TMap> implements RuntimeEventTarget<TMap>{
         private readonly connection: Connection,
         private readonly eventTargetLike: EventTargetLike<TMap>
     ){}
-    public async emitEvents(map: ChartMap<TMap>): Promise<void>{
-        const socket = await this.connection.getSocket();
+    public emitEvents(map: ChartMap<TMap>): void {
+        const messageTarget = this.connection.getMessageTarget();
         for(const type in map){
             const chart = map[type]
             if(!chart){
                 continue;
             }
-            const listener = new TargetEventListener(socket, this.eventTargetLike, type, chart as SerializablePropertyChart<TMap[typeof type]>)
+            const listener = new TargetEventListener(messageTarget, this.eventTargetLike, type, chart as SerializablePropertyChart<TMap[typeof type]>)
             this.listenerMap[type] = listener;
         }
     }

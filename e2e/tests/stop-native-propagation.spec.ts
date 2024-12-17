@@ -6,7 +6,6 @@ describe('when propagation of a mousedown event is stopped on capture on the can
     let infCanvas: TestPageInfiniteCanvas
     
     afterEach(async () => {
-        await infCanvas.eventTarget.destroy();
         await page.reload()
     })
 
@@ -35,7 +34,6 @@ describe('when propagation of a mousedown event is stopped on capture on the can
             page.mouse.move(200, 200)
         ])
         await page.mouse.up({button: 'left'});
-        await canvasElEvents.destroy();
     })
 
     it('also when the handler that stops propagation is added after creation of InfiniteCanvas', async () => {
@@ -62,6 +60,5 @@ describe('when propagation of a mousedown event is stopped on capture on the can
             noEvent(infCanvas.eventTarget, 'draw', 300),
             page.mouse.move(200, 200)
         ])
-        await canvasElEvents.destroy();
     })
 })

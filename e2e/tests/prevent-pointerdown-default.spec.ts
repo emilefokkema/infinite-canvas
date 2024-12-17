@@ -6,7 +6,6 @@ describe('when default is prevented for pointerdown', () => {
     let infCanvas: TestPageInfiniteCanvas
 
     afterEach(async () => {
-        await infCanvas.eventTarget.destroy();
         await page.reload()
     })
 

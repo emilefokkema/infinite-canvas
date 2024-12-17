@@ -13,7 +13,6 @@ export type ExtendedSerializedMap<
     }
 
 export interface RuntimeEventTarget<TMap, TSerializedMap = {}> extends EventTargetLike<Pick<TSerializedMap, keyof TMap & keyof TSerializedMap>>{
-    destroy(): Promise<void>
     emitEvents<TChartMap extends ChartMap<TMap>>(map: TChartMap): Promise<RuntimeEventTarget<TMap, ExtendedSerializedMap<TMap, TSerializedMap, TChartMap>>>
     handleEvents<TType extends (keyof TMap & keyof TSerializedMap)>(
         type: TType,

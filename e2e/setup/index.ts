@@ -10,7 +10,7 @@ export default async function setup(ctx: GlobalSetupContext){
     const server = http.createServer(app);
     const {destroy: destroyPageFactory} = setupPageFactory(ctx, app)
 
-    const { runtimeEventTargetOptions } = await setupTestPageServer(server, app);
+    const { runtimeEventTargetOptions } = await setupTestPageServer(app);
     ctx.provide('runtimeEventTargetOptions', runtimeEventTargetOptions)
 
     

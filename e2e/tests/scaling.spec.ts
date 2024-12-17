@@ -7,7 +7,6 @@ describe('when scaling', () => {
     let infCanvas: TestPageInfiniteCanvas
 
     afterEach(async () => {
-        await infCanvas.eventTarget.destroy();
         await page.reload()
     })
 

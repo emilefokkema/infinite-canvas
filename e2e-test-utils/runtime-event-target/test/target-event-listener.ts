@@ -1,24 +1,19 @@
-import WebSocket from 'ws'
-import { createSocketMessageListener } from "../shared/create-socket-message-listener";
 import { EventMessage } from "../shared/messages";
-
-function isEventMessage(message: unknown): message is EventMessage{
-    return !!message && (message as EventMessage).type === 'event';
-}
+import { EventSource } from './events/event-source';
 
 export class TargetEventListener<TSerializedEvent, TType extends keyof any>{
-    private socketMessageListener: (e: {data: unknown}) => void
+    private eventMessageListener: (e: EventMessage) => void
     private listeners: ((e: TSerializedEvent) => void)[] = [];
     public constructor(
-        private readonly socket: WebSocket,
+        private readonly eventMessages: EventSource<EventMessage>,
         private readonly type: TType
     ){
-        this.socketMessageListener = createSocketMessageListener(isEventMessage, (e) => {
+        this.eventMessageListener = (e) => {
             if(e.eventType !== this.type){
                 return;
             }
             this.notifyListeners(e.serializedEvent as TSerializedEvent);
-        })
+        }
     }
     private notifyListeners(event: TSerializedEvent): void{
         for(const listener of this.listeners.slice()){
@@ -30,7 +25,7 @@ export class TargetEventListener<TSerializedEvent, TType extends keyof any>{
         if(index > -1){
             this.listeners.splice(index, 1);
             if(this.listeners.length === 0){
-                this.socket.removeEventListener('message', this.socketMessageListener)
+                this.eventMessages.removeListener(this.eventMessageListener)
             }
         }
     }
@@ -38,7 +33,7 @@ export class TargetEventListener<TSerializedEvent, TType extends keyof any>{
         const isFirst = this.listeners.length === 0;
         this.listeners.push(listener)
         if(isFirst){
-            this.socket.addEventListener('message', this.socketMessageListener)
+            this.eventMessages.addListener(this.eventMessageListener)
         }
     }
 }

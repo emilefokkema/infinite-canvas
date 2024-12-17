@@ -8,7 +8,6 @@ describe('when default is prevented', () => {
     let infCanvas: TestPageInfiniteCanvas
 
     afterEach(async () => {
-        await infCanvas.eventTarget.destroy();
         await page.reload()
     })
 
@@ -78,7 +77,6 @@ describe('when default is prevented', () => {
         expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         expect(await page.page.evaluate(() => window.scrollY)).toEqual(deltaY);
         await page.page.evaluate(() => window.scrollTo(0, 0))
-        await windowEvents.destroy();
     })
 
     it('in case of greedy gesture handling should neither zoom nor scroll when both defaults are prevented', async () => {

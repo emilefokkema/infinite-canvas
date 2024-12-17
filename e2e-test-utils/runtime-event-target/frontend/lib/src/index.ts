@@ -1,12 +1,11 @@
 import type { EventTargetFactoryInitializer } from '../../api/event-target-factory-initializer'
-import type { Options } from '../../../shared/options'
-import { Connection } from './connection'
 import { RuntimeEventTargetImpl } from './runtime-event-target-impl'
+import { ExposedFunctionConnection } from './exposed-function-connection'
 
-const initializeEventTargetFactory: EventTargetFactoryInitializer = (options: Options) => {
+const initializeEventTargetFactory: EventTargetFactoryInitializer = () => {
     return { 
         createEventTarget(eventTargetLike, connectionData) {
-            const connection = new Connection(options, connectionData)
+            const connection = new ExposedFunctionConnection(connectionData);
             return new RuntimeEventTargetImpl(connection, eventTargetLike);
         }
     };

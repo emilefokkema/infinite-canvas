@@ -21,9 +21,6 @@ export class RuntimeEventTargetImpl<TMap, TSerializedMap> implements RuntimeEven
         private readonly runtimeEventTargetHandle: JSHandle<PageRuntimeEventTarget<TMap>>,
         private readonly listeners: ListenerMap<TMap, TSerializedMap>
     ){}
-    public destroy(): Promise<void>{
-        return this.connection.destroy();
-    }
     public addEventListener<TType extends (keyof TSerializedMap & keyof TMap)>(type: TType, listener: (e: TSerializedMap[TType]) => void): void {
         const eventListener = this.listeners[type];
         if(!eventListener){
@@ -41,15 +38,13 @@ export class RuntimeEventTargetImpl<TMap, TSerializedMap> implements RuntimeEven
     public async emitEvents<TChartMap extends ChartMap<TMap>>(
         map: TChartMap
     ): Promise<RuntimeEventTarget<TMap, ExtendedSerializedMap<TMap, TSerializedMap, TChartMap>>>{
-        const [socket, _] = await Promise.all([
-            this.connection.getSocket(),
-            this.runtimeEventTargetHandle.evaluate((t, map) => t.emitEvents(map as ChartMap<TMap>), map)
-        ])
+        const eventMessages = this.connection.getEventMessages();
+        await this.runtimeEventTargetHandle.evaluate((t, map) => t.emitEvents(map as ChartMap<TMap>), map);
         const addedListeners: {
-            [type in keyof TChartMap ]?: TargetEventListener<unknown, type>
+            [type in keyof TChartMap]?: TargetEventListener<unknown, type>
         } = {};
         for(const type in map){
-            const listener = new TargetEventListener(socket, type);
+            const listener = new TargetEventListener(eventMessages, type);
             addedListeners[type] = listener;
         }
         const newListeners = {...this.listeners, ...addedListeners} as ListenerMap<TMap, ExtendedSerializedMap<TMap, TSerializedMap, TChartMap>>

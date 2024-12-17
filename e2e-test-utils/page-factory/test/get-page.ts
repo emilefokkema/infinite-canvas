@@ -5,12 +5,14 @@ import { Browser } from '../shared/browser'
 export interface Page{
     page: PuppeteerPage
     close(): Promise<void>
+    reload(): Promise<void>
 }
 export async function getPage({baseUrl}: Options): Promise<Page>{
     const result = await fetch(baseUrl);
     const { wsEndpoint } = await result.json() as Browser
     const browser = await connect({browserWSEndpoint: wsEndpoint})
-    const page = await browser.newPage();
+    let page = await createNewPage();
+   
     async function close(): Promise<void>{
         browser.disconnect();
         const result = await fetch(baseUrl, {
@@ -24,5 +26,14 @@ export async function getPage({baseUrl}: Options): Promise<Page>{
             throw new Error('failed to clean up browser!')
         }
     }
-    return { page, close }
+    async function reload(): Promise<void> {
+        page = await createNewPage();
+    }
+    async function createNewPage(): Promise<PuppeteerPage>{
+        const page = await browser.newPage();
+        const existingPages = await browser.pages();
+        await Promise.all(existingPages.filter(p => p !== page).map(p => p.close()));
+        return page;
+    }
+    return { get page(){return page;}, close, reload }
 }
