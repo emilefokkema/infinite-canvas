@@ -1,9 +1,9 @@
-import { RuntimeEventTarget } from '@runtime-event-target/test';
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
 import { nextEvent, noError } from './utils/next-event';
+import { EventTargetHandle } from 'puppeteer-event-target-handle';
 
 describe('when a click happens in a touch way', () => {
-    let infCanvasEvents: RuntimeEventTarget<GlobalEventHandlersEventMap, {
+    let infCanvasEvents: EventTargetHandle<GlobalEventHandlersEventMap, {
         click: {offsetX: number}
     }>
 

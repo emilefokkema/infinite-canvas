@@ -1,12 +1,12 @@
 import { Observable, fromEvent, debounceTime, firstValueFrom } from 'rxjs';
 import { describe, it, beforeAll, expect } from 'vitest'
 import { SerializedDrawEvent } from './test-page/test-page-infinite-canvas';
-import { RuntimeEventTarget } from '@runtime-event-target/test';
 import { nextEvent } from './utils/next-event';
+import { EventTargetHandle } from 'puppeteer-event-target-handle';
 
 describe('after transforming', () => {
     let debouncedDrawn: Observable<SerializedDrawEvent>
-    let infCanvasEvents: RuntimeEventTarget<unknown, {
+    let infCanvasEvents: EventTargetHandle<unknown, {
         mousemove: {
             offsetX: number
             offsetY: number

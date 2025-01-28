@@ -7,8 +7,6 @@
         {"path": "../shared"},
         {"path": "../../e2e-test-utils/page-factory/setup"},
         {"path": "../test-page-app/frontend/tsconfig.node.json"},
-        {"path": "../../e2e-test-utils/runtime-event-target/setup"},
-        {"path": "../../e2e-test-utils/runtime-event-target/shared"},
         {"path": "../../test-cases/tsconfig.node.json"}
     ],
     "include": [

@@ -1,12 +1,12 @@
 import { describe, beforeAll, it, expect } from 'vitest'
 import { TouchHandle } from 'puppeteer'
-import { RuntimeEventTarget } from '@runtime-event-target/test'
 import { EventMap } from 'api'
 import { SerializedInfiniteCanvasTouchEvent, touchEventMap } from './utils/touch-event-types'
 import { nextEvent } from './utils/next-event'
+import { EventTargetHandle } from 'puppeteer-event-target-handle'
 
 describe('when the canvas is touched', () => {
-    let infCanvasEvents: RuntimeEventTarget<EventMap, {
+    let infCanvasEvents: EventTargetHandle<EventMap, {
         touchstart: SerializedInfiniteCanvasTouchEvent
         touchmove: SerializedInfiniteCanvasTouchEvent
         touchend: SerializedInfiniteCanvasTouchEvent

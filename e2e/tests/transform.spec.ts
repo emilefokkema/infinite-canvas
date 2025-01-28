@@ -108,7 +108,7 @@ describe('when transforming', () => {
         infCanvas = await initializeInfiniteCanvas();
         const windowHandle = await page.page.evaluateHandle(() => window);
         const windowEvents = await page
-            .createEventTarget<GlobalEventHandlersEventMap>(windowHandle)
+            .createEventTargetHandle<GlobalEventHandlersEventMap>(windowHandle)
             .then(e => e.emitEvents({scroll: {}}))
         const scrolled = fromEvent(windowEvents, 'scroll').pipe(debounceTime(300));
         await page.mouse.move(100, 100);

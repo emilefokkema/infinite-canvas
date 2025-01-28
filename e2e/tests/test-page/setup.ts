@@ -3,14 +3,12 @@ import { beforeAll, inject } from 'vitest'
 import { JSHandle } from 'puppeteer';
 import { TestPage } from "./test-page";
 import { getPage } from '../../../e2e-test-utils/page-factory/test/get-page'
-import { initializeEventTargetFactory } from '../../../e2e-test-utils/runtime-event-target/test/initialize-event-target-factory'
 import { SERVER_BASE_URL } from '../../shared/constants'
 import { CanvasElementInitialization } from '../../test-page-app/api/configuration';
 import type { Config } from 'api'
 import { createInfiniteCanvas } from './create-infinite-canvas'
 import '../utils/image-snapshots/expect-extensions'
-import { EventTargetLike } from '../../../e2e-test-utils/runtime-event-target/shared/event-target-like';
-import { RuntimeEventTarget, EventTargetFactory } from '@runtime-event-target/test';
+import { EventTargetHandle, EventTargetLike, EventTargetHandleFactory, createEventTargetHandleFactory } from 'puppeteer-event-target-handle'
 
 declare global{
     var page: TestPage
@@ -21,9 +19,8 @@ beforeAll(async () => {
         throw new Error('The page already exists!')
     }
     const pageFactoryOptions = inject('pageFactoryOptions')
-    const runtimeEventTargetOptions = inject('runtimeEventTargetOptions')
     const pageFactoryPage = await getPage(pageFactoryOptions)
-    let { eventTargetFactory } = await preparePage();
+    let { eventTargetHandleFactory } = await preparePage();
     globalThis.page = {
         get page(){return pageFactoryPage.page},
         setSize,
@@ -41,8 +38,8 @@ beforeAll(async () => {
             });
             return Buffer.from(array);
         },
-        createEventTarget<TMap>(target: JSHandle<EventTargetLike<TMap>>): Promise<RuntimeEventTarget<TMap>>{
-            return eventTargetFactory.createEventTarget(target);
+        createEventTargetHandle<TMap>(target: JSHandle<EventTargetLike<TMap>>): Promise<EventTargetHandle<TMap>> {
+            return eventTargetHandleFactory(target);
         },
         disableTouchAction(): Promise<void>{
             return pageFactoryPage.page.evaluate(() => window.TestPageLib.disableTouchAction());
@@ -51,7 +48,7 @@ beforeAll(async () => {
             return pageFactoryPage.page.evaluateHandle((config) => window.TestPageLib.createCanvasElement(config), config)
         },
         createInfiniteCanvas: (canvasElement: JSHandle<HTMLCanvasElement>, config?: Partial<Config>) => {
-            return createInfiniteCanvas(canvasElement, eventTargetFactory, config)
+            return createInfiniteCanvas(canvasElement, eventTargetHandleFactory, config)
         },
         measureText(
             canvas: JSHandle<{getContext(id: '2d'): CanvasRenderingContext2D}>,
@@ -61,15 +58,15 @@ beforeAll(async () => {
         },
         async reload(){
             await pageFactoryPage.reload();
-            ({eventTargetFactory} = await preparePage());
+            ({eventTargetHandleFactory} = await preparePage());
         }
     }
-    async function preparePage(): Promise<{eventTargetFactory: EventTargetFactory}>{
+    async function preparePage(): Promise<{eventTargetHandleFactory: EventTargetHandleFactory }>{
         const page = pageFactoryPage.page;
         await page.goto(SERVER_BASE_URL, {waitUntil: 'domcontentloaded'})
         await setSize(600, 600)
-        const eventTargetFactory = await initializeEventTargetFactory(page, runtimeEventTargetOptions);
-        return { eventTargetFactory }
+        const eventTargetHandleFactory = await createEventTargetHandleFactory(page);
+        return { eventTargetHandleFactory }
     }
     async function closePage(): Promise<void>{
         await pageFactoryPage.close();

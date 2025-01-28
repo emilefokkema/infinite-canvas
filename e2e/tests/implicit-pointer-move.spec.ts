@@ -1,12 +1,12 @@
 import { describe, it, beforeAll, expect, afterAll } from 'vitest'
 import { TouchHandle } from 'puppeteer';
-import { RuntimeEventTarget } from '@runtime-event-target/test';
 import { EventMap } from 'api';
 import { nextEvent } from './utils/next-event';
+import { EventTargetHandle } from 'puppeteer-event-target-handle';
 
 describe('when a pointer starts and default is not prevented', () => {
     let firstTouchInitialY: number;
-    let infCanvasEvents: RuntimeEventTarget<EventMap, {
+    let infCanvasEvents: EventTargetHandle<EventMap, {
         draw: {},
         touchstart: {},
         pointerdown: {

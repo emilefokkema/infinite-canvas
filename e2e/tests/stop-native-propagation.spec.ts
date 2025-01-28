@@ -16,7 +16,7 @@ describe('when propagation of a mousedown event is stopped on capture on the can
             canvasWidth: 400,
             canvasHeight: 400
         });
-        const canvasElEvents = await page.createEventTarget<GlobalEventHandlersEventMap>(canvasEl).then(c => c.emitEvents({
+        const canvasElEvents = await page.createEventTargetHandle<GlobalEventHandlersEventMap>(canvasEl).then(c => c.emitEvents({
             mousedown: {}
         }));
         await canvasElEvents.switchToCapture('mousedown');
@@ -47,7 +47,7 @@ describe('when propagation of a mousedown event is stopped on capture on the can
         await infCanvas.draw(d => d(ctx => {
             ctx.fillRect(100, 100, 200, 100);
         }))
-        const canvasElEvents = await page.createEventTarget<GlobalEventHandlersEventMap>(canvasEl).then(c => c.emitEvents({
+        const canvasElEvents = await page.createEventTargetHandle<GlobalEventHandlersEventMap>(canvasEl).then(c => c.emitEvents({
             mousedown: {}
         }));
         await canvasElEvents.switchToCapture('mousedown');

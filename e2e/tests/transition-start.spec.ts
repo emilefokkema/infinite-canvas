@@ -1,9 +1,9 @@
 import { describe, it, beforeAll } from 'vitest'
-import { RuntimeEventTarget } from '@runtime-event-target/test'
 import { nextEvent } from './utils/next-event'
+import { EventTargetHandle } from 'puppeteer-event-target-handle'
 
 describe('when we add an event listener for a non-pointer-related event', () => {
-    let infCanvasEvents: RuntimeEventTarget<unknown, {
+    let infCanvasEvents: EventTargetHandle<unknown, {
         transitionstart: {}
     }>
 

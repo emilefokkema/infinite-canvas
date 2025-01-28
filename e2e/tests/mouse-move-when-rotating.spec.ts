@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll } from 'vitest'
-import { RuntimeEventTarget } from '@runtime-event-target/test'
 import { EventMap } from 'api'
 import { nextEvent } from './utils/next-event'
+import { EventTargetHandle } from 'puppeteer-event-target-handle'
 
 describe('when the mouse interacts with the canvas', () => {
-    let infCanvasEvents: RuntimeEventTarget<EventMap, {
+    let infCanvasEvents: EventTargetHandle<EventMap, {
         mousemove: {
             offsetX: number, offsetY: number, movementX: number, movementY: number
         }

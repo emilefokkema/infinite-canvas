@@ -1,9 +1,9 @@
 import { Observable, filter, firstValueFrom, fromEvent, map, merge, switchMap, take, throwError, timer } from "rxjs";
-import { RuntimeEventTarget } from "@runtime-event-target/test";
 import { ConsoleMessage, Page } from "puppeteer";
+import { EventTargetHandle } from "puppeteer-event-target-handle";
 
 function eventsFromTarget<TMap, TType extends (keyof TMap) & string>(
-    eventTarget: RuntimeEventTarget<unknown, TMap>,
+    eventTarget: EventTargetHandle<unknown, TMap>,
     type: TType
 ): Observable<TMap[TType]>{
     return fromEvent(eventTarget, type)
@@ -40,7 +40,7 @@ export type SequenceOfEvents<TMap, TTypes extends ((keyof TMap) & string)[]> = {
 }
 
 export function nextEventsInSequence<TMap, TTypes extends ((keyof TMap) & string)[]>(
-    eventTarget: RuntimeEventTarget<unknown, TMap>,
+    eventTarget: EventTargetHandle<unknown, TMap>,
     ...types: TTypes
 ): Promise<SequenceOfEvents<TMap, TTypes>>{
     if(types.length === 0){
@@ -54,7 +54,7 @@ export function nextEventsInSequence<TMap, TTypes extends ((keyof TMap) & string
 }
 
 export function nextEvent<TMap, TType extends (keyof TMap) & string>(
-    eventTarget: RuntimeEventTarget<unknown, TMap>,
+    eventTarget: EventTargetHandle<unknown, TMap>,
     type: TType): Promise<TMap[TType]>{
         return firstValueFrom(eventsFromTarget(eventTarget, type))
 }
@@ -98,7 +98,7 @@ export async function noError(page: Page, interval: number): Promise<void>{
 }
 
 export async function noEvent<TMap, TType extends (keyof TMap) & string>(
-    eventTarget: RuntimeEventTarget<unknown, TMap>,
+    eventTarget: EventTargetHandle<unknown, TMap>,
     type: TType,
     interval: number,
     message?: (v: TMap[TType]) => string

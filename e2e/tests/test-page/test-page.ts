@@ -1,6 +1,5 @@
 import type { JSHandle, Page, Mouse, Touchscreen, Keyboard } from 'puppeteer'
-import type { EventTargetLike } from '../../../e2e-test-utils/runtime-event-target/shared/event-target-like'
-import type { RuntimeEventTarget } from '@runtime-event-target/test'
+import type { EventTargetHandle, EventTargetLike } from 'puppeteer-event-target-handle'
 import type { CanvasElementInitialization } from '../../test-page-app/api/configuration'
 import type { Config } from 'api'
 import { TestPageInfiniteCanvas } from './test-page-infinite-canvas'
@@ -12,7 +11,7 @@ export interface TestPage{
     keyboard: Keyboard,
     setSize(width: number, height: number): Promise<void>
     getScreenshot(): Promise<Buffer>
-    createEventTarget<TMap>(target: JSHandle<EventTargetLike<TMap>>): Promise<RuntimeEventTarget<TMap>>
+    createEventTargetHandle<TMap>(target: JSHandle<EventTargetLike<TMap>>): Promise<EventTargetHandle<TMap>>
     createCanvasElement(config: CanvasElementInitialization): Promise<JSHandle<HTMLCanvasElement>>
     createInfiniteCanvas(canvasElement: JSHandle<HTMLCanvasElement>, config?: Partial<Config>): Promise<TestPageInfiniteCanvas>
     measureText(

@@ -1,18 +1,18 @@
 import { JSHandle } from "puppeteer";
 import { firstValueFrom, fromEvent } from 'rxjs'
-import { EventTargetFactory } from '@runtime-event-target/test'
+import { EventTargetHandleFactory } from "puppeteer-event-target-handle";
 import { TestPageInfiniteCanvas } from "./test-page-infinite-canvas";
 import type { EventMap, Config, InfiniteCanvasRenderingContext2D } from "api";
 
 export async function createInfiniteCanvas(
     canvasElement: JSHandle<HTMLCanvasElement>,
-    eventTargetFactory: EventTargetFactory,
+    eventTargetHandleFactory: EventTargetHandleFactory,
     config?: Partial<Config>): Promise<TestPageInfiniteCanvas>{
         const infCanvas = await canvasElement.evaluateHandle(
             (canvasElement, config) => window.TestPageLib.createInfiniteCanvas(canvasElement, config),
             config
         );
-        const infCanvasEventTarget = await eventTargetFactory.createEventTarget<EventMap>(infCanvas)
+        const infCanvasEventTarget = await eventTargetHandleFactory<EventMap>(infCanvas)
             .then(t => t.emitEvents({
                 draw: {transformation: {a: true, b: true, c: true, d: true, e: true, f: true}}
             }))

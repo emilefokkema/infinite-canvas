@@ -1,18 +1,18 @@
 import { describe, it, beforeAll, expect } from 'vitest'
-import { RuntimeEventTarget } from '@runtime-event-target/test';
 import { EventMap, InfiniteCanvas } from 'api';
 import { nextEvent, noEvent } from './utils/next-event';
 import { JSHandle } from 'puppeteer';
 import { DetachableCanvasElement } from '../test-page-app/api/detachable-canvas-element';
 import { ResizeEvent } from '../test-page-app/api/resize-event';
 import { Observable, filter, firstValueFrom, fromEvent } from 'rxjs';
+import { EventTargetHandle } from 'puppeteer-event-target-handle';
 
 describe('given a page where the canvas is not attached yet and a drawing is made', () => {
     let detachableCanvas: JSHandle<DetachableCanvasElement>
-    let infCanvasEvents: RuntimeEventTarget<unknown, {
+    let infCanvasEvents: EventTargetHandle<unknown, {
         draw: {}
     }>;
-    let canvasResizeEvents: RuntimeEventTarget<unknown, {
+    let canvasResizeEvents: EventTargetHandle<unknown, {
         resize: ResizeEvent
     }>
     let infCanvas: JSHandle<InfiniteCanvas>
@@ -25,10 +25,10 @@ describe('given a page where the canvas is not attached yet and a drawing is mad
         );
         await infCanvas.evaluate(c => c.getContext('2d').fillRect(0, 0, 10, 10))
         infCanvasEvents = await page
-            .createEventTarget<EventMap>(infCanvas)
+            .createEventTargetHandle<EventMap>(infCanvas)
             .then(t => t.emitEvents({draw: {}}))
         canvasResizeEvents = await page
-            .createEventTarget<{resize: ResizeEvent}>(detachableCanvas)
+            .createEventTargetHandle<{resize: ResizeEvent}>(detachableCanvas)
             .then(t => t.emitEvents({resize: { positiveSize: true}}))
 
     })

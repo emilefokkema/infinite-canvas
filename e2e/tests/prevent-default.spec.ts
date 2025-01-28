@@ -64,7 +64,7 @@ describe('when default is prevented', () => {
                 ev.preventDefault();
             }
         }))
-        const windowEvents = await page.createEventTarget<GlobalEventHandlersEventMap>(
+        const windowEvents = await page.createEventTargetHandle<GlobalEventHandlersEventMap>(
             await page.page.evaluateHandle(() => window)
         ).then(e => e.emitEvents({scroll: {}}))
         const scrolled = fromEvent(windowEvents, 'scroll').pipe(debounceTime(300))
