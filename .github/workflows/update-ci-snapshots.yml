@@ -5,7 +5,7 @@ on:
 
 jobs:
     update:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
             - name: Use Node.js 18.x
@@ -17,7 +17,7 @@ jobs:
             - run: npm run test-e2e --- -u
             - run: node scripts/copy-snapshot-changes.js
             - name: Upload changed snapshots
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: changed-snapshots
                 path: updated-snapshots/

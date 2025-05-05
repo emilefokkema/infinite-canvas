@@ -18,7 +18,7 @@ export default {
             ctx.strokeStyle = pattern;
             ctx.lineWidth = 3;
             ctx.setLineDash([12, 2]);
-            ctx.font = '100px "Verdana"';
+            ctx.font = '100px sans-serif';
             ctx.strokeRect(10, 10, 90, 90);
             ctx.beginPath();
             ctx.moveTo(20, 20);
@@ -28,6 +28,5 @@ export default {
             ctx.stroke();
         });
     },
-    title: "using a pattern and a line dash, stroke a rect, make a path, stroke text and then stroke the current path",
-    dependsOnEnvironments: ['gitpod']
+    title: "using a pattern and a line dash, stroke a rect, make a path, stroke text and then stroke the current path"
 }

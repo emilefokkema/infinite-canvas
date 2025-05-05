@@ -83,7 +83,7 @@ describe('when transforming', () => {
             nextEvent(infCanvas.eventTarget, 'draw'),
             page.mouse.move(125, 100)
         ])
-        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({dependsOnEnvironment: true})
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom()
         await page.mouse.up({button: 'middle'})
         await Promise.all([
             noEvent(infCanvas.eventTarget, 'draw', 500),

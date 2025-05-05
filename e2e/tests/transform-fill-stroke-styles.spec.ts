@@ -54,7 +54,7 @@ describe('when using these particular fill and stroke styles', () => {
             nextEvent(infCanvas.eventTarget, 'draw'),
             firstTouch.move(-10, -10)
         ])
-        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({identifier:  'fill-stroke-styles-2', dependsOnEnvironment: true})
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({identifier:  'fill-stroke-styles-2'})
         await firstTouch.end();
         await secondTouch.end();
     })

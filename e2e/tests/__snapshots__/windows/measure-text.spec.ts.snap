@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`when we measure text > and then a transformation happens > should return this text measurement 1`] = `
+{
+  "actualBoundingBoxAscent": 9,
+  "actualBoundingBoxDescent": 0,
+  "actualBoundingBoxLeft": 0,
+  "actualBoundingBoxRight": 62.125,
+  "fontBoundingBoxAscent": 11,
+  "fontBoundingBoxDescent": 3,
+  "width": 61.798828125,
+}
+`;
+
+exports[`when we measure text > and then the font is changed > should return this text measurement 1`] = `
+{
+  "actualBoundingBoxAscent": 9,
+  "actualBoundingBoxDescent": 0,
+  "actualBoundingBoxLeft": 0,
+  "actualBoundingBoxRight": 62.125,
+  "fontBoundingBoxAscent": 11,
+  "fontBoundingBoxDescent": 3,
+  "width": 61.798828125,
+}
+`;
+
+exports[`when we measure text > should return this text measurement 1`] = `
+{
+  "actualBoundingBoxAscent": 7,
+  "actualBoundingBoxDescent": 0,
+  "actualBoundingBoxLeft": 0,
+  "actualBoundingBoxRight": 51.9375,
+  "fontBoundingBoxAscent": 9,
+  "fontBoundingBoxDescent": 2,
+  "width": 51.4990234375,
+}
+`;

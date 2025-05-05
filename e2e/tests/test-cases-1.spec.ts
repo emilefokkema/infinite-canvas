@@ -8,12 +8,11 @@ describe('the test cases', () => {
         await page.page.goto(new URL('test-case/', SERVER_BASE_URL).toString(), {waitUntil: 'domcontentloaded'})
     })
 
-    describe.each(testCases)('$title', ({id, dependsOnEnvironments, skip}) => {
+    describe.each(testCases)('$title', ({id, skip}) => {
         it.skipIf(skip)('', async () => {
             await page.page.evaluate((id) => window.TestCasesLib.drawTestCase(id), id);
             expect(await page.getScreenshot()).toMatchImageSnapshotCustom({
-                identifier: id,
-                dependsOnEnvironment: !!dependsOnEnvironments || undefined
+                identifier: id
             })
         })
     })

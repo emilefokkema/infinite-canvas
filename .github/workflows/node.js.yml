@@ -9,21 +9,30 @@ on:
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
-    inputs:
+    inputs: {}
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js 18.x
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: '20.x'
         cache: 'npm'
     - run: npm ci
     - run: npm run build
     - run: npm run test
     - run: npm run test-e2e
+    - run: node scripts/copy-diff-output.js
+      if: ${{ failure() }}
+      name: Copy diff output
+    - name: Upload diff output
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: diff-output
+        path: diff-output/

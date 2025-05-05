@@ -63,7 +63,7 @@ describe('when scaling', () => {
             nextEvent(infCanvas.eventTarget, 'draw'),
             page.mouse.move(120, 100)
         ])
-        expect(await page.getScreenshot()).toMatchImageSnapshotCustom({dependsOnEnvironment: true});
+        expect(await page.getScreenshot()).toMatchImageSnapshotCustom();
         await page.mouse.up({button: 'middle'});
     })
 

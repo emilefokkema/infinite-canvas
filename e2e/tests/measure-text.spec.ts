@@ -1,6 +1,5 @@
 import { describe, it, beforeAll, expect } from 'vitest'
 import { TestPageInfiniteCanvas } from './test-page/test-page-infinite-canvas'
-import { CODESPACES, selectEnvironment } from './utils/environments'
 
 describe('when we measure text', () => {
     let infCanvas: TestPageInfiniteCanvas
@@ -19,7 +18,7 @@ describe('when we measure text', () => {
 
     it('should return this text measurement', async () => {
         const textMetrics = await page.measureText(infCanvas.handle, 'Hello World')
-        expect(textMetrics).toMatchSnapshot(selectEnvironment(CODESPACES).id);
+        expect(textMetrics).toMatchSnapshot();
     })
 
     describe('and then the font is changed', () => {
@@ -30,7 +29,7 @@ describe('when we measure text', () => {
 
         it('should return this text measurement', async () => {
             const textMetrics = await page.measureText(infCanvas.handle, 'Hello World')
-            expect(textMetrics).toMatchSnapshot(selectEnvironment(CODESPACES).id);
+            expect(textMetrics).toMatchSnapshot();
         })
     })
 
@@ -46,7 +45,7 @@ describe('when we measure text', () => {
 
         it('should return this text measurement', async () => {
             const textMetrics = await page.measureText(infCanvas.handle, 'Hello World')
-            expect(textMetrics).toMatchSnapshot(selectEnvironment(CODESPACES).id);
+            expect(textMetrics).toMatchSnapshot();
         })
     })
 })

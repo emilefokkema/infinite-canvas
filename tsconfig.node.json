@@ -6,7 +6,8 @@
     },
     "references": [
         {"path": "./test-cases/tsconfig.node.json"},
-        {"path": "./src"}
+        {"path": "./src"},
+        {"path": "./e2e-test-utils/environments"}
     ],
     "include": ["*.ts", "package.json"]
 }

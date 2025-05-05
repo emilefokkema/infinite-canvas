@@ -4,8 +4,14 @@ import { Browser as PageFactoryBrowser } from '../shared/browser'
 
 function createBrowserPool(headless: boolean): Pool<Browser> {
     return createPool({
-        create(): Promise<Browser>{
-            return launch({headless})
+        async create(): Promise<Browser>{
+            try{
+                return await launch({headless, args: ['--no-sandbox']})
+            }catch(e){
+                console.error('error launching browser', e)
+                throw e;
+            }
+            
         },
         destroy(browser: Browser): Promise<void>{
             return browser.close();
