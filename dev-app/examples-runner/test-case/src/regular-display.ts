@@ -6,14 +6,15 @@ import type { CanvasElement } from "./canvas-element";
 export function createRegularDisplay(canvasEl: CanvasElement): TestCaseDisplay{
     function displayTestCase(testCase: TestCase): void{
         canvasEl.reset();
+        const ctx = canvasEl.el.getContext('2d') as CanvasRenderingContext2D;
         const distortion = testCase.distortion;
         if(distortion){
             canvasEl.applyDistortion(distortion)
         }
         if(isInfiniteTestCase(testCase)){
-            testCase.finiteCode(canvasEl.ctx);
+            testCase.finiteCode(ctx);
         }else{
-            testCase.code(canvasEl.ctx);
+            testCase.code(ctx);
         }
     }
     return { displayTestCase }

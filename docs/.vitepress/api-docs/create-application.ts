@@ -5,9 +5,9 @@ export const outDir = fileURLToPath(new URL('./.temp', import.meta.url));
 
 export async function createApplication(): Promise<Application>{    
     const application = await Application.bootstrapWithPlugins({
-        entryPoints: [fileURLToPath(new URL('../../../src/api-surface/infinite-canvas.ts', import.meta.url))],
+        entryPoints: [fileURLToPath(new URL('../../../src/api/infinite-canvas.ts', import.meta.url))],
         entryPointStrategy: 'expand',
-        tsconfig: fileURLToPath(new URL('../../../ts-config-types.json', import.meta.url)),
+        tsconfig: fileURLToPath(new URL('../../../src/api/tsconfig.json', import.meta.url)),
         out: outDir,
         excludeExternals: true,
         hideInPageTOC: true,

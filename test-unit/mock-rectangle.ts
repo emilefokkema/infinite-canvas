@@ -1,9 +1,9 @@
-import { TransformationRepresentation } from "../src/api-surface/transformation-representation";
-import { ConvexPolygon } from "../src/areas/polygons/convex-polygon";
-import { CoordinateSystem } from "../src/rectangle/coordinate-system";
-import { CanvasRectangle } from "../src/rectangle/canvas-rectangle";
-import { Transformation } from "../src/transformation";
-import { Point } from '../src/geometry/point'
+import { TransformationRepresentation } from "api/transformation-representation";
+import { ConvexPolygon } from "src/areas/polygons/convex-polygon";
+import { CoordinateSystem } from "src/rectangle/coordinate-system";
+import { CanvasRectangle } from "src/rectangle/canvas-rectangle";
+import { Transformation } from "src/transformation";
+import { Point } from 'src/geometry/point'
 import { createRectangle } from "./create-rectangle";
 
 export class MockRectangle implements CanvasRectangle{

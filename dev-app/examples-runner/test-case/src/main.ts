@@ -8,10 +8,10 @@ import { createCanvasElement } from './canvas-element';
 
 let testCaseId: string | undefined;
 const regularDisplay = createRegularDisplay(
-    createCanvasElement(document.getElementById('regular-canvas') as HTMLCanvasElement)
+    createCanvasElement('regular-canvas-container')
 );
 const infiniteDisplay = createInfiniteDisplay(
-    createCanvasElement(document.getElementById('infinite-canvas') as HTMLCanvasElement)
+    createCanvasElement('infinite-canvas-container')
 )
 const testCaseRouter = createTestCaseRouter();
 function drawTestCase(): void{

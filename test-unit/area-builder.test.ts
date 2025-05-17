@@ -1,11 +1,11 @@
 import { beforeEach, describe, it } from 'vitest'
-import { InfiniteCanvasAreaBuilder } from "../src/areas/infinite-canvas-area-builder";
-import { Area } from "../src/areas/area";
-import { empty } from "../src/areas/empty";
-import { Point } from "../src/geometry/point";
+import { InfiniteCanvasAreaBuilder } from "src/areas/infinite-canvas-area-builder";
+import { Area } from "src/areas/area";
+import { empty } from "src/areas/empty";
+import { Point } from "src/geometry/point";
 import { expectAreasToBeEqual } from "./expectations";
 import { ls, p, r, l } from "./builders";
-import { plane } from "../src/areas/plane";
+import { plane } from "src/areas/plane";
 
 type AreaBuildStep = [(builder: InfiniteCanvasAreaBuilder) => void, Area];
 type AreaBuildTestData = [((builder: InfiniteCanvasAreaBuilder) => void)[], Area];

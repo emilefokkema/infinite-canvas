@@ -1,6 +1,6 @@
 export default {
     code(ctx){
-        ctx.font = '48px "Verdana"';
+        ctx.font = '48px sans-serif';
         ctx.save();
         ctx.filter = 'blur(4px)';
         ctx.fillText('Hello world', 50, 100);
@@ -12,6 +12,5 @@ export default {
         ctx.filter = 'drop-shadow(20px 20px 5px red)';
         ctx.fillText('Hello world', 50, 250);
     },
-    title: "filter",
-    dependsOnEnvironments: ['gitpod']
+    title: "filter"
 }

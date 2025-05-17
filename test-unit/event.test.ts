@@ -1,18 +1,18 @@
 import { beforeEach, afterEach, describe, expect, it, vi, type Mock} from 'vitest'
-import {EventDispatcher} from "../src/event-utils/event-dispatcher";
-import {EventSource} from "../src/event-utils/event-source";
-import {share} from "../src/event-utils/share";
-import {filter} from "../src/event-utils/filter";
-import {map} from "../src/event-utils/map";
-import { once } from "../src/event-utils/once";
-import {shareSplit} from "../src/event-utils/share-split";
+import {EventDispatcher} from "src/event-utils/event-dispatcher";
+import {EventSource} from "src/event-utils/event-source";
+import {share} from "src/event-utils/share";
+import {filter} from "src/event-utils/filter";
+import {map} from "src/event-utils/map";
+import { once } from "src/event-utils/once";
+import {shareSplit} from "src/event-utils/share-split";
 import {
     acceptEventListenerObjects,
     EventSourceThatAcceptsEventListenerObjects
-} from "../src/event-utils/accept-event-listener-objects";
-import { withLatestFrom } from "../src/event-utils/with-latest-from";
-import { concatMap } from "../src/event-utils/concat-map";
-import { sequence } from "../src/event-utils/sequence";
+} from "src/event-utils/accept-event-listener-objects";
+import { withLatestFrom } from "src/event-utils/with-latest-from";
+import { concatMap } from "src/event-utils/concat-map";
+import { sequence } from "src/event-utils/sequence";
 
 
 describe('an event source', () => {

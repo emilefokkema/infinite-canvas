@@ -3,7 +3,6 @@ export interface TestCaseMetadata{
     fileName: string
     fullPath: string
     title: string
-    dependsOnEnvironments?: string[]
     skip?: boolean
 }
 

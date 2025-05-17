@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
+import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
 import { logWithState } from "./log-with-state";
-import { defaultState } from "../src/state/default-state";
-import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
-import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
-import { CurrentPath } from '../src/interfaces/current-path';
-import { Point } from "../src/geometry/point";
-import { getRectStrategy } from '../src/rect/get-rect-strategy';
-import { ExecutableStateChangingInstructionSet } from '../src/interfaces/executable-state-changing-instruction-set';
+import { defaultState } from 'src/state/default-state';
+import { fillStyle } from "src/state/dimensions/fill-stroke-style";
+import { InstructionsWithPath } from "src/instructions/instructions-with-path";
+import { CurrentPath } from 'src/interfaces/current-path';
+import { Point } from "src/geometry/point";
+import { getRectStrategy } from 'src/rect/get-rect-strategy';
+import { ExecutableStateChangingInstructionSet } from 'src/interfaces/executable-state-changing-instruction-set';
 
 function drawAndLog(instructionsWithPath: CurrentPath, state: InfiniteCanvasState): string[]{
     const result = instructionsWithPath.drawPath(

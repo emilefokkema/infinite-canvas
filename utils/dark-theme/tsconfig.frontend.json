@@ -1,15 +1,14 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "../../tsconfig.frontend.json",
     "compilerOptions": {
-        "composite": true,
-        "rootDir": ".."
+        "outDir": "dist"
     },
     "references": [
-        {"path": "../window-messages/tsconfig.json"}
+        {"path": "../window-messages/tsconfig.json"},
+        {"path": "../frontend"}
     ],
     "include": [
         "shared/**/*",
         "frontend/**/*",
-        "../frontend/**/*"
     ]
 }

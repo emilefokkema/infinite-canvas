@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url'
 import vue from '@vitejs/plugin-vue'
 import { backend } from '../backend'
 import { addRunner } from '../examples-runner/add-runner'
-import { PORT } from '../backend/constants'
+import { PORT } from '../shared/constants'
 
 export default defineConfig(({mode}): UserConfig => {
     const root = fileURLToPath(new URL('.', import.meta.url))

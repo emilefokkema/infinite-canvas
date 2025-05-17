@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "compilerOptions": {
+        "outDir": "dist-types",
+        "skipLibCheck": true
+    },
+    "references": [
+        {"path": "../../examples/tsconfig.node.json"},
+        {"path": "../../src/tsconfig.json"},
+        {"path": "../../utils/vite"},
+        {"path": "../../tsconfig.node.json"}
+    ],
+    "include": [
+        "**/*"
+    ],
+    "exclude": ["theme/**/*", "dist/**/*", "dist-types/**/*"] 
+}

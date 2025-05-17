@@ -1,20 +1,7 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
-    "compilerOptions": {
-        "rootDir": "../../..",
-        "composite": true,
-        "noEmit": true,
-        "paths": {
-            "infinite-canvas": ["../../../src/api-surface/infinite-canvas.ts"],
-            "test-case": ["../../../test-cases/frontend/test-case"]
-        }
-    },
+    "files": [],
     "references": [
-        {"path": "../../../test-cases/tsconfig.frontend.json"}
-    ],
-    "include": [
-        "src/**/*.ts",
-        "../../../src/api-surface/**/*",
-        "../../../utils/frontend/**/*"
+        {"path": "./tsconfig.app.json"},
+        {"path": "./tsconfig.node.json"}
     ]
 }

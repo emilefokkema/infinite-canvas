@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true,
+        "lib": [
+            "DOM",
+        ],
+        "paths": {
+            "src/*": ["../src/impl/*"],
+            "api/*": ["../src/api/*"]
+        },
+        "outDir": "./dist",
+        "emitDeclarationOnly": true
+    },
+    "references": [
+        {"path": "../src/impl/tsconfig.json"},
+        {"path": "../test-utils/tsconfig.json"},
+        {"path": "../src/api/tsconfig.json"}
+    ],
+    "include": ["**/*"]
+}

@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-        "rootDir": "..",
         "composite": true,
         "lib": [
             "ES2020",
             "DOM",
             "DOM.Iterable"
         ],
+        "outDir": "frontend/dist",
         "types": [],
         "module": "ESNext",
         "moduleResolution": "bundler",
@@ -16,11 +16,13 @@
         "forceConsistentCasingInFileNames": true,
         "paths": {
             "test-case": ["./frontend/test-case.ts"],
-            "infinite-canvas": ["../src/api-surface/infinite-canvas.ts"]
+            "infinite-canvas": ["../src/api/infinite-canvas.ts"]
         }
     },
+    "references": [
+        {"path": "../src/api/tsconfig.json"}
+    ],
     "include": [
-        "frontend/**/*.ts",
-        "../src/api-surface/**/*"
+        "frontend/**/*.ts"
     ]
 }

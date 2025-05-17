@@ -1,18 +1,16 @@
-import { beforeEach, afterEach, describe, expect, it, vi, type Mock, type SpyInstance} from 'vitest'
-import {ViewBox} from "../src/interfaces/viewbox";
+import { beforeEach, afterEach, describe, expect, it, vi, type Mock, type MockInstance} from 'vitest'
+import {ViewBox} from "src/interfaces/viewbox";
 import {CanvasContextMock} from "./canvas-context-mock";
-import {Transformation} from "../src/transformation";
-import {DrawingLock} from "../src/drawing-lock";
-import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
+import {Transformation} from "src/transformation";
+import {DrawingLock} from "src/drawing-lock";
+import {InfiniteCanvasRenderingContext2D} from "api/infinite-canvas-rendering-context-2d";
 import {MockCanvasMeasurementProvider} from "./mock-canvas-measurement-provider";
-import {Config} from "../src/api-surface/config";
-import {Units} from "../src/api-surface/units";
+import {Config} from "api/config";
+import {Units} from "api/units";
 import { createInfiniteCanvasTestFixture } from './infinite-canvas-test-fixture';
 import { MockDrawingIterationProvider } from './mock-drawing-iteration-provider';
 
-type CreateImageBitmapSpyInstance = SpyInstance<
-	Parameters<(typeof window)['createImageBitmap']>,
-	ReturnType<(typeof window)['createImageBitmap']>>;
+type CreateImageBitmapSpyInstance = MockInstance<(typeof window)['createImageBitmap']>
 
 
 describe("an infinite canvas context", () => {
@@ -21,8 +19,8 @@ describe("an infinite canvas context", () => {
 	let infiniteContext: InfiniteCanvasRenderingContext2D;
 	let contextMock: CanvasContextMock;
 	let viewbox: ViewBox;
-	let getDrawingLockSpy: Mock<[], DrawingLock>;
-	let releaseDrawingLockSpy: SpyInstance<[], void>;
+	let getDrawingLockSpy: MockInstance<()=>DrawingLock>;
+	let releaseDrawingLockSpy: MockInstance<()=>void>;
 	let mockDrawingIterationProvider: MockDrawingIterationProvider
 	let measurementProvider: MockCanvasMeasurementProvider;
 	let config: Partial<Config>;

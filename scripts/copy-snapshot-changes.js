@@ -1,70 +1,38 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { exec } from 'child_process'
 import { fileURLToPath } from 'url'
+import { getShortGitStatus } from './short-git-status.js'
+import { getChangedPaths } from './changed-paths.js'
+import { ensureDirectoryExists } from './ensure-directory-exists.js'
+import { getPathAsChildOf } from './path-as-child.js'
 
-const updatedSnapshotsDir = fileURLToPath(new URL('../.updated-snapshots/', import.meta.url))
-const snapshotsDir = fileURLToPath(new URL('../test-e2e/__snapshots__/', import.meta.url))
-const imageSnapshotsDir = fileURLToPath(new URL('../test-e2e/__image_snapshots__/', import.meta.url))
-
-async function exists(path){
-    try{
-        await fs.access(path);
-        return true
-    }catch{
-        return false;
-    }
-}
-
-function pathIsDirectChildOfAny(parentPaths, childPath) {
-    for(const parentPath of parentPaths){
-        const relativeDirName = path.dirname(path.relative(parentPath, childPath));
-        if(relativeDirName === '.'){
-            return true;
-        }
-    }
-    return false;
-}
-
-async function getChangedOrAddedSnapshotPaths(){
-    const commandResult = await new Promise((res, rej) => {
-        exec(`git status --short`, (err, stdOut, stdErr) => {
-            if(err){
-                return rej(err)
-            }
-            res(stdOut);
-        })
-    })
-    let match;
-    const statusEntryRegEx = /[\sM?]{2}\s([^\r\n]*)[\r\n]+/g;
-    const result = [];
-    while((match = statusEntryRegEx.exec(commandResult)) !== null){
-        const changedPath = fileURLToPath(new URL(`../${match[1]}`, import.meta.url))
-        if(!path.extname(changedPath)){
-            continue;
-        }
-        if(!pathIsDirectChildOfAny([snapshotsDir, imageSnapshotsDir], changedPath)){
-            continue;
-        }
-        result.push(changedPath)
-    }
-    return result;
-}
+const updatedSnapshotsDir = fileURLToPath(new URL('../updated-snapshots/', import.meta.url))
+const snapshotsDir = fileURLToPath(new URL('../e2e/tests/__snapshots__/', import.meta.url))
+const imageSnapshotsDir = fileURLToPath(new URL('../e2e/tests/__image_snapshots__/', import.meta.url))
 
 async function execute(){
-    const changedSnapshotPaths = await getChangedOrAddedSnapshotPaths();
-    if(changedSnapshotPaths.length === 0){
-        console.log('no snapshots have been changed or added')
-        return;
-    }
-    if(!(await exists(updatedSnapshotsDir))){
-        await fs.mkdir(updatedSnapshotsDir, {recursive: true})
-    }
-    for(let changedSnapshotPath of changedSnapshotPaths){
-        const base = path.basename(changedSnapshotPath);
-        const destination = path.resolve(updatedSnapshotsDir, base);
-        await fs.copyFile(changedSnapshotPath, destination)
-        console.log(`wrote updated snapshot to ${destination}`)
+    const shortGitStatusOutput = await getShortGitStatus();
+    console.log('git status output is', shortGitStatusOutput)
+    const changedPaths = getChangedPaths(shortGitStatusOutput);
+    for(const changedPath of changedPaths){
+        const childOfSnapshots = getPathAsChildOf(changedPath, [snapshotsDir, imageSnapshotsDir]);
+        if(!childOfSnapshots){
+            continue;
+        }
+        const extraPart = childOfSnapshots.parent === snapshotsDir ? 'snapshots' : 'image_snapshots';
+        const destination = path.resolve(updatedSnapshotsDir, extraPart, childOfSnapshots.relative);
+        await ensureDirectoryExists(path.dirname(destination));
+        console.log(`about to copy to '${destination}'...`)
+        if(!path.extname(destination)){
+            await fs.cp(childOfSnapshots.path, destination, {recursive: true})
+            console.log(`wrote updated snapshots to ${destination}`)
+        }else{
+            await fs.copyFile(childOfSnapshots.path, destination);
+            console.log(`wrote updated snapshot to ${destination}`)
+        }
+       
+        
+
     }
 }
 

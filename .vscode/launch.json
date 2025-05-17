@@ -12,6 +12,18 @@
             "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
             "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
             "args": ["run", "${relativeFile}", "--test-timeout=3600000", "--config", "vitest-unit.config.ts"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug e2e test",
+            "autoAttachChildProcesses": true,
+            "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+            "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+            "args": ["run", "${relativeFile}", "--test-timeout=3600000", "--config", "vitest-e2e.config.ts"],
+            "env": {
+                "HEADLESS": "false"
+            }
         }
     ]
 }

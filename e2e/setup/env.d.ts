@@ -1,0 +1,1 @@
+/// <reference types="../shared/provided-context-extensions" />

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import { Point } from '../src/geometry/point';
-import { getPointInFrontInDirection } from '../src/geometry/get-point-in-front-in-direction';
+import { Point } from 'src/geometry/point';
+import { getPointInFrontInDirection } from 'src/geometry/get-point-in-front-in-direction';
 
 describe('given a shape that contains these vertices', () => {
     let shapeVertices: Point[];

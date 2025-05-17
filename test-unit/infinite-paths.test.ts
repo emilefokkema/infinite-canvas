@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import {ViewBox} from "../src/interfaces/viewbox";
+import {ViewBox} from "src/interfaces/viewbox";
 import {CanvasContextMock} from "./canvas-context-mock";
-import {Transformation} from "../src/transformation";
-import {InfiniteCanvasRenderingContext2D} from "../src/api-surface/infinite-canvas-rendering-context-2d";
+import {Transformation} from "src/transformation";
+import {InfiniteCanvasRenderingContext2D} from "api/infinite-canvas-rendering-context-2d";
 import { createInfiniteCanvasTestFixture } from './infinite-canvas-test-fixture';
 
 describe('an infinite canvas context', () => {
@@ -1054,6 +1054,22 @@ describe('an infinite canvas context', () => {
 		})
 
 		it("should have filled the entire plane", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
+
+	describe('that draws a counterclockwise path around the plane', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveToInfinityInDirection(1, 0);
+			infiniteContext.lineToInfinityInDirection(-1, -1);
+			infiniteContext.lineToInfinityInDirection(-1, 1);
+			infiniteContext.rect(150, 150, 100, 100);
+			infiniteContext.fill();
+		})
+
+		it("should have traced this path", () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	})

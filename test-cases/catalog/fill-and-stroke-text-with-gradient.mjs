@@ -8,12 +8,11 @@ export default {
         gradient2.addColorStop(1, "#f00");
         ctx.setLineDash([10, 10]);
         ctx.lineWidth = 5;
-        ctx.font = '80px "Verdana"';
+        ctx.font = '80px sans-serif';
         ctx.strokeStyle = gradient1;
         ctx.fillStyle = gradient2;
         ctx.strokeText("Text", 0, 70);
         ctx.fillText("Text", 0, 70);
     },
-    title: "fill and stroke text with gradient",
-    dependsOnEnvironments: ['gitpod']
+    title: "fill and stroke text with gradient"
 };

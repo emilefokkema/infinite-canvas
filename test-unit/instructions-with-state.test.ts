@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it} from 'vitest'
 import { logWithState } from "./log-with-state";
-import { defaultState } from "../src/state/default-state";
-import { fillStyle, strokeStyle } from "../src/state/dimensions/fill-stroke-style";
-import { ExecutableInstructionWithState } from '../src/instructions/executable-instruction-with-state';
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
+import { defaultState } from "src/state/default-state";
+import { fillStyle, strokeStyle } from "src/state/dimensions/fill-stroke-style";
+import { ExecutableInstructionWithState } from 'src/instructions/executable-instruction-with-state';
+import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
 
 describe("a set of intructions that is only about state", () => {
     let instructionsWithState: ExecutableInstructionWithState;

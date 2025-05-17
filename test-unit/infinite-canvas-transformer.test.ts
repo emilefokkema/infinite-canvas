@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi} from 'vitest'
-import { InfiniteCanvasTransformer } from "../src/transformer/infinite-canvas-transformer";
-import { Transformation } from "../src/transformation";
-import { Point } from "../src/geometry/point";
-import { Config } from "../src/api-surface/config";
-import { Anchor } from "../src/transformer/anchor";
-import { InfiniteCanvasAnchor } from "../src/transformer/infinite-canvas-anchor";
-import { Transformable } from '../src/transformable';
+import { InfiniteCanvasTransformer } from "src/transformer/infinite-canvas-transformer";
+import { Transformation } from "src/transformation";
+import { Point } from "src/geometry/point";
+import { Config } from "api/config";
+import { Anchor } from "src/transformer/anchor";
+import { InfiniteCanvasAnchor } from "src/transformer/infinite-canvas-anchor";
+import { Transformable } from 'src/transformable';
 
 function expectPointToBeTransformedTo(point: Point, transformation: Transformation, expectedPoint: Point): void{
 	const actualTransformedPoint: Point = transformation.apply(point);

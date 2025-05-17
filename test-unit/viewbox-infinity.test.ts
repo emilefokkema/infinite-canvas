@@ -1,25 +1,25 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { Transformation } from "../src/transformation";
-import { Point } from "../src/geometry/point";
-import {ViewboxInfinity} from "../src/interfaces/viewbox-infinity";
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
-import { defaultState } from "../src/state/default-state";
-import { transformation } from "../src/state/dimensions/transformation";
-import { lineWidth } from '../src/state/dimensions/infinite-canvas-transformable-scalar-state-instance-dimension';
-import { shadowBlur } from '../src/state/dimensions/shadow-blur';
-import { shadowOffset } from '../src/state/dimensions/shadow-offset';
-import { PathInfinityProvider } from "../src/interfaces/path-infinity-provider";
+import { Transformation } from "src/transformation";
+import { Point } from "src/geometry/point";
+import {ViewboxInfinity} from "src/interfaces/viewbox-infinity";
+import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
+import { defaultState } from "src/state/default-state";
+import { transformation } from "src/state/dimensions/transformation";
+import { lineWidth } from 'src/state/dimensions/infinite-canvas-transformable-scalar-state-instance-dimension';
+import { shadowBlur } from 'src/state/dimensions/shadow-blur';
+import { shadowOffset } from 'src/state/dimensions/shadow-offset';
+import { PathInfinityProvider } from "src/interfaces/path-infinity-provider";
 import {CanvasContextMock} from "./canvas-context-mock";
-import { RectangleManager } from '../src/rectangle/rectangle-manager';
-import { RectangleManagerImpl } from "../src/rectangle/rectangle-manager-impl";
+import { RectangleManager } from 'src/rectangle/rectangle-manager';
+import { RectangleManagerImpl } from "src/rectangle/rectangle-manager-impl";
 import { MockCanvasMeasurementProvider } from "./mock-canvas-measurement-provider";
-import { InfiniteCanvasPathInfinityProvider } from '../src/infinite-canvas-path-infinity-provider';
-import { DrawnPathProperties } from '../src/interfaces/drawn-path-properties';
-import { CanvasRectangle } from '../src/rectangle/canvas-rectangle';
-import { CanvasMeasurement } from '../src/rectangle/canvas-measurement';
-import { CanvasRectangleImpl } from '../src/rectangle/canvas-rectangle-impl';
-import { Units } from '../src/infinite-canvas';
-import { TransformationRepresentation } from '../src/api-surface/transformation-representation';
+import { InfiniteCanvasPathInfinityProvider } from 'src/infinite-canvas-path-infinity-provider';
+import { DrawnPathProperties } from 'src/interfaces/drawn-path-properties';
+import { CanvasRectangle } from 'src/rectangle/canvas-rectangle';
+import { CanvasMeasurement } from 'src/rectangle/canvas-measurement';
+import { CanvasRectangleImpl } from 'src/rectangle/canvas-rectangle-impl';
+import { Units } from 'src/infinite-canvas';
+import { TransformationRepresentation } from 'api/transformation-representation';
 
 function recordPoints(instruction: (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => void, rectangle: CanvasRectangle): Point[]{
     const contextMock: any = new CanvasContextMock();

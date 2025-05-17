@@ -1,11 +1,11 @@
 import { beforeEach, describe, it, expect} from 'vitest'
-import { Ray } from "../src/areas/line/ray";
+import { Ray } from "src/areas/line/ray";
 import { r, p, ls, l } from "./builders";
-import { Point } from "../src/geometry/point";
-import { Area } from "../src/areas/area";
+import { Point } from "src/geometry/point";
+import { Area } from "src/areas/area";
 import { expectAreasToBeEqual } from "./expectations";
-import { LineSegment } from "../src/areas/line/line-segment";
-import { empty } from "../src/areas/empty";
+import { LineSegment } from "src/areas/line/line-segment";
+import { empty } from "src/areas/empty";
 
 describe("a ray", () => {
     let ray: Ray;

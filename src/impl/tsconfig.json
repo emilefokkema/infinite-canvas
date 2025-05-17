@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "noImplicitAny": true,
+        "composite": true,
+        "emitDeclarationOnly": true,
+        "lib": [
+            "DOM",
+        ],
+        "paths": {
+            "api/*": ["../api/*"]
+        },
+        "outDir": "./dist"
+    },
+    "references": [
+        {"path": "../api"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}

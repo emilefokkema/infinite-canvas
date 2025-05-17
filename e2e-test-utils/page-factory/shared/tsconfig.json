@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "composite": true,
+        "outDir": "./dist",
+        "emitDeclarationOnly": true
+    },
+    "include": [
+        "**/*"
+    ]
+}

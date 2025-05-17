@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it} from 'vitest'
-import { ClippedPaths } from "../src/instructions/clipped-paths";
-import { InfiniteCanvasState } from "../src/state/infinite-canvas-state";
+import { ClippedPaths } from "src/instructions/clipped-paths";
+import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
 import { logInstruction } from "./log-instruction";
-import { defaultState } from "../src/state/default-state";
-import { fillStyle } from "../src/state/dimensions/fill-stroke-style";
-import { InstructionsWithPath } from "../src/instructions/instructions-with-path";
-import { Point } from "../src/geometry/point";
-import { Instruction } from "../src/instructions/instruction";
+import { defaultState } from "src/state/default-state";
+import { fillStyle } from "src/state/dimensions/fill-stroke-style";
+import { InstructionsWithPath } from "src/instructions/instructions-with-path";
+import { Point } from "src/geometry/point";
+import { Instruction } from "src/instructions/instruction";
 
 describe("a clipped paths", () => {
     let clippedPaths: ClippedPaths;

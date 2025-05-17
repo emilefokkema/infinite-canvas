@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "target": "ESNext",
+        "composite": true,
+        "outDir": "./dist"
+    },
+    "references": [
+        {"path": "../src/api/tsconfig.json"}
+    ],
+    "include": ["**/*"]
+}

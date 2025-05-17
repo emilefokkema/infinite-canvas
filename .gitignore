@@ -1,4 +1,5 @@
 node_modules/*
+dist-types
 .idea/*
 .vscode/*
 !.vscode/launch.json
@@ -12,7 +13,6 @@ dev-utils/app/dist
 docs/.vitepress/dist
 docs/.vitepress/cache
 docs/.vitepress/api-docs/.temp
-test-e2e/test-page-lib/impl/dist
 .updated-snapshots
 **/dist/**/*
 !dist

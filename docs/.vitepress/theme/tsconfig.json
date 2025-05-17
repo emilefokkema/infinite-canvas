@@ -1,0 +1,19 @@
+{
+    "extends": "../../../tsconfig.frontend.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "paths": {
+            "infinite-canvas": ["../../../src/api/infinite-canvas.ts"]
+        }
+    },
+    "references": [
+        {"path": "../../../examples/tsconfig.frontend.json"},
+        {"path": "../../../examples/tsconfig.node.json"},
+        {"path": "../../../utils/dark-theme/tsconfig.frontend.json"},
+        {"path": "../../../utils/window-messages/tsconfig.json"},
+        {"path": "../../../src/api/tsconfig.json"}
+    ],
+    "include": [
+        "**/*.*",
+    ]
+}

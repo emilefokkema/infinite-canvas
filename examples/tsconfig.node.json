@@ -1,10 +1,11 @@
 {
     "extends": "../tsconfig.node.json",
     "compilerOptions": {
-        "composite": true
+        "outDir": "dist"
     },
     "references": [
-        {"path": "../utils/dark-theme/tsconfig.node.json"}
+        {"path": "../utils/dark-theme/tsconfig.node.json"},
+        {"path": "../src/tsconfig.json"}
     ],
     "include": [
         "access/**/*",

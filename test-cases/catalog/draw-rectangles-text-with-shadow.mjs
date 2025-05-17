@@ -5,7 +5,7 @@ export default {
         ctx.shadowOffsetX = 10;
         ctx.shadowOffsetY = 10;
         ctx.shadowBlur = 10;
-        ctx.font = '50px "Verdana"';
+        ctx.font = '50px sans-serif';
         ctx.fillRect(10, 20, 100, 100);
         ctx.fillStyle = "#00f"
         ctx.fillText("text", 50, 50);

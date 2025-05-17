@@ -1,7 +1,13 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "types": ["node"]
-    }
+        "types": ["node"],
+        "outDir": "dist-types"
+    },
+    "references": [
+        {"path": "./test-cases/tsconfig.node.json"},
+        {"path": "./src"},
+        {"path": "./e2e-test-utils/environments"}
+    ],
+    "include": ["*.ts", "package.json"]
 }

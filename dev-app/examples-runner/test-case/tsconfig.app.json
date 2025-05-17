@@ -1,0 +1,18 @@
+{
+    "extends": "../../../tsconfig.frontend.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "paths": {
+            "infinite-canvas": ["../../../src/api/infinite-canvas.ts"],
+            "test-case": ["../../../test-cases/frontend/test-case.ts"]
+        }
+    },
+    "references": [
+        {"path": "../../../test-cases/tsconfig.frontend.json"},
+        {"path": "../../../src/api/tsconfig.json"},
+        {"path": "../../../utils/frontend"}
+    ],
+    "include": [
+        "src/**/*.ts"
+    ]
+}

@@ -1,7 +1,7 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "../../tsconfig.frontend.json",
     "compilerOptions": {
-        "composite": true
+        "outDir": "dist"
     },
     "include": [
         "index.ts"

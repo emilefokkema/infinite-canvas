@@ -1,0 +1,15 @@
+{
+    "extends": "../../tsconfig.node.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "references": [
+        {"path": "../shared"},
+        {"path": "../../e2e-test-utils/page-factory/setup"},
+        {"path": "../test-page-app/frontend/tsconfig.node.json"},
+        {"path": "../../test-cases/tsconfig.node.json"}
+    ],
+    "include": [
+        "**/*"
+    ]
+}

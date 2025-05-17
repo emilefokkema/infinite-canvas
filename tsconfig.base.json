@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "types": [],
+        "target": "ESNext",
+        "composite": true,
+        "emitDeclarationOnly": true
+    },
+}

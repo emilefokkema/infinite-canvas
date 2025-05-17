@@ -754,6 +754,27 @@ exports[`an infinite canvas context > that creates a rect that extends to infini
 ]
 `;
 
+exports[`an infinite canvas context > that draws a counterclockwise path around the plane > should have traced this path 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.beginPath()",
+  "context.save()",
+  "context.setTransform(1,0,0,1,0,0)",
+  "context.rect(200,0,-200,200)",
+  "context.restore()",
+  "context.moveTo(150,150)",
+  "context.lineTo(250,150)",
+  "context.lineTo(250,250)",
+  "context.lineTo(150,250)",
+  "context.closePath()",
+  "context.moveTo(150,150)",
+  "context.lineWidth = 1",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context > that draws a line > and then draws a line to infinity in a different direction and fills the path > should have filled the right shape 1`] = `
 [
   "context.restore()",

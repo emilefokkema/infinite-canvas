@@ -1,0 +1,7 @@
+{
+    "extends": "../../tsconfig.frontend.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "include": ["**/*"]
+}

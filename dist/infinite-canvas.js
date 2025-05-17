@@ -1,4 +1,7 @@
-let ui = class {
+var di = Object.defineProperty;
+var fi = (s, t, e) => t in s ? di(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
+var a = (s, t, e) => fi(s, typeof t != "symbol" ? t + "" : t, e);
+let gi = class {
   constructor(t) {
     this.viewBox = t;
   }
@@ -63,13 +66,14 @@ const Y = class Y {
     return n > 0 ? t.cross(this) >= 0 && this.cross(e) >= 0 : n < 0 ? t.cross(this) <= 0 && this.cross(e) <= 0 : t.dot(e) > 0 ? this.cross(t) === 0 && this.dot(t) > 0 : !0;
   }
 };
-Y.origin = new Y(0, 0);
-let c = Y;
-function at(s) {
+a(Y, "origin", new Y(0, 0));
+let h = Y;
+function ct(s) {
   return s.toFixed(10).replace(/\.?0+$/, "");
 }
-const x = class x {
+const b = class b {
   constructor(t, e, n, i, r, o) {
+    a(this, "scale");
     this.a = t, this.b = e, this.c = n, this.d = i, this.e = r, this.f = o, this.scale = Math.sqrt(t * i - e * n);
   }
   getMaximumLineWidthScale() {
@@ -87,15 +91,15 @@ const x = class x {
     return { direction: this.untranslated().apply(t.direction) };
   }
   apply(t) {
-    return new c(this.a * t.x + this.c * t.y + this.e, this.b * t.x + this.d * t.y + this.f);
+    return new h(this.a * t.x + this.c * t.y + this.e, this.b * t.x + this.d * t.y + this.f);
   }
   untranslated() {
-    const { x: t, y: e } = this.apply(c.origin);
-    return this.before(x.translation(-t, -e));
+    const { x: t, y: e } = this.apply(h.origin);
+    return this.before(b.translation(-t, -e));
   }
   before(t) {
-    const e = t.a * this.a + t.c * this.b, n = t.b * this.a + t.d * this.b, i = t.a * this.c + t.c * this.d, r = t.b * this.c + t.d * this.d, o = t.a * this.e + t.c * this.f + t.e, a = t.b * this.e + t.d * this.f + t.f;
-    return new x(e, n, i, r, o, a);
+    const e = t.a * this.a + t.c * this.b, n = t.b * this.a + t.d * this.b, i = t.a * this.c + t.c * this.d, r = t.b * this.c + t.d * this.d, o = t.a * this.e + t.c * this.f + t.e, c = t.b * this.e + t.d * this.f + t.f;
+    return new b(e, n, i, r, o, c);
   }
   equals(t) {
     return this.a === t.a && this.b === t.b && this.c === t.c && this.d === t.d && this.e === t.e && this.f === t.f;
@@ -104,29 +108,29 @@ const x = class x {
     var t = this.a * this.d - this.b * this.c;
     if (t == 0)
       throw new Error("error calculating inverse: zero determinant");
-    const e = this.d / t, n = -this.b / t, i = -this.c / t, r = this.a / t, o = (this.c * this.f - this.d * this.e) / t, a = (this.b * this.e - this.a * this.f) / t;
-    return new x(e, n, i, r, o, a);
+    const e = this.d / t, n = -this.b / t, i = -this.c / t, r = this.a / t, o = (this.c * this.f - this.d * this.e) / t, c = (this.b * this.e - this.a * this.f) / t;
+    return new b(e, n, i, r, o, c);
   }
   static translation(t, e) {
-    return new x(1, 0, 0, 1, t, e);
+    return new b(1, 0, 0, 1, t, e);
   }
   static scale(t) {
-    return new x(t, 0, 0, t, 0, 0);
+    return new b(t, 0, 0, t, 0, 0);
   }
   static zoom(t, e, n, i, r) {
     const o = 1 - n;
-    return i !== void 0 ? new x(n, 0, 0, n, t * o + i, e * o + r) : new x(n, 0, 0, n, t * o, e * o);
+    return i !== void 0 ? new b(n, 0, 0, n, t * o + i, e * o + r) : new b(n, 0, 0, n, t * o, e * o);
   }
-  static translateZoom(t, e, n, i, r, o, a, l) {
-    const h = n - t, d = i - e, u = h * h + d * d;
-    if (u === 0)
+  static translateZoom(t, e, n, i, r, o, c, u) {
+    const l = n - t, f = i - e, d = l * l + f * f;
+    if (d === 0)
       throw new Error("divide by 0");
-    const g = a - r, v = l - o, P = g * g + v * v, T = Math.sqrt(P / u);
-    return x.zoom(t, e, T, r - t, o - e);
+    const m = c - r, w = u - o, C = m * m + w * w, S = Math.sqrt(C / d);
+    return b.zoom(t, e, S, r - t, o - e);
   }
   static rotation(t, e, n) {
     const i = Math.cos(n), r = Math.sin(n), o = 1 - i;
-    return new x(
+    return new b(
       i,
       r,
       -r,
@@ -135,26 +139,26 @@ const x = class x {
       -t * r + e * o
     );
   }
-  static translateRotateZoom(t, e, n, i, r, o, a, l) {
-    const h = n - t, d = i - e, u = h * h + d * d;
-    if (u === 0)
+  static translateRotateZoom(t, e, n, i, r, o, c, u) {
+    const l = n - t, f = i - e, d = l * l + f * f;
+    if (d === 0)
       throw new Error("divide by 0");
-    const g = a - r, v = l - o, P = t * i - e * n, T = n * h + i * d, B = t * h + e * d, H = (h * g + d * v) / u, q = (h * v - d * g) / u, tt = -q, wt = H, Pt = (r * T - a * B - P * v) / u, Ct = (o * T - l * B + P * g) / u;
-    return new x(H, q, tt, wt, Pt, Ct);
+    const m = c - r, w = u - o, C = t * i - e * n, S = n * l + i * f, L = t * l + e * f, V = (l * m + f * w) / d, j = (l * w - f * m) / d, Q = -j, Pt = V, Ct = (r * S - c * L - C * w) / d, It = (o * S - u * L + C * m) / d;
+    return new b(V, j, Q, Pt, Ct, It);
   }
   static create(t) {
-    if (t instanceof x)
+    if (t instanceof b)
       return t;
-    const { a: e, b: n, c: i, d: r, e: o, f: a } = t;
-    return new x(e, n, i, r, o, a);
+    const { a: e, b: n, c: i, d: r, e: o, f: c } = t;
+    return new b(e, n, i, r, o, c);
   }
   toString() {
-    return `x: (${at(this.a)}, ${at(this.b)}), y: (${at(this.c)}, ${at(this.d)}), d: (${at(this.e)}, ${at(this.f)})`;
+    return `x: (${ct(this.a)}, ${ct(this.b)}), y: (${ct(this.c)}, ${ct(this.d)}), d: (${ct(this.e)}, ${ct(this.f)})`;
   }
 };
-x.identity = new x(1, 0, 0, 1, 0, 0);
-let p = x;
-class S {
+a(b, "identity", new b(1, 0, 0, 1, 0, 0));
+let v = b;
+class y {
   constructor(t, e) {
     this.propertyName = t, this.noopInstruction = e;
   }
@@ -171,21 +175,21 @@ class S {
     return !0;
   }
 }
-const y = () => {
+const x = () => {
 };
-class di extends S {
+class mi extends y {
   valuesAreEqual(t, e) {
     return t.equals(e);
   }
   changeToNewValue(t) {
     return (e, n) => {
-      const { a: i, b: r, c: o, d: a, e: l, f: h } = n.getTransformationForInstruction(t);
-      e.setTransform(i, r, o, a, l, h);
+      const { a: i, b: r, c: o, d: c, e: u, f: l } = n.getTransformationForInstruction(t);
+      e.setTransform(i, r, o, c, u, l);
     };
   }
 }
-const qt = new di("transformation", y);
-class fi {
+const Gt = new mi("transformation", x);
+class pi {
   constructor(t) {
     this.viewBox = t;
   }
@@ -203,30 +207,30 @@ class fi {
     }
   }
   resetTransform() {
-    this.viewBox.changeState((t) => qt.changeInstanceValue(t, p.identity));
+    this.viewBox.changeState((t) => Gt.changeInstanceValue(t, v.identity));
   }
   rotate(t) {
-    this.addTransformation(p.rotation(0, 0, t));
+    this.addTransformation(v.rotation(0, 0, t));
   }
   scale(t, e) {
-    this.addTransformation(new p(t, 0, 0, e, 0, 0));
+    this.addTransformation(new v(t, 0, 0, e, 0, 0));
   }
   setTransform(t, e, n, i, r, o) {
-    let a, l, h, d, u, g;
-    typeof t == "number" ? (a = t, l = e, h = n, d = i, u = r, g = o) : t.a !== void 0 ? (a = t.a, l = t.b, h = t.c, d = t.d, u = t.e, g = t.f) : (a = t.m11, l = t.m12, h = t.m21, d = t.m22, u = t.m41, g = t.m42), this.viewBox.changeState((v) => qt.changeInstanceValue(v, new p(a, l, h, d, u, g)));
+    let c, u, l, f, d, m;
+    typeof t == "number" ? (c = t, u = e, l = n, f = i, d = r, m = o) : t.a !== void 0 ? (c = t.a, u = t.b, l = t.c, f = t.d, d = t.e, m = t.f) : (c = t.m11, u = t.m12, l = t.m21, f = t.m22, d = t.m41, m = t.m42), this.viewBox.changeState((w) => Gt.changeInstanceValue(w, new v(c, u, l, f, d, m)));
   }
   transform(t, e, n, i, r, o) {
-    this.addTransformation(new p(t, e, n, i, r, o));
+    this.addTransformation(new v(t, e, n, i, r, o));
   }
   translate(t, e) {
-    this.addTransformation(p.translation(t, e));
+    this.addTransformation(v.translation(t, e));
   }
   addTransformation(t) {
     const e = this.viewBox.state.current.transformation, n = t.before(e);
-    this.viewBox.changeState((i) => qt.changeInstanceValue(i, n));
+    this.viewBox.changeState((i) => Gt.changeInstanceValue(i, n));
   }
 }
-class gi extends S {
+class vi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -234,8 +238,8 @@ class gi extends S {
     return (e) => e.globalAlpha = t;
   }
 }
-const vn = new gi("globalAlpha", y);
-class mi extends S {
+const wn = new vi("globalAlpha", x);
+class wi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -243,8 +247,8 @@ class mi extends S {
     return (e) => e.globalCompositeOperation = t;
   }
 }
-const wn = new mi("globalCompositeOperation", y);
-class pi {
+const Pn = new wi("globalCompositeOperation", x);
+class Pi {
   constructor(t) {
     this.viewBox = t;
   }
@@ -252,16 +256,16 @@ class pi {
     return this.viewBox.state.current.globalAlpha;
   }
   set globalAlpha(t) {
-    this.viewBox.changeState((e) => vn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => wn.changeInstanceValue(e, t));
   }
   get globalCompositeOperation() {
     return this.viewBox.state.current.globalCompositeOperation;
   }
   set globalCompositeOperation(t) {
-    this.viewBox.changeState((e) => wn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Pn.changeInstanceValue(e, t));
   }
 }
-class vi extends S {
+class Ci extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -271,8 +275,8 @@ class vi extends S {
     };
   }
 }
-const Pn = new vi("imageSmoothingEnabled", y);
-class wi extends S {
+const Cn = new Ci("imageSmoothingEnabled", x);
+class Ii extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -282,8 +286,8 @@ class wi extends S {
     };
   }
 }
-const Cn = new wi("imageSmoothingQuality", y);
-class Pi {
+const In = new Ii("imageSmoothingQuality", x);
+class Ti {
   constructor(t) {
     this.viewBox = t;
   }
@@ -291,18 +295,18 @@ class Pi {
     return this.viewBox.state.current.imageSmoothingEnabled;
   }
   set imageSmoothingEnabled(t) {
-    this.viewBox.changeState((e) => Pn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Cn.changeInstanceValue(e, t));
   }
   get imageSmoothingQuality() {
     return this.viewBox.state.current.imageSmoothingQuality;
   }
   set imageSmoothingQuality(t) {
-    this.viewBox.changeState((e) => Cn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => In.changeInstanceValue(e, t));
   }
 }
-class Gt {
+class Xt {
 }
-class In extends Gt {
+class Tn extends Xt {
   constructor(t) {
     super(), this.fillStrokeStyle = t;
   }
@@ -320,7 +324,7 @@ class In extends Gt {
     };
   }
 }
-class Tn {
+class Sn {
   constructor(t) {
     this.propName = t;
   }
@@ -332,25 +336,25 @@ class Tn {
   }
   getInstructionToChange(t, e) {
     const n = e[this.propName];
-    return this.isEqualForInstances(t, e) ? !(n instanceof Gt) || t.fillAndStrokeStylesTransformed === e.fillAndStrokeStylesTransformed ? () => {
-    } : e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : n instanceof Gt ? e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : (i) => {
+    return this.isEqualForInstances(t, e) ? !(n instanceof Xt) || t.fillAndStrokeStylesTransformed === e.fillAndStrokeStylesTransformed ? () => {
+    } : e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : n instanceof Xt ? e.fillAndStrokeStylesTransformed ? n.getInstructionToSetTransformed(this.propName) : n.getInstructionToSetUntransformed(this.propName) : (i) => {
       i[this.propName] = e[this.propName];
     };
   }
   valueIsTransformableForInstance(t) {
-    return !(t[this.propName] instanceof In);
+    return !(t[this.propName] instanceof Tn);
   }
 }
-const Sn = new Tn("fillStyle"), yn = new Tn("strokeStyle");
-class Ci {
+const yn = new Sn("fillStyle"), xn = new Sn("strokeStyle");
+class Si {
   constructor(t) {
     this.viewBox = t;
   }
   set fillStyle(t) {
-    this.viewBox.changeState((e) => Sn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => yn.changeInstanceValue(e, t));
   }
   set strokeStyle(t) {
-    this.viewBox.changeState((e) => yn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => xn.changeInstanceValue(e, t));
   }
   createLinearGradient(t, e, n, i) {
     return this.viewBox.createLinearGradient(t, e, n, i);
@@ -365,7 +369,7 @@ class Ci {
     return this.viewBox.createConicGradient(t, e, n);
   }
 }
-class Ii extends S {
+class yi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -375,23 +379,23 @@ class Ii extends S {
     };
   }
 }
-const xn = new Ii("shadowColor", y);
-class Ti extends S {
+const bn = new yi("shadowColor", x);
+class xi extends y {
   changeToNewValue(t) {
     return (e, n) => {
-      const i = p.translation(t.x, t.y), r = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i), { x: o, y: a } = r.apply(c.origin);
-      e.shadowOffsetX = o, e.shadowOffsetY = a;
+      const i = v.translation(t.x, t.y), r = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i), { x: o, y: c } = r.apply(h.origin);
+      e.shadowOffsetX = o, e.shadowOffsetY = c;
     };
   }
   valuesAreEqual(t, e) {
     return t.x === e.x && t.y == e.y;
   }
 }
-const Ce = new Ti("shadowOffset", y);
-class Si extends S {
+const Ce = new xi("shadowOffset", x);
+class bi extends y {
   changeToNewValue(t) {
     return (e, n) => {
-      const i = p.translation(t, 0), o = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i).apply(c.origin).mod();
+      const i = v.translation(t, 0), o = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i).apply(h.origin).mod();
       e.shadowBlur = o;
     };
   }
@@ -399,8 +403,8 @@ class Si extends S {
     return t === e;
   }
 }
-const bn = new Si("shadowBlur", y);
-class yi {
+const On = new bi("shadowBlur", x);
+class Oi {
   constructor(t) {
     this.viewBox = t;
   }
@@ -408,35 +412,35 @@ class yi {
     return this.viewBox.state.current.shadowBlur;
   }
   set shadowBlur(t) {
-    this.viewBox.changeState((e) => bn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => On.changeInstanceValue(e, t));
   }
   get shadowOffsetX() {
     return this.viewBox.state.current.shadowOffset.x;
   }
   set shadowOffsetX(t) {
-    const e = new c(t, this.viewBox.state.current.shadowOffset.y);
+    const e = new h(t, this.viewBox.state.current.shadowOffset.y);
     this.viewBox.changeState((n) => Ce.changeInstanceValue(n, e));
   }
   get shadowOffsetY() {
     return this.viewBox.state.current.shadowOffset.y;
   }
   set shadowOffsetY(t) {
-    const e = new c(this.viewBox.state.current.shadowOffset.x, t);
+    const e = new h(this.viewBox.state.current.shadowOffset.x, t);
     this.viewBox.changeState((n) => Ce.changeInstanceValue(n, e));
   }
   get shadowColor() {
     return this.viewBox.state.current.shadowColor;
   }
   set shadowColor(t) {
-    this.viewBox.changeState((e) => xn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => bn.changeInstanceValue(e, t));
   }
 }
-const On = "[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?", Ln = "[+-]?(?:0*\\.)?0+(?:e[+-]?\\d+)?", Bn = "(?:ch|em|ex|ic|rem|vh|vw|vmax|vmin|vb|vi|cqw|cqh|cqi|cqb|cqmin|cqmax|px|cm|mm|Q|in|pc|pt)", zt = `(?:${Ln}|${On}${Bn})`, An = `blur\\((${zt})\\)`, Ze = "[^())\\s]+(?:\\([^)]*?\\))?", Dn = `drop-shadow\\((${zt})\\s+(${zt})\\s*?(?:(?:(${zt})\\s*?(${Ze})?)|(${Ze}))?\\)`, _e = `${An}|${Dn}`;
-function F(s, t) {
-  const e = s.match(new RegExp(`(?:(${Ln})|(${On})(${Bn}))`));
+const Ln = "[+-]?(?:\\d*\\.)?\\d+(?:e[+-]?\\d+)?", Bn = "[+-]?(?:0*\\.)?0+(?:e[+-]?\\d+)?", An = "(?:ch|em|ex|ic|rem|vh|vw|vmax|vmin|vb|vi|cqw|cqh|cqi|cqb|cqmin|cqmax|px|cm|mm|Q|in|pc|pt)", Yt = `(?:${Bn}|${Ln}${An})`, Dn = `blur\\((${Yt})\\)`, _e = "[^())\\s]+(?:\\([^)]*?\\))?", En = `drop-shadow\\((${Yt})\\s+(${Yt})\\s*?(?:(?:(${Yt})\\s*?(${_e})?)|(${_e}))?\\)`, tn = `${Dn}|${En}`;
+function W(s, t) {
+  const e = s.match(new RegExp(`(?:(${Bn})|(${Ln})(${An}))`));
   return e[1] ? 0 : t.getNumberOfPixels(Number.parseFloat(e[2]), e[3]);
 }
-class tn {
+class en {
   constructor(t) {
     this.stringRepresentation = t;
   }
@@ -452,61 +456,61 @@ class Oe {
     this.stringRepresentation = t, this.size = e;
   }
   toTransformedString(t) {
-    return `blur(${t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.size, 0)).apply(c.origin).mod()}px)`;
+    return `blur(${t.translateInfiniteCanvasContextTransformationToBitmapTransformation(v.translation(this.size, 0)).apply(h.origin).mod()}px)`;
   }
   getShadowOffset() {
     return null;
   }
   static tryCreate(t, e) {
-    const n = t.match(new RegExp(An));
-    return n === null ? null : new Oe(t, F(n[1], e));
+    const n = t.match(new RegExp(Dn));
+    return n === null ? null : new Oe(t, W(n[1], e));
   }
 }
-class ht {
+class lt {
   constructor(t, e, n, i, r) {
     this.stringRepresentation = t, this.offsetX = e, this.offsetY = n, this.blurRadius = i, this.color = r;
   }
   toTransformedString(t) {
-    const e = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.offsetX, this.offsetY)), { x: n, y: i } = e.apply(c.origin);
+    const e = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(v.translation(this.offsetX, this.offsetY)), { x: n, y: i } = e.apply(h.origin);
     if (this.blurRadius !== null) {
-      const o = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(p.translation(this.blurRadius, 0)).apply(c.origin).mod();
+      const o = t.translateInfiniteCanvasContextTransformationToBitmapTransformation(v.translation(this.blurRadius, 0)).apply(h.origin).mod();
       return this.color ? `drop-shadow(${n}px ${i}px ${o}px ${this.color})` : `drop-shadow(${n}px ${i}px ${o}px)`;
     }
     return this.color ? `drop-shadow(${n}px ${i}px ${this.color})` : `drop-shadow(${n}px ${i}px)`;
   }
   getShadowOffset() {
-    return new c(this.offsetX, this.offsetY);
+    return new h(this.offsetX, this.offsetY);
   }
   static tryCreate(t, e) {
-    const n = t.match(new RegExp(Dn));
-    return n === null ? null : n[5] ? new ht(
+    const n = t.match(new RegExp(En));
+    return n === null ? null : n[5] ? new lt(
       t,
-      F(n[1], e),
-      F(n[2], e),
+      W(n[1], e),
+      W(n[2], e),
       null,
       n[5]
-    ) : n[4] ? new ht(
+    ) : n[4] ? new lt(
       t,
-      F(n[1], e),
-      F(n[2], e),
-      F(n[3], e),
+      W(n[1], e),
+      W(n[2], e),
+      W(n[3], e),
       n[4]
-    ) : n[3] ? new ht(
+    ) : n[3] ? new lt(
       t,
-      F(n[1], e),
-      F(n[2], e),
-      F(n[3], e),
+      W(n[1], e),
+      W(n[2], e),
+      W(n[3], e),
       null
-    ) : new ht(
+    ) : new lt(
       t,
-      F(n[1], e),
-      F(n[2], e),
+      W(n[1], e),
+      W(n[2], e),
       null,
       null
     );
   }
 }
-const St = class St {
+const yt = class yt {
   constructor(t, e) {
     this.stringRepresentation = t, this.parts = e;
   }
@@ -525,17 +529,17 @@ const St = class St {
     return null;
   }
   static create(t, e) {
-    const i = t.match(new RegExp(`${_e}|((?!\\s|${_e}).)+`, "g")).map((r) => this.createPart(r, e));
-    return new St(t, i);
+    const i = t.match(new RegExp(`${tn}|((?!\\s|${tn}).)+`, "g")).map((r) => this.createPart(r, e));
+    return new yt(t, i);
   }
   static createPart(t, e) {
     let n = Oe.tryCreate(t, e);
-    return n !== null || (n = ht.tryCreate(t, e), n != null) ? n : new tn(t);
+    return n !== null || (n = lt.tryCreate(t, e), n != null) ? n : new en(t);
   }
 };
-St.none = new St("none", [new tn("none")]);
-let Yt = St;
-class xi extends S {
+a(yt, "none", new yt("none", [new en("none")]));
+let Ut = yt;
+class Li extends y {
   valuesAreEqual(t, e) {
     return t.stringRepresentation === e.stringRepresentation;
   }
@@ -543,8 +547,8 @@ class xi extends S {
     return (e, n) => e.filter = t.toTransformedString(n);
   }
 }
-const En = new xi("filter", y);
-class bi {
+const Rn = new Li("filter", x);
+class Bi {
   constructor(t, e) {
     this.viewBox = t, this.cssLengthConverterFactory = e;
   }
@@ -552,11 +556,11 @@ class bi {
     return this.viewBox.state.current.filter.stringRepresentation;
   }
   set filter(t) {
-    const e = Yt.create(t, this.cssLengthConverterFactory.create());
-    this.viewBox.changeState((n) => En.changeInstanceValue(n, e));
+    const e = Ut.create(t, this.cssLengthConverterFactory.create());
+    this.viewBox.changeState((n) => Rn.changeInstanceValue(n, e));
   }
 }
-class Oi {
+class Ai {
   constructor(t) {
     this.viewBox = t;
   }
@@ -571,7 +575,7 @@ class Oi {
     this.viewBox.strokeRect(t, e, n, i);
   }
 }
-class Li {
+class Di {
   constructor(t) {
     this.viewBox = t;
   }
@@ -609,20 +613,22 @@ class Li {
     this.viewBox.strokePath();
   }
 }
-class Bi {
+class Ei {
   drawFocusIfNeeded(t, e) {
   }
   scrollPathIntoView(t) {
   }
 }
-var N = /* @__PURE__ */ ((s) => (s[s.None = 0] = "None", s[s.Relative = 1] = "Relative", s[s.Absolute = 2] = "Absolute", s))(N || {}), I = /* @__PURE__ */ ((s) => (s[s.Positive = 0] = "Positive", s[s.Negative = 1] = "Negative", s))(I || {});
-const Xt = { direction: new c(0, 1) }, $t = { direction: new c(0, -1) }, Ut = { direction: new c(-1, 0) }, Kt = { direction: new c(1, 0) };
-function Ai(s, t, e, n) {
+var z = /* @__PURE__ */ ((s) => (s[s.None = 0] = "None", s[s.Relative = 1] = "Relative", s[s.Absolute = 2] = "Absolute", s))(z || {}), T = /* @__PURE__ */ ((s) => (s[s.Positive = 0] = "Positive", s[s.Negative = 1] = "Negative", s))(T || {});
+const $t = { direction: new h(0, 1) }, Kt = { direction: new h(0, -1) }, jt = { direction: new h(-1, 0) }, Qt = { direction: new h(1, 0) };
+function Ri(s, t, e, n) {
   const i = e.minus(s), r = n.cross(t), o = n.getPerpendicular().dot(i) / r;
   return s.plus(t.scale(o));
 }
 class st {
   constructor(t, e, n) {
+    a(this, "leftNormal");
+    a(this, "rightNormal");
     this.point = t, this.leftHalfPlane = e, this.rightHalfPlane = n, this.leftNormal = e.normalTowardInterior, this.rightNormal = n.normalTowardInterior;
   }
   replaceLeftHalfPlane(t) {
@@ -650,14 +656,15 @@ class st {
     if (e.cross(this.rightHalfPlane.normalTowardInterior) === 0)
       return this.rightHalfPlane;
     const n = this.leftNormal.plus(this.rightNormal);
-    return e.dot(n) <= 0 && (e = e.scale(-1)), new w(t, e);
+    return e.dot(n) <= 0 && (e = e.scale(-1)), new P(t, e);
   }
   static create(t, e, n) {
     return e.normalTowardInterior.cross(n.normalTowardInterior) >= 0 ? new st(t, e, n) : new st(t, n, e);
   }
 }
-class w {
+class P {
   constructor(t, e) {
+    a(this, "lengthOfNormal");
     this.base = t, this.normalTowardInterior = e, this.lengthOfNormal = e.mod();
   }
   getDistanceFromEdge(t) {
@@ -665,17 +672,17 @@ class w {
   }
   transform(t) {
     const e = t.apply(this.base), n = t.apply(this.base.plus(this.normalTowardInterior.getPerpendicular())), i = t.apply(this.base.plus(this.normalTowardInterior));
-    return w.throughPointsAndContainingPoint(e, n, i);
+    return P.throughPointsAndContainingPoint(e, n, i);
   }
   complement() {
-    return new w(this.base, this.normalTowardInterior.scale(-1));
+    return new P(this.base, this.normalTowardInterior.scale(-1));
   }
   expandByDistance(t) {
     const e = this.base.plus(this.normalTowardInterior.scale(-t / this.normalTowardInterior.mod()));
-    return new w(e, this.normalTowardInterior);
+    return new P(e, this.normalTowardInterior);
   }
   expandToIncludePoint(t) {
-    return this.containsPoint(t) ? this : new w(t, this.normalTowardInterior);
+    return this.containsPoint(t) ? this : new P(t, this.normalTowardInterior);
   }
   containsPoint(t) {
     return this.getDistanceFromEdge(t) >= 0;
@@ -691,7 +698,7 @@ class w {
   }
   intersectWithLine(t, e) {
     return {
-      point: Ai(this.base, this.normalTowardInterior.getPerpendicular(), t, e),
+      point: Ri(this.base, this.normalTowardInterior.getPerpendicular(), t, e),
       halfPlane: this
     };
   }
@@ -703,23 +710,23 @@ class w {
     return st.create(e.point, this, t);
   }
   static throughPointsAndContainingPoint(t, e, n) {
-    const i = w.withBorderPoints(t, e);
+    const i = P.withBorderPoints(t, e);
     for (let r of i)
       if (r.containsPoint(n))
         return r;
   }
   static withBorderPointAndInfinityInDirection(t, e) {
-    return w.withBorderPoints(t, t.plus(e));
+    return P.withBorderPoints(t, t.plus(e));
   }
   static withBorderPoints(t, e) {
     const n = e.minus(t).getPerpendicular();
     return [
-      new w(t, n),
-      new w(t, n.scale(-1))
+      new P(t, n),
+      new P(t, n.scale(-1))
     ];
   }
 }
-class Di {
+class Fi {
   getVertices() {
     return [];
   }
@@ -790,8 +797,8 @@ class Di {
     return !0;
   }
 }
-const mt = new Di();
-class Ei {
+const pt = new Fi();
+class Wi {
   getVertices() {
     return [];
   }
@@ -862,10 +869,11 @@ class Ei {
     return t;
   }
 }
-const L = new Ei();
-class m {
+const A = new Wi();
+class p {
   constructor(t, e) {
-    this.vertices = e, this.halfPlanes = t, this.vertices = this.vertices || m.getVertices(this.halfPlanes);
+    a(this, "halfPlanes");
+    this.vertices = e, this.halfPlanes = t, this.vertices = this.vertices || p.getVertices(this.halfPlanes);
   }
   findVertex(t) {
     for (let e of this.vertices)
@@ -920,7 +928,7 @@ class m {
       const i = this.getVerticesOnHalfPlane(n);
       if (i.length <= 1 && (n.isContainedByHalfPlane(e) || e.isContainedByHalfPlane(n)))
         return !1;
-      const r = n.getIntersectionWith(t), o = i.find((a) => a.point.equals(r.point));
+      const r = n.getIntersectionWith(t), o = i.find((c) => c.point.equals(r.point));
       if (o) {
         if (!o.isContainedByHalfPlaneWithNormal(t.normalTowardInterior))
           return !1;
@@ -938,50 +946,50 @@ class m {
   }
   expandToIncludePoint(t) {
     if (this.vertices.length === 0) {
-      const d = this.halfPlanes.map((u) => u.expandToIncludePoint(t));
-      return new m(d);
+      const f = this.halfPlanes.map((d) => d.expandToIncludePoint(t));
+      return new p(f);
     }
     const e = /* @__PURE__ */ new Set(), n = /* @__PURE__ */ new Set();
     let i = null, r = null;
-    const o = [], a = /* @__PURE__ */ new Set();
-    for (const d of this.vertices) {
-      const u = d.leftHalfPlane;
-      n.has(u) ? n.delete(u) : e.add(u);
-      const g = d.rightHalfPlane;
-      if (e.has(g) ? e.delete(g) : n.add(g), u.containsPoint(t)) {
-        if (a.add(u), g.containsPoint(t)) {
-          a.add(g), o.push(d);
+    const o = [], c = /* @__PURE__ */ new Set();
+    for (const f of this.vertices) {
+      const d = f.leftHalfPlane;
+      n.has(d) ? n.delete(d) : e.add(d);
+      const m = f.rightHalfPlane;
+      if (e.has(m) ? e.delete(m) : n.add(m), d.containsPoint(t)) {
+        if (c.add(d), m.containsPoint(t)) {
+          c.add(m), o.push(f);
           continue;
         }
-        i = d;
+        i = f;
         continue;
       }
-      g.containsPoint(t) && (a.add(g), r = d);
+      m.containsPoint(t) && (c.add(m), r = f);
     }
     if (o.length === this.vertices.length)
       return this;
-    let l, h;
+    let u, l;
     if (i === null) {
-      const d = [...e][0];
-      if (!d)
+      const f = [...e][0];
+      if (!f)
         return this;
-      l = d.expandToIncludePoint(t);
+      u = f.expandToIncludePoint(t);
     } else
-      l = i.getContainingHalfPlaneThroughPoint(t), l !== i.leftHalfPlane && o.push(i.replaceRightHalfPlane(l));
+      u = i.getContainingHalfPlaneThroughPoint(t), u !== i.leftHalfPlane && o.push(i.replaceRightHalfPlane(u));
     if (r === null) {
-      const d = [...n][0];
-      if (!d)
+      const f = [...n][0];
+      if (!f)
         return this;
-      h = d.expandToIncludePoint(t);
+      l = f.expandToIncludePoint(t);
     } else
-      h = r.getContainingHalfPlaneThroughPoint(t), h !== r.rightHalfPlane && o.push(r.replaceLeftHalfPlane(h));
-    return a.add(l), a.add(h), o.push(new st(t, l, h)), new m([...a], o);
+      l = r.getContainingHalfPlaneThroughPoint(t), l !== r.rightHalfPlane && o.push(r.replaceLeftHalfPlane(l));
+    return c.add(u), c.add(l), o.push(new st(t, u, l)), new p([...c], o);
   }
   expandToIncludeInfinityInDirection(t) {
     if (this.containsInfinityInDirection(t))
       return this;
     let e = this.halfPlanes.filter((n) => n.containsInfinityInDirection(t)).concat(this.getTangentPlanesThroughInfinityInDirection(t));
-    return e = m.getHalfPlanesNotContainingAnyOther(e), e.length === 0 ? mt : new m(e);
+    return e = p.getHalfPlanesNotContainingAnyOther(e), e.length === 0 ? pt : new p(e);
   }
   getIntersectionsWithLine(t, e) {
     const n = [];
@@ -994,10 +1002,10 @@ class m {
     return n;
   }
   expandByDistance(t) {
-    return new m(this.halfPlanes.map((e) => e.expandByDistance(t)));
+    return new p(this.halfPlanes.map((e) => e.expandByDistance(t)));
   }
   transform(t) {
-    return new m(this.halfPlanes.map((e) => e.transform(t)));
+    return new p(this.halfPlanes.map((e) => e.transform(t)));
   }
   intersectWithConvexPolygon(t) {
     if (t.isContainedByConvexPolygon(this))
@@ -1005,12 +1013,12 @@ class m {
     if (this.isContainedByConvexPolygon(t))
       return this;
     if (this.isOutsideConvexPolygon(t))
-      return L;
-    const e = m.getHalfPlanesNotContainingAnyOther(this.halfPlanes.concat(t.halfPlanes)), r = m.groupVerticesByPoint(m.getVertices(e)).map((a) => m.getVerticesNotContainingAnyOther(a)).reduce((a, l) => a.concat(l), []);
+      return A;
+    const e = p.getHalfPlanesNotContainingAnyOther(this.halfPlanes.concat(t.halfPlanes)), r = p.groupVerticesByPoint(p.getVertices(e)).map((c) => p.getVerticesNotContainingAnyOther(c)).reduce((c, u) => c.concat(u), []);
     if (r.length === 0)
-      return new m(e);
-    const o = m.getHalfPlanes(r);
-    return new m(o);
+      return new p(e);
+    const o = p.getHalfPlanes(r);
+    return new p(o);
   }
   containsInfinityInDirection(t) {
     for (let e of this.halfPlanes)
@@ -1061,7 +1069,7 @@ class m {
   getTangentPlanesThroughInfinityInDirection(t) {
     const e = [];
     for (let n of this.vertices) {
-      const i = w.withBorderPointAndInfinityInDirection(n.point, t);
+      const i = P.withBorderPointAndInfinityInDirection(n.point, t);
       for (let r of i)
         this.isContainedByHalfPlane(r) && e.push(r);
     }
@@ -1142,129 +1150,131 @@ class m {
         const r = t[n], o = t[i];
         if (r.complement().isContainedByHalfPlane(o))
           continue;
-        const a = r.getIntersectionWith(o);
-        let l = !0;
-        for (let h = 0; h < t.length; h++) {
-          if (h === n || h === i)
+        const c = r.getIntersectionWith(o);
+        let u = !0;
+        for (let l = 0; l < t.length; l++) {
+          if (l === n || l === i)
             continue;
-          if (!t[h].containsPoint(a.point)) {
-            l = !1;
+          if (!t[l].containsPoint(c.point)) {
+            u = !1;
             break;
           }
         }
-        l && e.push(a);
+        u && e.push(c);
       }
     return e;
   }
   static createTriangleWithInfinityInTwoDirections(t, e, n) {
     const i = e.getPerpendicular(), r = n.getPerpendicular();
-    return e.cross(n) < 0 ? new m([
-      new w(t, i.scale(-1)),
-      new w(t, r)
-    ]) : new m([
-      new w(t, i),
-      new w(t, r.scale(-1))
+    return e.cross(n) < 0 ? new p([
+      new P(t, i.scale(-1)),
+      new P(t, r)
+    ]) : new p([
+      new P(t, i),
+      new P(t, r.scale(-1))
     ]);
   }
   static createFromHalfPlane(t) {
-    return new m([t]);
+    return new p([t]);
   }
   static createTriangleWithInfinityInDirection(t, e, n) {
     const i = e.minus(t).projectOn(n.getPerpendicular());
-    return new m([
-      new w(t, i),
-      new w(e, i.scale(-1)),
-      w.throughPointsAndContainingPoint(t, e, t.plus(n))
+    return new p([
+      new P(t, i),
+      new P(e, i.scale(-1)),
+      P.throughPointsAndContainingPoint(t, e, t.plus(n))
     ]);
   }
   static createTriangle(t, e, n) {
-    return new m([
-      w.throughPointsAndContainingPoint(t, e, n),
-      w.throughPointsAndContainingPoint(t, n, e),
-      w.throughPointsAndContainingPoint(e, n, t)
+    return new p([
+      P.throughPointsAndContainingPoint(t, e, n),
+      P.throughPointsAndContainingPoint(t, n, e),
+      P.throughPointsAndContainingPoint(e, n, t)
     ]);
   }
 }
-function U(...s) {
+function $(...s) {
   return (...t) => {
     for (const e of s)
       e && e(...t);
   };
 }
-function Ri(s, t) {
+function ki(s, t) {
   return t ? (e, n) => {
     e.save(), t(e, n), s(e, n), e.restore();
   } : s;
 }
-function Fi(s) {
-  return s === N.Relative ? (t, e) => {
-    const { a: n, b: i, c: r, d: o, e: a, f: l } = e.getBitmapTransformationToTransformedInfiniteCanvasContext();
-    t.transform(n, i, r, o, a, l);
-  } : s === N.Absolute ? (t, e) => {
-    const { a: n, b: i, c: r, d: o, e: a, f: l } = e.getBitmapTransformationToInfiniteCanvasContext();
-    t.setTransform(n, i, r, o, a, l);
+function Hi(s) {
+  return s === z.Relative ? (t, e) => {
+    const { a: n, b: i, c: r, d: o, e: c, f: u } = e.getBitmapTransformationToTransformedInfiniteCanvasContext();
+    t.transform(n, i, r, o, c, u);
+  } : s === z.Absolute ? (t, e) => {
+    const { a: n, b: i, c: r, d: o, e: c, f: u } = e.getBitmapTransformationToInfiniteCanvasContext();
+    t.setTransform(n, i, r, o, c, u);
   } : null;
 }
-function Wi(s, t) {
+function Vi(s, t) {
   let e = s.area;
   return e && t.lineWidth > 0 && (e = e.expandByDistance(t.lineWidth / 2)), e;
 }
-function ki(s) {
+function Mi(s) {
   return {
     lineWidth: s.current.getMaximumLineWidth(),
     lineDashPeriod: s.current.getLineDashPeriod(),
     shadowOffsets: s.current.getShadowOffsets()
   };
 }
-function Hi(s) {
+function Ni(s) {
   return {
     lineWidth: 0,
     lineDashPeriod: 0,
     shadowOffsets: s.current.getShadowOffsets()
   };
 }
-class V {
-  constructor(t, e, n, i, r, o, a) {
-    this.instruction = t, this.area = e, this.build = n, this.takeClippingRegionIntoAccount = i, this.transformationKind = r, this.state = o, this.tempState = a;
+class M {
+  constructor(t, e, n, i, r, o, c) {
+    this.instruction = t, this.area = e, this.build = n, this.takeClippingRegionIntoAccount = i, this.transformationKind = r, this.state = o, this.tempState = c;
   }
   static forStrokingPath(t, e, n) {
-    return V.forPath(t, e, ki, n);
+    return M.forPath(t, e, Mi, n);
   }
   static forFillingPath(t, e, n) {
-    return V.forPath(t, e, Hi, n);
+    return M.forPath(t, e, Ni, n);
   }
   static forPath(t, e, n, i) {
-    const r = e.current.isTransformable(), o = r ? N.None : N.Relative, a = e.currentlyTransformed(r), l = n(a), h = i(a), d = Wi(h, l);
-    return new V(
+    const r = e.current.isTransformable(), o = r ? z.None : z.Relative, c = e.currentlyTransformed(r), u = n(c), l = i(c), f = Vi(l, u);
+    return new M(
       t,
-      d,
-      (u) => h.drawPath(u, a, l),
+      f,
+      (d) => l.drawPath(d, c, u),
       !0,
       o,
-      a
+      c
     );
   }
   getDrawnArea() {
     let t = this.area;
     const e = this.state;
-    if (e.current.shadowBlur !== 0 || !e.current.shadowOffset.equals(c.origin)) {
-      const n = t.expandByDistance(e.current.shadowBlur).transform(p.translation(e.current.shadowOffset.x, e.current.shadowOffset.y));
+    if (e.current.shadowBlur !== 0 || !e.current.shadowOffset.equals(h.origin)) {
+      const n = t.expandByDistance(e.current.shadowBlur).transform(v.translation(e.current.shadowOffset.x, e.current.shadowOffset.y));
       t = t.join(n);
     }
     return e.current.clippingRegion && this.takeClippingRegionIntoAccount && (t = t.intersectWith(e.current.clippingRegion)), t;
   }
   getModifiedInstruction() {
-    let t = Fi(this.transformationKind);
+    let t = Hi(this.transformationKind);
     if (this.tempState) {
       const n = this.takeClippingRegionIntoAccount ? this.state.getInstructionToConvertToStateWithClippedPath(this.tempState) : this.state.getInstructionToConvertToState(this.tempState);
-      t = U(t, n);
+      t = $(t, n);
     }
-    return Ri(this.instruction, t);
+    return ki(this.instruction, t);
   }
 }
 class Le {
   constructor(t) {
-    this.initiallyWithState = t, this.added = [];
+    a(this, "added", []);
+    a(this, "addedLast");
+    this.initiallyWithState = t;
   }
   get length() {
     return this.added.length;
@@ -1313,6 +1323,7 @@ class Le {
 }
 class Be {
   constructor(t, e) {
+    a(this, "stateConversion");
     this.initialState = t, this.state = e, this.stateConversion = () => {
     };
   }
@@ -1345,7 +1356,7 @@ class K extends Be {
     });
   }
 }
-class gt extends Be {
+class mt extends Be {
   constructor(t, e, n, i) {
     super(t, e), this.instruction = n, this.stateConversion = i;
   }
@@ -1353,22 +1364,22 @@ class gt extends Be {
     return new K(this.initialState, this.state, this.instruction, this.stateConversion);
   }
   static create(t, e) {
-    return new gt(t, t, e, () => {
+    return new mt(t, t, e, () => {
     });
   }
 }
-function C(s) {
+function I(s) {
   return s.direction !== void 0;
 }
-function J(s, t) {
-  return C(s) ? t.applyToPointAtInfinity(s) : t.apply(s);
+function _(s, t) {
+  return I(s) ? t.applyToPointAtInfinity(s) : t.apply(s);
 }
-class Vi {
+class zi {
   constructor(t, e) {
     this.areaBuilder = t, this.transformation = e;
   }
   addPosition(t) {
-    this.areaBuilder.addPosition(J(t, this.transformation));
+    this.areaBuilder.addPosition(_(t, this.transformation));
   }
 }
 class Ae {
@@ -1385,8 +1396,8 @@ class Ae {
     return this.direction.cross(t.direction) === 0 && this.pointIsOnSameLine(t.point1);
   }
   expandLineByDistance(t) {
-    const e = this.direction.getPerpendicular(), n = new w(this.base, e).expandByDistance(t), i = new w(this.base, e.scale(-1)).expandByDistance(t);
-    return new m([n, i]);
+    const e = this.direction.getPerpendicular(), n = new P(this.base, e).expandByDistance(t), i = new P(this.base, e.scale(-1)).expandByDistance(t);
+    return new p([n, i]);
   }
   getPointsInSameDirection(t, e) {
     return this.comesBefore(e, t) ? { point1: e, point2: t } : { point1: t, point2: e };
@@ -1404,7 +1415,7 @@ class Ae {
     return !1;
   }
 }
-class oe extends Ae {
+class ae extends Ae {
   getVertices() {
     return [];
   }
@@ -1416,23 +1427,23 @@ class oe extends Ae {
   }
   intersectWithConvexPolygon(t) {
     if (!this.intersectsConvexPolygon(t))
-      return L;
+      return A;
     if (this.isContainedByConvexPolygon(t))
       return this;
     const e = t.getIntersectionsWithLine(this.base, this.direction);
     let n, i;
     for (let r of e)
       (!n && !i || !n && this.comesBefore(r.point, i) || !i && this.comesBefore(n, r.point) || n && i && this.pointIsBetweenPoints(r.point, n, i)) && (r.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = r.point : i = r.point);
-    return n && i ? new D(n, i) : n ? new M(n, this.direction) : new M(i, this.direction.scale(-1));
+    return n && i ? new E(n, i) : n ? new N(n, this.direction) : new N(i, this.direction.scale(-1));
   }
   intersectWithLine(t) {
-    return this.intersectsLine(t) ? this : L;
+    return this.intersectsLine(t) ? this : A;
   }
   intersectWithLineSegment(t) {
-    return this.lineSegmentIsOnSameLine(t) ? t : L;
+    return this.lineSegmentIsOnSameLine(t) ? t : A;
   }
   intersectWithRay(t) {
-    return this.intersectsRay(t) ? t : L;
+    return this.intersectsRay(t) ? t : A;
   }
   isContainedByConvexPolygon(t) {
     return t.containsPoint(this.base) && t.containsInfinityInDirection(this.direction) && t.containsInfinityInDirection(this.direction.scale(-1));
@@ -1465,24 +1476,24 @@ class oe extends Ae {
     return t.intersectsLine(this);
   }
   expandToIncludePoint(t) {
-    return this.pointIsOnSameLine(t) ? this : m.createTriangleWithInfinityInDirection(this.base, t, this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
+    return this.pointIsOnSameLine(t) ? this : p.createTriangleWithInfinityInDirection(this.base, t, this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
   }
   expandByDistance(t) {
     return this.expandLineByDistance(t);
   }
   expandToIncludeInfinityInDirection(t) {
     const e = t.cross(this.direction), n = this.direction.getPerpendicular();
-    return e === 0 ? this : e > 0 ? m.createFromHalfPlane(new w(this.base, n.scale(-1))) : m.createFromHalfPlane(new w(this.base, n));
+    return e === 0 ? this : e > 0 ? p.createFromHalfPlane(new P(this.base, n.scale(-1))) : p.createFromHalfPlane(new P(this.base, n));
   }
   transform(t) {
     const e = t.apply(this.base);
-    return new oe(e, t.apply(this.base.plus(this.direction)).minus(e));
+    return new ae(e, t.apply(this.base.plus(this.direction)).minus(e));
   }
   interiorContainsPoint(t) {
     return this.pointIsOnSameLine(t);
   }
 }
-class M extends Ae {
+class N extends Ae {
   getVertices() {
     return [this.base];
   }
@@ -1494,17 +1505,17 @@ class M extends Ae {
   }
   intersectWithConvexPolygon(t) {
     if (!this.intersectsConvexPolygon(t))
-      return L;
+      return A;
     if (this.isContainedByConvexPolygon(t))
       return this;
     const e = t.getIntersectionsWithLine(this.base, this.direction);
     let n = this.base, i;
     for (let r of e)
       (!i && this.comesBefore(n, r.point) || i && this.pointIsBetweenPoints(r.point, n, i)) && (r.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = r.point : i = r.point);
-    return i ? new D(n, i) : new M(n, this.direction);
+    return i ? new E(n, i) : new N(n, this.direction);
   }
   intersectWithRay(t) {
-    return this.isContainedByRay(t) ? this : t.isContainedByRay(this) ? t : this.interiorContainsPoint(t.base) ? new D(this.base, t.base) : L;
+    return this.isContainedByRay(t) ? this : t.isContainedByRay(this) ? t : this.interiorContainsPoint(t.base) ? new E(this.base, t.base) : A;
   }
   intersectWithLine(t) {
     return t.intersectWithRay(this);
@@ -1513,9 +1524,9 @@ class M extends Ae {
     if (t.isContainedByRay(this))
       return t;
     if (!this.lineSegmentIsOnSameLine(t))
-      return L;
+      return A;
     let { point2: e } = this.getPointsInSameDirection(t.point1, t.point2);
-    return this.comesBefore(e, this.base) ? L : new D(this.base, e);
+    return this.comesBefore(e, this.base) ? A : new E(this.base, e);
   }
   isContainedByConvexPolygon(t) {
     return t.containsPoint(this.base) && t.containsInfinityInDirection(this.direction);
@@ -1550,18 +1561,18 @@ class M extends Ae {
     return t.intersectsRay(this);
   }
   expandToIncludePoint(t) {
-    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? new M(t, this.direction) : m.createTriangleWithInfinityInDirection(this.base, t, this.direction);
+    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? new N(t, this.direction) : p.createTriangleWithInfinityInDirection(this.base, t, this.direction);
   }
   expandByDistance(t) {
-    const e = this.expandLineByDistance(t), n = new w(this.base, this.direction).expandByDistance(t);
-    return e.intersectWithConvexPolygon(new m([n]));
+    const e = this.expandLineByDistance(t), n = new P(this.base, this.direction).expandByDistance(t);
+    return e.intersectWithConvexPolygon(new p([n]));
   }
   expandToIncludeInfinityInDirection(t) {
-    return t.inSameDirectionAs(this.direction) ? this : this.direction.cross(t) === 0 ? new oe(this.base, this.direction) : m.createTriangleWithInfinityInTwoDirections(this.base, this.direction, t);
+    return t.inSameDirectionAs(this.direction) ? this : this.direction.cross(t) === 0 ? new ae(this.base, this.direction) : p.createTriangleWithInfinityInTwoDirections(this.base, this.direction, t);
   }
   transform(t) {
     const e = t.apply(this.base);
-    return new M(e, t.apply(this.base.plus(this.direction)).minus(e));
+    return new N(e, t.apply(this.base.plus(this.direction)).minus(e));
   }
   interiorContainsPoint(t) {
     return this.pointIsOnSameLine(t) && !this.comesBefore(t, this.base);
@@ -1573,7 +1584,7 @@ class M extends Ae {
     return this.pointIsOnSameLine(t) && this.comesBefore(this.base, t);
   }
 }
-class D extends Ae {
+class E extends Ae {
   constructor(t, e) {
     super(t, e.minus(t)), this.point1 = t, this.point2 = e;
   }
@@ -1592,9 +1603,9 @@ class D extends Ae {
     if (t.isContainedByLineSegment(this))
       return t;
     if (!this.lineSegmentIsOnSameLine(t))
-      return L;
+      return A;
     let { point1: e, point2: n } = this.getPointsInSameDirection(t.point1, t.point2);
-    return this.comesBefore(n, this.point1) || this.comesBefore(this.point2, e) ? L : this.comesBefore(this.point1, e) ? new D(e, this.point2) : new D(this.point1, n);
+    return this.comesBefore(n, this.point1) || this.comesBefore(this.point2, e) ? A : this.comesBefore(this.point1, e) ? new E(e, this.point2) : new E(this.point1, n);
   }
   intersectWithRay(t) {
     return t.intersectWithLineSegment(this);
@@ -1613,14 +1624,14 @@ class D extends Ae {
   }
   intersectWithConvexPolygon(t) {
     if (!this.intersectsConvexPolygon(t))
-      return L;
+      return A;
     if (this.isContainedByConvexPolygon(t))
       return this;
     const e = t.getIntersectionsWithLine(this.point1, this.direction);
     let n = this.point1, i = this.point2;
     for (let r of e)
       this.pointIsBetweenPoints(r.point, n, i) && (r.halfPlane.normalTowardInterior.dot(this.direction) > 0 ? n = r.point : i = r.point);
-    return new D(n, i);
+    return new E(n, i);
   }
   isContainedByConvexPolygon(t) {
     return t.containsPoint(this.point1) && t.containsPoint(this.point2);
@@ -1655,37 +1666,37 @@ class D extends Ae {
     return t.intersectsLineSegment(this);
   }
   expandByDistance(t) {
-    const e = this.expandLineByDistance(t), n = new w(this.base, this.direction).expandByDistance(t), i = new w(this.point2, this.direction.scale(-1)).expandByDistance(t);
-    return e.intersectWithConvexPolygon(new m([n, i]));
+    const e = this.expandLineByDistance(t), n = new P(this.base, this.direction).expandByDistance(t), i = new P(this.point2, this.direction.scale(-1)).expandByDistance(t);
+    return e.intersectWithConvexPolygon(new p([n, i]));
   }
   expandToIncludePoint(t) {
-    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? this.comesBefore(t, this.point1) ? new D(t, this.point2) : new D(this.point1, t) : m.createTriangle(this.point1, t, this.point2);
+    return this.containsPoint(t) ? this : this.pointIsOnSameLine(t) ? this.comesBefore(t, this.point1) ? new E(t, this.point2) : new E(this.point1, t) : p.createTriangle(this.point1, t, this.point2);
   }
   expandToIncludeInfinityInDirection(t) {
-    return t.inSameDirectionAs(this.direction) ? new M(this.point1, t) : t.cross(this.direction) === 0 ? new M(this.point2, t) : m.createTriangleWithInfinityInDirection(this.point1, this.point2, t);
+    return t.inSameDirectionAs(this.direction) ? new N(this.point1, t) : t.cross(this.direction) === 0 ? new N(this.point2, t) : p.createTriangleWithInfinityInDirection(this.point1, this.point2, t);
   }
   transform(t) {
-    return new D(t.apply(this.point1), t.apply(this.point2));
+    return new E(t.apply(this.point1), t.apply(this.point2));
   }
 }
-class Mi {
+class qi {
   addPoint(t) {
-    return mt;
+    return pt;
   }
   addPointAtInfinity(t) {
     return this;
   }
   addArea(t) {
-    return mt;
+    return pt;
   }
 }
-const De = new Mi();
+const De = new qi();
 class Ie {
   constructor(t) {
     this.towardsMiddle = t;
   }
   addPoint(t) {
-    return m.createFromHalfPlane(new w(t, this.towardsMiddle));
+    return p.createFromHalfPlane(new P(t, this.towardsMiddle));
   }
   addPointAtInfinity(t) {
     return t.dot(this.towardsMiddle) >= 0 ? this : De;
@@ -1695,26 +1706,26 @@ class Ie {
     return t.expandToIncludeInfinityInDirection(this.towardsMiddle).expandToIncludeInfinityInDirection(e).expandToIncludeInfinityInDirection(e.scale(-1));
   }
 }
-class jt {
+class Jt {
   constructor(t, e) {
     this.direction1 = t, this.direction2 = e;
   }
   addPoint(t) {
-    return m.createTriangleWithInfinityInTwoDirections(t, this.direction1, this.direction2);
+    return p.createTriangleWithInfinityInTwoDirections(t, this.direction1, this.direction2);
   }
   addPointAtInfinity(t) {
-    return t.isInSmallerAngleBetweenPoints(this.direction1, this.direction2) ? this : t.cross(this.direction1) === 0 ? new Ie(this.direction2.projectOn(this.direction1.getPerpendicular())) : t.cross(this.direction2) === 0 ? new Ie(this.direction1.projectOn(this.direction2.getPerpendicular())) : this.direction1.isInSmallerAngleBetweenPoints(t, this.direction2) ? new jt(t, this.direction2) : this.direction2.isInSmallerAngleBetweenPoints(t, this.direction1) ? new jt(t, this.direction1) : De;
+    return t.isInSmallerAngleBetweenPoints(this.direction1, this.direction2) ? this : t.cross(this.direction1) === 0 ? new Ie(this.direction2.projectOn(this.direction1.getPerpendicular())) : t.cross(this.direction2) === 0 ? new Ie(this.direction1.projectOn(this.direction2.getPerpendicular())) : this.direction1.isInSmallerAngleBetweenPoints(t, this.direction2) ? new Jt(t, this.direction2) : this.direction2.isInSmallerAngleBetweenPoints(t, this.direction1) ? new Jt(t, this.direction1) : De;
   }
   addArea(t) {
     return t.expandToIncludeInfinityInDirection(this.direction1).expandToIncludeInfinityInDirection(this.direction2);
   }
 }
-class Ni {
+class Gi {
   constructor(t) {
     this.direction = t;
   }
   addPoint(t) {
-    return new oe(t, this.direction);
+    return new ae(t, this.direction);
   }
   addPointAtInfinity(t) {
     return t.cross(this.direction) === 0 ? this : new Ie(t.projectOn(this.direction.getPerpendicular()));
@@ -1723,41 +1734,41 @@ class Ni {
     return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
   }
 }
-class qi {
+class Yi {
   constructor(t) {
     this.direction = t;
   }
   addPointAtInfinity(t) {
-    return t.inSameDirectionAs(this.direction) ? this : t.cross(this.direction) === 0 ? new Ni(this.direction) : new jt(this.direction, t);
+    return t.inSameDirectionAs(this.direction) ? this : t.cross(this.direction) === 0 ? new Gi(this.direction) : new Jt(this.direction, t);
   }
   addPoint(t) {
-    return new M(t, this.direction);
+    return new N(t, this.direction);
   }
   addArea(t) {
     return t.expandToIncludeInfinityInDirection(this.direction);
   }
 }
-class zi {
+class Xi {
   constructor(t, e, n) {
     this._area = t, this.firstPoint = e, this.subsetOfLineAtInfinity = n;
   }
   get area() {
-    return this._area || L;
+    return this._area || A;
   }
   addPoint(t) {
-    this._area ? this._area = this._area.expandToIncludePoint(t) : this.firstPoint ? t.equals(this.firstPoint) || (this._area = new D(this.firstPoint, t)) : this.subsetOfLineAtInfinity ? this._area = this.subsetOfLineAtInfinity.addPoint(t) : this.firstPoint = t;
+    this._area ? this._area = this._area.expandToIncludePoint(t) : this.firstPoint ? t.equals(this.firstPoint) || (this._area = new E(this.firstPoint, t)) : this.subsetOfLineAtInfinity ? this._area = this.subsetOfLineAtInfinity.addPoint(t) : this.firstPoint = t;
   }
   addPosition(t) {
-    C(t) ? this.addInfinityInDirection(t.direction) : this.addPoint(t);
+    I(t) ? this.addInfinityInDirection(t.direction) : this.addPoint(t);
   }
   addInfinityInDirection(t) {
-    this._area ? this._area = this._area.expandToIncludeInfinityInDirection(t) : this.firstPoint ? this._area = new M(this.firstPoint, t) : this.subsetOfLineAtInfinity ? (this.subsetOfLineAtInfinity = this.subsetOfLineAtInfinity.addPointAtInfinity(t), this.subsetOfLineAtInfinity === De && (this._area = mt)) : this.subsetOfLineAtInfinity = new qi(t);
+    this._area ? this._area = this._area.expandToIncludeInfinityInDirection(t) : this.firstPoint ? this._area = new N(this.firstPoint, t) : this.subsetOfLineAtInfinity ? (this.subsetOfLineAtInfinity = this.subsetOfLineAtInfinity.addPointAtInfinity(t), this.subsetOfLineAtInfinity === De && (this._area = pt)) : this.subsetOfLineAtInfinity = new Yi(t);
   }
   transformedWith(t) {
-    return new Vi(this, t);
+    return new zi(this, t);
   }
 }
-class Qt extends Be {
+class Zt extends Be {
   constructor(t, e, n, i) {
     super(t, e), this.instruction = n, this.stateConversion = i;
   }
@@ -1769,14 +1780,14 @@ class Qt extends Be {
     return new K(this.initialState, this.state, i, this.stateConversion);
   }
   static create(t, e) {
-    return new Qt(t, t, e, () => {
+    return new Zt(t, t, e, () => {
     });
   }
 }
-function Gi(s, t) {
-  return s ? t ? C(s) ? C(t) && s.direction.equals(t.direction) : !C(t) && s.equals(t) : !s : !t;
+function Ui(s, t) {
+  return s ? t ? I(s) ? I(t) && s.direction.equals(t.direction) : !I(t) && s.equals(t) : !s : !t;
 }
-class Lt {
+class Bt {
   constructor(t) {
     this.shape = t;
   }
@@ -1827,12 +1838,12 @@ class Lt {
     };
   }
 }
-class ae {
+class ce {
   constructor(t, e, n, i) {
     this.initialPosition = t, this.firstFinitePoint = e, this.lastFinitePoint = n, this.currentPosition = i;
   }
   transform(t) {
-    return new ae(
+    return new ce(
       t.applyToPointAtInfinity(this.initialPosition),
       t.apply(this.firstFinitePoint),
       t.apply(this.lastFinitePoint),
@@ -1840,31 +1851,31 @@ class ae {
     );
   }
 }
-class Bt {
+class At {
   constructor(t, e, n) {
     this.initialPosition = t, this.firstFinitePoint = e, this.currentPosition = n;
   }
   transform(t) {
-    return new Bt(
+    return new At(
       t.applyToPointAtInfinity(this.initialPosition),
       t.apply(this.firstFinitePoint),
       t.apply(this.currentPosition)
     );
   }
 }
-class Yi extends Lt {
+class $i extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
   getInstructionToMoveToBeginningOfShape(t) {
-    return t.initialPosition.direction.cross(t.currentPosition.direction) === 0 ? this.moveToInfinityFromPointInDirection(t.firstFinitePoint, t.initialPosition.direction) : U(
+    return t.initialPosition.direction.cross(t.currentPosition.direction) === 0 ? this.moveToInfinityFromPointInDirection(t.firstFinitePoint, t.initialPosition.direction) : $(
       this.moveToInfinityFromPointInDirection(t.lastFinitePoint, t.currentPosition.direction),
       this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint, t.currentPosition.direction, t.initialPosition.direction),
       this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint, t.firstFinitePoint, t.initialPosition.direction)
     );
   }
   getInstructionToExtendShapeWithLineTo(t, e) {
-    return C(e) ? this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint, t.currentPosition.direction, e.direction) : U(
+    return I(e) ? this.lineToInfinityFromInfinityFromPoint(t.lastFinitePoint, t.currentPosition.direction, e.direction) : $(
       this.lineFromInfinityFromPointToInfinityFromPoint(t.lastFinitePoint, e, t.currentPosition.direction),
       this.lineFromInfinityFromPointToPoint(e, t.currentPosition.direction)
     );
@@ -1879,13 +1890,13 @@ class Yi extends Lt {
     return !this.shape.initialPosition.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
   }
   canAddLineTo(t) {
-    return !C(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+    return !I(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
   }
   addPosition(t) {
-    return C(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new ae(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.lastFinitePoint, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new Bt(this.shape.initialPosition, this.shape.firstFinitePoint, t));
+    return I(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new ce(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.lastFinitePoint, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new At(this.shape.initialPosition, this.shape.firstFinitePoint, t));
   }
 }
-class Xi extends Lt {
+class Ki extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -1894,10 +1905,10 @@ class Xi extends Lt {
     if (t.currentPosition.equals(t.firstFinitePoint))
       return e;
     const n = this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition, t.firstFinitePoint, t.initialPosition.direction);
-    return U(e, n);
+    return $(e, n);
   }
   getInstructionToExtendShapeWithLineTo(t, e) {
-    return C(e) ? this.lineToInfinityFromPointInDirection(t.currentPosition, e.direction) : this.lineTo(e);
+    return I(e) ? this.lineToInfinityFromPointInDirection(t.currentPosition, e.direction) : this.lineTo(e);
   }
   canAddLineTo(t) {
     return !0;
@@ -1912,32 +1923,32 @@ class Xi extends Lt {
     return !0;
   }
   addPosition(t) {
-    return C(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new ae(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.currentPosition, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new Bt(this.shape.initialPosition, this.shape.firstFinitePoint, t));
+    return I(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new ce(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.currentPosition, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new At(this.shape.initialPosition, this.shape.firstFinitePoint, t));
   }
 }
-class ce {
+class he {
   constructor(t, e) {
     this.initialPoint = t, this.currentPosition = e;
   }
   transform(t) {
-    return new ce(
+    return new he(
       t.apply(this.initialPoint),
       t.applyToPointAtInfinity(this.currentPosition)
     );
   }
 }
-class At {
+class Dt {
   constructor(t, e) {
     this.initialPoint = t, this.currentPosition = e;
   }
   transform(t) {
-    return new At(
+    return new Dt(
       t.apply(this.initialPoint),
       t.apply(this.currentPosition)
     );
   }
 }
-class $i extends Lt {
+class ji extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -1945,11 +1956,11 @@ class $i extends Lt {
     return this.moveTo(t.initialPoint);
   }
   getInstructionToExtendShapeWithLineTo(t, e) {
-    return C(e) ? e.direction.inSameDirectionAs(t.currentPosition.direction) ? () => {
-    } : this.lineToInfinityFromInfinityFromPoint(t.initialPoint, t.currentPosition.direction, e.direction) : U(this.lineFromInfinityFromPointToInfinityFromPoint(t.initialPoint, e, t.currentPosition.direction), this.lineFromInfinityFromPointToPoint(e, t.currentPosition.direction));
+    return I(e) ? e.direction.inSameDirectionAs(t.currentPosition.direction) ? () => {
+    } : this.lineToInfinityFromInfinityFromPoint(t.initialPoint, t.currentPosition.direction, e.direction) : $(this.lineFromInfinityFromPointToInfinityFromPoint(t.initialPoint, e, t.currentPosition.direction), this.lineFromInfinityFromPointToPoint(e, t.currentPosition.direction));
   }
   canAddLineTo(t) {
-    return !C(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+    return !I(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
   }
   containsFinitePoint() {
     return !0;
@@ -1961,10 +1972,10 @@ class $i extends Lt {
     return !0;
   }
   addPosition(t) {
-    return C(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new ce(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new At(this.shape.initialPoint, t));
+    return I(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new he(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new Dt(this.shape.initialPoint, t));
   }
 }
-class en extends Lt {
+class nn extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -1972,12 +1983,12 @@ class en extends Lt {
     return this.moveTo(t.initialPoint);
   }
   getInstructionToExtendShapeWithLineTo(t, e) {
-    if (C(e)) {
+    if (I(e)) {
       const n = this.lineToInfinityFromPointInDirection(t.currentPosition, e.direction);
       if (t.currentPosition.minus(t.initialPoint).cross(e.direction) === 0)
         return n;
       const i = this.lineFromInfinityFromPointToInfinityFromPoint(t.currentPosition, t.initialPoint, e.direction);
-      return U(n, i);
+      return $(n, i);
     }
     return this.lineTo(e);
   }
@@ -1994,32 +2005,19 @@ class en extends Lt {
     return !0;
   }
   addPosition(t) {
-    return C(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new ce(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new At(this.shape.initialPoint, t));
+    return I(t) ? this.pathBuilderProvider.fromPointToPointAtInfinity(new he(this.shape.initialPoint, t)) : this.pathBuilderProvider.fromPointToPoint(new Dt(this.shape.initialPoint, t));
   }
 }
-class he {
-  constructor(t, e, n, i) {
-    this.initialPosition = t, this.surroundsFinitePoint = e, this.positionsSoFar = n, this.currentPosition = i;
-  }
-  transform(t) {
-    return new he(
-      t.applyToPointAtInfinity(this.initialPosition),
-      this.surroundsFinitePoint,
-      this.positionsSoFar.map((e) => t.applyToPointAtInfinity(e)),
-      t.applyToPointAtInfinity(this.currentPosition)
-    );
-  }
-}
-class nn extends Lt {
+class rn extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
   getInstructionToMoveToBeginningOfShape(t) {
-    return t.surroundsFinitePoint ? (e, n, i) => i.addPathAroundViewbox(e, n) : () => {
+    return t.surroundsFinitePoint ? (e, n, i) => i.addPathAroundViewbox(e, n, t.direction === "counterclockwise") : () => {
     };
   }
   getInstructionToExtendShapeWithLineTo(t, e) {
-    if (C(e))
+    if (I(e))
       return;
     if (t.positionsSoFar.length === 1)
       return this.lineFromInfinityFromPointToPoint(e, t.positionsSoFar[0].direction);
@@ -2028,10 +2026,10 @@ class nn extends Lt {
     const r = [];
     for (let o of n)
       r.push(this.lineToInfinityFromInfinityFromPoint(e, i.direction, o.direction)), i = o;
-    return U(U(...r), this.lineFromInfinityFromPointToPoint(e, i.direction));
+    return $($(...r), this.lineFromInfinityFromPointToPoint(e, i.direction));
   }
   canAddLineTo(t) {
-    return !C(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
+    return !I(t) || !t.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);
   }
   containsFinitePoint() {
     return !1;
@@ -2043,31 +2041,50 @@ class nn extends Lt {
     return !0;
   }
   addPosition(t) {
-    if (C(t)) {
-      const n = t.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction, this.shape.currentPosition.direction) ? this.shape.surroundsFinitePoint : !this.shape.surroundsFinitePoint;
-      return this.pathBuilderProvider.atInfinity(new he(this.shape.initialPosition, n, this.shape.positionsSoFar.concat([t]), t));
-    }
-    return this.pathBuilderProvider.fromPointAtInfinityToPoint(new Bt(this.shape.initialPosition, t, t));
+    return I(t) ? this.pathBuilderProvider.atInfinity(this.shape.addPosition(t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new At(this.shape.initialPosition, t, t));
   }
 }
-class Ui {
+class St {
+  constructor(t, e, n, i) {
+    a(this, "direction");
+    this.initialPosition = t, this.surroundsFinitePoint = e, this.positionsSoFar = n, this.currentPosition = i;
+    const r = t.direction.cross(i.direction);
+    this.direction = e ? r >= 0 ? "counterclockwise" : "clockwise" : r >= 0 ? "clockwise" : "counterclockwise";
+  }
+  transform(t) {
+    return new St(
+      t.applyToPointAtInfinity(this.initialPosition),
+      this.surroundsFinitePoint,
+      this.positionsSoFar.map((e) => t.applyToPointAtInfinity(e)),
+      t.applyToPointAtInfinity(this.currentPosition)
+    );
+  }
+  addPosition(t) {
+    const n = t.direction.isOnSameSideOfOriginAs(this.initialPosition.direction, this.currentPosition.direction) ? this.surroundsFinitePoint : !this.surroundsFinitePoint;
+    return new St(this.initialPosition, n, this.positionsSoFar.concat([t]), t);
+  }
+  static create(t) {
+    return new St(t, !1, [t], t);
+  }
+}
+class Qi {
   fromPointAtInfinityToPointAtInfinity(t) {
-    return new Yi(this, t);
-  }
-  fromPointAtInfinityToPoint(t) {
-    return new Xi(this, t);
-  }
-  fromPointToPointAtInfinity(t) {
     return new $i(this, t);
   }
-  fromPointToPoint(t) {
-    return new en(this, t);
+  fromPointAtInfinityToPoint(t) {
+    return new Ki(this, t);
   }
-  atInfinity(t) {
+  fromPointToPointAtInfinity(t) {
+    return new ji(this, t);
+  }
+  fromPointToPoint(t) {
     return new nn(this, t);
   }
+  atInfinity(t) {
+    return new rn(this, t);
+  }
   getBuilderFromPosition(t) {
-    return C(t) ? new nn(this, new he(t, !1, [t], t)) : new en(this, new At(t, t));
+    return I(t) ? new rn(this, St.create(t)) : new nn(this, new Dt(t, t));
   }
 }
 class Ee extends Le {
@@ -2091,7 +2108,7 @@ class Re extends Le {
     t.setInitialState(this.state), this.add(t);
   }
   closePath() {
-    const t = gt.create(this.state, (e) => {
+    const t = mt.create(this.state, (e) => {
       e.closePath();
     });
     this.add(t);
@@ -2112,26 +2129,26 @@ class Re extends Le {
     return this.pathInstructionBuilder.canAddLineTo(t);
   }
   lineTo(t, e) {
-    const n = J(t, e.current.transformation);
-    (!C(t) || this.pathInstructionBuilder.containsFinitePoint()) && this.addInstructionToDrawLineTo(t, e), this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(n);
+    const n = _(t, e.current.transformation);
+    (!I(t) || this.pathInstructionBuilder.containsFinitePoint()) && this.addInstructionToDrawLineTo(t, e), this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(n);
     const i = this.pathInstructionBuilder.getInstructionToMoveToBeginning(this._initiallyWithState.state);
-    this._initiallyWithState.replaceInstruction((r, o, a) => {
-      i(r, o, a);
+    this._initiallyWithState.replaceInstruction((r, o, c) => {
+      i(r, o, c);
     });
   }
   addInstructionToDrawLineTo(t, e) {
-    const n = this.pathInstructionBuilder.getInstructionToDrawLineTo(t, e), i = Qt.create(e, n);
+    const n = this.pathInstructionBuilder.getInstructionToDrawLineTo(t, e), i = Zt.create(e, n);
     i.setInitialState(this.state), this.add(i);
   }
   addPathInstruction(t, e, n) {
-    t.initialPoint && !Gi(this.pathInstructionBuilder.currentPosition, t.initialPoint) && this.lineTo(t.initialPoint, n), t.positionChange && (this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(J(t.positionChange, n.current.transformation))), e.setInitialState(this.state), this.add(e);
+    t.initialPoint && !Ui(this.pathInstructionBuilder.currentPosition, t.initialPoint) && this.lineTo(t.initialPoint, n), t.positionChange && (this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(_(t.positionChange, n.current.transformation))), e.setInitialState(this.state), this.add(e);
   }
   static create(t, e) {
-    const n = J(e, t.current.transformation), i = new Ui().getBuilderFromPosition(n), r = i.getInstructionToMoveToBeginning(t), o = Qt.create(t, r);
+    const n = _(e, t.current.transformation), i = new Qi().getBuilderFromPosition(n), r = i.getInstructionToMoveToBeginning(t), o = Zt.create(t, r);
     return new Re(o, i);
   }
 }
-function Ki(s, t, e) {
+function Ji(s, t, e) {
   let n = 0, i;
   for (let r of s) {
     const o = r.minus(t).dot(e);
@@ -2139,69 +2156,69 @@ function Ki(s, t, e) {
   }
   return i ? t.plus(i.minus(t).projectOn(e)) : t;
 }
-function R(s, t, e) {
-  return Ki(s.getVertices(), t, e);
+function F(s, t, e) {
+  return Ji(s.getVertices(), t, e);
 }
-class ji {
+class Zi {
   constructor(t, e) {
     this.state = t, this.drawnPathProperties = e;
   }
-  addPathAroundViewbox(t, e) {
-    e.addPathAroundViewbox(t, this.drawnPathProperties.lineWidth);
+  addPathAroundViewbox(t, e, n) {
+    e.addPathAroundViewbox(t, this.drawnPathProperties.lineWidth, n);
   }
   getTransformedViewbox(t) {
     const e = this.state.current.transformation.before(t.getBitmapTransformationToInfiniteCanvasContext());
     let n = t.polygon;
     n = n.transform(e.inverse()).expandByDistance(this.drawnPathProperties.lineWidth);
     for (const i of this.drawnPathProperties.shadowOffsets) {
-      const r = n.transform(p.translation(-i.x, -i.y));
+      const r = n.transform(v.translation(-i.x, -i.y));
       n = n.join(r);
     }
     return n;
   }
   clearRect(t, e, n, i, r, o) {
-    const a = this.getTransformedViewbox(e), { a: l, b: h, c: d, d: u, e: g, f: v } = e.userTransformation;
-    t.save(), t.transform(l, h, d, u, g, v);
-    const P = Number.isFinite(n) ? n : R(a, new c(0, 0), n > 0 ? Kt.direction : Ut.direction).x, T = Number.isFinite(r) ? n + r : R(a, new c(0, 0), r > 0 ? Kt.direction : Ut.direction).x, B = Number.isFinite(i) ? i : R(a, new c(0, 0), i > 0 ? Xt.direction : $t.direction).y, H = Number.isFinite(o) ? i + o : R(a, new c(0, 0), o > 0 ? Xt.direction : $t.direction).y;
-    t.clearRect(P, B, T - P, H - B), t.restore();
+    const c = this.getTransformedViewbox(e), { a: u, b: l, c: f, d, e: m, f: w } = e.userTransformation;
+    t.save(), t.transform(u, l, f, d, m, w);
+    const C = Number.isFinite(n) ? n : F(c, new h(0, 0), n > 0 ? Qt.direction : jt.direction).x, S = Number.isFinite(r) ? n + r : F(c, new h(0, 0), r > 0 ? Qt.direction : jt.direction).x, L = Number.isFinite(i) ? i : F(c, new h(0, 0), i > 0 ? $t.direction : Kt.direction).y, V = Number.isFinite(o) ? i + o : F(c, new h(0, 0), o > 0 ? $t.direction : Kt.direction).y;
+    t.clearRect(C, L, S - C, V - L), t.restore();
   }
   moveToInfinityFromPointInDirection(t, e, n, i) {
-    const r = R(this.getTransformedViewbox(e), n, i);
+    const r = F(this.getTransformedViewbox(e), n, i);
     this.moveToTransformed(t, r, e.userTransformation);
   }
   drawLineToInfinityFromInfinityFromPoint(t, e, n, i, r) {
-    const o = this.getTransformedViewbox(e), a = R(o, n, i), l = R(o, n, r), h = e.userTransformation, u = o.expandToIncludePoint(n).expandToIncludePoint(a).expandToIncludePoint(l).getVertices().filter((P) => !P.equals(a) && !P.equals(l) && !P.equals(n) && P.minus(n).isInSmallerAngleBetweenPoints(i, r));
-    u.sort((P, T) => P.minus(n).isInSmallerAngleBetweenPoints(T.minus(n), i) ? -1 : 1);
-    let g = a, v = 0;
-    for (let P of u)
-      v += P.minus(g).mod(), this.lineToTransformed(t, P, h), g = P;
-    v += l.minus(g).mod(), this.lineToTransformed(t, l, h), this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, h, v, l, r);
+    const o = this.getTransformedViewbox(e), c = F(o, n, i), u = F(o, n, r), l = e.userTransformation, d = o.expandToIncludePoint(n).expandToIncludePoint(c).expandToIncludePoint(u).getVertices().filter((C) => !C.equals(c) && !C.equals(u) && !C.equals(n) && C.minus(n).isInSmallerAngleBetweenPoints(i, r));
+    d.sort((C, S) => C.minus(n).isInSmallerAngleBetweenPoints(S.minus(n), i) ? -1 : 1);
+    let m = c, w = 0;
+    for (let C of d)
+      w += C.minus(m).mod(), this.lineToTransformed(t, C, l), m = C;
+    w += u.minus(m).mod(), this.lineToTransformed(t, u, l), this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, l, w, u, r);
   }
   drawLineFromInfinityFromPointToInfinityFromPoint(t, e, n, i, r) {
-    const o = this.getTransformedViewbox(e), a = R(o, n, r), l = e.userTransformation, h = R(o, i, r);
-    this.lineToTransformed(t, h, l);
-    const d = h.minus(a).mod();
-    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, l, d, h, r);
+    const o = this.getTransformedViewbox(e), c = F(o, n, r), u = e.userTransformation, l = F(o, i, r);
+    this.lineToTransformed(t, l, u);
+    const f = l.minus(c).mod();
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, u, f, l, r);
   }
   drawLineFromInfinityFromPointToPoint(t, e, n, i) {
-    const r = R(this.getTransformedViewbox(e), n, i), o = n.minus(r).mod(), a = e.userTransformation;
-    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, a, o, r, i), this.lineToTransformed(t, n, a);
+    const r = F(this.getTransformedViewbox(e), n, i), o = n.minus(r).mod(), c = e.userTransformation;
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, c, o, r, i), this.lineToTransformed(t, n, c);
   }
   drawLineToInfinityFromPointInDirection(t, e, n, i) {
-    const r = R(this.getTransformedViewbox(e), n, i), o = e.userTransformation;
+    const r = F(this.getTransformedViewbox(e), n, i), o = e.userTransformation;
     this.lineToTransformed(t, r, o);
-    const a = r.minus(n).mod();
-    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, o, a, r, i);
+    const c = r.minus(n).mod();
+    this.ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, o, c, r, i);
   }
   ensureDistanceCoveredIsMultipleOfLineDashPeriod(t, e, n, i, r) {
     const o = this.drawnPathProperties.lineDashPeriod;
     if (o === 0)
       return;
-    const a = this.getDistanceLeft(n, o);
-    if (a === 0)
+    const c = this.getDistanceLeft(n, o);
+    if (c === 0)
       return;
-    const l = i.plus(r.scale(a / (2 * r.mod())));
-    this.lineToTransformed(t, l, e), this.lineToTransformed(t, i, e);
+    const u = i.plus(r.scale(c / (2 * r.mod())));
+    this.lineToTransformed(t, u, e), this.lineToTransformed(t, i, e);
   }
   lineToTransformed(t, e, n) {
     const { x: i, y: r } = n.apply(e);
@@ -2223,10 +2240,10 @@ class Fe {
     this.drawnPathProperties = t;
   }
   getInfinity(t) {
-    return new ji(t, this.drawnPathProperties);
+    return new Zi(t, this.drawnPathProperties);
   }
 }
-class Qi {
+class _i {
   constructor(t, e) {
     this.instructions = t, this.area = e;
   }
@@ -2240,16 +2257,18 @@ class Qi {
     this.instructions.execute(t, e);
   }
 }
-class yt extends Le {
-  constructor(t) {
-    super(t), this._initiallyWithState = t, this.areaBuilder = new zi();
+class xt extends Le {
+  constructor(e) {
+    super(e);
+    a(this, "areaBuilder", new Xi());
+    this._initiallyWithState = e;
   }
   get area() {
     return this.areaBuilder.area;
   }
   surroundsFinitePoint() {
-    for (const t of this.added)
-      if (t.surroundsFinitePoint())
+    for (const e of this.added)
+      if (e.surroundsFinitePoint())
         return !0;
     return !1;
   }
@@ -2259,79 +2278,80 @@ class yt extends Le {
   allSubpathsAreClosable() {
     if (this.added.length === 0)
       return !0;
-    for (const t of this.added)
-      if (!t.isClosable())
+    for (const e of this.added)
+      if (!e.isClosable())
         return !1;
     return !0;
   }
-  drawPath(t, e, n) {
+  drawPath(e, n, i) {
     if (this.added.length === 0)
       return;
-    const i = K.create(e, t), r = this.makeExecutable(n);
-    return i.setInitialState(r.state), r.add(i), r;
+    const r = K.create(n, e), o = this.makeExecutable(i);
+    return r.setInitialState(o.state), o.add(r), o;
   }
-  makeExecutable(t) {
-    const e = new Ee(this._initiallyWithState.makeExecutable()), n = new Fe(t);
-    for (const i of this.added)
-      e.add(i.makeExecutable(n));
-    return e;
+  makeExecutable(e) {
+    const n = new Ee(this._initiallyWithState.makeExecutable()), i = new Fe(e);
+    for (const r of this.added)
+      n.add(r.makeExecutable(i));
+    return n;
   }
   getInstructionsToClip() {
-    const t = this.makeExecutable({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] });
-    return t.setInitialState(t.stateOfFirstInstruction), new Qi(t, this.area);
+    const e = this.makeExecutable({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] });
+    return e.setInitialState(e.stateOfFirstInstruction), new _i(e, this.area);
   }
-  clipPath(t, e) {
+  clipPath(e, n) {
     if (this.added.length === 0)
       return;
-    const n = this.added[this.added.length - 1], i = gt.create(e, t);
-    n.addInstruction(i);
-    const r = this.getInstructionsToClip();
-    this.addClippedPath(r);
+    const i = this.added[this.added.length - 1], r = mt.create(n, e);
+    i.addInstruction(r);
+    const o = this.getInstructionsToClip();
+    this.addClippedPath(o);
   }
   closePath() {
     if (this.added.length === 0)
       return;
     this.added[this.added.length - 1].closePath();
   }
-  moveTo(t, e) {
-    const n = J(t, e.current.transformation);
-    this.areaBuilder.addPosition(n);
-    const i = Re.create(e, t);
-    i.setInitialState(this.state), this.add(i);
+  moveTo(e, n) {
+    const i = _(e, n.current.transformation);
+    this.areaBuilder.addPosition(i);
+    const r = Re.create(n, e);
+    r.setInitialState(this.state), this.add(r);
   }
-  canAddLineTo(t, e) {
+  canAddLineTo(e, n) {
     if (this.added.length === 0)
       return !0;
-    const n = J(t, e.current.transformation);
-    return this.added[this.added.length - 1].canAddLineTo(n);
+    const i = _(e, n.current.transformation);
+    return this.added[this.added.length - 1].canAddLineTo(i);
   }
-  lineTo(t, e) {
+  lineTo(e, n) {
     if (this.added.length === 0) {
-      this.moveTo(t, e);
+      this.moveTo(e, n);
       return;
     }
-    const n = this.added[this.added.length - 1], i = J(t, e.current.transformation);
-    this.areaBuilder.addPosition(i), n.lineTo(t, e);
+    const i = this.added[this.added.length - 1], r = _(e, n.current.transformation);
+    this.areaBuilder.addPosition(r), i.lineTo(e, n);
   }
-  addPathInstruction(t, e) {
+  addPathInstruction(e, n) {
     if (this.added.length === 0)
-      if (t.initialPoint)
-        this.moveTo(t.initialPoint, e);
+      if (e.initialPoint)
+        this.moveTo(e.initialPoint, n);
       else
         return;
-    const n = this.added[this.added.length - 1], i = n.currentPosition, r = J(i, e.current.transformation.inverse());
-    t.changeArea(this.areaBuilder.transformedWith(e.current.transformation), r);
-    const o = gt.create(e, t.instruction);
-    n.addPathInstruction(t, o, e);
+    const i = this.added[this.added.length - 1], r = i.currentPosition, o = _(r, n.current.transformation.inverse());
+    e.changeArea(this.areaBuilder.transformedWith(n.current.transformation), o);
+    const c = mt.create(n, e.instruction);
+    i.addPathInstruction(e, c, n);
   }
-  static create(t) {
-    return new yt(gt.create(t, (e) => {
-      e.beginPath();
+  static create(e) {
+    return new xt(mt.create(e, (n) => {
+      n.beginPath();
     }));
   }
 }
-class E {
+class R {
   constructor(t, ...e) {
+    a(this, "corners");
     this.topLeftCorner = t, this.corners = e;
   }
   addSubpaths(t, e) {
@@ -2341,19 +2361,19 @@ class E {
     this.topLeftCorner.finishRect(t, e);
   }
   stroke(t, e) {
-    return V.forStrokingPath(e, t, (n) => {
-      const i = yt.create(n);
+    return M.forStrokingPath(e, t, (n) => {
+      const i = xt.create(n);
       return this.addSubpaths(i, n), i;
     });
   }
   fill(t, e) {
-    return V.forFillingPath(e, t, (n) => {
-      const i = yt.create(n);
+    return M.forFillingPath(e, t, (n) => {
+      const i = xt.create(n);
       return this.addSubpaths(i, n), i;
     });
   }
 }
-class Ji extends E {
+class tr extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.horizontal = t;
   }
@@ -2361,10 +2381,10 @@ class Ji extends E {
     return this;
   }
   getArea() {
-    return new m(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
+    return new p(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
   }
 }
-class Zi extends E {
+class er extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.vertical = t;
   }
@@ -2372,29 +2392,29 @@ class Zi extends E {
     return this;
   }
   getArea() {
-    return new m(this.vertical.getHalfPlanesWithVerticalCrossSection());
+    return new p(this.vertical.getHalfPlanesWithVerticalCrossSection());
   }
 }
-class _i extends E {
+class nr extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.horizontal = t, this.vertical = e, this.topLeft = n, this.right = i, this.bottom = r;
   }
   getRoundRect(t) {
     const e = this.topLeft.round(t.upperLeft);
-    return new E(
+    return new R(
       e,
       this.right,
       this.bottom
     );
   }
   getArea() {
-    return new m([
+    return new p([
       ...this.vertical.getHalfPlanesWithVerticalCrossSection(),
       ...this.horizontal.getHalfPlanesWithHorizontalCrossSection()
     ]);
   }
 }
-class ts extends E {
+class ir extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.horizontal = t;
   }
@@ -2402,10 +2422,10 @@ class ts extends E {
     return this;
   }
   getArea() {
-    return new m(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
+    return new p(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
   }
 }
-function es(s) {
+function rr(s) {
   return s.x !== void 0;
 }
 function sn(s) {
@@ -2425,21 +2445,21 @@ function sn(s) {
     return { x: t, y: e, circular: !1 };
   }
 }
-function Et(s, t) {
+function Ft(s, t) {
   const { x: e, y: n, circular: i } = s;
   return { x: e * t, y: n * t, circular: i };
 }
 function We(s, t) {
   const { upperLeft: e, upperRight: n, lowerLeft: i, lowerRight: r } = s;
   return {
-    upperLeft: Et(e, t),
-    upperRight: Et(n, t),
-    lowerLeft: Et(i, t),
-    lowerRight: Et(r, t)
+    upperLeft: Ft(e, t),
+    upperRight: Ft(n, t),
+    lowerLeft: Ft(i, t),
+    lowerRight: Ft(r, t)
   };
 }
-function ns(s) {
-  if (typeof s == "number" || es(s)) {
+function sr(s) {
+  if (typeof s == "number" || rr(s)) {
     const n = sn(s);
     return n ? { upperLeft: n, upperRight: n, lowerLeft: n, lowerRight: n } : void 0;
   }
@@ -2484,7 +2504,7 @@ function ns(s) {
     throw new RangeError(`${t.length} radii provided. Between one and four radii are necessary.`);
   }
 }
-class is extends E {
+class or extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.horizontal = t, this.vertical = e, this.topLeft = n, this.topRightCorner = i, this.bottom = r;
   }
@@ -2492,20 +2512,20 @@ class is extends E {
     const e = this.horizontal.getLength(), n = t.upperLeft.x + t.upperRight.x, i = e / n;
     i < 1 && (t = We(t, i));
     const r = this.topRightCorner.round(t.upperRight), o = this.topLeft.round(t.upperLeft);
-    return new E(
+    return new R(
       o,
       r,
       this.bottom
     );
   }
   getArea() {
-    return new m([
+    return new p([
       ...this.vertical.getHalfPlanesWithVerticalCrossSection(),
       ...this.horizontal.getHalfPlanesWithHorizontalCrossSection()
     ]);
   }
 }
-class ss extends E {
+class ar extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.vertical = t;
   }
@@ -2513,10 +2533,10 @@ class ss extends E {
     return this;
   }
   getArea() {
-    return new m(this.vertical.getHalfPlanesWithVerticalCrossSection());
+    return new p(this.vertical.getHalfPlanesWithVerticalCrossSection());
   }
 }
-class rs extends E {
+class cr extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.vertical = t, this.horizontal = e, this.topLeft = n, this.right = i, this.bottomLeftCorner = r;
   }
@@ -2524,20 +2544,20 @@ class rs extends E {
     const e = this.vertical.getLength(), n = t.upperLeft.y + t.lowerLeft.y, i = e / n;
     i < 1 && (t = We(t, i));
     const r = this.topLeft.round(t.upperLeft), o = this.bottomLeftCorner.round(t.lowerLeft);
-    return new E(
+    return new R(
       r,
       this.right,
       o
     );
   }
   getArea() {
-    return new m([
+    return new p([
       ...this.vertical.getHalfPlanesWithVerticalCrossSection(),
       ...this.horizontal.getHalfPlanesWithHorizontalCrossSection()
     ]);
   }
 }
-class os extends E {
+class hr extends R {
   constructor(t, e, n, i, r, o) {
     super(n, i, r, o), this.vertical = t, this.horizontal = e, this.topLeft = n, this.topRight = i, this.bottomRight = r, this.bottomLeft = o;
   }
@@ -2549,22 +2569,22 @@ class os extends E {
       n / (t.lowerLeft.x + t.lowerRight.x)
     );
     i < 1 && (t = We(t, i));
-    const r = this.bottomRight.round(t.lowerRight), o = this.topLeft.round(t.upperLeft), a = this.topRight.round(t.upperRight), l = this.bottomLeft.round(t.lowerLeft);
-    return new E(
+    const r = this.bottomRight.round(t.lowerRight), o = this.topLeft.round(t.upperLeft), c = this.topRight.round(t.upperRight), u = this.bottomLeft.round(t.lowerLeft);
+    return new R(
       o,
-      a,
+      c,
       r,
-      l
+      u
     );
   }
   getArea() {
-    return new m([
+    return new p([
       ...this.horizontal.getHalfPlanesWithHorizontalCrossSection(),
       ...this.vertical.getHalfPlanesWithVerticalCrossSection()
     ]);
   }
 }
-class Jt {
+class _t {
   constructor(t) {
     this.topLeftPosition = t;
   }
@@ -2581,38 +2601,38 @@ class Jt {
   fill() {
   }
 }
-class as {
+class lr {
   constructor() {
-    this.area = mt;
+    a(this, "area", pt);
   }
   drawPath(t, e, n) {
     const r = new Fe(n).getInfinity(e);
-    return K.create(e, (o, a) => {
-      o.beginPath(), r.addPathAroundViewbox(o, a), t(o, a);
+    return K.create(e, (o, c) => {
+      o.beginPath(), r.addPathAroundViewbox(o, c, !1), t(o, c);
     });
   }
 }
-const cs = new as();
-function Rn(s, t) {
+const ur = new lr();
+function Fn(s, t) {
   throw new Error(`The starting coordinates provided (${s.start} and ${t.start}) do not determine a direction.`);
 }
-class hs {
+class dr {
   constructor(t, e) {
     this.horizontal = t, this.vertical = e;
   }
   addSubpaths() {
-    Rn(this.horizontal, this.vertical);
+    Fn(this.horizontal, this.vertical);
   }
   getRoundRect() {
     return this;
   }
   getArea() {
-    return mt;
+    return pt;
   }
   stroke() {
   }
   fill(t, e) {
-    return V.forFillingPath(e, t, () => cs);
+    return M.forFillingPath(e, t, () => ur);
   }
 }
 class Te {
@@ -2620,7 +2640,7 @@ class Te {
     this.horizontal = t, this.vertical = e;
   }
   addSubpaths() {
-    Rn(this.horizontal, this.vertical);
+    Fn(this.horizontal, this.vertical);
   }
   getRoundRect() {
     return this;
@@ -2632,85 +2652,85 @@ class Te {
   fill() {
   }
 }
-class it {
+class rt {
   static arc(t, e, n, i, r, o) {
     return {
-      instruction: (h, d) => {
-        const u = d.userTransformation, { x: g, y: v } = u.apply(new c(t, e)), { a: P, b: T, c: B, d: H, e: q, f: tt } = u.untranslated().before(p.translation(g, v));
-        h.save(), h.transform(P, T, B, H, q, tt), h.arc(0, 0, n, i, r, o), h.restore();
+      instruction: (l, f) => {
+        const d = f.userTransformation, { x: m, y: w } = d.apply(new h(t, e)), { a: C, b: S, c: L, d: V, e: j, f: Q } = d.untranslated().before(v.translation(m, w));
+        l.save(), l.transform(C, S, L, V, j, Q), l.arc(0, 0, n, i, r, o), l.restore();
       },
-      changeArea: (h) => {
-        h.addPosition(new c(t - n, e - n)), h.addPosition(new c(t - n, e + n)), h.addPosition(new c(t + n, e - n)), h.addPosition(new c(t + n, e + n));
+      changeArea: (l) => {
+        l.addPosition(new h(t - n, e - n)), l.addPosition(new h(t - n, e + n)), l.addPosition(new h(t + n, e - n)), l.addPosition(new h(t + n, e + n));
       },
-      positionChange: new c(t, e).plus(p.rotation(0, 0, r).apply(new c(n, 0))),
-      initialPoint: new c(t, e).plus(p.rotation(0, 0, i).apply(new c(n, 0)))
+      positionChange: new h(t, e).plus(v.rotation(0, 0, r).apply(new h(n, 0))),
+      initialPoint: new h(t, e).plus(v.rotation(0, 0, i).apply(new h(n, 0)))
     };
   }
   static arcTo(t, e, n, i, r) {
-    const o = new c(t, e), a = new c(n, i);
+    const o = new h(t, e), c = new h(n, i);
     return {
-      instruction: (d, u) => {
-        const g = u.userTransformation, v = g.apply(o), P = g.apply(a);
-        d.arcTo(v.x, v.y, P.x, P.y, r * g.scale);
+      instruction: (f, d) => {
+        const m = d.userTransformation, w = m.apply(o), C = m.apply(c);
+        f.arcTo(w.x, w.y, C.x, C.y, r * m.scale);
       },
-      changeArea: (d) => {
-        d.addPosition(o), d.addPosition(a);
+      changeArea: (f) => {
+        f.addPosition(o), f.addPosition(c);
       },
-      positionChange: new c(n, i)
+      positionChange: new h(n, i)
     };
   }
-  static ellipse(t, e, n, i, r, o, a, l) {
+  static ellipse(t, e, n, i, r, o, c, u) {
     return {
-      instruction: (h, d) => {
-        const u = d.userTransformation, g = u.apply(new c(t, e)), v = u.getRotationAngle();
-        h.ellipse(g.x, g.y, n * u.scale, i * u.scale, r + v, o, a, l);
+      instruction: (l, f) => {
+        const d = f.userTransformation, m = d.apply(new h(t, e)), w = d.getRotationAngle();
+        l.ellipse(m.x, m.y, n * d.scale, i * d.scale, r + w, o, c, u);
       },
-      changeArea: (h) => {
-        h.addPosition(new c(t - n, e - i)), h.addPosition(new c(t - n, e + i)), h.addPosition(new c(t + n, e - i)), h.addPosition(new c(t + n, e + i));
+      changeArea: (l) => {
+        l.addPosition(new h(t - n, e - i)), l.addPosition(new h(t - n, e + i)), l.addPosition(new h(t + n, e - i)), l.addPosition(new h(t + n, e + i));
       },
-      positionChange: new c(t, e).plus(
-        p.rotation(0, 0, a).before(
-          new p(n, 0, 0, i, 0, 0)
+      positionChange: new h(t, e).plus(
+        v.rotation(0, 0, c).before(
+          new v(n, 0, 0, i, 0, 0)
         ).before(
-          p.rotation(0, 0, r)
-        ).apply(new c(1, 0))
+          v.rotation(0, 0, r)
+        ).apply(new h(1, 0))
       ),
-      initialPoint: new c(t, e).plus(
-        p.rotation(0, 0, o).before(
-          new p(n, 0, 0, i, 0, 0)
+      initialPoint: new h(t, e).plus(
+        v.rotation(0, 0, o).before(
+          new v(n, 0, 0, i, 0, 0)
         ).before(
-          p.rotation(0, 0, r)
-        ).apply(new c(1, 0))
+          v.rotation(0, 0, r)
+        ).apply(new h(1, 0))
       )
     };
   }
   static bezierCurveTo(t, e, n, i, r, o) {
     return {
-      instruction: (a, l) => {
-        const h = l.userTransformation, d = h.apply(new c(t, e)), u = h.apply(new c(n, i)), g = h.apply(new c(r, o));
-        a.bezierCurveTo(d.x, d.y, u.x, u.y, g.x, g.y);
+      instruction: (c, u) => {
+        const l = u.userTransformation, f = l.apply(new h(t, e)), d = l.apply(new h(n, i)), m = l.apply(new h(r, o));
+        c.bezierCurveTo(f.x, f.y, d.x, d.y, m.x, m.y);
       },
-      changeArea: (a, l) => {
-        C(l) || (a.addPosition(new c((l.x + t) / 2, (l.y + e) / 2)), a.addPosition(new c((t + n) / 2, (e + i) / 2)), a.addPosition(new c((n + r) / 2, (i + o) / 2)), a.addPosition(new c(r, o)));
+      changeArea: (c, u) => {
+        I(u) || (c.addPosition(new h((u.x + t) / 2, (u.y + e) / 2)), c.addPosition(new h((t + n) / 2, (e + i) / 2)), c.addPosition(new h((n + r) / 2, (i + o) / 2)), c.addPosition(new h(r, o)));
       },
-      positionChange: new c(r, o)
+      positionChange: new h(r, o)
     };
   }
   static quadraticCurveTo(t, e, n, i) {
     return {
       instruction: (r, o) => {
-        const a = o.userTransformation, l = a.apply(new c(t, e)), h = a.apply(new c(n, i));
-        r.quadraticCurveTo(l.x, l.y, h.x, h.y);
+        const c = o.userTransformation, u = c.apply(new h(t, e)), l = c.apply(new h(n, i));
+        r.quadraticCurveTo(u.x, u.y, l.x, l.y);
       },
       changeArea: (r, o) => {
-        C(o) || (r.addPosition(new c((o.x + t) / 2, (o.y + e) / 2)), r.addPosition(new c((t + n) / 2, (e + i) / 2)), r.addPosition(new c(n, i)));
+        I(o) || (r.addPosition(new h((o.x + t) / 2, (o.y + e) / 2)), r.addPosition(new h((t + n) / 2, (e + i) / 2)), r.addPosition(new h(n, i)));
       },
-      positionChange: new c(n, i)
+      positionChange: new h(n, i)
     };
   }
 }
-var $ = /* @__PURE__ */ ((s) => (s[s.TOPLEFT = 0] = "TOPLEFT", s[s.TOPRIGHT = 1] = "TOPRIGHT", s[s.BOTTOMLEFT = 2] = "BOTTOMLEFT", s[s.BOTTOMRIGHT = 3] = "BOTTOMRIGHT", s))($ || {});
-function ls(s) {
+var U = /* @__PURE__ */ ((s) => (s[s.TOPLEFT = 0] = "TOPLEFT", s[s.TOPRIGHT = 1] = "TOPRIGHT", s[s.BOTTOMLEFT = 2] = "BOTTOMLEFT", s[s.BOTTOMRIGHT = 3] = "BOTTOMRIGHT", s))(U || {});
+function fr(s) {
   switch (s) {
     case 0:
       return 2;
@@ -2722,7 +2742,7 @@ function ls(s) {
       return 0;
   }
 }
-function us(s) {
+function gr(s) {
   switch (s) {
     case 0:
       return 1;
@@ -2734,22 +2754,27 @@ function us(s) {
       return 3;
   }
 }
-class Fn {
+class Wn {
   constructor(t, e, n, i, r) {
-    this.corner = e, n = fs(n, i, r);
+    a(this, "center");
+    a(this, "start");
+    a(this, "end");
+    a(this, "radii");
+    a(this, "clockwise");
+    this.corner = e, n = pr(n, i, r);
     const o = r === i;
-    let { center: a, start: l, end: h } = gs(n, e, t);
-    o || ({ start: l, end: h } = { start: h, end: l }), this.radii = t, this.clockwise = o, this.center = a, this.start = l, this.end = h;
+    let { center: c, start: u, end: l } = vr(n, e, t);
+    o || ({ start: u, end: l } = { start: l, end: u }), this.radii = t, this.clockwise = o, this.center = c, this.start = u, this.end = l;
   }
   draw(t, e) {
-    t.lineTo(this.start.point, e), this.radii.circular ? t.addPathInstruction(it.arc(
+    t.lineTo(this.start.point, e), this.radii.circular ? t.addPathInstruction(rt.arc(
       this.center.x,
       this.center.y,
       this.radii.x,
       this.start.angle,
       this.end.angle,
       !this.clockwise
-    ), e) : t.addPathInstruction(it.ellipse(
+    ), e) : t.addPathInstruction(rt.ellipse(
       this.center.x,
       this.center.y,
       this.radii.x,
@@ -2761,7 +2786,7 @@ class Fn {
     ), e);
   }
 }
-class ds extends Fn {
+class mr extends Wn {
   moveToEndingPoint(t, e) {
     t.moveTo(this.end.point, e);
   }
@@ -2769,57 +2794,57 @@ class ds extends Fn {
     this.draw(t, e), t.moveTo(this.corner, e);
   }
 }
-function fs(s, t, e) {
-  return t === I.Negative && (s = us(s)), e === I.Negative && (s = ls(s)), s;
+function pr(s, t, e) {
+  return t === T.Negative && (s = gr(s)), e === T.Negative && (s = fr(s)), s;
 }
-function gs(s, t, e) {
+function vr(s, t, e) {
   switch (s) {
-    case $.TOPLEFT:
+    case U.TOPLEFT:
       return {
-        center: new c(t.x + e.x, t.y + e.y),
+        center: new h(t.x + e.x, t.y + e.y),
         start: {
           angle: Math.PI,
-          point: new c(t.x, t.y + e.y)
+          point: new h(t.x, t.y + e.y)
         },
         end: {
           angle: 3 * Math.PI / 2,
-          point: new c(t.x + e.x, t.y)
+          point: new h(t.x + e.x, t.y)
         }
       };
-    case $.TOPRIGHT:
+    case U.TOPRIGHT:
       return {
-        center: new c(t.x - e.x, t.y + e.y),
+        center: new h(t.x - e.x, t.y + e.y),
         start: {
           angle: 3 * Math.PI / 2,
-          point: new c(t.x - e.x, t.y)
+          point: new h(t.x - e.x, t.y)
         },
         end: {
           angle: 0,
-          point: new c(t.x, t.y + e.y)
+          point: new h(t.x, t.y + e.y)
         }
       };
-    case $.BOTTOMRIGHT:
+    case U.BOTTOMRIGHT:
       return {
-        center: new c(t.x - e.x, t.y - e.y),
+        center: new h(t.x - e.x, t.y - e.y),
         start: {
           angle: 0,
-          point: new c(t.x, t.y - e.y)
+          point: new h(t.x, t.y - e.y)
         },
         end: {
           angle: Math.PI / 2,
-          point: new c(t.x - e.x, t.y)
+          point: new h(t.x - e.x, t.y)
         }
       };
-    case $.BOTTOMLEFT:
+    case U.BOTTOMLEFT:
       return {
-        center: new c(t.x + e.x, t.y - e.y),
+        center: new h(t.x + e.x, t.y - e.y),
         start: {
           angle: Math.PI / 2,
-          point: new c(t.x + e.x, t.y)
+          point: new h(t.x + e.x, t.y)
         },
         end: {
           angle: Math.PI,
-          point: new c(t.x, t.y - e.y)
+          point: new h(t.x, t.y - e.y)
         }
       };
   }
@@ -2832,7 +2857,7 @@ class Se {
     t.lineTo(this.corner, e);
   }
   round(t) {
-    return t.x === 0 || t.y === 0 ? this : new Fn(
+    return t.x === 0 || t.y === 0 ? this : new Wn(
       t,
       this.corner,
       this.cornerOrientation,
@@ -2841,7 +2866,7 @@ class Se {
     );
   }
 }
-class ms {
+class wr {
   constructor(t, e, n, i) {
     this.corner = t, this.cornerOrientation = e, this.horizontalOrientation = n, this.verticalOrientation = i;
   }
@@ -2852,7 +2877,7 @@ class ms {
     t.closePath(), t.moveTo(this.corner, e);
   }
   round(t) {
-    return t.x === 0 || t.y === 0 ? this : new ds(
+    return t.x === 0 || t.y === 0 ? this : new mr(
       t,
       this.corner,
       this.cornerOrientation,
@@ -2869,7 +2894,7 @@ class ke {
     t.lineTo(this.point, e), t.lineTo(this.direction, e);
   }
 }
-class ps {
+class Pr {
   constructor(t, e) {
     this.point = t, this.direction = e;
   }
@@ -2888,7 +2913,7 @@ class ye {
     t.lineTo(this.direction, e);
   }
 }
-class vs {
+class Cr {
   constructor(t) {
     this.direction = t;
   }
@@ -2901,13 +2926,17 @@ class vs {
 }
 class He {
   constructor(t, e) {
-    this.start = t, this.orientation = e, this.horizontalLineStart = e === I.Positive ? Ut : Kt, this.horizontalLineEnd = e === I.Positive ? Kt : Ut, this.verticalLineStart = e === I.Positive ? $t : Xt, this.verticalLineEnd = e === I.Positive ? Xt : $t;
+    a(this, "horizontalLineEnd");
+    a(this, "horizontalLineStart");
+    a(this, "verticalLineEnd");
+    a(this, "verticalLineStart");
+    this.start = t, this.orientation = e, this.horizontalLineStart = e === T.Positive ? jt : Qt, this.horizontalLineEnd = e === T.Positive ? Qt : jt, this.verticalLineStart = e === T.Positive ? Kt : $t, this.verticalLineEnd = e === T.Positive ? $t : Kt;
   }
   createTopLeftAtVerticalInfinity(t) {
-    return new ps(new c(t.finiteStart, 0), this.verticalLineStart);
+    return new Pr(new h(t.finiteStart, 0), this.verticalLineStart);
   }
   createBottomRightAtInfinity(t) {
-    return new ke(new c(t.end, 0), this.verticalLineEnd);
+    return new ke(new h(t.end, 0), this.verticalLineEnd);
   }
   createRightAtInfinity(t) {
     return new ye(t.horizontalLineEnd);
@@ -2919,21 +2948,21 @@ class He {
     return t.addEntireHorizontalDimension(this);
   }
   addEntireHorizontalDimension(t) {
-    return new hs(t, this);
+    return new dr(t, this);
   }
   addHorizontalDimensionAtInfinity(t) {
     return new Te(t, this);
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createTopLeftAtVerticalInfinity(t), n = this.createRightAtInfinity(t), i = this.createBottomAtInfinity();
-    return new Ji(t, e, n, i);
+    return new tr(t, e, n, i);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createTopLeftAtVerticalInfinity(t), n = this.createBottomRightAtInfinity(t);
-    return new ts(t, e, n);
+    return new ir(t, e, n);
   }
 }
-class Rt extends He {
+class Wt extends He {
   addVerticalDimension(t) {
     return t.addHorizontalDimensionAtInfinity(this);
   }
@@ -2944,13 +2973,13 @@ class Rt extends He {
     return new Te(t, this);
   }
   addHorizontalDimensionWithStart() {
-    return new Jt(this.verticalLineEnd);
+    return new _t(this.verticalLineEnd);
   }
   addHorizontalDimensionWithStartAndEnd() {
-    return new Jt(this.verticalLineEnd);
+    return new _t(this.verticalLineEnd);
   }
 }
-class Wn extends He {
+class kn extends He {
   constructor(t, e) {
     super(e, t), this.finiteStart = e;
   }
@@ -2958,52 +2987,52 @@ class Wn extends He {
     return new ye(t.horizontalLineStart);
   }
   createLeftAtInfinity(t) {
-    return new vs(t.horizontalLineStart);
+    return new Cr(t.horizontalLineStart);
   }
   createTopRightAtHorizontalInfinity(t) {
-    return new ke(new c(0, this.finiteStart), t.horizontalLineEnd);
+    return new ke(new h(0, this.finiteStart), t.horizontalLineEnd);
   }
   createTopLeft(t) {
-    return new ms(
-      new c(t.finiteStart, this.finiteStart),
-      $.TOPLEFT,
+    return new wr(
+      new h(t.finiteStart, this.finiteStart),
+      U.TOPLEFT,
       t.orientation,
       this.orientation
     );
   }
   createTopRight(t) {
     return new Se(
-      new c(t.end, this.finiteStart),
-      $.TOPRIGHT,
+      new h(t.end, this.finiteStart),
+      U.TOPRIGHT,
       t.orientation,
       this.orientation
     );
   }
   getStartingHalfPlaneWithHorizontalCrossSection() {
-    const t = this.orientation === I.Positive ? new c(1, 0) : new c(-1, 0), e = new c(this.finiteStart, 0);
-    return new w(e, t);
+    const t = this.orientation === T.Positive ? new h(1, 0) : new h(-1, 0), e = new h(this.finiteStart, 0);
+    return new P(e, t);
   }
   getStartingHalfPlaneWithVerticalCrossSection() {
-    const t = this.orientation === I.Positive ? new c(0, 1) : new c(0, -1), e = new c(0, this.finiteStart);
-    return new w(e, t);
+    const t = this.orientation === T.Positive ? new h(0, 1) : new h(0, -1), e = new h(0, this.finiteStart);
+    return new P(e, t);
   }
   addVerticalDimension(t) {
     return t.addHorizontalDimensionWithStart(this);
   }
   addEntireHorizontalDimension(t) {
     const e = this.createLeftAtInfinity(t), n = this.createTopRightAtHorizontalInfinity(t), i = this.createBottomAtInfinity(), r = this.createBottomLeftAtInfinity(t);
-    return new Zi(this, e, n, i, r);
+    return new er(this, e, n, i, r);
   }
   addHorizontalDimensionAtInfinity(t) {
-    return new Jt(t.horizontalLineEnd);
+    return new _t(t.horizontalLineEnd);
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createRightAtInfinity(t), n = this.createBottomAtInfinity(), i = this.createTopLeft(t);
-    return new _i(t, this, i, e, n);
+    return new nr(t, this, i, e, n);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createBottomAtInfinity(), n = this.createTopLeft(t), i = this.createTopRight(t);
-    return new is(t, this, n, i, e);
+    return new or(t, this, n, i, e);
   }
   getHalfPlanesWithHorizontalCrossSection() {
     return [this.getStartingHalfPlaneWithHorizontalCrossSection()];
@@ -3012,33 +3041,33 @@ class Wn extends He {
     return [this.getStartingHalfPlaneWithVerticalCrossSection()];
   }
 }
-class kn extends Wn {
+class Hn extends kn {
   constructor(t, e, n) {
     super(t, e), this.end = n;
   }
   createBottomLeftAtHorizontalInfinity(t) {
-    return new ke(new c(0, this.end), t.horizontalLineStart);
+    return new ke(new h(0, this.end), t.horizontalLineStart);
   }
   getEndingHalfPlaneWithHorizontalCrossSection() {
-    const t = this.orientation === I.Positive ? new c(-1, 0) : new c(1, 0), e = new c(this.end, 0);
-    return new w(e, t);
+    const t = this.orientation === T.Positive ? new h(-1, 0) : new h(1, 0), e = new h(this.end, 0);
+    return new P(e, t);
   }
   getEndingHalfPlaneWithVerticalCrossSection() {
-    const t = this.orientation === I.Positive ? new c(0, -1) : new c(0, 1), e = new c(0, this.end);
-    return new w(e, t);
+    const t = this.orientation === T.Positive ? new h(0, -1) : new h(0, 1), e = new h(0, this.end);
+    return new P(e, t);
   }
   createBottomLeft(t) {
     return new Se(
-      new c(t.finiteStart, this.end),
-      $.BOTTOMLEFT,
+      new h(t.finiteStart, this.end),
+      U.BOTTOMLEFT,
       t.orientation,
       this.orientation
     );
   }
   createBottomRight(t) {
     return new Se(
-      new c(t.end, this.end),
-      $.BOTTOMRIGHT,
+      new h(t.end, this.end),
+      U.BOTTOMRIGHT,
       t.orientation,
       this.orientation
     );
@@ -3048,21 +3077,21 @@ class kn extends Wn {
   }
   addEntireHorizontalDimension(t) {
     const e = this.createLeftAtInfinity(t), n = this.createTopRightAtHorizontalInfinity(t), i = this.createBottomLeftAtHorizontalInfinity(t);
-    return new ss(this, e, n, i);
+    return new ar(this, e, n, i);
   }
   addHorizontalDimensionAtInfinity(t) {
-    return new Jt(t.horizontalLineEnd);
+    return new _t(t.horizontalLineEnd);
   }
   addVerticalDimension(t) {
     return t.addHorizontalDimensionWithStartAndEnd(this);
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createRightAtInfinity(t), n = this.createTopLeft(t), i = this.createBottomLeft(t);
-    return new rs(this, t, n, e, i);
+    return new cr(this, t, n, e, i);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createTopLeft(t), n = this.createTopRight(t), i = this.createBottomLeft(t), r = this.createBottomRight(t);
-    return new os(
+    return new hr(
       this,
       t,
       e,
@@ -3084,23 +3113,23 @@ class kn extends Wn {
     ];
   }
 }
-function rn(s, t) {
-  const e = t > 0 ? I.Positive : I.Negative;
-  return new kn(e, s, s + t);
-}
 function on(s, t) {
-  const e = t > 0 ? I.Positive : I.Negative, n = new He(s, e);
-  return Number.isFinite(s) ? Number.isFinite(t) ? new kn(e, s, s + t) : new Wn(e, s) : Number.isFinite(t) ? s < 0 ? new Rt(s, I.Negative) : new Rt(s, I.Positive) : s > 0 ? e === I.Positive ? new Rt(s, I.Positive) : n : e === I.Positive ? n : new Rt(s, I.Negative);
+  const e = t > 0 ? T.Positive : T.Negative;
+  return new Hn(e, s, s + t);
 }
-function Z(s, t, e, n) {
-  const i = on(s, e), r = on(t, n);
+function an(s, t) {
+  const e = t > 0 ? T.Positive : T.Negative, n = new He(s, e);
+  return Number.isFinite(s) ? Number.isFinite(t) ? new Hn(e, s, s + t) : new kn(e, s) : Number.isFinite(t) ? s < 0 ? new Wt(s, T.Negative) : new Wt(s, T.Positive) : s > 0 ? e === T.Positive ? new Wt(s, T.Positive) : n : e === T.Positive ? n : new Wt(s, T.Negative);
+}
+function tt(s, t, e, n) {
+  const i = an(s, e), r = an(t, n);
   return i.addVerticalDimension(r);
 }
-function an(s, t, e, n) {
-  const i = rn(s, e);
-  return rn(t, n).addHorizontalDimensionWithStartAndEnd(i);
+function cn(s, t, e, n) {
+  const i = on(s, e);
+  return on(t, n).addHorizontalDimensionWithStartAndEnd(i);
 }
-class ws {
+class Ir {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3110,7 +3139,7 @@ class ws {
     } : (o) => {
       o.fillText(t, e, n, i);
     };
-    this.viewBox.addDrawing(r, this.getDrawnRectangle(e, n, t), N.Relative, !0);
+    this.viewBox.addDrawing(r, this.getDrawnRectangle(e, n, t), z.Relative, !0);
   }
   measureText(t) {
     return this.viewBox.measureText(t);
@@ -3121,21 +3150,21 @@ class ws {
     } : (o) => {
       o.strokeText(t, e, n, i);
     };
-    this.viewBox.addDrawing(r, this.getDrawnRectangle(e, n, t), N.Relative, !0);
+    this.viewBox.addDrawing(r, this.getDrawnRectangle(e, n, t), z.Relative, !0);
   }
   getDrawnRectangle(t, e, n) {
     const i = this.viewBox.measureText(n);
     let r;
     i.actualBoundingBoxRight !== void 0 ? r = Math.abs(i.actualBoundingBoxRight - i.actualBoundingBoxLeft) : r = i.width;
-    const o = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent + i.actualBoundingBoxDescent : 1, a = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent : 0;
-    return Z(t, e - a, r, o).getArea();
+    const o = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent + i.actualBoundingBoxDescent : 1, c = i.actualBoundingBoxAscent !== void 0 ? i.actualBoundingBoxAscent : 0;
+    return tt(t, e - c, r, o).getArea();
   }
 }
-function Ps(s) {
+function Tr(s) {
   return typeof s.duration < "u";
 }
-function Cs(s) {
-  return Ps(s) ? {
+function Sr(s) {
+  return Tr(s) ? {
     width: s.displayWidth,
     height: s.displayHeight
   } : {
@@ -3143,30 +3172,30 @@ function Cs(s) {
     height: s.height
   };
 }
-class Is {
+class yr {
   constructor(t) {
     this.viewBox = t;
   }
   drawImage() {
     const t = Array.prototype.slice.apply(arguments);
-    let e, n, i, r, o, a, l, h, d;
-    arguments.length <= 5 ? [e, a, l, h, d] = t : [e, n, i, r, o, a, l, h, d] = t;
-    const { width: u, height: g } = Cs(e), v = this.getDrawnLength(u, n, r, h), P = this.getDrawnLength(g, i, o, d), T = Z(a, l, v, P).getArea(), B = this.getDrawImageInstruction(arguments.length, e, n, i, r, o, a, l, h, d);
-    this.viewBox.addDrawing(B, T, N.Relative, !0);
+    let e, n, i, r, o, c, u, l, f;
+    arguments.length <= 5 ? [e, c, u, l, f] = t : [e, n, i, r, o, c, u, l, f] = t;
+    const { width: d, height: m } = Sr(e), w = this.getDrawnLength(d, n, r, l), C = this.getDrawnLength(m, i, o, f), S = tt(c, u, w, C).getArea(), L = this.getDrawImageInstruction(arguments.length, e, n, i, r, o, c, u, l, f);
+    this.viewBox.addDrawing(L, S, z.Relative, !0);
   }
-  getDrawImageInstruction(t, e, n, i, r, o, a, l, h, d) {
+  getDrawImageInstruction(t, e, n, i, r, o, c, u, l, f) {
     switch (t) {
       case 3:
-        return (u) => {
-          u.drawImage(e, a, l);
+        return (d) => {
+          d.drawImage(e, c, u);
         };
       case 5:
-        return (u) => {
-          u.drawImage(e, a, l, h, d);
+        return (d) => {
+          d.drawImage(e, c, u, l, f);
         };
       case 9:
-        return (u) => {
-          u.drawImage(e, n, i, r, o, a, l, h, d);
+        return (d) => {
+          d.drawImage(e, n, i, r, o, c, u, l, f);
         };
       default:
         throw new TypeError(`Failed to execute 'drawImage' on 'CanvasRenderingContext2D': Valid arities are: [3, 5, 9], but ${t} arguments provided.`);
@@ -3180,30 +3209,30 @@ class Is {
     return typeof t == "number" ? t : t.baseVal.value;
   }
 }
-function Ts(s, t, e, n, i) {
+function xr(s, t, e, n, i) {
   t = t === void 0 ? 0 : t, e = e === void 0 ? 0 : e, n = n === void 0 ? s.width : n, i = i === void 0 ? s.height : i;
   const r = s.data, o = new Uint8ClampedArray(4 * n * i);
-  for (let a = 0; a < i; a++)
-    for (let l = 0; l < n; l++) {
-      const h = 4 * ((e + a) * s.width + t + l), d = 4 * (a * n + l);
-      o[d] = r[h], o[d + 1] = r[h + 1], o[d + 2] = r[h + 2], o[d + 3] = r[h + 3];
+  for (let c = 0; c < i; c++)
+    for (let u = 0; u < n; u++) {
+      const l = 4 * ((e + c) * s.width + t + u), f = 4 * (c * n + u);
+      o[f] = r[l], o[f + 1] = r[l + 1], o[f + 2] = r[l + 2], o[f + 3] = r[l + 3];
     }
   return new ImageData(o, n, i);
 }
-class Zt {
+class te {
   constructor(t, e, n) {
     this.area = t, this.latestClippedPath = e, this.previouslyClippedPaths = n;
   }
   withClippedPath(t) {
     const e = t.area.intersectWith(this.area);
-    return new Zt(e, t, this);
+    return new te(e, t, this);
   }
   get initialState() {
     return this.previouslyClippedPaths ? this.previouslyClippedPaths.initialState : this.latestClippedPath.initialState;
   }
   except(t) {
     if (t !== this)
-      return this.previouslyClippedPaths ? new Zt(this.area, this.latestClippedPath, this.previouslyClippedPaths.except(t)) : this;
+      return this.previouslyClippedPaths ? new te(this.area, this.latestClippedPath, this.previouslyClippedPaths.except(t)) : this;
   }
   contains(t) {
     return t ? this === t ? !0 : this.previouslyClippedPaths ? this.previouslyClippedPaths.contains(t) : !1 : !1;
@@ -3221,7 +3250,7 @@ class Zt {
     return t;
   }
 }
-class Ss extends S {
+class br extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3231,8 +3260,8 @@ class Ss extends S {
     };
   }
 }
-const Ve = new Ss("direction", y);
-class ys extends S {
+const Ve = new br("direction", x);
+class Or extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3242,8 +3271,8 @@ class ys extends S {
     };
   }
 }
-const Me = new ys("font", y);
-class Hn {
+const Me = new Or("font", x);
+class Vn {
   constructor(t) {
     this.propertyName = t;
   }
@@ -3265,7 +3294,7 @@ class Hn {
     } : this.changeToNewValue(i, e.fillAndStrokeStylesTransformed);
   }
 }
-class Vn extends Hn {
+class Mn extends Vn {
   constructor(t) {
     super(t);
   }
@@ -3287,8 +3316,8 @@ class Vn extends Hn {
     return t === 0 && e === 0;
   }
 }
-const Mn = new Vn("lineWidth"), Nn = new Vn("lineDashOffset");
-class xs extends Hn {
+const Nn = new Mn("lineWidth"), zn = new Mn("lineDashOffset");
+class Lr extends Vn {
   valuesAreEqual(t, e) {
     if (t.length !== e.length)
       return !1;
@@ -3312,8 +3341,8 @@ class xs extends Hn {
     return t.length === 0 && e.length === 0;
   }
 }
-const qn = new xs("lineDash");
-class bs extends S {
+const qn = new Lr("lineDash");
+class Br extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3323,8 +3352,8 @@ class bs extends S {
     };
   }
 }
-const Ne = new bs("textAlign", y);
-class Os extends S {
+const Ne = new Br("textAlign", x);
+class Ar extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3334,8 +3363,8 @@ class Os extends S {
     };
   }
 }
-const qe = new Os("textBaseline", y);
-class Ls extends S {
+const ze = new Ar("textBaseline", x);
+class Dr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3343,8 +3372,8 @@ class Ls extends S {
     return (e) => e.lineCap = t;
   }
 }
-const zn = new Ls("lineCap", y);
-class Bs extends S {
+const Gn = new Dr("lineCap", x);
+class Er extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3352,8 +3381,8 @@ class Bs extends S {
     return (e) => e.lineJoin = t;
   }
 }
-const Gn = new Bs("lineJoin", y);
-class As extends S {
+const Yn = new Er("lineJoin", x);
+class Rr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3361,35 +3390,59 @@ class As extends S {
     return (e) => e.miterLimit = t;
   }
 }
-const Yn = new As("miterLimit", y), pe = [
+const Xn = new Rr("miterLimit", x), pe = [
   Ve,
-  Pn,
   Cn,
-  Sn,
-  Nn,
-  qn,
+  In,
+  yn,
   zn,
+  qn,
   Gn,
   Yn,
-  vn,
+  Xn,
   wn,
-  En,
-  Mn,
-  yn,
+  Pn,
+  Rn,
+  Nn,
+  xn,
   Ne,
-  qe,
-  qt,
+  ze,
+  Gt,
   Me,
   Ce,
-  bn,
-  xn
-], Ds = [
+  On,
+  bn
+], Fr = [
   Me,
   Ne,
-  qe,
+  ze,
   Ve
-], ft = class ft {
+], gt = class gt {
   constructor(t) {
+    a(this, "fillStyle");
+    a(this, "fontKerning");
+    a(this, "lineWidth");
+    a(this, "lineDash");
+    a(this, "lineCap");
+    a(this, "lineJoin");
+    a(this, "miterLimit");
+    a(this, "globalAlpha");
+    a(this, "globalCompositeOperation");
+    a(this, "filter");
+    a(this, "strokeStyle");
+    a(this, "lineDashOffset");
+    a(this, "transformation");
+    a(this, "direction");
+    a(this, "imageSmoothingEnabled");
+    a(this, "imageSmoothingQuality");
+    a(this, "font");
+    a(this, "textAlign");
+    a(this, "textBaseline");
+    a(this, "clippedPaths");
+    a(this, "fillAndStrokeStylesTransformed");
+    a(this, "shadowOffset");
+    a(this, "shadowColor");
+    a(this, "shadowBlur");
     this.fillStyle = t.fillStyle, this.fontKerning = t.fontKerning, this.lineWidth = t.lineWidth, this.lineCap = t.lineCap, this.lineJoin = t.lineJoin, this.lineDash = t.lineDash, this.miterLimit = t.miterLimit, this.globalAlpha = t.globalAlpha, this.globalCompositeOperation = t.globalCompositeOperation, this.filter = t.filter, this.strokeStyle = t.strokeStyle, this.lineDashOffset = t.lineDashOffset, this.transformation = t.transformation, this.direction = t.direction, this.imageSmoothingEnabled = t.imageSmoothingEnabled, this.imageSmoothingQuality = t.imageSmoothingQuality, this.font = t.font, this.textAlign = t.textAlign, this.textBaseline = t.textBaseline, this.clippedPaths = t.clippedPaths, this.fillAndStrokeStylesTransformed = t.fillAndStrokeStylesTransformed, this.shadowOffset = t.shadowOffset, this.shadowColor = t.shadowColor, this.shadowBlur = t.shadowBlur;
   }
   changeProperty(t, e) {
@@ -3398,53 +3451,53 @@ const Yn = new As("miterLimit", y), pe = [
       fontKerning: i,
       lineWidth: r,
       lineDash: o,
-      lineCap: a,
-      lineJoin: l,
-      miterLimit: h,
-      globalAlpha: d,
-      globalCompositeOperation: u,
-      filter: g,
-      strokeStyle: v,
-      lineDashOffset: P,
-      transformation: T,
-      direction: B,
-      imageSmoothingEnabled: H,
-      imageSmoothingQuality: q,
-      font: tt,
-      textAlign: wt,
-      textBaseline: Pt,
-      clippedPaths: Ct,
+      lineCap: c,
+      lineJoin: u,
+      miterLimit: l,
+      globalAlpha: f,
+      globalCompositeOperation: d,
+      filter: m,
+      strokeStyle: w,
+      lineDashOffset: C,
+      transformation: S,
+      direction: L,
+      imageSmoothingEnabled: V,
+      imageSmoothingQuality: j,
+      font: Q,
+      textAlign: Pt,
+      textBaseline: Ct,
+      clippedPaths: It,
       fillAndStrokeStylesTransformed: ue,
       shadowOffset: de,
       shadowColor: fe,
       shadowBlur: ge
-    } = this, It = {
+    } = this, Rt = {
       fillStyle: n,
       fontKerning: i,
       lineWidth: r,
       lineDash: o,
-      lineCap: a,
-      lineJoin: l,
-      miterLimit: h,
-      globalAlpha: d,
-      globalCompositeOperation: u,
-      filter: g,
-      strokeStyle: v,
-      lineDashOffset: P,
-      transformation: T,
-      direction: B,
-      imageSmoothingEnabled: H,
-      imageSmoothingQuality: q,
-      font: tt,
-      textAlign: wt,
-      textBaseline: Pt,
-      clippedPaths: Ct,
+      lineCap: c,
+      lineJoin: u,
+      miterLimit: l,
+      globalAlpha: f,
+      globalCompositeOperation: d,
+      filter: m,
+      strokeStyle: w,
+      lineDashOffset: C,
+      transformation: S,
+      direction: L,
+      imageSmoothingEnabled: V,
+      imageSmoothingQuality: j,
+      font: Q,
+      textAlign: Pt,
+      textBaseline: Ct,
+      clippedPaths: It,
       fillAndStrokeStylesTransformed: ue,
       shadowOffset: de,
       shadowColor: fe,
       shadowBlur: ge
     };
-    return It[t] = e, new ft(It);
+    return Rt[t] = e, new gt(Rt);
   }
   get clippingRegion() {
     return this.clippedPaths ? this.clippedPaths.area : void 0;
@@ -3469,21 +3522,21 @@ const Yn = new As("miterLimit", y), pe = [
   }
   getShadowOffsets() {
     const t = [], e = this.filter.getShadowOffset();
-    return e !== null && t.push(e), this.shadowOffset.equals(c.origin) || t.push(this.shadowOffset), t;
+    return e !== null && t.push(e), this.shadowOffset.equals(h.origin) || t.push(this.shadowOffset), t;
   }
   getInstructionToConvertToState(t) {
     return this.getInstructionToConvertToStateOnDimensions(t, pe);
   }
   withClippedPath(t) {
-    const e = this.clippedPaths ? this.clippedPaths.withClippedPath(t) : new Zt(t.area, t);
+    const e = this.clippedPaths ? this.clippedPaths.withClippedPath(t) : new te(t.area, t);
     return this.changeProperty("clippedPaths", e);
   }
   getInstructionToConvertToStateOnDimensions(t, e) {
     const n = e.map((i) => i.getInstructionToChange(this, t));
-    return U(...n);
+    return $(...n);
   }
 };
-ft.default = new ft({
+a(gt, "default", new gt({
   fillStyle: "#000",
   fontKerning: "auto",
   lineWidth: 1,
@@ -3493,10 +3546,10 @@ ft.default = new ft({
   miterLimit: 10,
   globalAlpha: 1,
   globalCompositeOperation: "source-over",
-  filter: Yt.none,
+  filter: Ut.none,
   strokeStyle: "#000",
   lineDashOffset: 0,
-  transformation: p.identity,
+  transformation: v.identity,
   direction: "inherit",
   imageSmoothingEnabled: !0,
   imageSmoothingQuality: "low",
@@ -3505,13 +3558,13 @@ ft.default = new ft({
   textBaseline: "alphabetic",
   clippedPaths: void 0,
   fillAndStrokeStylesTransformed: !1,
-  shadowOffset: c.origin,
+  shadowOffset: h.origin,
   shadowColor: "rgba(0, 0, 0, 0)",
   shadowBlur: 0
-}), ft.setDefault = () => {
-};
-let k = ft;
-class Es {
+})), a(gt, "setDefault", () => {
+});
+let H = gt;
+class Wr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3519,17 +3572,17 @@ class Es {
   }
   getImageData(t, e, n, i) {
   }
-  putImageData(t, e, n, i, r, o, a) {
-    t = Ts(t, i, r, o, a);
-    let l, h = this.viewBox.getDrawingLock();
-    this.viewBox.createPatternFromImageData(t).then((u) => {
-      l = u, h.release();
-    }), this.viewBox.addDrawing((u) => {
-      u.translate(e, n), u.fillStyle = l, u.fillRect(0, 0, t.width, t.height);
-    }, Z(e, n, t.width, t.height).getArea(), N.Absolute, !1, (u) => u.changeProperty("shadowColor", k.default.shadowColor).changeProperty("shadowOffset", k.default.shadowOffset).changeProperty("shadowBlur", k.default.shadowBlur).changeProperty("globalAlpha", k.default.globalAlpha).changeProperty("globalCompositeOperation", k.default.globalCompositeOperation).changeProperty("imageSmoothingEnabled", !1).changeProperty("filter", k.default.filter));
+  putImageData(t, e, n, i, r, o, c) {
+    t = xr(t, i, r, o, c);
+    let u, l = this.viewBox.getDrawingLock();
+    this.viewBox.createPatternFromImageData(t).then((d) => {
+      u = d, l.release();
+    }), this.viewBox.addDrawing((d) => {
+      d.translate(e, n), d.fillStyle = u, d.fillRect(0, 0, t.width, t.height);
+    }, tt(e, n, t.width, t.height).getArea(), z.Absolute, !1, (d) => d.changeProperty("shadowColor", H.default.shadowColor).changeProperty("shadowOffset", H.default.shadowOffset).changeProperty("shadowBlur", H.default.shadowBlur).changeProperty("globalAlpha", H.default.globalAlpha).changeProperty("globalCompositeOperation", H.default.globalCompositeOperation).changeProperty("imageSmoothingEnabled", !1).changeProperty("filter", H.default.filter));
   }
 }
-class Rs {
+class kr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3537,31 +3590,31 @@ class Rs {
     return this.viewBox.state.current.lineCap;
   }
   set lineCap(t) {
-    this.viewBox.changeState((e) => zn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Gn.changeInstanceValue(e, t));
   }
   get lineDashOffset() {
     return this.viewBox.state.current.lineDashOffset;
   }
   set lineDashOffset(t) {
-    this.viewBox.changeState((e) => Nn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => zn.changeInstanceValue(e, t));
   }
   get lineJoin() {
     return this.viewBox.state.current.lineJoin;
   }
   set lineJoin(t) {
-    this.viewBox.changeState((e) => Gn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Yn.changeInstanceValue(e, t));
   }
   get lineWidth() {
     return this.viewBox.state.current.lineWidth;
   }
   set lineWidth(t) {
-    this.viewBox.changeState((e) => Mn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Nn.changeInstanceValue(e, t));
   }
   get miterLimit() {
     return this.viewBox.state.current.miterLimit;
   }
   set miterLimit(t) {
-    this.viewBox.changeState((e) => Yn.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Xn.changeInstanceValue(e, t));
   }
   getLineDash() {
     return this.viewBox.state.current.lineDash;
@@ -3570,7 +3623,7 @@ class Rs {
     t.length % 2 === 1 && (t = t.concat(t)), this.viewBox.changeState((e) => qn.changeInstanceValue(e, t));
   }
 }
-class Fs extends S {
+class Hr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3578,8 +3631,8 @@ class Fs extends S {
     return (e) => e.fontKerning = t;
   }
 }
-const Ws = new Fs("fontKerning", y);
-class ks {
+const Vr = new Hr("fontKerning", x);
+class Mr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3593,45 +3646,45 @@ class ks {
     this.viewBox.changeState((e) => Ne.changeInstanceValue(e, t));
   }
   set textBaseline(t) {
-    this.viewBox.changeState((e) => qe.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => ze.changeInstanceValue(e, t));
   }
   set fontKerning(t) {
-    this.viewBox.changeState((e) => Ws.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Vr.changeInstanceValue(e, t));
   }
 }
-class Hs {
+class Nr {
   constructor(t) {
     this.viewBox = t;
   }
   arc(t, e, n, i, r, o) {
-    this.viewBox.addPathInstruction(it.arc(t, e, n, i, r, o));
+    this.viewBox.addPathInstruction(rt.arc(t, e, n, i, r, o));
   }
   arcTo(t, e, n, i, r) {
-    this.viewBox.addPathInstruction(it.arcTo(t, e, n, i, r));
+    this.viewBox.addPathInstruction(rt.arcTo(t, e, n, i, r));
   }
   closePath() {
     this.viewBox.closePath();
   }
-  ellipse(t, e, n, i, r, o, a, l) {
-    this.viewBox.addPathInstruction(it.ellipse(t, e, n, i, r, o, a, l));
+  ellipse(t, e, n, i, r, o, c, u) {
+    this.viewBox.addPathInstruction(rt.ellipse(t, e, n, i, r, o, c, u));
   }
   lineTo(t, e) {
-    this.viewBox.lineTo(new c(t, e));
+    this.viewBox.lineTo(new h(t, e));
   }
   lineToInfinityInDirection(t, e) {
-    this.viewBox.lineTo({ direction: new c(t, e) });
+    this.viewBox.lineTo({ direction: new h(t, e) });
   }
   moveTo(t, e) {
-    this.viewBox.moveTo(new c(t, e));
+    this.viewBox.moveTo(new h(t, e));
   }
   moveToInfinityInDirection(t, e) {
-    this.viewBox.moveTo({ direction: new c(t, e) });
+    this.viewBox.moveTo({ direction: new h(t, e) });
   }
   quadraticCurveTo(t, e, n, i) {
-    this.viewBox.addPathInstruction(it.quadraticCurveTo(t, e, n, i));
+    this.viewBox.addPathInstruction(rt.quadraticCurveTo(t, e, n, i));
   }
   bezierCurveTo(t, e, n, i, r, o) {
-    this.viewBox.addPathInstruction(it.bezierCurveTo(t, e, n, i, r, o));
+    this.viewBox.addPathInstruction(rt.bezierCurveTo(t, e, n, i, r, o));
   }
   rect(t, e, n, i) {
     this.viewBox.rect(t, e, n, i);
@@ -3640,9 +3693,25 @@ class Hs {
     this.viewBox.roundRect(t, e, n, i, r);
   }
 }
-class Vs {
+class zr {
   constructor(t, e, n) {
-    this.canvas = t, this.canvasState = new ui(e), this.canvasTransform = new fi(e), this.canvasCompositing = new pi(e), this.canvasImageSmoothing = new Pi(e), this.canvasStrokeStyles = new Ci(e), this.canvasShadowStyles = new yi(e), this.canvasFilters = new bi(e, n), this.canvasRect = new Oi(e), this.canvasDrawPath = new Li(e), this.canvasUserInterface = new Bi(), this.canvasText = new ws(e), this.canvasDrawImage = new Is(e), this.canvasImageData = new Es(e), this.canvasPathDrawingStyles = new Rs(e), this.canvasTextDrawingStyles = new ks(e), this.canvasPath = new Hs(e);
+    a(this, "canvasState");
+    a(this, "canvasTransform");
+    a(this, "canvasCompositing");
+    a(this, "canvasImageSmoothing");
+    a(this, "canvasStrokeStyles");
+    a(this, "canvasShadowStyles");
+    a(this, "canvasFilters");
+    a(this, "canvasRect");
+    a(this, "canvasDrawPath");
+    a(this, "canvasUserInterface");
+    a(this, "canvasText");
+    a(this, "canvasDrawImage");
+    a(this, "canvasImageData");
+    a(this, "canvasPathDrawingStyles");
+    a(this, "canvasTextDrawingStyles");
+    a(this, "canvasPath");
+    this.canvas = t, this.canvasState = new gi(e), this.canvasTransform = new pi(e), this.canvasCompositing = new Pi(e), this.canvasImageSmoothing = new Ti(e), this.canvasStrokeStyles = new Si(e), this.canvasShadowStyles = new Oi(e), this.canvasFilters = new Bi(e, n), this.canvasRect = new Ai(e), this.canvasDrawPath = new Di(e), this.canvasUserInterface = new Ei(), this.canvasText = new Ir(e), this.canvasDrawImage = new yr(e), this.canvasImageData = new Wr(e), this.canvasPathDrawingStyles = new kr(e), this.canvasTextDrawingStyles = new Mr(e), this.canvasPath = new Nr(e);
   }
   getContextAttributes() {
     return this.canvas.getContext("2d").getContextAttributes();
@@ -3773,8 +3842,8 @@ class Vs {
   getImageData(t, e, n, i) {
     return this.canvasImageData.getImageData(t, e, n, i);
   }
-  putImageData(t, e, n, i, r, o, a) {
-    this.canvasImageData.putImageData(t, e, n, i, r, o, a);
+  putImageData(t, e, n, i, r, o, c) {
+    this.canvasImageData.putImageData(t, e, n, i, r, o, c);
   }
   set lineCap(t) {
     this.canvasPathDrawingStyles.lineCap = t;
@@ -3824,8 +3893,8 @@ class Vs {
   closePath() {
     this.canvasPath.closePath();
   }
-  ellipse(t, e, n, i, r, o, a, l) {
-    this.canvasPath.ellipse(t, e, n, i, r, o, a);
+  ellipse(t, e, n, i, r, o, c, u) {
+    this.canvasPath.ellipse(t, e, n, i, r, o, c);
   }
   lineTo(t, e) {
     this.canvasPath.lineTo(t, e);
@@ -3849,35 +3918,36 @@ class Vs {
     this.canvasPath.roundRect(t, e, n, i, r);
   }
 }
-class ze extends Gt {
+class qe extends Xt {
   constructor() {
-    super(...arguments), this.colorStops = [];
+    super(...arguments);
+    a(this, "colorStops", []);
   }
-  addColorStopsToGradient(t) {
-    for (const e of this.colorStops)
-      t.addColorStop(e.offset, e.color);
+  addColorStopsToGradient(e) {
+    for (const n of this.colorStops)
+      e.addColorStop(n.offset, n.color);
   }
-  addColorStop(t, e) {
-    this.colorStops.push({ offset: t, color: e });
+  addColorStop(e, n) {
+    this.colorStops.push({ offset: e, color: n });
   }
-  getInstructionToSetTransformed(t) {
-    return (e, n) => {
-      const i = n.userTransformation;
-      e[t] = this.createTransformedGradient(i);
+  getInstructionToSetTransformed(e) {
+    return (n, i) => {
+      const r = i.userTransformation;
+      n[e] = this.createTransformedGradient(r);
     };
   }
-  getInstructionToSetUntransformed(t) {
-    return (e) => {
-      e[t] = this.createGradient();
+  getInstructionToSetUntransformed(e) {
+    return (n) => {
+      n[e] = this.createGradient();
     };
   }
 }
-class Ms extends ze {
+class qr extends qe {
   constructor(t, e, n, i, r) {
     super(), this.context = t, this.x0 = e, this.y0 = n, this.x1 = i, this.y1 = r;
   }
   createTransformedGradient(t) {
-    const { x: e, y: n } = t.apply(new c(this.x0, this.y0)), { x: i, y: r } = t.apply(new c(this.x1, this.y1)), o = this.context.createLinearGradient(e, n, i, r);
+    const { x: e, y: n } = t.apply(new h(this.x0, this.y0)), { x: i, y: r } = t.apply(new h(this.x1, this.y1)), o = this.context.createLinearGradient(e, n, i, r);
     return this.addColorStopsToGradient(o), o;
   }
   createGradient() {
@@ -3885,22 +3955,23 @@ class Ms extends ze {
     return this.addColorStopsToGradient(t), t;
   }
 }
-class Ns extends ze {
-  constructor(t, e, n, i, r, o, a) {
-    super(), this.context = t, this.x0 = e, this.y0 = n, this.r0 = i, this.x1 = r, this.y1 = o, this.r1 = a;
+class Gr extends qe {
+  constructor(t, e, n, i, r, o, c) {
+    super(), this.context = t, this.x0 = e, this.y0 = n, this.r0 = i, this.x1 = r, this.y1 = o, this.r1 = c;
   }
   createTransformedGradient(t) {
-    const { x: e, y: n } = t.apply(new c(this.x0, this.y0)), { x: i, y: r } = t.apply(new c(this.x1, this.y1)), o = this.r0 * t.scale, a = this.r1 * t.scale, l = this.context.createRadialGradient(e, n, o, i, r, a);
-    return this.addColorStopsToGradient(l), l;
+    const { x: e, y: n } = t.apply(new h(this.x0, this.y0)), { x: i, y: r } = t.apply(new h(this.x1, this.y1)), o = this.r0 * t.scale, c = this.r1 * t.scale, u = this.context.createRadialGradient(e, n, o, i, r, c);
+    return this.addColorStopsToGradient(u), u;
   }
   createGradient() {
     const t = this.context.createRadialGradient(this.x0, this.y0, this.r0, this.x1, this.y1, this.r1);
     return this.addColorStopsToGradient(t), t;
   }
 }
-class Xn {
+class Un {
   constructor(t) {
-    this.currentState = t, this.instructions = [];
+    a(this, "instructions", []);
+    this.currentState = t;
   }
   restore() {
     this.addChangeToState(this.currentState.restored(), (t) => {
@@ -3929,7 +4000,7 @@ class Xn {
       };
   }
 }
-class Ge extends Xn {
+class Ge extends Un {
   changeCurrentInstanceTo(t) {
     if (!this.currentState.current.equals(t)) {
       if (!Ge.canConvert(this.currentState.current, t))
@@ -3959,30 +4030,30 @@ class Ge extends Xn {
     return t.clippedPaths ? e.clippedPaths ? e.clippedPaths.contains(t.clippedPaths) : !1 : !0;
   }
 }
-class Q {
+class Z {
   constructor(t, e = []) {
     this.current = t, this.stack = e;
   }
   replaceCurrent(t) {
-    return new Q(t, this.stack);
+    return new Z(t, this.stack);
   }
   withCurrentState(t) {
-    return new Q(t, this.stack);
+    return new Z(t, this.stack);
   }
   currentlyTransformed(t) {
     return this.withCurrentState(this.current.changeProperty("fillAndStrokeStylesTransformed", t));
   }
   withClippedPath(t) {
-    return new Q(this.current.withClippedPath(t), this.stack);
+    return new Z(this.current.withClippedPath(t), this.stack);
   }
   saved() {
-    return new Q(this.current, (this.stack || []).concat([this.current]));
+    return new Z(this.current, (this.stack || []).concat([this.current]));
   }
   restored() {
     if (!this.stack || this.stack.length === 0)
       return this;
     const t = this.stack[this.stack.length - 1];
-    return new Q(t, this.stack.slice(0, this.stack.length - 1));
+    return new Z(t, this.stack.slice(0, this.stack.length - 1));
   }
   convertToLastSavedInstance(t, e) {
     for (let n = this.stack.length - 1; n > e; n--)
@@ -3994,11 +4065,11 @@ class Q {
     t.changeCurrentInstanceTo(this.current);
   }
   getInstructionToConvertToStateUsingConversion(t, e) {
-    const n = Q.findIndexOfHighestCommon(this.stack, e.stack);
+    const n = Z.findIndexOfHighestCommon(this.stack, e.stack);
     return this.convertToLastSavedInstance(t, n), e.convertFromLastSavedInstance(t, n), t.instruction;
   }
   getInstructionToConvertToState(t) {
-    return this.getInstructionToConvertToStateUsingConversion(new Xn(this), t);
+    return this.getInstructionToConvertToStateUsingConversion(new Un(this), t);
   }
   getInstructionToConvertToStateWithClippedPath(t) {
     return this.getInstructionToConvertToStateUsingConversion(new Ge(this), t);
@@ -4013,8 +4084,8 @@ class Q {
     return n - 1;
   }
 }
-const cn = new Q(k.default, []);
-class qs {
+const hn = new Z(H.default, []);
+class Yr {
   constructor(t) {
     this.area = t;
   }
@@ -4029,17 +4100,19 @@ class qs {
   }
 }
 class Ye extends K {
-  constructor(t, e, n, i, r) {
-    super(t, e, n, i), this.drawingArea = new qs(r);
+  constructor(e, n, i, r, o) {
+    super(e, n, i, r);
+    a(this, "drawingArea");
+    this.drawingArea = new Yr(o);
   }
-  static createClearRect(t, e, n, i, r, o, a) {
-    return new Ye(t, t, (l, h) => {
-      n.clearRect(l, h, i, r, o, a);
+  static createClearRect(e, n, i, r, o, c, u) {
+    return new Ye(e, e, (l, f) => {
+      i.clearRect(l, f, r, o, c, u);
     }, () => {
-    }, e);
+    }, n);
   }
 }
-class _t extends Ee {
+class ee extends Ee {
   reconstructState(t, e) {
     e.setInitialStateWithClippedPaths(t);
   }
@@ -4050,18 +4123,18 @@ class _t extends Ee {
     return this.contains((e) => e.drawingArea.intersects(t));
   }
   addClearRect(t, e, n, i, r, o) {
-    const l = new Fe({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] }).getInfinity(e), h = Ye.createClearRect(e, t, l, n, i, r, o);
-    h.setInitialState(this.state), this.add(h);
+    const u = new Fe({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] }).getInfinity(e), l = Ye.createClearRect(e, t, u, n, i, r, o);
+    l.setInitialState(this.state), this.add(l);
   }
   clearContentsInsideArea(t) {
     this.removeAll((e) => e.drawingArea.isContainedBy(t));
   }
   static create() {
-    return new _t(new K(cn, cn, k.setDefault, () => {
+    return new ee(new K(hn, hn, H.setDefault, () => {
     }));
   }
 }
-class zs {
+class Xr {
   constructor(t) {
     this.area = t;
   }
@@ -4075,9 +4148,10 @@ class zs {
     return this.area.intersects(t);
   }
 }
-class Gs {
+class Ur {
   constructor(t, e) {
-    this.instructions = t, this.drawingArea = new zs(e);
+    a(this, "drawingArea");
+    this.instructions = t, this.drawingArea = new Xr(e);
   }
   get state() {
     return this.instructions.state;
@@ -4101,22 +4175,25 @@ class Gs {
     this.instructions.execute(t, e);
   }
 }
-function Ys(s, t, e, n) {
+function $r(s, t, e, n) {
   if (e === void 0) {
     t.addSubpaths(s, n);
     return;
   }
-  let i = ns(e);
+  let i = sr(e);
   if (!i)
     return;
   t.getRoundRect(i).addSubpaths(s, n);
 }
-class Xs {
+class Kr {
   constructor(t) {
-    this.onChange = t, this.previousInstructionsWithPath = _t.create(), this.state = this.previousInstructionsWithPath.state;
+    a(this, "currentInstructionsWithPath");
+    a(this, "previousInstructionsWithPath");
+    a(this, "state");
+    this.onChange = t, this.previousInstructionsWithPath = ee.create(), this.state = this.previousInstructionsWithPath.state;
   }
   beginPath() {
-    const t = yt.create(this.state);
+    const t = xt.create(this.state);
     t.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state), this.currentInstructionsWithPath = t;
   }
   changeState(t) {
@@ -4129,7 +4206,7 @@ class Xs {
     this.state = this.state.restored();
   }
   resetState() {
-    this.previousInstructionsWithPath = _t.create(), this.state = this.previousInstructionsWithPath.state, this.currentInstructionsWithPath = void 0, this.onChange();
+    this.previousInstructionsWithPath = ee.create(), this.state = this.previousInstructionsWithPath.state, this.currentInstructionsWithPath = void 0, this.onChange();
   }
   allSubpathsAreClosable() {
     return !this.currentInstructionsWithPath || this.currentInstructionsWithPath.allSubpathsAreClosable();
@@ -4143,13 +4220,13 @@ class Xs {
   fillPath(t) {
     if (!this.currentInstructionsWithPath)
       return;
-    const e = V.forFillingPath(t, this.state, () => this.currentInstructionsWithPath);
+    const e = M.forFillingPath(t, this.state, () => this.currentInstructionsWithPath);
     this.state = e.state, this.incorporateDrawingInstruction(e);
   }
   strokePath() {
     if (!this.currentInstructionsWithPath)
       return;
-    const t = V.forStrokingPath((e) => {
+    const t = M.forStrokingPath((e) => {
       e.stroke();
     }, this.state, () => this.currentInstructionsWithPath);
     this.state = t.state, this.incorporateDrawingInstruction(t);
@@ -4166,16 +4243,16 @@ class Xs {
   }
   addDrawing(t, e, n, i, r) {
     const o = this.state.currentlyTransformed(!1);
-    n === N.Relative && (e = e.transform(this.state.current.transformation));
-    let a;
-    r && (a = o.withCurrentState(r(o.current))), this.incorporateDrawingInstruction(new V(
+    n === z.Relative && (e = e.transform(this.state.current.transformation));
+    let c;
+    r && (c = o.withCurrentState(r(o.current))), this.incorporateDrawingInstruction(new M(
       t,
       e,
-      (l) => K.create(o, l),
+      (u) => K.create(o, u),
       i,
       n,
       o,
-      a
+      c
     ));
   }
   clipPath(t) {
@@ -4183,13 +4260,13 @@ class Xs {
   }
   incorporateDrawingInstruction(t) {
     const e = t.getDrawnArea();
-    if (e === L)
+    if (e === A)
       return;
     const n = t.getModifiedInstruction();
     this.addToPreviousInstructions(n, e, t.build), this.currentInstructionsWithPath || (this.state = this.previousInstructionsWithPath.state), this.onChange();
   }
   addToPreviousInstructions(t, e, n) {
-    const i = new Gs(n(t), e);
+    const i = new Ur(n(t), e);
     i.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state), this.previousInstructionsWithPath.add(i);
   }
   clipCurrentPath(t) {
@@ -4214,7 +4291,7 @@ class Xs {
     this.currentInstructionsWithPath && t.addSubpaths(this.currentInstructionsWithPath, this.state);
   }
   roundRect(t, e) {
-    this.currentInstructionsWithPath && Ys(this.currentInstructionsWithPath, t, e, this.state);
+    this.currentInstructionsWithPath && $r(this.currentInstructionsWithPath, t, e, this.state);
   }
   intersects(t) {
     return this.previousInstructionsWithPath.intersects(t);
@@ -4223,11 +4300,11 @@ class Xs {
     this.previousInstructionsWithPath.clearContentsInsideArea(t), this.currentInstructionsWithPath && this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.previousInstructionsWithPath.state);
   }
   clearArea(t, e, n, i) {
-    const o = Z(t, e, n, i).getArea();
+    const o = tt(t, e, n, i).getArea();
     if (!o)
       return;
-    const a = o.transform(this.state.current.transformation);
-    this.intersects(a) && (this.clearContentsInsideArea(a), this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(a) && (this.previousInstructionsWithPath.addClearRect(o, this.state, t, e, n, i), this.currentInstructionsWithPath && this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state)), this.onChange());
+    const c = o.transform(this.state.current.transformation);
+    this.intersects(c) && (this.clearContentsInsideArea(c), this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(c) && (this.previousInstructionsWithPath.addClearRect(o, this.state, t, e, n, i), this.currentInstructionsWithPath && this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state)), this.onChange());
   }
   execute(t, e) {
     this.previousInstructionsWithPath.length && this.previousInstructionsWithPath.execute(t, e);
@@ -4236,12 +4313,12 @@ class Xs {
       t.restore();
   }
 }
-class $s extends ze {
+class jr extends qe {
   constructor(t, e, n, i) {
     super(), this.context = t, this.startAngle = e, this.x = n, this.y = i;
   }
   createTransformedGradient(t) {
-    const { x: e, y: n } = t.apply(new c(this.x, this.y)), i = t.getRotationAngle(), r = this.context.createConicGradient(this.startAngle + i, e, n);
+    const { x: e, y: n } = t.apply(new h(this.x, this.y)), i = t.getRotationAngle(), r = this.context.createConicGradient(this.startAngle + i, e, n);
     return this.addColorStopsToGradient(r), r;
   }
   createGradient() {
@@ -4249,9 +4326,10 @@ class $s extends ze {
     return this.addColorStopsToGradient(t), t;
   }
 }
-class Us {
+class Qr {
   constructor(t, e, n, i, r) {
-    this.rectangleManager = t, this.context = e, this.drawingIterationProvider = n, this.drawLockProvider = i, this.isTransforming = r, this.instructionSet = new Xs(() => this.draw());
+    a(this, "instructionSet");
+    this.rectangleManager = t, this.context = e, this.drawingIterationProvider = n, this.drawLockProvider = i, this.isTransforming = r, this.instructionSet = new Kr(() => this.draw());
   }
   get width() {
     return this.rectangleManager.rectangle.viewboxWidth;
@@ -4275,7 +4353,7 @@ class Us {
     this.instructionSet.changeState(t);
   }
   measureText(t) {
-    this.context.save(), k.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(!1).current, Ds)(this.context);
+    this.context.save(), H.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(!1).current, Fr)(this.context);
     const n = this.context.measureText(t);
     return this.context.restore(), n;
   }
@@ -4311,11 +4389,11 @@ class Us {
     this.instructionSet.canAddLineTo(t) && this.instructionSet.lineTo(t);
   }
   rect(t, e, n, i) {
-    const r = Z(t, e, n, i);
+    const r = tt(t, e, n, i);
     this.instructionSet.rect(r);
   }
   roundRect(t, e, n, i, r) {
-    const o = Z(t, e, n, i);
+    const o = tt(t, e, n, i);
     this.instructionSet.roundRect(o, r);
   }
   currentPathCanBeFilled() {
@@ -4328,11 +4406,11 @@ class Us {
     this.instructionSet.strokePath();
   }
   fillRect(t, e, n, i, r) {
-    const o = Z(t, e, n, i);
+    const o = tt(t, e, n, i);
     this.instructionSet.fillRect(o, r);
   }
   strokeRect(t, e, n, i) {
-    const r = Z(t, e, n, i);
+    const r = tt(t, e, n, i);
     this.instructionSet.strokeRect(r);
   }
   clipPath(t) {
@@ -4342,37 +4420,40 @@ class Us {
     this.instructionSet.clearArea(t, e, n, i);
   }
   createLinearGradient(t, e, n, i) {
-    return new Ms(this.context, t, e, n, i);
+    return new qr(this.context, t, e, n, i);
   }
   createRadialGradient(t, e, n, i, r, o) {
-    return new Ns(this.context, t, e, n, i, r, o);
+    return new Gr(this.context, t, e, n, i, r, o);
   }
   createConicGradient(t, e, n) {
-    return new $s(this.context, t, e, n);
+    return new jr(this.context, t, e, n);
   }
   createPattern(t, e) {
     let n;
-    return n = new In(this.context.createPattern(t, e)), n;
+    return n = new Tn(this.context.createPattern(t, e)), n;
   }
   draw() {
     this.drawingIterationProvider.provideDrawingIteration(() => (this.isTransforming() || this.rectangleManager.measure(), this.rectangleManager.rectangle ? (this.context.restore(), this.context.save(), this.context.clearRect(0, 0, this.width, this.height), this.setInitialTransformation(), this.instructionSet.execute(this.context, this.rectangleManager.rectangle), !0) : !1));
   }
   setInitialTransformation() {
     const t = this.rectangleManager.rectangle.initialBitmapTransformation;
-    if (t.equals(p.identity))
+    if (t.equals(v.identity))
       return;
-    const { a: e, b: n, c: i, d: r, e: o, f: a } = t;
-    this.context.setTransform(e, n, i, r, o, a);
+    const { a: e, b: n, c: i, d: r, e: o, f: c } = t;
+    this.context.setTransform(e, n, i, r, o, c);
   }
 }
-class Ks {
+class Jr {
   constructor(t, e) {
+    a(this, "point");
+    a(this, "angularVelocity");
+    a(this, "initialTransformation");
     this.context = e, this.initialTransformation = e.transformation, this.angularVelocity = Math.PI / 100, this.point = t.onMoved(() => {
       this.setTransformation();
     }, !1);
   }
   setTransformation() {
-    this.context.transformation = this.initialTransformation.before(p.rotation(
+    this.context.transformation = this.initialTransformation.before(v.rotation(
       this.point.initial.x,
       this.point.initial.y,
       (this.point.initial.x - this.point.current.x) * this.angularVelocity
@@ -4388,8 +4469,13 @@ class Ks {
     this.point.cancel();
   }
 }
-class js {
+class Zr {
   constructor(t, e, n, i, r) {
+    a(this, "maxScaleLogStep");
+    a(this, "currentScaleLog");
+    a(this, "targetScaleLog");
+    a(this, "stepTimeout");
+    a(this, "initialTransformation");
     this.transformable = t, this.centerX = e, this.centerY = n, this.onFinish = r, this.initialTransformation = t.transformation, this.maxScaleLogStep = 0.1, this.currentScaleLog = 0, this.targetScaleLog = Math.log(i), this.makeStep();
   }
   makeStep() {
@@ -4398,7 +4484,7 @@ class js {
   }
   setTransformToCurrentScaleLog() {
     this.transformable.transformation = this.initialTransformation.before(
-      p.zoom(
+      v.zoom(
         this.centerX,
         this.centerY,
         Math.exp(this.currentScaleLog)
@@ -4409,8 +4495,10 @@ class js {
     this.stepTimeout !== void 0 && clearTimeout(this.stepTimeout);
   }
 }
-class Qs {
+class _r {
   constructor(t, e) {
+    a(this, "point");
+    a(this, "initialTransformation");
     this.anchor = t, this.context = e, this.initialTransformation = e.transformation, this.point = t.onMoved(() => {
       this.setTransformation();
     }, !0);
@@ -4419,7 +4507,7 @@ class Qs {
     this.context.transformation = this.initialTransformation.before(this.getTranslation());
   }
   getTranslation() {
-    return p.translation(this.point.current.x - this.point.initial.x, this.point.current.y - this.point.initial.y);
+    return v.translation(this.point.current.x - this.point.initial.x, this.point.current.y - this.point.initial.y);
   }
   withAnchor(t) {
     return t === this.anchor ? this : this.context.getGestureForTwoAnchors(this.point.cancel(), t);
@@ -4430,6 +4518,9 @@ class Qs {
 }
 class $n {
   constructor(t, e, n) {
+    a(this, "point1");
+    a(this, "point2");
+    a(this, "initialTransformation");
     this.context = n, this.initialTransformation = n.transformation, this.point1 = t.onMoved(() => this.setTransformation(), this.fixesFirstAnchorOnInfiniteCanvas()), this.point2 = e.onMoved(() => this.setTransformation(), this.fixesSecondAnchorOnInfiniteCanvas());
   }
   withAnchor(t) {
@@ -4443,7 +4534,7 @@ class $n {
       return this.context.getGestureForOneAnchor(e);
   }
 }
-class Js extends $n {
+class ts extends $n {
   constructor(t, e, n) {
     super(t, e, n);
   }
@@ -4454,7 +4545,7 @@ class Js extends $n {
     return !1;
   }
   setTransformation() {
-    this.context.transformation = this.initialTransformation.before(p.translateZoom(
+    this.context.transformation = this.initialTransformation.before(v.translateZoom(
       this.point1.initial.x,
       this.point1.initial.y,
       this.point2.initial.x,
@@ -4466,7 +4557,7 @@ class Js extends $n {
     ));
   }
 }
-class Zs extends $n {
+class es extends $n {
   constructor(t, e, n) {
     super(t, e, n);
   }
@@ -4477,7 +4568,7 @@ class Zs extends $n {
     return !0;
   }
   setTransformation() {
-    this.context.transformation = this.initialTransformation.before(p.translateRotateZoom(
+    this.context.transformation = this.initialTransformation.before(v.translateRotateZoom(
       this.point1.initial.x,
       this.point1.initial.y,
       this.point2.initial.x,
@@ -4489,9 +4580,9 @@ class Zs extends $n {
     ));
   }
 }
-class Dt {
+class Et {
   constructor() {
-    this.mapped = [];
+    a(this, "mapped", []);
   }
   onRemoved(t) {
   }
@@ -4506,7 +4597,7 @@ class Dt {
     this.onRemoved(n);
   }
 }
-class _ extends Dt {
+class et extends Et {
   map(t) {
     return t;
   }
@@ -4528,9 +4619,14 @@ class _ extends Dt {
       n(t);
   }
 }
-class _s {
+class ns {
   constructor(t, e) {
-    this.setNewValue = t, this.timeoutInMs = e, this._changing = !1, this._firstChange = new _(), this._subsequentChange = new _(), this._changeEnd = new _();
+    a(this, "currentTimeout");
+    a(this, "_changing");
+    a(this, "_firstChange");
+    a(this, "_subsequentChange");
+    a(this, "_changeEnd");
+    this.setNewValue = t, this.timeoutInMs = e, this._changing = !1, this._firstChange = new et(), this._subsequentChange = new et(), this._changeEnd = new et();
   }
   get firstChange() {
     return this._firstChange;
@@ -4553,9 +4649,12 @@ class _s {
     this.setNewValue(t), this._changing || (this._changing = !0, this._firstChange.dispatch()), this._subsequentChange.dispatch(), this.refreshTimeout();
   }
 }
-class tr {
+class is {
   constructor(t, e) {
-    this.viewBox = t, this.config = e, this._transformationChangeMonitor = new _s((n) => this.viewBox.transformation = n, 100);
+    a(this, "gesture");
+    a(this, "_zoom");
+    a(this, "_transformationChangeMonitor");
+    this.viewBox = t, this.config = e, this._transformationChangeMonitor = new ns((n) => this.viewBox.transformation = n, 100);
   }
   get isTransforming() {
     return this._transformationChangeMonitor.changing;
@@ -4576,21 +4675,21 @@ class tr {
     this._transformationChangeMonitor.setValue(t);
   }
   getGestureForOneAnchor(t) {
-    return new Qs(t, this);
+    return new _r(t, this);
   }
   getGestureForTwoAnchors(t, e) {
-    return this.config.rotationEnabled ? new Zs(t, e, this) : new Js(t, e, this);
+    return this.config.rotationEnabled ? new es(t, e, this) : new ts(t, e, this);
   }
   releaseAnchor(t) {
     this.gesture && (this.gesture = this.gesture.withoutAnchor(t));
   }
   zoom(t, e, n) {
-    this._zoom && this._zoom.cancel(), this._zoom = new js(this, t, e, n, () => {
+    this._zoom && this._zoom.cancel(), this._zoom = new Zr(this, t, e, n, () => {
       this._zoom = void 0;
     });
   }
   addRotationAnchor(t) {
-    this.gesture = new Ks(t, this);
+    this.gesture = new Jr(t, this);
   }
   addAnchor(t) {
     if (!this.gesture) {
@@ -4601,9 +4700,9 @@ class tr {
     e && (this.gesture = e);
   }
 }
-class er {
+class rs {
   constructor() {
-    this.animationFrameRequested = !1;
+    a(this, "animationFrameRequested", !1);
   }
   provideDrawingIteration(t) {
     this.animationFrameRequested || (this.animationFrameRequested = !0, requestAnimationFrame(() => {
@@ -4611,9 +4710,10 @@ class er {
     }));
   }
 }
-class nr {
+class ss {
   constructor(t) {
-    this.drawingIterationProvider = t, this._drawHappened = new _();
+    a(this, "_drawHappened", new et());
+    this.drawingIterationProvider = t;
   }
   get drawHappened() {
     return this._drawHappened;
@@ -4625,9 +4725,11 @@ class nr {
     });
   }
 }
-class ir {
+class os {
   constructor(t) {
-    this.drawingIterationProvider = t, this._locks = [];
+    a(this, "_draw");
+    a(this, "_locks", []);
+    this.drawingIterationProvider = t;
   }
   removeLock(t) {
     const e = this._locks.indexOf(t);
@@ -4643,9 +4745,10 @@ class ir {
     } }, this._locks.push(t), t;
   }
 }
-var b = /* @__PURE__ */ ((s) => (s[s.CSS = 0] = "CSS", s[s.CANVAS = 1] = "CANVAS", s))(b || {});
-class A {
+var O = /* @__PURE__ */ ((s) => (s[s.CSS = 0] = "CSS", s[s.CANVAS = 1] = "CANVAS", s))(O || {});
+class D {
   constructor(t) {
+    a(this, "inverseBase");
     this.base = t, this.inverseBase = t.inverse();
   }
   getSimilarTransformation(t) {
@@ -4658,43 +4761,50 @@ class A {
     return t.before(this.inverseBase);
   }
 }
-class xt {
+class bt {
   constructor(t, e, n) {
+    a(this, "userCoordinatesInsideCanvasBitmap");
+    a(this, "icContextFromCanvasBitmap");
+    a(this, "infiniteCanvasContext");
+    a(this, "initialBitmapTransformation");
     this.userCoordinates = t, this.canvasBitmap = e, this.virtualBitmapBase = n, this.setDerivedProperties();
   }
   withCanvasBitmapDistortion(t) {
-    const e = this.canvasBitmap.representBase(t), n = this.userCoordinates.representSimilarTransformation(e), i = this.virtualBitmapBase.before(n), r = new A(t);
-    return new xt(this.userCoordinates, r, i);
+    const e = this.canvasBitmap.representBase(t), n = this.userCoordinates.representSimilarTransformation(e), i = this.virtualBitmapBase.before(n), r = new D(t);
+    return new bt(this.userCoordinates, r, i);
   }
   withUserTransformation(t) {
-    return new xt(new A(t), this.canvasBitmap, this.virtualBitmapBase);
+    return new bt(new D(t), this.canvasBitmap, this.virtualBitmapBase);
   }
   setDerivedProperties() {
-    this.infiniteCanvasContext = new A(this.virtualBitmapBase.before(this.userCoordinates.base)), this.userCoordinatesInsideCanvasBitmap = new A(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.representBase(this.userCoordinates.getSimilarTransformation(this.virtualBitmapBase)), this.icContextFromCanvasBitmap = new A(this.infiniteCanvasContext.base.before(this.canvasBitmap.inverseBase));
+    this.infiniteCanvasContext = new D(this.virtualBitmapBase.before(this.userCoordinates.base)), this.userCoordinatesInsideCanvasBitmap = new D(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.representBase(this.userCoordinates.getSimilarTransformation(this.virtualBitmapBase)), this.icContextFromCanvasBitmap = new D(this.infiniteCanvasContext.base.before(this.canvasBitmap.inverseBase));
   }
 }
-class bt {
+class Ot {
   constructor(t, e) {
+    a(this, "userCoordinatesInsideCanvasBitmap");
+    a(this, "icContextFromCanvasBitmap");
+    a(this, "initialBitmapTransformation");
     this.userCoordinates = t, this.canvasBitmap = e, this.setDerivedProperties();
   }
   get infiniteCanvasContext() {
     return this.userCoordinates;
   }
   withUserTransformation(t) {
-    return new bt(new A(t), this.canvasBitmap);
+    return new Ot(new D(t), this.canvasBitmap);
   }
   withCanvasBitmapDistortion(t) {
-    return new bt(this.userCoordinates, new A(t));
+    return new Ot(this.userCoordinates, new D(t));
   }
   setDerivedProperties() {
-    this.userCoordinatesInsideCanvasBitmap = new A(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.inverseBase, this.icContextFromCanvasBitmap = new A(this.userCoordinates.base.before(this.canvasBitmap.inverseBase));
+    this.userCoordinatesInsideCanvasBitmap = new D(this.userCoordinates.base.before(this.canvasBitmap.base)), this.initialBitmapTransformation = this.canvasBitmap.inverseBase, this.icContextFromCanvasBitmap = new D(this.userCoordinates.base.before(this.canvasBitmap.inverseBase));
   }
 }
-function hn(s) {
+function ln(s) {
   const { screenWidth: t, screenHeight: e, viewboxWidth: n, viewboxHeight: i } = s;
-  return new p(t / n, 0, 0, e / i, 0, 0);
+  return new v(t / n, 0, 0, e / i, 0, 0);
 }
-class lt {
+class ut {
   constructor(t, e) {
     this.units = t, this.coordinates = e;
   }
@@ -4714,35 +4824,35 @@ class lt {
     return this.coordinates.icContextFromCanvasBitmap.base;
   }
   translateInfiniteCanvasContextTransformationToBitmapTransformation(t) {
-    return this.coordinates.icContextFromCanvasBitmap.getSimilarTransformation(p.create(t));
+    return this.coordinates.icContextFromCanvasBitmap.getSimilarTransformation(v.create(t));
   }
   getTransformationForInstruction(t) {
-    const e = p.create(t).before(this.coordinates.infiniteCanvasContext.base), n = this.coordinates.userCoordinatesInsideCanvasBitmap.representBase(e);
+    const e = v.create(t).before(this.coordinates.infiniteCanvasContext.base), n = this.coordinates.userCoordinatesInsideCanvasBitmap.representBase(e);
     return this.coordinates.userCoordinates.getSimilarTransformation(n);
   }
   withUserTransformation(t) {
     const e = this.coordinates.withUserTransformation(t);
-    return new lt(this.units, e);
+    return new ut(this.units, e);
   }
   withCanvasMeasurement(t) {
-    const e = hn(t), n = this.coordinates.withCanvasBitmapDistortion(e);
-    return new lt(this.units, n);
+    const e = ln(t), n = this.coordinates.withCanvasBitmapDistortion(e);
+    return new ut(this.units, n);
   }
   withUnits(t) {
     if (t === this.units)
       return this;
     let e;
-    return t === b.CANVAS ? e = new xt(this.coordinates.userCoordinates, this.coordinates.canvasBitmap, this.coordinates.canvasBitmap.base) : e = new bt(this.coordinates.userCoordinates, this.coordinates.canvasBitmap), new lt(t, e);
+    return t === O.CANVAS ? e = new bt(this.coordinates.userCoordinates, this.coordinates.canvasBitmap, this.coordinates.canvasBitmap.base) : e = new Ot(this.coordinates.userCoordinates, this.coordinates.canvasBitmap), new ut(t, e);
   }
   static create(t, e) {
-    const n = hn(e), i = t === b.CANVAS ? new xt(new A(p.identity), new A(n), n) : new bt(new A(p.identity), new A(n));
-    return new lt(t, i);
+    const n = ln(e), i = t === O.CANVAS ? new bt(new D(v.identity), new D(n), n) : new Ot(new D(v.identity), new D(n));
+    return new ut(t, i);
   }
 }
-function sr(s, t) {
+function as(s, t) {
   return s ? t ? s.viewboxWidth === t.viewboxWidth && s.viewboxHeight === t.viewboxHeight && s.screenWidth === t.screenWidth && s.screenHeight === t.screenHeight : !1 : !t;
 }
-class ut {
+class dt {
   constructor(t, e, n) {
     this.coordinates = t, this.measurement = e, this.polygon = n;
   }
@@ -4763,21 +4873,21 @@ class ut {
   }
   withUnits(t) {
     const e = this.coordinates.withUnits(t);
-    return new ut(e, this.measurement, this.polygon);
+    return new dt(e, this.measurement, this.polygon);
   }
   withTransformation(t) {
-    const e = this.coordinates.withUserTransformation(p.create(t));
-    return new ut(e, this.measurement, this.polygon);
+    const e = this.coordinates.withUserTransformation(v.create(t));
+    return new dt(e, this.measurement, this.polygon);
   }
   withMeasurement(t) {
-    if (sr(this.measurement, t))
+    if (as(this.measurement, t))
       return this;
-    const { viewboxWidth: n, viewboxHeight: i } = t, r = an(0, 0, n, i).getArea(), o = this.coordinates.withCanvasMeasurement(t);
-    return new ut(o, t, r);
+    const { viewboxWidth: n, viewboxHeight: i } = t, r = cn(0, 0, n, i).getArea(), o = this.coordinates.withCanvasMeasurement(t);
+    return new dt(o, t, r);
   }
   getCSSPosition(t, e) {
     const { left: n, top: i } = this.measurement;
-    return new c(t - n, e - i);
+    return new h(t - n, e - i);
   }
   getTransformationForInstruction(t) {
     return this.coordinates.getTransformationForInstruction(t);
@@ -4791,28 +4901,30 @@ class ut {
   getBitmapTransformationToInfiniteCanvasContext() {
     return this.coordinates.getBitmapTransformationToInfiniteCanvasContext();
   }
-  addPathAroundViewbox(t, e) {
-    const n = this.viewboxWidth + 2 * e, i = this.viewboxHeight + 2 * e;
-    t.save(), t.setTransform(1, 0, 0, 1, 0, 0), t.rect(-e, -e, n, i), t.restore();
+  addPathAroundViewbox(t, e, n) {
+    const i = this.viewboxWidth + 2 * e, r = this.viewboxHeight + 2 * e;
+    t.save(), t.setTransform(1, 0, 0, 1, 0, 0), n ? t.rect(i - e, -e, -i, r) : t.rect(-e, -e, i, r), t.restore();
   }
   static create(t, e) {
-    const { viewboxWidth: n, viewboxHeight: i } = t, r = an(0, 0, n, i).getArea(), o = lt.create(e, t);
-    return new ut(o, t, r);
+    const { viewboxWidth: n, viewboxHeight: i } = t, r = cn(0, 0, n, i).getArea(), o = ut.create(e, t);
+    return new dt(o, t, r);
   }
 }
-class rr {
+class cs {
   constructor(t, e) {
-    this.measurementProvider = t, this.config = e, this.transformation = p.identity;
+    a(this, "rectangle");
+    a(this, "transformation");
+    this.measurementProvider = t, this.config = e, this.transformation = v.identity;
   }
   setTransformation(t) {
     this.rectangle ? this.rectangle = this.rectangle.withTransformation(t) : this.transformation = t;
   }
   measure() {
-    const t = this.config.units === b.CSS ? b.CSS : b.CANVAS, e = this.measurementProvider.measure();
-    e.screenWidth === 0 || e.screenHeight === 0 ? this.rectangle = void 0 : this.rectangle ? this.rectangle = this.rectangle.withUnits(t).withMeasurement(e) : this.rectangle = ut.create(e, t).withTransformation(this.transformation);
+    const t = this.config.units === O.CSS ? O.CSS : O.CANVAS, e = this.measurementProvider.measure();
+    e.screenWidth === 0 || e.screenHeight === 0 ? this.rectangle = void 0 : this.rectangle ? this.rectangle = this.rectangle.withUnits(t).withMeasurement(e) : this.rectangle = dt.create(e, t).withTransformation(this.transformation);
   }
 }
-class or {
+class hs {
   constructor(t) {
     this.canvas = t;
   }
@@ -4828,15 +4940,15 @@ class or {
     };
   }
 }
-function pt(s) {
+function vt(s) {
   const { a: t, b: e, c: n, d: i, e: r, f: o } = s;
   return { a: t, b: e, c: n, d: i, e: r, f: o };
 }
-const ar = {
+const ls = {
   transformationstart: null,
   transformationchange: null,
   transformationend: null
-}, Un = {
+}, Kn = {
   auxclick: null,
   click: null,
   contextmenu: null,
@@ -4846,13 +4958,13 @@ const ar = {
   mouseout: null,
   mouseover: null,
   mouseup: null
-}, Kn = {
+}, jn = {
   gotpointercapture: null,
   lostpointercapture: null,
   pointerenter: null,
   pointerout: null,
   pointerover: null
-}, jn = {
+}, Qn = {
   drag: null,
   dragend: null,
   dragenter: null,
@@ -4860,15 +4972,15 @@ const ar = {
   dragover: null,
   dragstart: null,
   drop: null
-}, Qn = {
+}, Jn = {
   touchcancel: null,
   touchend: null
-}, cr = {
-  ...Un,
+}, us = {
   ...Kn,
   ...jn,
-  ...Qn
-}, Jn = {
+  ...Qn,
+  ...Jn
+}, Zn = {
   mousedown: null,
   mousemove: null,
   pointerdown: null,
@@ -4882,28 +4994,28 @@ const ar = {
   wheelignored: null,
   touchignored: null
 };
-function Ft(s) {
-  return ar.hasOwnProperty(s);
-}
-function Wt(s) {
-  return cr.hasOwnProperty(s) || Jn.hasOwnProperty(s);
-}
 function kt(s) {
-  return Jn.hasOwnProperty(s);
+  return ls.hasOwnProperty(s);
 }
 function Ht(s) {
-  return Un.hasOwnProperty(s);
+  return us.hasOwnProperty(s) || Zn.hasOwnProperty(s);
 }
 function Vt(s) {
-  return Kn.hasOwnProperty(s);
+  return Zn.hasOwnProperty(s);
 }
 function Mt(s) {
-  return jn.hasOwnProperty(s);
+  return Kn.hasOwnProperty(s);
 }
 function Nt(s) {
+  return jn.hasOwnProperty(s);
+}
+function zt(s) {
   return Qn.hasOwnProperty(s);
 }
-class hr extends Dt {
+function qt(s) {
+  return Jn.hasOwnProperty(s);
+}
+class ds extends Et {
   constructor(t) {
     super(), this.source = t;
   }
@@ -4926,47 +5038,49 @@ class hr extends Dt {
     this.remove({ listener: t });
   }
 }
-class lr extends Dt {
-  constructor(t, e) {
-    super(), this.transform = e, this.old = new hr(t);
+class fs extends Et {
+  constructor(e, n) {
+    super();
+    a(this, "old");
+    this.transform = n, this.old = new ds(e);
   }
-  map(t) {
-    const e = {
+  map(e) {
+    const n = {
       oldListener: void 0,
-      newListener: t.listener,
+      newListener: e.listener,
       removedCallback: () => {
-        t.removedCallback && t.removedCallback();
+        e.removedCallback && e.removedCallback();
       }
     };
-    return e.oldListener = this.transform(t.listener, (n) => e.removedCallback = () => {
-      t.removedCallback && t.removedCallback(), n();
-    }), this.old.addListener(e.oldListener, () => this.removeListener(t.listener)), e;
+    return n.oldListener = this.transform(e.listener, (i) => n.removedCallback = () => {
+      e.removedCallback && e.removedCallback(), i();
+    }), this.old.addListener(n.oldListener, () => this.removeListener(e.listener)), n;
   }
-  mapsTo(t, e) {
-    return t.newListener === e.listener;
+  mapsTo(e, n) {
+    return e.newListener === n.listener;
   }
-  onRemoved(t) {
-    this.old.removeListener(t.oldListener), t.removedCallback();
+  onRemoved(e) {
+    this.old.removeListener(e.oldListener), e.removedCallback();
   }
-  addListener(t, e) {
-    this.add({ listener: t, removedCallback: e });
+  addListener(e, n) {
+    this.add({ listener: e, removedCallback: n });
   }
-  removeListener(t) {
-    this.remove({ listener: t });
+  removeListener(e) {
+    this.remove({ listener: e });
   }
 }
-function rt(s, t) {
-  return new lr(s, t);
+function ot(s, t) {
+  return new fs(s, t);
 }
 function X(s, t) {
-  return rt(s, (e) => (n) => {
+  return ot(s, (e) => (n) => {
     e(t(n));
   });
 }
-function te(s) {
+function ne(s) {
   return !!s && typeof s.handleEvent == "function";
 }
-class ur extends Dt {
+class gs extends Et {
   constructor(t) {
     super(), this.source = t;
   }
@@ -4985,40 +5099,45 @@ class ur extends Dt {
     this.source.removeListener(t.listener), t.removedCallback();
   }
 }
-class dr {
+class ms {
   constructor(t) {
-    this.source = t, this.listenerObjectCollection = new ur(t);
+    a(this, "listenerObjectCollection");
+    this.source = t, this.listenerObjectCollection = new gs(t);
   }
   addListener(t, e) {
-    te(t) ? this.listenerObjectCollection.add({ listenerObject: t, removedCallback: e }) : this.source.addListener(t, e);
+    ne(t) ? this.listenerObjectCollection.add({ listenerObject: t, removedCallback: e }) : this.source.addListener(t, e);
   }
   removeListener(t) {
-    te(t) ? this.listenerObjectCollection.remove({ listenerObject: t }) : this.source.removeListener(t);
+    ne(t) ? this.listenerObjectCollection.remove({ listenerObject: t }) : this.source.removeListener(t);
   }
 }
-function ln(s) {
-  return new dr(s);
+function un(s) {
+  return new ms(s);
 }
-function fr(s, t, e) {
-  te(t), s.addListener(t, e);
+function ps(s, t, e) {
+  ne(t), s.addListener(t, e);
 }
-function gr(s, t, e) {
-  te(t), s.removeListener(t, e);
+function vs(s, t, e) {
+  ne(t), s.removeListener(t, e);
 }
-function mr(s) {
-  const t = rt(s, (e) => (n) => {
+function ws(s) {
+  const t = ot(s, (e) => (n) => {
     e(n), t.removeListener(e);
   });
   return t;
 }
-function pr(s, t) {
-  return rt(s, (e) => (n) => {
+function Ps(s, t) {
+  return ot(s, (e) => (n) => {
     e.apply(t, [n]);
   });
 }
-class vr {
+class Cs {
   constructor(t) {
-    this.source = t, this.firstDispatcher = new _(), this.secondDispatcher = new _(), this.numberOfListeners = 0, this.sourceListener = (e) => this.dispatchEvent(e);
+    a(this, "firstDispatcher", new et());
+    a(this, "secondDispatcher", new et());
+    a(this, "sourceListener");
+    a(this, "numberOfListeners", 0);
+    this.source = t, this.sourceListener = (e) => this.dispatchEvent(e);
   }
   add() {
     this.numberOfListeners === 0 && this.source.addListener(this.sourceListener), this.numberOfListeners++;
@@ -5031,22 +5150,24 @@ class vr {
   }
   build() {
     return {
-      first: rt(this.firstDispatcher, (t, e) => (this.add(), e(() => this.remove()), t)),
-      second: rt(this.secondDispatcher, (t, e) => (this.add(), e(() => this.remove()), t))
+      first: ot(this.firstDispatcher, (t, e) => (this.add(), e(() => this.remove()), t)),
+      second: ot(this.secondDispatcher, (t, e) => (this.add(), e(() => this.remove()), t))
     };
   }
 }
-function un(s) {
-  return new vr(s).build();
+function dn(s) {
+  return new Cs(s).build();
 }
 function G(s, t) {
-  return rt(s, (e) => (n) => {
+  return ot(s, (e) => (n) => {
     t(n) && e(n);
   });
 }
-class dn {
+class fn {
   constructor(t, e) {
-    t = pr(t, e), this._onceSource = ln(mr(t)), this.source = ln(t);
+    a(this, "_onceSource");
+    a(this, "source");
+    t = Ps(t, e), this._onceSource = un(ws(t)), this.source = un(t);
   }
   addListener(t, e) {
     e && e.once ? this._onceSource.addListener(t) : this.source.addListener(t);
@@ -5055,8 +5176,10 @@ class dn {
     this.source.removeListener(t), this._onceSource.removeListener(t);
   }
 }
-class wr {
+class Is {
   constructor(t, e) {
+    a(this, "wrappedOnEventHandler");
+    a(this, "onEventHandler");
     this.captureSource = t, this.bubbleSource = e;
   }
   get on() {
@@ -5075,27 +5198,27 @@ class wr {
     (typeof e == "boolean" ? e : e && e.capture) ? this.captureSource.removeListener(t) : this.bubbleSource.removeListener(t);
   }
 }
-function Pr(s, t, e) {
-  return new wr(
-    new dn(s, e),
-    new dn(t, e)
+function Ts(s, t, e) {
+  return new Is(
+    new fn(s, e),
+    new fn(t, e)
   );
 }
-function et(s, t, e, n) {
+function nt(s, t, e, n) {
   const i = X(G(s, (o) => !o.immediatePropagationStopped), (o) => o.getResultEvent(e.rectangle)), r = X(G(t, (o) => !o.propagationStopped && !o.immediatePropagationStopped), (o) => o.getResultEvent(e.rectangle));
-  return Pr(i, r, n);
+  return Ts(i, r, n);
 }
-function nt(s) {
-  const { first: t, second: e } = un(s), { first: n, second: i } = un(e);
+function it(s) {
+  const { first: t, second: e } = dn(s), { first: n, second: i } = dn(e);
   return {
     captureSource: t,
     bubbleSource: n,
     afterBubble: i
   };
 }
-function Cr(s, t, e) {
-  const { captureSource: n, bubbleSource: i } = nt(s);
-  return et(
+function Ss(s, t, e) {
+  const { captureSource: n, bubbleSource: i } = it(s);
+  return nt(
     n,
     i,
     t,
@@ -5104,10 +5227,11 @@ function Cr(s, t, e) {
 }
 class Xe {
   constructor(t, e) {
+    a(this, "cache");
     this.rectangleManager = t, this.infiniteCanvas = e, this.cache = {};
   }
   map(t, e) {
-    return Cr(X(t, e), this.rectangleManager, this.infiniteCanvas);
+    return Ss(X(t, e), this.rectangleManager, this.infiniteCanvas);
   }
   setOn(t, e) {
     if (e)
@@ -5122,20 +5246,24 @@ class Xe {
     return this.cache[t] ? this.cache[t].on : null;
   }
   addEventListener(t, e, n) {
-    this.cache[t] || (this.cache[t] = this.getEventSource(t)), fr(this.cache[t], e, n);
+    this.cache[t] || (this.cache[t] = this.getEventSource(t)), ps(this.cache[t], e, n);
   }
   removeEventListener(t, e, n) {
-    this.cache[t] && gr(this.cache[t], e, n);
+    this.cache[t] && vs(this.cache[t], e, n);
   }
 }
-class Zn extends Xe {
+class _n extends Xe {
   getEventSource(t) {
     return (!this.cache || !this.cache[t]) && (this.cache = this.createEvents()), this.cache[t];
   }
 }
-class _n {
+class ti {
   constructor(t, e) {
-    this.canvasEvent = t, this.preventableDefault = e, this.AT_TARGET = 2, this.BUBBLING_PHASE = 3, this.CAPTURING_PHASE = 1, this.NONE = 0;
+    a(this, "AT_TARGET", 2);
+    a(this, "BUBBLING_PHASE", 3);
+    a(this, "CAPTURING_PHASE", 1);
+    a(this, "NONE", 0);
+    this.canvasEvent = t, this.preventableDefault = e;
   }
   get bubbles() {
     return !1;
@@ -5164,7 +5292,7 @@ class _n {
     this.canvasEvent.stopPropagation();
   }
 }
-class $e extends _n {
+class Ue extends ti {
   constructor(t, e, n) {
     super(t, e), this.type = n;
   }
@@ -5193,9 +5321,12 @@ class $e extends _n {
     return [];
   }
 }
-class ti {
+class ei {
   constructor(t) {
-    this.preventableDefault = t, this.propagationStopped = !1, this.immediatePropagationStopped = !1;
+    a(this, "resultEvent");
+    a(this, "propagationStopped", !1);
+    a(this, "immediatePropagationStopped", !1);
+    this.preventableDefault = t;
   }
   get infiniteCanvasDefaultPrevented() {
     return this.preventableDefault.infiniteCanvasDefaultPrevented;
@@ -5210,7 +5341,10 @@ class ti {
     return this.resultEvent || (this.resultEvent = this.createResultEvent(t)), this.resultEvent;
   }
 }
-class Ir {
+class ys {
+  constructor() {
+    a(this, "_defaultPrevented");
+  }
   get defaultPrevented() {
     return this._defaultPrevented;
   }
@@ -5224,7 +5358,7 @@ class Ir {
     this._defaultPrevented = !0;
   }
 }
-class Tr {
+class xs {
   get infiniteCanvasDefaultPrevented() {
     return !1;
   }
@@ -5237,48 +5371,59 @@ class Tr {
   preventDefault() {
   }
 }
-class Ue extends ti {
+class $e extends ei {
   constructor(t) {
-    super(t ? new Ir() : new Tr());
+    super(t ? new ys() : new xs());
   }
 }
-class Sr extends $e {
-  constructor(t, e) {
-    super(t, e, "draw"), this.transformation = t.transformation, this.inverseTransformation = t.inverseTransformation;
+class bs extends Ue {
+  constructor(e, n) {
+    super(e, n, "draw");
+    a(this, "transformation");
+    a(this, "inverseTransformation");
+    this.transformation = e.transformation, this.inverseTransformation = e.inverseTransformation;
   }
 }
-class yr extends Ue {
+class Os extends $e {
   constructor() {
     super(!1);
+    a(this, "transformation");
+    a(this, "inverseTransformation");
   }
-  createResultEvent(t) {
-    return this.transformation = pt(t.infiniteCanvasContext.inverseBase), this.inverseTransformation = pt(t.infiniteCanvasContext.base), new Sr(this, this.preventableDefault);
+  createResultEvent(e) {
+    return this.transformation = vt(e.infiniteCanvasContext.inverseBase), this.inverseTransformation = vt(e.infiniteCanvasContext.base), new bs(this, this.preventableDefault);
   }
 }
-class xr extends Zn {
+class Ls extends _n {
   constructor(t, e, n) {
     super(e, n), this.drawingIterationProvider = t;
   }
   createEvents() {
     return {
-      draw: this.map(this.drawingIterationProvider.drawHappened, () => new yr())
+      draw: this.map(this.drawingIterationProvider.drawHappened, () => new Os())
     };
   }
 }
-class br extends $e {
-  constructor(t, e, n) {
-    super(t, e, n), this.transformation = t.transformation, this.inverseTransformation = t.inverseTransformation;
+class Bs extends Ue {
+  constructor(e, n, i) {
+    super(e, n, i);
+    a(this, "transformation");
+    a(this, "inverseTransformation");
+    this.transformation = e.transformation, this.inverseTransformation = e.inverseTransformation;
   }
 }
-class ve extends Ue {
-  constructor(t) {
-    super(!1), this.type = t;
+class ve extends $e {
+  constructor(e) {
+    super(!1);
+    a(this, "transformation");
+    a(this, "inverseTransformation");
+    this.type = e;
   }
-  createResultEvent(t) {
-    return this.transformation = pt(t.infiniteCanvasContext.inverseBase), this.inverseTransformation = pt(t.infiniteCanvasContext.base), new br(this, this.preventableDefault, this.type);
+  createResultEvent(e) {
+    return this.transformation = vt(e.infiniteCanvasContext.inverseBase), this.inverseTransformation = vt(e.infiniteCanvasContext.base), new Bs(this, this.preventableDefault, this.type);
   }
 }
-class Or extends Zn {
+class As extends _n {
   constructor(t, e, n) {
     super(e, n), this.transformer = t;
   }
@@ -5290,7 +5435,7 @@ class Or extends Zn {
     };
   }
 }
-function W(s, t) {
+function k(s, t) {
   return {
     addListener(e) {
       s.addEventListener(t, e);
@@ -5300,7 +5445,7 @@ function W(s, t) {
     }
   };
 }
-class Lr {
+class Ds {
   constructor(t) {
     this.event = t;
   }
@@ -5323,8 +5468,9 @@ class Lr {
     this.event.preventDefault();
   }
 }
-class Br {
+class Es {
   constructor(t) {
+    a(this, "_defaultPrevented");
     this.event = t;
   }
   get infiniteCanvasDefaultPrevented() {
@@ -5346,9 +5492,9 @@ class Br {
     this._defaultPrevented = !0, t && this.event.preventDefault();
   }
 }
-class vt extends ti {
+class wt extends ei {
   constructor(t, e) {
-    super(e ? new Br(t) : new Lr(t)), this.event = t;
+    super(e ? new Es(t) : new Ds(t)), this.event = t;
   }
   stopPropagation() {
     super.stopPropagation(), this.event && this.event.stopPropagation();
@@ -5357,19 +5503,19 @@ class vt extends ti {
     super.stopImmediatePropagation(), this.event && this.event.stopImmediatePropagation();
   }
 }
-class ot {
+class at {
   constructor(t, e, n, i) {
     this.offsetX = t, this.offsetY = e, this.movementX = n, this.movementY = i;
   }
   toInfiniteCanvasCoordinates(t) {
-    const { x: e, y: n } = t.infiniteCanvasContext.inverseBase.apply(new c(this.offsetX, this.offsetY)), { x: i, y: r } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new c(this.movementX, this.movementY));
-    return new ot(e, n, i, r);
+    const { x: e, y: n } = t.infiniteCanvasContext.inverseBase.apply(new h(this.offsetX, this.offsetY)), { x: i, y: r } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new h(this.movementX, this.movementY));
+    return new at(e, n, i, r);
   }
   static create(t) {
-    return new ot(t.offsetX, t.offsetY, t.movementX, t.movementY);
+    return new at(t.offsetX, t.offsetY, t.movementX, t.movementY);
   }
 }
-class Ar extends _n {
+class Rs extends ti {
   constructor(t, e, n) {
     super(t, e), this.event = n;
   }
@@ -5410,7 +5556,7 @@ class Ar extends _n {
     return this.event.composedPath();
   }
 }
-class ei extends Ar {
+class ni extends Rs {
   get detail() {
     return this.event.detail;
   }
@@ -5423,9 +5569,14 @@ class ei extends Ar {
   initUIEvent(t, e, n, i, r) {
   }
 }
-class le extends ei {
-  constructor(t, e, n, i) {
-    super(t, e, n), this.offsetX = i.offsetX, this.offsetY = i.offsetY, this.movementX = i.movementX, this.movementY = i.movementY;
+class le extends ni {
+  constructor(e, n, i, r) {
+    super(e, n, i);
+    a(this, "offsetX");
+    a(this, "offsetY");
+    a(this, "movementX");
+    a(this, "movementY");
+    this.offsetX = r.offsetX, this.offsetY = r.offsetY, this.movementX = r.movementX, this.movementY = r.movementY;
   }
   get altKey() {
     return this.event.altKey;
@@ -5472,38 +5623,40 @@ class le extends ei {
   get y() {
     return this.event.y;
   }
-  getModifierState(t) {
-    return this.event.getModifierState(t);
+  getModifierState(e) {
+    return this.event.getModifierState(e);
   }
-  initMouseEvent(t, e, n, i, r, o, a, l, h, d, u, g, v, P, T) {
-  }
-}
-class xe extends vt {
-  constructor(t, e) {
-    super(t, e), this.props = ot.create(t);
-  }
-  createResultEvent(t) {
-    return new le(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  initMouseEvent(e, n, i, r, o, c, u, l, f, d, m, w, C, S, L) {
   }
 }
-class ee extends ot {
+class xe extends wt {
+  constructor(e, n) {
+    super(e, n);
+    a(this, "props");
+    this.props = at.create(e);
+  }
+  createResultEvent(e) {
+    return new le(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(e));
+  }
+}
+class ie extends at {
   constructor(t, e, n, i, r, o) {
     super(t, e, n, i), this.width = r, this.height = o;
   }
   toInfiniteCanvasCoordinates(t) {
-    const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.toInfiniteCanvasCoordinates(t), { x: o, y: a } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new c(this.width, this.height));
-    return new ee(
+    const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.toInfiniteCanvasCoordinates(t), { x: o, y: c } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new h(this.width, this.height));
+    return new ie(
       e,
       n,
       i,
       r,
       o,
-      a
+      c
     );
   }
   static create(t) {
     const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.create(t);
-    return new ee(
+    return new ie(
       e,
       n,
       i,
@@ -5513,9 +5666,11 @@ class ee extends ot {
     );
   }
 }
-class Dr extends le {
-  constructor(t, e, n, i) {
-    super(t, e, n, i);
+class Fs extends le {
+  constructor(e, n, i, r) {
+    super(e, n, i, r);
+    a(this, "width");
+    a(this, "height");
   }
   get isPrimary() {
     return this.event.isPrimary;
@@ -5548,22 +5703,27 @@ class Dr extends le {
     return console.warn("`PointerEvent.getPredictedEvents()` is currently not supported by InfiniteCanvas"), [];
   }
 }
-class ct extends vt {
-  constructor(t, e) {
-    super(t, e), this.props = ee.create(t);
+class ht extends wt {
+  constructor(e, n) {
+    super(e, n);
+    a(this, "props");
+    this.props = ie.create(e);
   }
-  createResultEvent(t) {
-    return new Dr(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  createResultEvent(e) {
+    return new Fs(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(e));
   }
 }
-class Er {
+class Ws {
   constructor(t, e) {
+    a(this, "current");
     this.initial = t, this.cancel = e, this.current = t;
   }
 }
-class Rr {
+class ks {
   constructor(t) {
-    this.point = t, this.moveEventDispatcher = new _(), this._fixedOnInfiniteCanvas = !1;
+    a(this, "moveEventDispatcher", new et());
+    a(this, "_fixedOnInfiniteCanvas", !1);
+    this.point = t;
   }
   get fixedOnInfiniteCanvas() {
     return this._fixedOnInfiniteCanvas;
@@ -5572,7 +5732,7 @@ class Rr {
     this.moveEventDispatcher.removeListener(t);
   }
   moveTo(t, e) {
-    const n = new c(t, e);
+    const n = new h(t, e);
     this.point = n, this.moveEventDispatcher.dispatch(n);
   }
   onMoved(t, e) {
@@ -5581,12 +5741,15 @@ class Rr {
     const i = (r) => {
       n.current = r, t();
     };
-    return this.moveEventDispatcher.addListener(i), n = new Er(this.point, () => (this.removeHandler(i), this._fixedOnInfiniteCanvas = !1, this)), n;
+    return this.moveEventDispatcher.addListener(i), n = new Ws(this.point, () => (this.removeHandler(i), this._fixedOnInfiniteCanvas = !1, this)), n;
   }
 }
-class Fr {
+class Hs {
   constructor(t) {
-    this.pointerEvent = t, this._defaultPrevented = !1, this.anchor = new Rr(new c(t.offsetX, t.offsetY));
+    a(this, "_touchId");
+    a(this, "_defaultPrevented", !1);
+    a(this, "anchor");
+    this.pointerEvent = t, this.anchor = new ks(new h(t.offsetX, t.offsetY));
   }
   get defaultPrevented() {
     return this._defaultPrevented;
@@ -5607,9 +5770,9 @@ class Fr {
     this.pointerEvent = t, this.anchor.moveTo(t.offsetX, t.offsetY);
   }
 }
-class Wr {
+class Vs {
   constructor() {
-    this.anchors = [];
+    a(this, "anchors", []);
   }
   find(t) {
     return this.anchors.find(t);
@@ -5621,7 +5784,7 @@ class Wr {
     return this.anchors.find((e) => e.touchId === t);
   }
   addAnchorForPointerEvent(t) {
-    const e = new Fr(t);
+    const e = new Hs(t);
     this.anchors.push(e);
   }
   updateAnchorForPointerEvent(t) {
@@ -5640,24 +5803,24 @@ class Wr {
     e > -1 && this.anchors.splice(e, 1);
   }
 }
-class ne extends ot {
+class re extends at {
   constructor(t, e, n, i, r, o) {
     super(t, e, n, i), this.deltaX = r, this.deltaY = o;
   }
   toInfiniteCanvasCoordinates(t) {
-    const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.toInfiniteCanvasCoordinates(t), { x: o, y: a } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new c(this.deltaX, this.deltaY));
-    return new ne(
+    const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.toInfiniteCanvasCoordinates(t), { x: o, y: c } = t.infiniteCanvasContext.inverseBase.untranslated().apply(new h(this.deltaX, this.deltaY));
+    return new re(
       e,
       n,
       i,
       r,
       o,
-      a
+      c
     );
   }
   static create(t) {
     const { offsetX: e, offsetY: n, movementX: i, movementY: r } = super.create(t);
-    return new ne(
+    return new re(
       e,
       n,
       i,
@@ -5667,9 +5830,15 @@ class ne extends ot {
     );
   }
 }
-class kr extends le {
-  constructor(t, e, n, i) {
-    super(t, e, n, i), this.DOM_DELTA_LINE = 1, this.DOM_DELTA_PAGE = 2, this.DOM_DELTA_PIXEL = 0, this.deltaX = i.deltaX, this.deltaY = i.deltaY;
+class Ms extends le {
+  constructor(e, n, i, r) {
+    super(e, n, i, r);
+    a(this, "deltaX");
+    a(this, "deltaY");
+    a(this, "DOM_DELTA_LINE", 1);
+    a(this, "DOM_DELTA_PAGE", 2);
+    a(this, "DOM_DELTA_PIXEL", 0);
+    this.deltaX = r.deltaX, this.deltaY = r.deltaY;
   }
   get deltaMode() {
     return this.event.deltaMode;
@@ -5678,15 +5847,17 @@ class kr extends le {
     return this.event.deltaZ;
   }
 }
-class Hr extends vt {
-  constructor(t, e) {
-    super(t, e), this.props = ne.create(t);
+class Ns extends wt {
+  constructor(e, n) {
+    super(e, n);
+    a(this, "props");
+    this.props = re.create(e);
   }
-  createResultEvent(t) {
-    return new kr(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  createResultEvent(e) {
+    return new Ms(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(e));
   }
 }
-function dt(s, t) {
+function ft(s, t) {
   const e = [];
   for (let n = 0; n < s.length; n++) {
     const i = s[n];
@@ -5694,24 +5865,24 @@ function dt(s, t) {
   }
   return e;
 }
-class ie {
+class se {
   constructor(t, e, n, i, r, o) {
     this.x = t, this.y = e, this.radiusX = n, this.radiusY = i, this.rotationAngle = r, this.identifier = o;
   }
   toInfiniteCanvasCoordinates(t) {
-    const e = t.infiniteCanvasContext.inverseBase, { x: n, y: i } = e.apply(new c(this.x, this.y)), r = this.radiusX * e.scale, o = this.radiusY * e.scale, a = this.rotationAngle + e.getRotationAngle();
-    return new ie(
+    const e = t.infiniteCanvasContext.inverseBase, { x: n, y: i } = e.apply(new h(this.x, this.y)), r = this.radiusX * e.scale, o = this.radiusY * e.scale, c = this.rotationAngle + e.getRotationAngle();
+    return new se(
       n,
       i,
       r,
       o,
-      a,
+      c,
       this.identifier
     );
   }
   static create(t, e) {
     const { x: n, y: i } = e.getCSSPosition(t.clientX, t.clientY);
-    return new ie(
+    return new se(
       n,
       i,
       t.radiusX,
@@ -5721,9 +5892,10 @@ class ie {
     );
   }
 }
-class fn {
+class gn {
   constructor() {
-    this.translatedProps = [], this.createdProps = [];
+    a(this, "translatedProps", []);
+    a(this, "createdProps", []);
   }
   toInfiniteCanvasCoordinates(t, e) {
     let n = this.translatedProps.find((i) => i.identifier === t.identifier);
@@ -5731,18 +5903,18 @@ class fn {
   }
   createProps(t, e) {
     let n = this.createdProps.find((i) => i.identifier === t.identifier);
-    return n || (n = ie.create(t, e), this.createdProps.push(n), n);
+    return n || (n = se.create(t, e), this.createdProps.push(n), n);
   }
   dispose() {
     this.translatedProps.splice(0, this.translatedProps.length), this.createdProps.splice(0, this.createdProps.length);
   }
 }
-class se {
+class oe {
   constructor(t, e, n) {
     this.targetTouches = t, this.changedTouches = e, this.touches = n;
   }
   toInfiniteCanvasCoordinates(t) {
-    const e = new fn(), n = new se(
+    const e = new gn(), n = new oe(
       this.targetTouches.map((i) => e.toInfiniteCanvasCoordinates(i, t)),
       this.changedTouches.map((i) => e.toInfiniteCanvasCoordinates(i, t)),
       this.touches.map((i) => e.toInfiniteCanvasCoordinates(i, t))
@@ -5750,16 +5922,21 @@ class se {
     return e.dispose(), n;
   }
   static create(t, e, n) {
-    const i = new fn(), r = e.map((a) => i.createProps(a, t)), o = n.map((a) => i.createProps(a, t));
-    return i.dispose(), new se(
+    const i = new gn(), r = e.map((c) => i.createProps(c, t)), o = n.map((c) => i.createProps(c, t));
+    return i.dispose(), new oe(
       r,
       o,
       r
     );
   }
 }
-class Vr {
+class zs {
   constructor(t, e) {
+    a(this, "infiniteCanvasX");
+    a(this, "infiniteCanvasY");
+    a(this, "radiusX");
+    a(this, "radiusY");
+    a(this, "rotationAngle");
     this.touch = t, this.infiniteCanvasX = e.x, this.infiniteCanvasY = e.y, this.radiusX = e.radiusX, this.radiusY = e.radiusY, this.rotationAngle = e.rotationAngle;
   }
   get clientX() {
@@ -5790,12 +5967,12 @@ class Vr {
     return this.touch.target;
   }
 }
-class Mr extends Array {
+class qs extends Array {
   item(t) {
     return this[t];
   }
 }
-function Nr(s, t) {
+function Gs(s, t) {
   const e = s.length;
   for (let n = 0; n < e; n++) {
     const i = s[n];
@@ -5803,9 +5980,9 @@ function Nr(s, t) {
       return i;
   }
 }
-function qr(s, t) {
+function Ys(s, t) {
   for (let e of s) {
-    const n = Nr(e, t);
+    const n = Gs(e, t);
     if (n)
       return n;
   }
@@ -5813,14 +5990,18 @@ function qr(s, t) {
 function we(s, t) {
   const e = [];
   for (const n of t) {
-    const i = qr(s, n.identifier);
-    i && e.push(new Vr(i, n));
+    const i = Ys(s, n.identifier);
+    i && e.push(new zs(i, n));
   }
-  return new Mr(...e);
+  return new qs(...e);
 }
-class zr extends ei {
-  constructor(t, e, n, i) {
-    super(t, e, n), this.touches = we([n.touches], i.touches), this.targetTouches = we([n.touches], i.targetTouches), this.changedTouches = we([n.touches, n.changedTouches], i.changedTouches);
+class Xs extends ni {
+  constructor(e, n, i, r) {
+    super(e, n, i);
+    a(this, "touches");
+    a(this, "targetTouches");
+    a(this, "changedTouches");
+    this.touches = we([i.touches], r.touches), this.targetTouches = we([i.touches], r.targetTouches), this.changedTouches = we([i.touches, i.changedTouches], r.changedTouches);
   }
   get altKey() {
     return this.event.altKey;
@@ -5835,19 +6016,19 @@ class zr extends ei {
     return this.event.shiftKey;
   }
 }
-class Ot extends vt {
+class Lt extends wt {
   constructor(t, e, n) {
     super(t, n), this.props = e;
   }
   createResultEvent(t) {
-    return new zr(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+    return new Xs(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
   }
   static create(t, e, n, i, r) {
-    const o = se.create(t, n, i);
-    return new Ot(e, o, r);
+    const o = oe.create(t, n, i);
+    return new Lt(e, o, r);
   }
 }
-class gn {
+class mn {
   constructor(t, e) {
     this.source = t, this.listener = e, t.addListener(e);
   }
@@ -5855,13 +6036,15 @@ class gn {
     this.source.removeListener(this.listener);
   }
 }
-class Gr {
+class Us {
   constructor(t, e, n, i) {
+    a(this, "subscription");
+    a(this, "otherSubscription");
     this.listener = n, this.onRemoved = i;
     let r;
-    this.otherSubscription = new gn(e, (o) => {
+    this.otherSubscription = new mn(e, (o) => {
       r = o;
-    }), this.subscription = new gn(t, (o) => {
+    }), this.subscription = new mn(t, (o) => {
       n([o, r]);
     });
   }
@@ -5869,12 +6052,12 @@ class Gr {
     this.subscription.remove(), this.otherSubscription.remove(), this.onRemoved && this.onRemoved();
   }
 }
-class Yr extends Dt {
+class $s extends Et {
   constructor(t, e) {
     super(), this.source = t, this.otherSource = e;
   }
   map(t) {
-    return new Gr(this.source, this.otherSource, t.listener, t.onRemoved);
+    return new Us(this.source, this.otherSource, t.listener, t.onRemoved);
   }
   mapsTo(t, e) {
     return t.listener === e.listener;
@@ -5890,9 +6073,9 @@ class Yr extends Dt {
   }
 }
 function Pe(s, t) {
-  return new Yr(s, t);
+  return new $s(s, t);
 }
-function Xr(s, t) {
+function Ks(s, t) {
   for (let e = 0; e < s.length; e++) {
     const n = s[e];
     if (t(n))
@@ -5900,8 +6083,8 @@ function Xr(s, t) {
   }
   return !1;
 }
-function $r(s, t) {
-  return rt(s, (e) => {
+function js(s, t) {
+  return ot(s, (e) => {
     let n = !1;
     const i = [];
     function r() {
@@ -5914,7 +6097,7 @@ function $r(s, t) {
     };
   });
 }
-class Ur {
+class Qs {
   constructor(t) {
     this.sequence = t;
   }
@@ -5926,174 +6109,176 @@ class Ur {
   removeListener(t) {
   }
 }
-function Kr(s) {
-  return new Ur(s);
+function Js(s) {
+  return new Qs(s);
 }
-class mn extends Ue {
+class pn extends $e {
   constructor(t) {
     super(!0), this.type = t;
   }
   createResultEvent() {
-    return new $e(this, this.preventableDefault, this.type);
+    return new Ue(this, this.preventableDefault, this.type);
   }
 }
-class jr extends Xe {
-  constructor(t, e, n, i, r) {
-    super(n, i), this.transformer = e, this.config = r, this.anchorSet = new Wr();
-    const o = W(t, "pointerdown"), a = W(t, "pointerleave"), l = W(t, "pointermove"), h = W(t, "pointerup"), d = W(t, "pointercancel"), u = G(
-      W(t, "touchmove"),
-      (f) => Xr(f.targetTouches, (O) => !this.hasFixedAnchorForTouch(O.identifier))
+class Zs extends Xe {
+  constructor(e, n, i, r, o) {
+    super(i, r);
+    a(this, "anchorSet");
+    this.transformer = n, this.config = o, this.anchorSet = new Vs();
+    const c = k(e, "pointerdown"), u = k(e, "pointerleave"), l = k(e, "pointermove"), f = k(e, "pointerup"), d = k(e, "pointercancel"), m = G(
+      k(e, "touchmove"),
+      (g) => Ks(g.targetTouches, (B) => !this.hasFixedAnchorForTouch(B.identifier))
     );
-    o.addListener((f) => this.anchorSet.updateAnchorForPointerEvent(f)), l.addListener((f) => this.anchorSet.updateAnchorForPointerEvent(f)), h.addListener((f) => this.removePointer(f)), a.addListener((f) => this.removePointer(f));
-    const g = X(W(t, "mousedown"), (f) => new xe(f, !0)), v = X(W(t, "wheel"), (f) => new Hr(f, !0)), P = X(W(t, "touchstart"), (f) => {
-      const O = dt(f.targetTouches), z = dt(f.changedTouches);
-      return Ot.create(
+    c.addListener((g) => this.anchorSet.updateAnchorForPointerEvent(g)), l.addListener((g) => this.anchorSet.updateAnchorForPointerEvent(g)), f.addListener((g) => this.removePointer(g)), u.addListener((g) => this.removePointer(g));
+    const w = X(k(e, "mousedown"), (g) => new xe(g, !0)), C = X(k(e, "wheel"), (g) => new Ns(g, !0)), S = X(k(e, "touchstart"), (g) => {
+      const B = ft(g.targetTouches), q = ft(g.changedTouches);
+      return Lt.create(
         this.rectangleManager.rectangle,
-        f,
-        O,
-        z,
+        g,
+        B,
+        q,
         !0
       );
-    }), T = X(o, (f) => new ct(f, !0)), { captureSource: B, bubbleSource: H, afterBubble: q } = nt(T), { captureSource: tt, bubbleSource: wt, afterBubble: Pt } = nt(g), { captureSource: Ct, bubbleSource: ue, afterBubble: de } = nt(P), { captureSource: fe, bubbleSource: ge, afterBubble: It } = nt(v), ni = X(
-      G(It, (f) => !this.config.greedyGestureHandling && !f.event.ctrlKey && !f.infiniteCanvasDefaultPrevented),
-      () => new mn("wheelignored")
-    ), { captureSource: ii, bubbleSource: si, afterBubble: ri } = nt(ni);
-    It.addListener((f) => {
-      f.infiniteCanvasDefaultPrevented || this.zoom(f.event);
-    }), ri.addListener((f) => {
-      f.infiniteCanvasDefaultPrevented || console.warn("use ctrl + scroll to zoom");
-    }), Pe(Pt, q).addListener(([f, O]) => {
-      !f.infiniteCanvasDefaultPrevented && !O.infiniteCanvasDefaultPrevented && this.transformUsingPointer(f.event, O.event);
+    }), L = X(c, (g) => new ht(g, !0)), { captureSource: V, bubbleSource: j, afterBubble: Q } = it(L), { captureSource: Pt, bubbleSource: Ct, afterBubble: It } = it(w), { captureSource: ue, bubbleSource: de, afterBubble: fe } = it(S), { captureSource: ge, bubbleSource: Rt, afterBubble: je } = it(C), ii = X(
+      G(je, (g) => !this.config.greedyGestureHandling && !g.event.ctrlKey && !g.infiniteCanvasDefaultPrevented),
+      () => new pn("wheelignored")
+    ), { captureSource: ri, bubbleSource: si, afterBubble: oi } = it(ii);
+    je.addListener((g) => {
+      g.infiniteCanvasDefaultPrevented || this.zoom(g.event);
+    }), oi.addListener((g) => {
+      g.infiniteCanvasDefaultPrevented || console.warn("use ctrl + scroll to zoom");
+    }), Pe(It, Q).addListener(([g, B]) => {
+      !g.infiniteCanvasDefaultPrevented && !B.infiniteCanvasDefaultPrevented && this.transformUsingPointer(g.event, B.event);
     });
-    const oi = G(de, (f) => f.event.changedTouches.length === 1), je = Pe(oi, q);
-    je.addListener(([f, O]) => {
-      const z = f.event.changedTouches[0], j = this.anchorSet.getAnchorForPointerEvent(O.event);
-      if (j)
-        if (j.setTouchId(z.identifier), !f.infiniteCanvasDefaultPrevented && !O.infiniteCanvasDefaultPrevented)
+    const ai = G(fe, (g) => g.event.changedTouches.length === 1), Qe = Pe(ai, Q);
+    Qe.addListener(([g, B]) => {
+      const q = g.event.changedTouches[0], J = this.anchorSet.getAnchorForPointerEvent(B.event);
+      if (J)
+        if (J.setTouchId(q.identifier), !g.infiniteCanvasDefaultPrevented && !B.infiniteCanvasDefaultPrevented)
           if (this.config.greedyGestureHandling)
-            this.rectangleManager.measure(), this.transformer.addAnchor(j.anchor), f.event.preventDefault();
+            this.rectangleManager.measure(), this.transformer.addAnchor(J.anchor), g.event.preventDefault();
           else {
-            const Je = this.anchorSet.find((me) => me.touchId !== void 0 && me !== j && !me.defaultPrevented);
-            if (!Je)
+            const Ze = this.anchorSet.find((me) => me.touchId !== void 0 && me !== J && !me.defaultPrevented);
+            if (!Ze)
               return;
-            this.rectangleManager.measure(), this.transformer.addAnchor(Je.anchor), this.transformer.addAnchor(j.anchor), f.event.preventDefault();
+            this.rectangleManager.measure(), this.transformer.addAnchor(Ze.anchor), this.transformer.addAnchor(J.anchor), g.event.preventDefault();
           }
         else
-          j.preventDefault();
+          J.preventDefault();
     });
-    const Qe = G(
-      Pe(d, je),
-      ([f, [O, z]]) => f.pointerId === z.event.pointerId
+    const Je = G(
+      Pe(d, Qe),
+      ([g, [B, q]]) => g.pointerId === q.event.pointerId
     );
-    Qe.addListener(([f]) => {
-      this.removePointer(f);
+    Je.addListener(([g]) => {
+      this.removePointer(g);
     });
-    const ai = X(
-      G(Qe, ([f, [O, z]]) => !this.config.greedyGestureHandling && !O.infiniteCanvasDefaultPrevented && !z.infiniteCanvasDefaultPrevented),
-      () => new mn("touchignored")
-    ), { captureSource: ci, bubbleSource: hi, afterBubble: li } = nt(ai);
-    li.addListener((f) => {
-      f.infiniteCanvasDefaultPrevented || console.warn("use two fingers to move");
+    const ci = X(
+      G(Je, ([g, [B, q]]) => !this.config.greedyGestureHandling && !B.infiniteCanvasDefaultPrevented && !q.infiniteCanvasDefaultPrevented),
+      () => new pn("touchignored")
+    ), { captureSource: hi, bubbleSource: li, afterBubble: ui } = it(ci);
+    ui.addListener((g) => {
+      g.infiniteCanvasDefaultPrevented || console.warn("use two fingers to move");
     }), this.cache = {
-      mousemove: this.map(G(W(t, "mousemove"), () => !this.mouseAnchorIsFixed()), (f) => new xe(f)),
-      mousedown: et(tt, wt, n, i),
-      pointerdown: et(B, H, n, i),
+      mousemove: this.map(G(k(e, "mousemove"), () => !this.mouseAnchorIsFixed()), (g) => new xe(g)),
+      mousedown: nt(Pt, Ct, i, r),
+      pointerdown: nt(V, j, i, r),
       pointermove: this.map(
-        $r(
+        js(
           G(l, () => this.hasNonFixedAnchorForSomePointer()),
-          () => Kr(this.anchorSet.getAll((f) => !f.anchor.fixedOnInfiniteCanvas).map((f) => f.pointerEvent))
+          () => Js(this.anchorSet.getAll((g) => !g.anchor.fixedOnInfiniteCanvas).map((g) => g.pointerEvent))
         ),
-        (f) => new ct(f)
+        (g) => new ht(g)
       ),
-      pointerleave: this.map(a, (f) => new ct(f)),
-      pointerup: this.map(h, (f) => new ct(f)),
-      pointercancel: this.map(d, (f) => new ct(f)),
-      wheel: et(fe, ge, n, i),
-      wheelignored: et(ii, si, n, i),
-      touchstart: et(Ct, ue, n, i),
-      touchignored: et(ci, hi, n, i),
-      touchmove: this.map(u, (f) => {
-        const O = dt(f.targetTouches), z = dt(f.targetTouches, (j) => !this.hasFixedAnchorForTouch(j.identifier));
-        return Ot.create(
+      pointerleave: this.map(u, (g) => new ht(g)),
+      pointerup: this.map(f, (g) => new ht(g)),
+      pointercancel: this.map(d, (g) => new ht(g)),
+      wheel: nt(ge, Rt, i, r),
+      wheelignored: nt(ri, si, i, r),
+      touchstart: nt(ue, de, i, r),
+      touchignored: nt(hi, li, i, r),
+      touchmove: this.map(m, (g) => {
+        const B = ft(g.targetTouches), q = ft(g.targetTouches, (J) => !this.hasFixedAnchorForTouch(J.identifier));
+        return Lt.create(
           this.rectangleManager.rectangle,
-          f,
-          O,
-          z
+          g,
+          B,
+          q
         );
       })
     };
   }
-  getEventSource(t) {
-    return this.cache[t];
+  getEventSource(e) {
+    return this.cache[e];
   }
   mouseAnchorIsFixed() {
-    const t = this.anchorSet.find((e) => e.pointerEvent.pointerType === "mouse");
-    return t ? t.anchor.fixedOnInfiniteCanvas : !1;
+    const e = this.anchorSet.find((n) => n.pointerEvent.pointerType === "mouse");
+    return e ? e.anchor.fixedOnInfiniteCanvas : !1;
   }
-  hasFixedAnchorForTouch(t) {
-    const e = this.anchorSet.getAnchorForTouch(t);
-    return !!e && e.anchor.fixedOnInfiniteCanvas;
+  hasFixedAnchorForTouch(e) {
+    const n = this.anchorSet.getAnchorForTouch(e);
+    return !!n && n.anchor.fixedOnInfiniteCanvas;
   }
   hasNonFixedAnchorForSomePointer() {
-    return !!this.anchorSet.find((t) => !t.anchor.fixedOnInfiniteCanvas);
+    return !!this.anchorSet.find((e) => !e.anchor.fixedOnInfiniteCanvas);
   }
-  transformUsingPointer(t, e) {
+  transformUsingPointer(e, n) {
     this.rectangleManager.measure();
+    const i = this.anchorSet.getAnchorForPointerEvent(n);
+    i && (n.button === 1 && this.config.rotationEnabled ? (e.preventDefault(), this.transformer.addRotationAnchor(i.anchor)) : n.button === 0 && this.transformer.addAnchor(i.anchor));
+  }
+  removePointer(e) {
     const n = this.anchorSet.getAnchorForPointerEvent(e);
-    n && (e.button === 1 && this.config.rotationEnabled ? (t.preventDefault(), this.transformer.addRotationAnchor(n.anchor)) : e.button === 0 && this.transformer.addAnchor(n.anchor));
+    n && (this.transformer.releaseAnchor(n.anchor), this.anchorSet.removeAnchor(n));
   }
-  removePointer(t) {
-    const e = this.anchorSet.getAnchorForPointerEvent(t);
-    e && (this.transformer.releaseAnchor(e.anchor), this.anchorSet.removeAnchor(e));
-  }
-  zoom(t) {
-    if (!this.config.greedyGestureHandling && !t.ctrlKey)
+  zoom(e) {
+    if (!this.config.greedyGestureHandling && !e.ctrlKey)
       return;
-    const { offsetX: e, offsetY: n } = t;
-    let i = t.deltaY;
-    const r = Math.pow(2, -i / 300);
-    this.rectangleManager.measure(), this.transformer.zoom(e, n, r), t.preventDefault();
+    const { offsetX: n, offsetY: i } = e;
+    let r = e.deltaY;
+    const o = Math.pow(2, -r / 300);
+    this.rectangleManager.measure(), this.transformer.zoom(n, i, o), e.preventDefault();
   }
 }
-class Qr {
+class _s {
   constructor(t, e) {
     this.handledOrFilteredEventCollection = t, this.mappingCollection = e;
   }
   setOn(t, e) {
-    kt(t) ? this.handledOrFilteredEventCollection.setOn(t, e) : this.mappingCollection.setOn(t, e);
+    Vt(t) ? this.handledOrFilteredEventCollection.setOn(t, e) : this.mappingCollection.setOn(t, e);
   }
   getOn(t) {
-    return kt(t) ? this.handledOrFilteredEventCollection.getOn(t) : this.mappingCollection.getOn(t);
+    return Vt(t) ? this.handledOrFilteredEventCollection.getOn(t) : this.mappingCollection.getOn(t);
   }
   addEventListener(t, e, n) {
-    kt(t) ? this.handledOrFilteredEventCollection.addEventListener(t, e, n) : this.mappingCollection.addEventListener(t, e, n);
+    Vt(t) ? this.handledOrFilteredEventCollection.addEventListener(t, e, n) : this.mappingCollection.addEventListener(t, e, n);
   }
   removeEventListener(t, e, n) {
-    kt(t) ? this.handledOrFilteredEventCollection.removeEventListener(t, e, n) : this.mappingCollection.removeEventListener(t, e, n);
+    Vt(t) ? this.handledOrFilteredEventCollection.removeEventListener(t, e, n) : this.mappingCollection.removeEventListener(t, e, n);
   }
 }
-class Jr {
+class to {
   constructor(t, e, n, i) {
     this.mappedMouseEventCollection = t, this.mappedTouchEventCollection = e, this.mappedOnlyPointerEventCollection = n, this.mappedDragEventCollection = i;
   }
   setOn(t, e) {
-    Ht(t) ? this.mappedMouseEventCollection.setOn(t, e) : Nt(t) ? this.mappedTouchEventCollection.setOn(t, e) : Vt(t) ? this.mappedOnlyPointerEventCollection.setOn(t, e) : Mt(t) && this.mappedDragEventCollection.setOn(t, e);
+    Mt(t) ? this.mappedMouseEventCollection.setOn(t, e) : qt(t) ? this.mappedTouchEventCollection.setOn(t, e) : Nt(t) ? this.mappedOnlyPointerEventCollection.setOn(t, e) : zt(t) && this.mappedDragEventCollection.setOn(t, e);
   }
   getOn(t) {
-    if (Ht(t))
-      return this.mappedMouseEventCollection.getOn(t);
-    if (Nt(t))
-      return this.mappedTouchEventCollection.getOn(t);
-    if (Vt(t))
-      return this.mappedOnlyPointerEventCollection.getOn(t);
     if (Mt(t))
+      return this.mappedMouseEventCollection.getOn(t);
+    if (qt(t))
+      return this.mappedTouchEventCollection.getOn(t);
+    if (Nt(t))
+      return this.mappedOnlyPointerEventCollection.getOn(t);
+    if (zt(t))
       return this.mappedDragEventCollection.getOn(t);
   }
   addEventListener(t, e, n) {
-    Ht(t) ? this.mappedMouseEventCollection.addEventListener(t, e, n) : Nt(t) ? this.mappedTouchEventCollection.addEventListener(t, e, n) : Vt(t) ? this.mappedOnlyPointerEventCollection.addEventListener(t, e, n) : Mt(t) && this.mappedDragEventCollection.addEventListener(t, e, n);
+    Mt(t) ? this.mappedMouseEventCollection.addEventListener(t, e, n) : qt(t) ? this.mappedTouchEventCollection.addEventListener(t, e, n) : Nt(t) ? this.mappedOnlyPointerEventCollection.addEventListener(t, e, n) : zt(t) && this.mappedDragEventCollection.addEventListener(t, e, n);
   }
   removeEventListener(t, e, n) {
-    Ht(t) ? this.mappedMouseEventCollection.removeEventListener(t, e, n) : Nt(t) ? this.mappedTouchEventCollection.removeEventListener(t, e, n) : Vt(t) ? this.mappedOnlyPointerEventCollection.removeEventListener(t, e, n) : Mt(t) && this.mappedDragEventCollection.removeEventListener(t, e, n);
+    Mt(t) ? this.mappedMouseEventCollection.removeEventListener(t, e, n) : qt(t) ? this.mappedTouchEventCollection.removeEventListener(t, e, n) : Nt(t) ? this.mappedOnlyPointerEventCollection.removeEventListener(t, e, n) : zt(t) && this.mappedDragEventCollection.removeEventListener(t, e, n);
   }
 }
 class Tt extends Xe {
@@ -6104,23 +6289,25 @@ class Tt extends Xe {
     return this.cache[t] || (this.cache[t] = this.createEventSource(t)), this.cache[t];
   }
   createEventSource(t) {
-    return this.map(W(this.canvasEl, t), (e) => this.createInternalEvent(e));
+    return this.map(k(this.canvasEl, t), (e) => this.createInternalEvent(e));
   }
 }
-class Zr extends le {
+class eo extends le {
   get dataTransfer() {
     return this.event.dataTransfer;
   }
 }
-class _r extends vt {
-  constructor(t, e) {
-    super(t, e), this.props = ot.create(t);
+class no extends wt {
+  constructor(e, n) {
+    super(e, n);
+    a(this, "props");
+    this.props = at.create(e);
   }
-  createResultEvent(t) {
-    return new Zr(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(t));
+  createResultEvent(e) {
+    return new eo(this, this.preventableDefault, this.event, this.props.toInfiniteCanvasCoordinates(e));
   }
 }
-class to extends vt {
+class io extends wt {
   createResultEvent() {
     return this.event;
   }
@@ -6130,100 +6317,101 @@ class Ke {
     this.drawEventCollection = t, this.transformationEventCollection = e, this.pointerEventCollection = n, this.unmappedEventCollection = i;
   }
   setOn(t, e) {
-    t === "draw" ? this.drawEventCollection.setOn("draw", e) : Ft(t) ? this.transformationEventCollection.setOn(t, e) : Wt(t) ? this.pointerEventCollection.setOn(t, e) : this.unmappedEventCollection.setOn(t, e);
+    t === "draw" ? this.drawEventCollection.setOn("draw", e) : kt(t) ? this.transformationEventCollection.setOn(t, e) : Ht(t) ? this.pointerEventCollection.setOn(t, e) : this.unmappedEventCollection.setOn(t, e);
   }
   getOn(t) {
-    return t === "draw" ? this.drawEventCollection.getOn("draw") : Ft(t) ? this.transformationEventCollection.getOn(t) : Wt(t) ? this.pointerEventCollection.getOn(t) : this.unmappedEventCollection.getOn(t);
+    return t === "draw" ? this.drawEventCollection.getOn("draw") : kt(t) ? this.transformationEventCollection.getOn(t) : Ht(t) ? this.pointerEventCollection.getOn(t) : this.unmappedEventCollection.getOn(t);
   }
   addEventListener(t, e, n) {
-    t === "draw" ? this.drawEventCollection.addEventListener("draw", e, n) : Ft(t) ? this.transformationEventCollection.addEventListener(t, e, n) : Wt(t) ? this.pointerEventCollection.addEventListener(t, e, n) : this.unmappedEventCollection.addEventListener(t, e, n);
+    t === "draw" ? this.drawEventCollection.addEventListener("draw", e, n) : kt(t) ? this.transformationEventCollection.addEventListener(t, e, n) : Ht(t) ? this.pointerEventCollection.addEventListener(t, e, n) : this.unmappedEventCollection.addEventListener(t, e, n);
   }
   removeEventListener(t, e, n) {
-    t === "draw" ? this.drawEventCollection.removeEventListener("draw", e, n) : Ft(t) ? this.transformationEventCollection.removeEventListener(t, e, n) : Wt(t) ? this.pointerEventCollection.removeEventListener(t, e, n) : this.unmappedEventCollection.removeEventListener(t, e, n);
+    t === "draw" ? this.drawEventCollection.removeEventListener("draw", e, n) : kt(t) ? this.transformationEventCollection.removeEventListener(t, e, n) : Ht(t) ? this.pointerEventCollection.removeEventListener(t, e, n) : this.unmappedEventCollection.removeEventListener(t, e, n);
   }
   static create(t, e, n, i, r, o) {
-    const a = new xr(o, n, i), l = new Or(e, n, i), h = new jr(
+    const c = new Ls(o, n, i), u = new As(e, n, i), l = new Zs(
       t,
       e,
       n,
       i,
       r
-    ), d = new Qr(
-      h,
-      new Jr(
-        new Tt(t, (u) => new xe(u), n, i),
-        new Tt(t, (u) => {
-          const g = dt(u.targetTouches), v = dt(u.changedTouches);
-          return Ot.create(
+    ), f = new _s(
+      l,
+      new to(
+        new Tt(t, (d) => new xe(d), n, i),
+        new Tt(t, (d) => {
+          const m = ft(d.targetTouches), w = ft(d.changedTouches);
+          return Lt.create(
             n.rectangle,
-            u,
-            g,
-            v
+            d,
+            m,
+            w
           );
         }, n, i),
-        new Tt(t, (u) => new ct(u), n, i),
-        new Tt(t, (u) => new _r(u), n, i)
+        new Tt(t, (d) => new ht(d), n, i),
+        new Tt(t, (d) => new no(d), n, i)
       )
     );
     return new Ke(
-      a,
-      l,
-      d,
-      new Tt(t, (u) => new to(u), n, i)
+      c,
+      u,
+      f,
+      new Tt(t, (d) => new io(d), n, i)
     );
   }
 }
-function eo(s, t) {
+function ro(s, t) {
   let e = -1;
   const n = s.canvas.width;
   s.save(), s.fillStyle = "#fff", s.fillRect(0, 0, n, 5), s.filter = `drop-shadow(${t} 0)`, s.fillRect(0, 0, 1, 5);
   const r = s.getImageData(0, 0, n, 3).data;
   for (let o = 0; o < n; o++) {
-    const a = 4 * (2 * n + o);
-    if (r[a] !== 255) {
+    const c = 4 * (2 * n + o);
+    if (r[c] !== 255) {
       e = o;
       break;
     }
   }
   return s.restore(), e;
 }
-function no(s, t) {
+function so(s, t) {
   const e = s.canvas.width;
   let n = 1, i = 1, r = -1;
-  return d(), l(), o(), { numerator: n, denominator: i, pixels: r };
+  return f(), u(), o(), { numerator: n, denominator: i, pixels: r };
   function o() {
-    let u = 0;
+    let d = 0;
     do {
-      const g = r;
-      if (a(), r === g)
+      const m = r;
+      if (c(), r === m)
         break;
-      u++;
-    } while (u < 10);
+      d++;
+    } while (d < 10);
   }
-  function a() {
-    const u = e / (r + 1);
-    let g = r === 0 ? u : Math.min((e - 1) / r, u), v;
-    for (; (v = Math.floor(g)) < 2; )
-      g *= 10, i *= 10;
-    n *= v, d(), h();
+  function c() {
+    const d = e / (r + 1);
+    let m = r === 0 ? d : Math.min((e - 1) / r, d), w;
+    for (; (w = Math.floor(m)) < 2; )
+      m *= 10, i *= 10;
+    n *= w, f(), l();
+  }
+  function u() {
+    let d = 0;
+    for (; r === -1 && d < 10; )
+      i *= 10, f(), d++;
+    l();
   }
   function l() {
-    let u = 0;
-    for (; r === -1 && u < 10; )
-      i *= 10, d(), u++;
-    h();
-  }
-  function h() {
     if (r === -1)
       throw new Error(`something went wrong while getting measurement for unit '${t}' on canvas with width ${e}`);
   }
-  function d() {
-    r = eo(s, `${n / i}${t}`);
+  function f() {
+    r = ro(s, `${n / i}${t}`);
   }
 }
-class io {
+class oo {
   constructor(t) {
-    this.ctx = t, this.cache = {};
+    a(this, "cache", {});
+    this.ctx = t;
   }
   getNumberOfPixels(t, e) {
     if (t === 0)
@@ -6231,12 +6419,15 @@ class io {
     if (e === "px")
       return t;
     let n = this.cache[e];
-    return n || (n = no(this.ctx, e), this.cache[e] = n), t * n.pixels * n.denominator / n.numerator;
+    return n || (n = so(this.ctx, e), this.cache[e] = n), t * n.pixels * n.denominator / n.numerator;
   }
 }
-class so {
+class ao {
   constructor(t) {
-    this.canvas = t, this.dispatcher = new _(), this.numberOfListeners = 0;
+    a(this, "dispatcher", new et());
+    a(this, "observer");
+    a(this, "numberOfListeners", 0);
+    this.canvas = t;
   }
   addListener(t, e) {
     this.dispatcher.addListener(t, () => {
@@ -6263,19 +6454,21 @@ class so {
     this.observer && (this.observer.disconnect(), this.observer = void 0);
   }
 }
-function pn(s) {
+function vn(s) {
   const { screenWidth: t, screenHeight: e } = s;
   return t > 0 && e > 0;
 }
-class ro {
+class co {
   constructor(t, e, n) {
-    this.measurementProvider = t, this.resizes = e, this.viewBox = n, this.currentlyVisible = !1;
+    a(this, "currentlyVisible", !1);
+    a(this, "listener");
+    this.measurementProvider = t, this.resizes = e, this.viewBox = n;
   }
   observe() {
     const t = this.measurementProvider.measure();
-    this.currentlyVisible = pn(t);
+    this.currentlyVisible = vn(t);
     const e = (n) => {
-      const i = pn(n);
+      const i = vn(n);
       i && !this.currentlyVisible && this.viewBox.draw(), this.currentlyVisible = i;
     };
     this.resizes.addListener(e), this.listener = e;
@@ -6284,40 +6477,49 @@ class ro {
     this.listener && (this.resizes.removeListener(this.listener), this.listener = void 0);
   }
 }
-const re = class re {
+class be {
   constructor(t, e) {
-    this.canvas = t, this.config = { rotationEnabled: !0, greedyGestureHandling: !1, units: b.CANVAS }, e && Object.assign(this.config, e);
-    const n = new so(t);
+    a(this, "context");
+    a(this, "viewBox");
+    a(this, "config");
+    a(this, "rectangleManager");
+    a(this, "canvasResizes");
+    a(this, "cssUnitsCanvasResizeListener");
+    a(this, "canvasUnitsCanvasResizeObserver");
+    a(this, "eventCollection");
+    a(this, "cssLengthConverterFactory");
+    this.canvas = t, this.config = { rotationEnabled: !0, greedyGestureHandling: !1, units: O.CANVAS }, e && Object.assign(this.config, e);
+    const n = new ao(t);
     this.canvasResizes = n, this.cssUnitsCanvasResizeListener = () => {
       this.canvas.parentElement !== null && this.viewBox.draw();
     };
-    const i = new nr(new er()), r = new ir(i), o = new or(t);
-    this.rectangleManager = new rr(o, this.config);
-    let a;
-    const l = t.getContext("2d");
+    const i = new ss(new rs()), r = new os(i), o = new hs(t);
+    this.rectangleManager = new cs(o, this.config);
+    let c;
+    const u = t.getContext("2d");
     this.cssLengthConverterFactory = {
-      create: () => new io(l)
+      create: () => new oo(u)
     };
-    const h = new Us(
+    const l = new Qr(
       this.rectangleManager,
-      l,
+      u,
       r,
       () => r.getLock(),
-      () => a.isTransforming
+      () => c.isTransforming
     );
-    this.viewBox = h, this.canvasUnitsCanvasResizeObserver = new ro(o, n, h), a = new tr(this.viewBox, this.config), this.eventCollection = Ke.create(t, a, this.rectangleManager, this, this.config, i), this.config.units === b.CSS ? this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener) : this.config.units === b.CANVAS && this.canvasUnitsCanvasResizeObserver.observe();
+    this.viewBox = l, this.canvasUnitsCanvasResizeObserver = new co(o, n, l), c = new is(this.viewBox, this.config), this.eventCollection = Ke.create(t, c, this.rectangleManager, this, this.config, i), this.config.units === O.CSS ? this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener) : this.config.units === O.CANVAS && this.canvasUnitsCanvasResizeObserver.observe();
   }
   setUnits(t) {
-    t === b.CSS && this.config.units !== b.CSS && (this.canvasUnitsCanvasResizeObserver.disconnect(), this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener)), t === b.CANVAS && this.config.units !== b.CANVAS && (this.canvasResizes.removeListener(this.cssUnitsCanvasResizeListener), this.canvasUnitsCanvasResizeObserver.observe()), this.config.units = t, this.rectangleManager.measure(), this.viewBox.draw();
+    t === O.CSS && this.config.units !== O.CSS && (this.canvasUnitsCanvasResizeObserver.disconnect(), this.canvasResizes.addListener(this.cssUnitsCanvasResizeListener)), t === O.CANVAS && this.config.units !== O.CANVAS && (this.canvasResizes.removeListener(this.cssUnitsCanvasResizeListener), this.canvasUnitsCanvasResizeObserver.observe()), this.config.units = t, this.rectangleManager.measure(), this.viewBox.draw();
   }
   getContext() {
-    return this.context || (this.context = new Vs(this.canvas, this.viewBox, this.cssLengthConverterFactory)), this.context;
+    return this.context || (this.context = new zr(this.canvas, this.viewBox, this.cssLengthConverterFactory)), this.context;
   }
   get transformation() {
-    return pt(this.rectangleManager.rectangle.infiniteCanvasContext.inverseBase);
+    return vt(this.rectangleManager.rectangle.infiniteCanvasContext.inverseBase);
   }
   get inverseTransformation() {
-    return pt(this.rectangleManager.rectangle.infiniteCanvasContext.base);
+    return vt(this.rectangleManager.rectangle.infiniteCanvasContext.base);
   }
   get rotationEnabled() {
     return this.config.rotationEnabled;
@@ -6949,11 +7151,10 @@ const re = class re {
   removeEventListener(t, e, n) {
     this.eventCollection.removeEventListener(t, e, n);
   }
-};
-re.CANVAS_UNITS = b.CANVAS, re.CSS_UNITS = b.CSS;
-let be = re;
-const ao = be;
+}
+a(be, "CANVAS_UNITS", O.CANVAS), a(be, "CSS_UNITS", O.CSS);
+const uo = be;
 export {
-  b as Units,
-  ao as default
+  O as Units,
+  uo as default
 };

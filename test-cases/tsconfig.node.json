@@ -1,10 +1,10 @@
 {
     "extends": "../tsconfig.node.json",
     "compilerOptions": {
-        "composite": true,
         "paths": {
             "test-case-metadata": ["./backend/test-case-metadata.ts"]
-        }
+        },
+        "outDir": "./dist",
     },
     "include": [
         "backend/**/*",

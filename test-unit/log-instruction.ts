@@ -1,4 +1,4 @@
-import { Instruction } from "../src/instructions/instruction";
+import { Instruction } from "src/instructions/instruction";
 import { CanvasContextMock } from "./canvas-context-mock";
 import { MockRectangle } from "./mock-rectangle";
 
