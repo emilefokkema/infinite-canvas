@@ -1057,4 +1057,20 @@ describe('an infinite canvas context', () => {
 			expect(contextMock.getLog()).toMatchSnapshot();
 		});
 	})
+
+	describe('that draws a counterclockwise path around the plane', () => {
+
+		beforeEach(() => {
+			infiniteContext.beginPath();
+			infiniteContext.moveToInfinityInDirection(1, 0);
+			infiniteContext.lineToInfinityInDirection(-1, -1);
+			infiniteContext.lineToInfinityInDirection(-1, 1);
+			infiniteContext.rect(150, 150, 100, 100);
+			infiniteContext.fill();
+		})
+
+		it("should have traced this path", () => {
+			expect(contextMock.getLog()).toMatchSnapshot();
+		});
+	})
 })

@@ -13,7 +13,7 @@ export interface CanvasRectangle{
     readonly userTransformation: Transformation;
     readonly infiniteCanvasContext: CoordinateSystem;
     readonly initialBitmapTransformation: Transformation;
-    addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void;
+    addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number, counterclockwise: boolean): void;
     getCSSPosition(clientX: number, clientY: number): Point;
     getTransformationForInstruction(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;
     translateInfiniteCanvasContextTransformationToBitmapTransformation(infiniteCanvasContextTransformation: TransformationRepresentation): Transformation;

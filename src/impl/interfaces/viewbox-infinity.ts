@@ -8,5 +8,5 @@ export interface ViewboxInfinity{
     drawLineFromInfinityFromPointToInfinityFromPoint(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, point1: Point, point2: Point, direction: Point): void;
     drawLineToInfinityFromInfinityFromPoint(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, point: Point, fromDirection: Point, toDirection: Point): void;
     clearRect(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, x: number, y: number, width: number, height: number): void;
-    addPathAroundViewbox(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void;
+    addPathAroundViewbox(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, counterclockwise: boolean): void;
 }

@@ -17,7 +17,7 @@ export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstruct
     }
     protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity{
         if(shape.surroundsFinitePoint){
-            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context, rectangle)
+            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context, rectangle, shape.direction === 'counterclockwise')
         }
         return () => {};
     }
@@ -51,9 +51,7 @@ export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstruct
     }
     public addPosition(position: Position): PathInstructionBuilder{
         if(isPointAtInfinity(position)){
-            const newDirectionOnSameSideOfOrigin: boolean = position.direction.isOnSameSideOfOriginAs(this.shape.initialPosition.direction, this.shape.currentPosition.direction);
-            const newSurroundsFinitePoint: boolean = newDirectionOnSameSideOfOrigin ? this.shape.surroundsFinitePoint : !this.shape.surroundsFinitePoint;
-            return this.pathBuilderProvider.atInfinity(new AtInfinity(this.shape.initialPosition, newSurroundsFinitePoint, this.shape.positionsSoFar.concat([position]), position));
+            return this.pathBuilderProvider.atInfinity(this.shape.addPosition(position));
         }
         return this.pathBuilderProvider.fromPointAtInfinityToPoint(new FromPointAtInfinityToPoint(this.shape.initialPosition, position, position));
     }

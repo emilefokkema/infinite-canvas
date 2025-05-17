@@ -31,7 +31,7 @@ export class InfiniteCanvasPathInstructionBuilderProvider implements PathInstruc
     }
     getBuilderFromPosition(position: Position): PathInstructionBuilder{
         if(isPointAtInfinity(position)){
-           return new PathInstructionBuilderAtInfinity(this, new AtInfinity(position, false, [position], position));
+           return new PathInstructionBuilderAtInfinity(this, AtInfinity.create(position));
         }
         return new PathInstructionBuilderFromPointToPoint(this, new FromPointToPoint(position, position));
     }

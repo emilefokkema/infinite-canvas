@@ -17,7 +17,7 @@ class PathAroundViewbox implements DrawablePath{
 
         return ExecutableInstructionWithState.create(state, (context, rectangle) => {
             context.beginPath();
-            infinity.addPathAroundViewbox(context, rectangle)
+            infinity.addPathAroundViewbox(context, rectangle, false)
             instruction(context, rectangle)
         })
     }

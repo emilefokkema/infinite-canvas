@@ -17,8 +17,8 @@ export class InfiniteCanvasViewboxInfinity implements ViewboxInfinity{
         private readonly state: InfiniteCanvasState,
         private readonly drawnPathProperties: DrawnPathProperties) {
     }
-    public addPathAroundViewbox(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void{
-        rectangle.addPathAroundViewbox(context, this.drawnPathProperties.lineWidth);
+    public addPathAroundViewbox(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, counterclockwise: boolean): void{
+        rectangle.addPathAroundViewbox(context, this.drawnPathProperties.lineWidth, counterclockwise);
     }
     private getTransformedViewbox(rectangle: CanvasRectangle): Area{
         const bitmapTransformationToTransformedInfiniteCanvasContext: Transformation = this.state.current.transformation.before(rectangle.getBitmapTransformationToInfiniteCanvasContext());

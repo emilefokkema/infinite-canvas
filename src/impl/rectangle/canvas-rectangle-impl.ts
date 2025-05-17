@@ -76,12 +76,16 @@ export class CanvasRectangleImpl implements CanvasRectangle{
         return this.coordinates.getBitmapTransformationToInfiniteCanvasContext();
     }
 
-    public addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number): void{
+    public addPathAroundViewbox(context: CanvasRenderingContext2D, margin: number, counterclockwise: boolean): void{
         const width: number = this.viewboxWidth + 2 * margin;
         const height: number = this.viewboxHeight + 2 * margin;
         context.save();
         context.setTransform(1, 0, 0, 1, 0, 0);
-        context.rect(-margin, -margin, width, height);
+        if(counterclockwise){
+            context.rect(width - margin, -margin, -width, height);
+        }else{
+            context.rect(-margin, -margin, width, height);
+        }
         context.restore();
     }
 
