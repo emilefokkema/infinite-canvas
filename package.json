@@ -15,7 +15,9 @@
   },
   "private": false,
   "files": [
-    "dist/**/*"
+    "dist/*.js",
+    "dist/*.cjs",
+    "dist/types/*.d.ts"
   ],
   "scripts": {
     "pretest": "tsc --build test-unit",
