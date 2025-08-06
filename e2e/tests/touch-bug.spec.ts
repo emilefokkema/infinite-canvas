@@ -55,7 +55,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
                 await firstTouch.end();
                 await Promise.all([
                     noEvent(infCanvas.eventTarget, 'draw', 300),
-                    secondTouch.move(200, 200)
+                    secondTouch.move(100, 150)
                 ])
             })
 
@@ -71,7 +71,7 @@ describe('when a touch exists on the page outside of infinite canvas that has gr
                     thirdTouch = await page.touchscreen.touchStart(200, 200);
                     await Promise.all([
                         noEvent(infCanvas.eventTarget, 'draw', 300),
-                        thirdTouch.move(100, 200)
+                        thirdTouch.move(200, 100)
                     ])
                 })
 
