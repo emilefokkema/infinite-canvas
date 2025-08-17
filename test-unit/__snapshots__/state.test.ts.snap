@@ -31,6 +31,7 @@ exports[`a default state > that is changed to a non-default state that differs o
   "context.strokeStyle = "#f00"",
   "context.setTransform(2,0,0,2,0,0)",
   "context.font = "12px sans-serif"",
+  "context.fontKerning = "normal"",
 ]
 `;
 

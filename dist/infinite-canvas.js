@@ -1,7 +1,7 @@
-var di = Object.defineProperty;
-var fi = (s, t, e) => t in s ? di(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
-var a = (s, t, e) => fi(s, typeof t != "symbol" ? t + "" : t, e);
-let gi = class {
+var fi = Object.defineProperty;
+var gi = (s, t, e) => t in s ? fi(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
+var a = (s, t, e) => gi(s, typeof t != "symbol" ? t + "" : t, e);
+let mi = class {
   constructor(t) {
     this.viewBox = t;
   }
@@ -177,7 +177,7 @@ class y {
 }
 const x = () => {
 };
-class mi extends y {
+class pi extends y {
   valuesAreEqual(t, e) {
     return t.equals(e);
   }
@@ -188,8 +188,8 @@ class mi extends y {
     };
   }
 }
-const Gt = new mi("transformation", x);
-class pi {
+const Gt = new pi("transformation", x);
+class vi {
   constructor(t) {
     this.viewBox = t;
   }
@@ -230,7 +230,7 @@ class pi {
     this.viewBox.changeState((i) => Gt.changeInstanceValue(i, n));
   }
 }
-class vi extends y {
+class wi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -238,8 +238,8 @@ class vi extends y {
     return (e) => e.globalAlpha = t;
   }
 }
-const wn = new vi("globalAlpha", x);
-class wi extends y {
+const wn = new wi("globalAlpha", x);
+class Pi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -247,8 +247,8 @@ class wi extends y {
     return (e) => e.globalCompositeOperation = t;
   }
 }
-const Pn = new wi("globalCompositeOperation", x);
-class Pi {
+const Pn = new Pi("globalCompositeOperation", x);
+class Ci {
   constructor(t) {
     this.viewBox = t;
   }
@@ -265,7 +265,7 @@ class Pi {
     this.viewBox.changeState((e) => Pn.changeInstanceValue(e, t));
   }
 }
-class Ci extends y {
+class Ii extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -275,8 +275,8 @@ class Ci extends y {
     };
   }
 }
-const Cn = new Ci("imageSmoothingEnabled", x);
-class Ii extends y {
+const Cn = new Ii("imageSmoothingEnabled", x);
+class Ti extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -286,8 +286,8 @@ class Ii extends y {
     };
   }
 }
-const In = new Ii("imageSmoothingQuality", x);
-class Ti {
+const In = new Ti("imageSmoothingQuality", x);
+class Si {
   constructor(t) {
     this.viewBox = t;
   }
@@ -346,7 +346,7 @@ class Sn {
   }
 }
 const yn = new Sn("fillStyle"), xn = new Sn("strokeStyle");
-class Si {
+class yi {
   constructor(t) {
     this.viewBox = t;
   }
@@ -369,7 +369,7 @@ class Si {
     return this.viewBox.createConicGradient(t, e, n);
   }
 }
-class yi extends y {
+class xi extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -379,8 +379,8 @@ class yi extends y {
     };
   }
 }
-const bn = new yi("shadowColor", x);
-class xi extends y {
+const bn = new xi("shadowColor", x);
+class bi extends y {
   changeToNewValue(t) {
     return (e, n) => {
       const i = v.translation(t.x, t.y), r = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i), { x: o, y: c } = r.apply(h.origin);
@@ -391,8 +391,8 @@ class xi extends y {
     return t.x === e.x && t.y == e.y;
   }
 }
-const Ce = new xi("shadowOffset", x);
-class bi extends y {
+const Ce = new bi("shadowOffset", x);
+class Oi extends y {
   changeToNewValue(t) {
     return (e, n) => {
       const i = v.translation(t, 0), o = n.translateInfiniteCanvasContextTransformationToBitmapTransformation(i).apply(h.origin).mod();
@@ -403,8 +403,8 @@ class bi extends y {
     return t === e;
   }
 }
-const On = new bi("shadowBlur", x);
-class Oi {
+const On = new Oi("shadowBlur", x);
+class Li {
   constructor(t) {
     this.viewBox = t;
   }
@@ -539,7 +539,7 @@ const yt = class yt {
 };
 a(yt, "none", new yt("none", [new en("none")]));
 let Ut = yt;
-class Li extends y {
+class Bi extends y {
   valuesAreEqual(t, e) {
     return t.stringRepresentation === e.stringRepresentation;
   }
@@ -547,8 +547,8 @@ class Li extends y {
     return (e, n) => e.filter = t.toTransformedString(n);
   }
 }
-const Rn = new Li("filter", x);
-class Bi {
+const Rn = new Bi("filter", x);
+class Ai {
   constructor(t, e) {
     this.viewBox = t, this.cssLengthConverterFactory = e;
   }
@@ -560,7 +560,7 @@ class Bi {
     this.viewBox.changeState((n) => Rn.changeInstanceValue(n, e));
   }
 }
-class Ai {
+class Di {
   constructor(t) {
     this.viewBox = t;
   }
@@ -575,7 +575,7 @@ class Ai {
     this.viewBox.strokeRect(t, e, n, i);
   }
 }
-class Di {
+class Ei {
   constructor(t) {
     this.viewBox = t;
   }
@@ -613,7 +613,7 @@ class Di {
     this.viewBox.strokePath();
   }
 }
-class Ei {
+class Ri {
   drawFocusIfNeeded(t, e) {
   }
   scrollPathIntoView(t) {
@@ -621,7 +621,7 @@ class Ei {
 }
 var z = /* @__PURE__ */ ((s) => (s[s.None = 0] = "None", s[s.Relative = 1] = "Relative", s[s.Absolute = 2] = "Absolute", s))(z || {}), T = /* @__PURE__ */ ((s) => (s[s.Positive = 0] = "Positive", s[s.Negative = 1] = "Negative", s))(T || {});
 const $t = { direction: new h(0, 1) }, Kt = { direction: new h(0, -1) }, jt = { direction: new h(-1, 0) }, Qt = { direction: new h(1, 0) };
-function Ri(s, t, e, n) {
+function Fi(s, t, e, n) {
   const i = e.minus(s), r = n.cross(t), o = n.getPerpendicular().dot(i) / r;
   return s.plus(t.scale(o));
 }
@@ -698,7 +698,7 @@ class P {
   }
   intersectWithLine(t, e) {
     return {
-      point: Ri(this.base, this.normalTowardInterior.getPerpendicular(), t, e),
+      point: Fi(this.base, this.normalTowardInterior.getPerpendicular(), t, e),
       halfPlane: this
     };
   }
@@ -726,82 +726,82 @@ class P {
     ];
   }
 }
-class Fi {
-  getVertices() {
-    return [];
-  }
-  expandToIncludePoint(t) {
-    return this;
-  }
-  expandToIncludePolygon(t) {
-    return this;
-  }
-  expandToIncludeInfinityInDirection(t) {
-    return this;
-  }
-  expandByDistance(t) {
-    return this;
-  }
-  intersects(t) {
-    return !0;
-  }
-  expandToInclude(t) {
-    return this;
-  }
-  transform(t) {
-    return this;
-  }
-  intersectWithLineSegment(t) {
-    return t;
-  }
-  contains(t) {
-    return !0;
-  }
-  intersectWith(t) {
-    return t;
-  }
-  join(t) {
-    return this;
-  }
-  intersectWithRay(t) {
-    return t;
-  }
-  intersectWithLine(t) {
-    return t;
-  }
-  intersectWithConvexPolygon(t) {
-    return t;
-  }
-  isContainedByRay(t) {
-    return !1;
-  }
-  isContainedByLineSegment(t) {
-    return !1;
-  }
-  isContainedByLine(t) {
-    return !1;
-  }
-  isContainedByConvexPolygon(t) {
-    return !1;
-  }
-  intersectsRay(t) {
-    return !0;
-  }
-  intersectsLineSegment(t) {
-    return !0;
-  }
-  intersectsLine(t) {
-    return !0;
-  }
-  intersectsConvexPolygon(t) {
-    return !0;
-  }
-}
-const pt = new Fi();
 class Wi {
   getVertices() {
     return [];
   }
+  expandToIncludePoint(t) {
+    return this;
+  }
+  expandToIncludePolygon(t) {
+    return this;
+  }
+  expandToIncludeInfinityInDirection(t) {
+    return this;
+  }
+  expandByDistance(t) {
+    return this;
+  }
+  intersects(t) {
+    return !0;
+  }
+  expandToInclude(t) {
+    return this;
+  }
+  transform(t) {
+    return this;
+  }
+  intersectWithLineSegment(t) {
+    return t;
+  }
+  contains(t) {
+    return !0;
+  }
+  intersectWith(t) {
+    return t;
+  }
+  join(t) {
+    return this;
+  }
+  intersectWithRay(t) {
+    return t;
+  }
+  intersectWithLine(t) {
+    return t;
+  }
+  intersectWithConvexPolygon(t) {
+    return t;
+  }
+  isContainedByRay(t) {
+    return !1;
+  }
+  isContainedByLineSegment(t) {
+    return !1;
+  }
+  isContainedByLine(t) {
+    return !1;
+  }
+  isContainedByConvexPolygon(t) {
+    return !1;
+  }
+  intersectsRay(t) {
+    return !0;
+  }
+  intersectsLineSegment(t) {
+    return !0;
+  }
+  intersectsLine(t) {
+    return !0;
+  }
+  intersectsConvexPolygon(t) {
+    return !0;
+  }
+}
+const pt = new Wi();
+class ki {
+  getVertices() {
+    return [];
+  }
   intersectWith(t) {
     return this;
   }
@@ -869,7 +869,7 @@ class Wi {
     return t;
   }
 }
-const A = new Wi();
+const A = new ki();
 class p {
   constructor(t, e) {
     a(this, "halfPlanes");
@@ -1199,12 +1199,12 @@ function $(...s) {
       e && e(...t);
   };
 }
-function ki(s, t) {
+function Hi(s, t) {
   return t ? (e, n) => {
     e.save(), t(e, n), s(e, n), e.restore();
   } : s;
 }
-function Hi(s) {
+function Vi(s) {
   return s === z.Relative ? (t, e) => {
     const { a: n, b: i, c: r, d: o, e: c, f: u } = e.getBitmapTransformationToTransformedInfiniteCanvasContext();
     t.transform(n, i, r, o, c, u);
@@ -1213,18 +1213,18 @@ function Hi(s) {
     t.setTransform(n, i, r, o, c, u);
   } : null;
 }
-function Vi(s, t) {
+function Mi(s, t) {
   let e = s.area;
   return e && t.lineWidth > 0 && (e = e.expandByDistance(t.lineWidth / 2)), e;
 }
-function Mi(s) {
+function Ni(s) {
   return {
     lineWidth: s.current.getMaximumLineWidth(),
     lineDashPeriod: s.current.getLineDashPeriod(),
     shadowOffsets: s.current.getShadowOffsets()
   };
 }
-function Ni(s) {
+function zi(s) {
   return {
     lineWidth: 0,
     lineDashPeriod: 0,
@@ -1236,13 +1236,13 @@ class M {
     this.instruction = t, this.area = e, this.build = n, this.takeClippingRegionIntoAccount = i, this.transformationKind = r, this.state = o, this.tempState = c;
   }
   static forStrokingPath(t, e, n) {
-    return M.forPath(t, e, Mi, n);
-  }
-  static forFillingPath(t, e, n) {
     return M.forPath(t, e, Ni, n);
   }
+  static forFillingPath(t, e, n) {
+    return M.forPath(t, e, zi, n);
+  }
   static forPath(t, e, n, i) {
-    const r = e.current.isTransformable(), o = r ? z.None : z.Relative, c = e.currentlyTransformed(r), u = n(c), l = i(c), f = Vi(l, u);
+    const r = e.current.isTransformable(), o = r ? z.None : z.Relative, c = e.currentlyTransformed(r), u = n(c), l = i(c), f = Mi(l, u);
     return new M(
       t,
       f,
@@ -1262,12 +1262,12 @@ class M {
     return e.current.clippingRegion && this.takeClippingRegionIntoAccount && (t = t.intersectWith(e.current.clippingRegion)), t;
   }
   getModifiedInstruction() {
-    let t = Hi(this.transformationKind);
+    let t = Vi(this.transformationKind);
     if (this.tempState) {
       const n = this.takeClippingRegionIntoAccount ? this.state.getInstructionToConvertToStateWithClippedPath(this.tempState) : this.state.getInstructionToConvertToState(this.tempState);
       t = $(t, n);
     }
-    return ki(this.instruction, t);
+    return Hi(this.instruction, t);
   }
 }
 class Le {
@@ -1374,7 +1374,7 @@ function I(s) {
 function _(s, t) {
   return I(s) ? t.applyToPointAtInfinity(s) : t.apply(s);
 }
-class zi {
+class qi {
   constructor(t, e) {
     this.areaBuilder = t, this.transformation = e;
   }
@@ -1679,7 +1679,7 @@ class E extends Ae {
     return new E(t.apply(this.point1), t.apply(this.point2));
   }
 }
-class qi {
+class Gi {
   addPoint(t) {
     return pt;
   }
@@ -1690,7 +1690,7 @@ class qi {
     return pt;
   }
 }
-const De = new qi();
+const De = new Gi();
 class Ie {
   constructor(t) {
     this.towardsMiddle = t;
@@ -1720,7 +1720,7 @@ class Jt {
     return t.expandToIncludeInfinityInDirection(this.direction1).expandToIncludeInfinityInDirection(this.direction2);
   }
 }
-class Gi {
+class Yi {
   constructor(t) {
     this.direction = t;
   }
@@ -1734,12 +1734,12 @@ class Gi {
     return t.expandToIncludeInfinityInDirection(this.direction).expandToIncludeInfinityInDirection(this.direction.scale(-1));
   }
 }
-class Yi {
+class Xi {
   constructor(t) {
     this.direction = t;
   }
   addPointAtInfinity(t) {
-    return t.inSameDirectionAs(this.direction) ? this : t.cross(this.direction) === 0 ? new Gi(this.direction) : new Jt(this.direction, t);
+    return t.inSameDirectionAs(this.direction) ? this : t.cross(this.direction) === 0 ? new Yi(this.direction) : new Jt(this.direction, t);
   }
   addPoint(t) {
     return new N(t, this.direction);
@@ -1748,7 +1748,7 @@ class Yi {
     return t.expandToIncludeInfinityInDirection(this.direction);
   }
 }
-class Xi {
+class Ui {
   constructor(t, e, n) {
     this._area = t, this.firstPoint = e, this.subsetOfLineAtInfinity = n;
   }
@@ -1762,10 +1762,10 @@ class Xi {
     I(t) ? this.addInfinityInDirection(t.direction) : this.addPoint(t);
   }
   addInfinityInDirection(t) {
-    this._area ? this._area = this._area.expandToIncludeInfinityInDirection(t) : this.firstPoint ? this._area = new N(this.firstPoint, t) : this.subsetOfLineAtInfinity ? (this.subsetOfLineAtInfinity = this.subsetOfLineAtInfinity.addPointAtInfinity(t), this.subsetOfLineAtInfinity === De && (this._area = pt)) : this.subsetOfLineAtInfinity = new Yi(t);
+    this._area ? this._area = this._area.expandToIncludeInfinityInDirection(t) : this.firstPoint ? this._area = new N(this.firstPoint, t) : this.subsetOfLineAtInfinity ? (this.subsetOfLineAtInfinity = this.subsetOfLineAtInfinity.addPointAtInfinity(t), this.subsetOfLineAtInfinity === De && (this._area = pt)) : this.subsetOfLineAtInfinity = new Xi(t);
   }
   transformedWith(t) {
-    return new zi(this, t);
+    return new qi(this, t);
   }
 }
 class Zt extends Be {
@@ -1784,7 +1784,7 @@ class Zt extends Be {
     });
   }
 }
-function Ui(s, t) {
+function $i(s, t) {
   return s ? t ? I(s) ? I(t) && s.direction.equals(t.direction) : !I(t) && s.equals(t) : !s : !t;
 }
 class Bt {
@@ -1863,7 +1863,7 @@ class At {
     );
   }
 }
-class $i extends Bt {
+class Ki extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -1896,7 +1896,7 @@ class $i extends Bt {
     return I(t) ? this.pathBuilderProvider.fromPointAtInfinityToPointAtInfinity(new ce(this.shape.initialPosition, this.shape.firstFinitePoint, this.shape.lastFinitePoint, t)) : this.pathBuilderProvider.fromPointAtInfinityToPoint(new At(this.shape.initialPosition, this.shape.firstFinitePoint, t));
   }
 }
-class Ki extends Bt {
+class ji extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -1948,7 +1948,7 @@ class Dt {
     );
   }
 }
-class ji extends Bt {
+class Qi extends Bt {
   constructor(t, e) {
     super(e), this.pathBuilderProvider = t;
   }
@@ -2067,15 +2067,15 @@ class St {
     return new St(t, !1, [t], t);
   }
 }
-class Qi {
+class Ji {
   fromPointAtInfinityToPointAtInfinity(t) {
-    return new $i(this, t);
-  }
-  fromPointAtInfinityToPoint(t) {
     return new Ki(this, t);
   }
-  fromPointToPointAtInfinity(t) {
+  fromPointAtInfinityToPoint(t) {
     return new ji(this, t);
+  }
+  fromPointToPointAtInfinity(t) {
+    return new Qi(this, t);
   }
   fromPointToPoint(t) {
     return new nn(this, t);
@@ -2141,14 +2141,14 @@ class Re extends Le {
     i.setInitialState(this.state), this.add(i);
   }
   addPathInstruction(t, e, n) {
-    t.initialPoint && !Ui(this.pathInstructionBuilder.currentPosition, t.initialPoint) && this.lineTo(t.initialPoint, n), t.positionChange && (this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(_(t.positionChange, n.current.transformation))), e.setInitialState(this.state), this.add(e);
+    t.initialPoint && !$i(this.pathInstructionBuilder.currentPosition, t.initialPoint) && this.lineTo(t.initialPoint, n), t.positionChange && (this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(_(t.positionChange, n.current.transformation))), e.setInitialState(this.state), this.add(e);
   }
   static create(t, e) {
-    const n = _(e, t.current.transformation), i = new Qi().getBuilderFromPosition(n), r = i.getInstructionToMoveToBeginning(t), o = Zt.create(t, r);
+    const n = _(e, t.current.transformation), i = new Ji().getBuilderFromPosition(n), r = i.getInstructionToMoveToBeginning(t), o = Zt.create(t, r);
     return new Re(o, i);
   }
 }
-function Ji(s, t, e) {
+function Zi(s, t, e) {
   let n = 0, i;
   for (let r of s) {
     const o = r.minus(t).dot(e);
@@ -2157,9 +2157,9 @@ function Ji(s, t, e) {
   return i ? t.plus(i.minus(t).projectOn(e)) : t;
 }
 function F(s, t, e) {
-  return Ji(s.getVertices(), t, e);
+  return Zi(s.getVertices(), t, e);
 }
-class Zi {
+class _i {
   constructor(t, e) {
     this.state = t, this.drawnPathProperties = e;
   }
@@ -2240,10 +2240,10 @@ class Fe {
     this.drawnPathProperties = t;
   }
   getInfinity(t) {
-    return new Zi(t, this.drawnPathProperties);
+    return new _i(t, this.drawnPathProperties);
   }
 }
-class _i {
+class tr {
   constructor(t, e) {
     this.instructions = t, this.area = e;
   }
@@ -2260,7 +2260,7 @@ class _i {
 class xt extends Le {
   constructor(e) {
     super(e);
-    a(this, "areaBuilder", new Xi());
+    a(this, "areaBuilder", new Ui());
     this._initiallyWithState = e;
   }
   get area() {
@@ -2297,7 +2297,7 @@ class xt extends Le {
   }
   getInstructionsToClip() {
     const e = this.makeExecutable({ lineWidth: 0, lineDashPeriod: 0, shadowOffsets: [] });
-    return e.setInitialState(e.stateOfFirstInstruction), new _i(e, this.area);
+    return e.setInitialState(e.stateOfFirstInstruction), new tr(e, this.area);
   }
   clipPath(e, n) {
     if (this.added.length === 0)
@@ -2373,7 +2373,7 @@ class R {
     });
   }
 }
-class tr extends R {
+class er extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.horizontal = t;
   }
@@ -2384,7 +2384,7 @@ class tr extends R {
     return new p(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
   }
 }
-class er extends R {
+class nr extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.vertical = t;
   }
@@ -2395,7 +2395,7 @@ class er extends R {
     return new p(this.vertical.getHalfPlanesWithVerticalCrossSection());
   }
 }
-class nr extends R {
+class ir extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.horizontal = t, this.vertical = e, this.topLeft = n, this.right = i, this.bottom = r;
   }
@@ -2414,7 +2414,7 @@ class nr extends R {
     ]);
   }
 }
-class ir extends R {
+class rr extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.horizontal = t;
   }
@@ -2425,7 +2425,7 @@ class ir extends R {
     return new p(this.horizontal.getHalfPlanesWithHorizontalCrossSection());
   }
 }
-function rr(s) {
+function sr(s) {
   return s.x !== void 0;
 }
 function sn(s) {
@@ -2458,8 +2458,8 @@ function We(s, t) {
     lowerRight: Ft(r, t)
   };
 }
-function sr(s) {
-  if (typeof s == "number" || rr(s)) {
+function or(s) {
+  if (typeof s == "number" || sr(s)) {
     const n = sn(s);
     return n ? { upperLeft: n, upperRight: n, lowerLeft: n, lowerRight: n } : void 0;
   }
@@ -2504,7 +2504,7 @@ function sr(s) {
     throw new RangeError(`${t.length} radii provided. Between one and four radii are necessary.`);
   }
 }
-class or extends R {
+class ar extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.horizontal = t, this.vertical = e, this.topLeft = n, this.topRightCorner = i, this.bottom = r;
   }
@@ -2525,7 +2525,7 @@ class or extends R {
     ]);
   }
 }
-class ar extends R {
+class cr extends R {
   constructor(t, e, ...n) {
     super(e, ...n), this.vertical = t;
   }
@@ -2536,7 +2536,7 @@ class ar extends R {
     return new p(this.vertical.getHalfPlanesWithVerticalCrossSection());
   }
 }
-class cr extends R {
+class hr extends R {
   constructor(t, e, n, i, r) {
     super(n, i, r), this.vertical = t, this.horizontal = e, this.topLeft = n, this.right = i, this.bottomLeftCorner = r;
   }
@@ -2557,7 +2557,7 @@ class cr extends R {
     ]);
   }
 }
-class hr extends R {
+class lr extends R {
   constructor(t, e, n, i, r, o) {
     super(n, i, r, o), this.vertical = t, this.horizontal = e, this.topLeft = n, this.topRight = i, this.bottomRight = r, this.bottomLeft = o;
   }
@@ -2601,7 +2601,7 @@ class _t {
   fill() {
   }
 }
-class lr {
+class ur {
   constructor() {
     a(this, "area", pt);
   }
@@ -2612,11 +2612,11 @@ class lr {
     });
   }
 }
-const ur = new lr();
+const dr = new ur();
 function Fn(s, t) {
   throw new Error(`The starting coordinates provided (${s.start} and ${t.start}) do not determine a direction.`);
 }
-class dr {
+class fr {
   constructor(t, e) {
     this.horizontal = t, this.vertical = e;
   }
@@ -2632,7 +2632,7 @@ class dr {
   stroke() {
   }
   fill(t, e) {
-    return M.forFillingPath(e, t, () => ur);
+    return M.forFillingPath(e, t, () => dr);
   }
 }
 class Te {
@@ -2730,7 +2730,7 @@ class rt {
   }
 }
 var U = /* @__PURE__ */ ((s) => (s[s.TOPLEFT = 0] = "TOPLEFT", s[s.TOPRIGHT = 1] = "TOPRIGHT", s[s.BOTTOMLEFT = 2] = "BOTTOMLEFT", s[s.BOTTOMRIGHT = 3] = "BOTTOMRIGHT", s))(U || {});
-function fr(s) {
+function gr(s) {
   switch (s) {
     case 0:
       return 2;
@@ -2742,7 +2742,7 @@ function fr(s) {
       return 0;
   }
 }
-function gr(s) {
+function mr(s) {
   switch (s) {
     case 0:
       return 1;
@@ -2761,9 +2761,9 @@ class Wn {
     a(this, "end");
     a(this, "radii");
     a(this, "clockwise");
-    this.corner = e, n = pr(n, i, r);
+    this.corner = e, n = vr(n, i, r);
     const o = r === i;
-    let { center: c, start: u, end: l } = vr(n, e, t);
+    let { center: c, start: u, end: l } = wr(n, e, t);
     o || ({ start: u, end: l } = { start: l, end: u }), this.radii = t, this.clockwise = o, this.center = c, this.start = u, this.end = l;
   }
   draw(t, e) {
@@ -2786,7 +2786,7 @@ class Wn {
     ), e);
   }
 }
-class mr extends Wn {
+class pr extends Wn {
   moveToEndingPoint(t, e) {
     t.moveTo(this.end.point, e);
   }
@@ -2794,10 +2794,10 @@ class mr extends Wn {
     this.draw(t, e), t.moveTo(this.corner, e);
   }
 }
-function pr(s, t, e) {
-  return t === T.Negative && (s = gr(s)), e === T.Negative && (s = fr(s)), s;
-}
 function vr(s, t, e) {
+  return t === T.Negative && (s = mr(s)), e === T.Negative && (s = gr(s)), s;
+}
+function wr(s, t, e) {
   switch (s) {
     case U.TOPLEFT:
       return {
@@ -2866,7 +2866,7 @@ class Se {
     );
   }
 }
-class wr {
+class Pr {
   constructor(t, e, n, i) {
     this.corner = t, this.cornerOrientation = e, this.horizontalOrientation = n, this.verticalOrientation = i;
   }
@@ -2877,7 +2877,7 @@ class wr {
     t.closePath(), t.moveTo(this.corner, e);
   }
   round(t) {
-    return t.x === 0 || t.y === 0 ? this : new mr(
+    return t.x === 0 || t.y === 0 ? this : new pr(
       t,
       this.corner,
       this.cornerOrientation,
@@ -2894,7 +2894,7 @@ class ke {
     t.lineTo(this.point, e), t.lineTo(this.direction, e);
   }
 }
-class Pr {
+class Cr {
   constructor(t, e) {
     this.point = t, this.direction = e;
   }
@@ -2913,7 +2913,7 @@ class ye {
     t.lineTo(this.direction, e);
   }
 }
-class Cr {
+class Ir {
   constructor(t) {
     this.direction = t;
   }
@@ -2933,7 +2933,7 @@ class He {
     this.start = t, this.orientation = e, this.horizontalLineStart = e === T.Positive ? jt : Qt, this.horizontalLineEnd = e === T.Positive ? Qt : jt, this.verticalLineStart = e === T.Positive ? Kt : $t, this.verticalLineEnd = e === T.Positive ? $t : Kt;
   }
   createTopLeftAtVerticalInfinity(t) {
-    return new Pr(new h(t.finiteStart, 0), this.verticalLineStart);
+    return new Cr(new h(t.finiteStart, 0), this.verticalLineStart);
   }
   createBottomRightAtInfinity(t) {
     return new ke(new h(t.end, 0), this.verticalLineEnd);
@@ -2948,18 +2948,18 @@ class He {
     return t.addEntireHorizontalDimension(this);
   }
   addEntireHorizontalDimension(t) {
-    return new dr(t, this);
+    return new fr(t, this);
   }
   addHorizontalDimensionAtInfinity(t) {
     return new Te(t, this);
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createTopLeftAtVerticalInfinity(t), n = this.createRightAtInfinity(t), i = this.createBottomAtInfinity();
-    return new tr(t, e, n, i);
+    return new er(t, e, n, i);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createTopLeftAtVerticalInfinity(t), n = this.createBottomRightAtInfinity(t);
-    return new ir(t, e, n);
+    return new rr(t, e, n);
   }
 }
 class Wt extends He {
@@ -2987,13 +2987,13 @@ class kn extends He {
     return new ye(t.horizontalLineStart);
   }
   createLeftAtInfinity(t) {
-    return new Cr(t.horizontalLineStart);
+    return new Ir(t.horizontalLineStart);
   }
   createTopRightAtHorizontalInfinity(t) {
     return new ke(new h(0, this.finiteStart), t.horizontalLineEnd);
   }
   createTopLeft(t) {
-    return new wr(
+    return new Pr(
       new h(t.finiteStart, this.finiteStart),
       U.TOPLEFT,
       t.orientation,
@@ -3021,18 +3021,18 @@ class kn extends He {
   }
   addEntireHorizontalDimension(t) {
     const e = this.createLeftAtInfinity(t), n = this.createTopRightAtHorizontalInfinity(t), i = this.createBottomAtInfinity(), r = this.createBottomLeftAtInfinity(t);
-    return new er(this, e, n, i, r);
+    return new nr(this, e, n, i, r);
   }
   addHorizontalDimensionAtInfinity(t) {
     return new _t(t.horizontalLineEnd);
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createRightAtInfinity(t), n = this.createBottomAtInfinity(), i = this.createTopLeft(t);
-    return new nr(t, this, i, e, n);
+    return new ir(t, this, i, e, n);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createBottomAtInfinity(), n = this.createTopLeft(t), i = this.createTopRight(t);
-    return new or(t, this, n, i, e);
+    return new ar(t, this, n, i, e);
   }
   getHalfPlanesWithHorizontalCrossSection() {
     return [this.getStartingHalfPlaneWithHorizontalCrossSection()];
@@ -3077,7 +3077,7 @@ class Hn extends kn {
   }
   addEntireHorizontalDimension(t) {
     const e = this.createLeftAtInfinity(t), n = this.createTopRightAtHorizontalInfinity(t), i = this.createBottomLeftAtHorizontalInfinity(t);
-    return new ar(this, e, n, i);
+    return new cr(this, e, n, i);
   }
   addHorizontalDimensionAtInfinity(t) {
     return new _t(t.horizontalLineEnd);
@@ -3087,11 +3087,11 @@ class Hn extends kn {
   }
   addHorizontalDimensionWithStart(t) {
     const e = this.createRightAtInfinity(t), n = this.createTopLeft(t), i = this.createBottomLeft(t);
-    return new cr(this, t, n, e, i);
+    return new hr(this, t, n, e, i);
   }
   addHorizontalDimensionWithStartAndEnd(t) {
     const e = this.createTopLeft(t), n = this.createTopRight(t), i = this.createBottomLeft(t), r = this.createBottomRight(t);
-    return new hr(
+    return new lr(
       this,
       t,
       e,
@@ -3129,7 +3129,7 @@ function cn(s, t, e, n) {
   const i = on(s, e);
   return on(t, n).addHorizontalDimensionWithStartAndEnd(i);
 }
-class Ir {
+class Tr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3160,11 +3160,11 @@ class Ir {
     return tt(t, e - c, r, o).getArea();
   }
 }
-function Tr(s) {
+function Sr(s) {
   return typeof s.duration < "u";
 }
-function Sr(s) {
-  return Tr(s) ? {
+function yr(s) {
+  return Sr(s) ? {
     width: s.displayWidth,
     height: s.displayHeight
   } : {
@@ -3172,7 +3172,7 @@ function Sr(s) {
     height: s.height
   };
 }
-class yr {
+class xr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3180,7 +3180,7 @@ class yr {
     const t = Array.prototype.slice.apply(arguments);
     let e, n, i, r, o, c, u, l, f;
     arguments.length <= 5 ? [e, c, u, l, f] = t : [e, n, i, r, o, c, u, l, f] = t;
-    const { width: d, height: m } = Sr(e), w = this.getDrawnLength(d, n, r, l), C = this.getDrawnLength(m, i, o, f), S = tt(c, u, w, C).getArea(), L = this.getDrawImageInstruction(arguments.length, e, n, i, r, o, c, u, l, f);
+    const { width: d, height: m } = yr(e), w = this.getDrawnLength(d, n, r, l), C = this.getDrawnLength(m, i, o, f), S = tt(c, u, w, C).getArea(), L = this.getDrawImageInstruction(arguments.length, e, n, i, r, o, c, u, l, f);
     this.viewBox.addDrawing(L, S, z.Relative, !0);
   }
   getDrawImageInstruction(t, e, n, i, r, o, c, u, l, f) {
@@ -3209,7 +3209,7 @@ class yr {
     return typeof t == "number" ? t : t.baseVal.value;
   }
 }
-function xr(s, t, e, n, i) {
+function br(s, t, e, n, i) {
   t = t === void 0 ? 0 : t, e = e === void 0 ? 0 : e, n = n === void 0 ? s.width : n, i = i === void 0 ? s.height : i;
   const r = s.data, o = new Uint8ClampedArray(4 * n * i);
   for (let c = 0; c < i; c++)
@@ -3250,7 +3250,7 @@ class te {
     return t;
   }
 }
-class br extends y {
+class Or extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3260,8 +3260,8 @@ class br extends y {
     };
   }
 }
-const Ve = new br("direction", x);
-class Or extends y {
+const Ve = new Or("direction", x);
+class Lr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3271,7 +3271,7 @@ class Or extends y {
     };
   }
 }
-const Me = new Or("font", x);
+const Me = new Lr("font", x);
 class Vn {
   constructor(t) {
     this.propertyName = t;
@@ -3317,7 +3317,7 @@ class Mn extends Vn {
   }
 }
 const Nn = new Mn("lineWidth"), zn = new Mn("lineDashOffset");
-class Lr extends Vn {
+class Br extends Vn {
   valuesAreEqual(t, e) {
     if (t.length !== e.length)
       return !1;
@@ -3341,8 +3341,8 @@ class Lr extends Vn {
     return t.length === 0 && e.length === 0;
   }
 }
-const qn = new Lr("lineDash");
-class Br extends y {
+const qn = new Br("lineDash");
+class Ar extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3352,8 +3352,8 @@ class Br extends y {
     };
   }
 }
-const Ne = new Br("textAlign", x);
-class Ar extends y {
+const Ne = new Ar("textAlign", x);
+class Dr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3363,8 +3363,8 @@ class Ar extends y {
     };
   }
 }
-const ze = new Ar("textBaseline", x);
-class Dr extends y {
+const ze = new Dr("textBaseline", x);
+class Er extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3372,8 +3372,8 @@ class Dr extends y {
     return (e) => e.lineCap = t;
   }
 }
-const Gn = new Dr("lineCap", x);
-class Er extends y {
+const Gn = new Er("lineCap", x);
+class Rr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3381,8 +3381,8 @@ class Er extends y {
     return (e) => e.lineJoin = t;
   }
 }
-const Yn = new Er("lineJoin", x);
-class Rr extends y {
+const Yn = new Rr("lineJoin", x);
+class Fr extends y {
   valuesAreEqual(t, e) {
     return t === e;
   }
@@ -3390,7 +3390,16 @@ class Rr extends y {
     return (e) => e.miterLimit = t;
   }
 }
-const Xn = new Rr("miterLimit", x), pe = [
+const Xn = new Fr("miterLimit", x);
+class Wr extends y {
+  valuesAreEqual(t, e) {
+    return t === e;
+  }
+  changeToNewValue(t) {
+    return (e) => e.fontKerning = t;
+  }
+}
+const Un = new Wr("fontKerning", x), pe = [
   Ve,
   Cn,
   In,
@@ -3409,10 +3418,11 @@ const Xn = new Rr("miterLimit", x), pe = [
   ze,
   Gt,
   Me,
+  Un,
   Ce,
   On,
   bn
-], Fr = [
+], kr = [
   Me,
   Ne,
   ze,
@@ -3564,7 +3574,7 @@ a(gt, "default", new gt({
 })), a(gt, "setDefault", () => {
 });
 let H = gt;
-class Wr {
+class Hr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3573,7 +3583,7 @@ class Wr {
   getImageData(t, e, n, i) {
   }
   putImageData(t, e, n, i, r, o, c) {
-    t = xr(t, i, r, o, c);
+    t = br(t, i, r, o, c);
     let u, l = this.viewBox.getDrawingLock();
     this.viewBox.createPatternFromImageData(t).then((d) => {
       u = d, l.release();
@@ -3582,7 +3592,7 @@ class Wr {
     }, tt(e, n, t.width, t.height).getArea(), z.Absolute, !1, (d) => d.changeProperty("shadowColor", H.default.shadowColor).changeProperty("shadowOffset", H.default.shadowOffset).changeProperty("shadowBlur", H.default.shadowBlur).changeProperty("globalAlpha", H.default.globalAlpha).changeProperty("globalCompositeOperation", H.default.globalCompositeOperation).changeProperty("imageSmoothingEnabled", !1).changeProperty("filter", H.default.filter));
   }
 }
-class kr {
+class Vr {
   constructor(t) {
     this.viewBox = t;
   }
@@ -3623,15 +3633,6 @@ class kr {
     t.length % 2 === 1 && (t = t.concat(t)), this.viewBox.changeState((e) => qn.changeInstanceValue(e, t));
   }
 }
-class Hr extends y {
-  valuesAreEqual(t, e) {
-    return t === e;
-  }
-  changeToNewValue(t) {
-    return (e) => e.fontKerning = t;
-  }
-}
-const Vr = new Hr("fontKerning", x);
 class Mr {
   constructor(t) {
     this.viewBox = t;
@@ -3649,7 +3650,7 @@ class Mr {
     this.viewBox.changeState((e) => ze.changeInstanceValue(e, t));
   }
   set fontKerning(t) {
-    this.viewBox.changeState((e) => Vr.changeInstanceValue(e, t));
+    this.viewBox.changeState((e) => Un.changeInstanceValue(e, t));
   }
 }
 class Nr {
@@ -3711,7 +3712,7 @@ class zr {
     a(this, "canvasPathDrawingStyles");
     a(this, "canvasTextDrawingStyles");
     a(this, "canvasPath");
-    this.canvas = t, this.canvasState = new gi(e), this.canvasTransform = new pi(e), this.canvasCompositing = new Pi(e), this.canvasImageSmoothing = new Ti(e), this.canvasStrokeStyles = new Si(e), this.canvasShadowStyles = new Oi(e), this.canvasFilters = new Bi(e, n), this.canvasRect = new Ai(e), this.canvasDrawPath = new Di(e), this.canvasUserInterface = new Ei(), this.canvasText = new Ir(e), this.canvasDrawImage = new yr(e), this.canvasImageData = new Wr(e), this.canvasPathDrawingStyles = new kr(e), this.canvasTextDrawingStyles = new Mr(e), this.canvasPath = new Nr(e);
+    this.canvas = t, this.canvasState = new mi(e), this.canvasTransform = new vi(e), this.canvasCompositing = new Ci(e), this.canvasImageSmoothing = new Si(e), this.canvasStrokeStyles = new yi(e), this.canvasShadowStyles = new Li(e), this.canvasFilters = new Ai(e, n), this.canvasRect = new Di(e), this.canvasDrawPath = new Ei(e), this.canvasUserInterface = new Ri(), this.canvasText = new Tr(e), this.canvasDrawImage = new xr(e), this.canvasImageData = new Hr(e), this.canvasPathDrawingStyles = new Vr(e), this.canvasTextDrawingStyles = new Mr(e), this.canvasPath = new Nr(e);
   }
   getContextAttributes() {
     return this.canvas.getContext("2d").getContextAttributes();
@@ -3968,7 +3969,7 @@ class Gr extends qe {
     return this.addColorStopsToGradient(t), t;
   }
 }
-class Un {
+class $n {
   constructor(t) {
     a(this, "instructions", []);
     this.currentState = t;
@@ -4000,7 +4001,7 @@ class Un {
       };
   }
 }
-class Ge extends Un {
+class Ge extends $n {
   changeCurrentInstanceTo(t) {
     if (!this.currentState.current.equals(t)) {
       if (!Ge.canConvert(this.currentState.current, t))
@@ -4069,7 +4070,7 @@ class Z {
     return this.convertToLastSavedInstance(t, n), e.convertFromLastSavedInstance(t, n), t.instruction;
   }
   getInstructionToConvertToState(t) {
-    return this.getInstructionToConvertToStateUsingConversion(new Un(this), t);
+    return this.getInstructionToConvertToStateUsingConversion(new $n(this), t);
   }
   getInstructionToConvertToStateWithClippedPath(t) {
     return this.getInstructionToConvertToStateUsingConversion(new Ge(this), t);
@@ -4180,7 +4181,7 @@ function $r(s, t, e, n) {
     t.addSubpaths(s, n);
     return;
   }
-  let i = sr(e);
+  let i = or(e);
   if (!i)
     return;
   t.getRoundRect(i).addSubpaths(s, n);
@@ -4353,7 +4354,7 @@ class Qr {
     this.instructionSet.changeState(t);
   }
   measureText(t) {
-    this.context.save(), H.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(!1).current, Fr)(this.context);
+    this.context.save(), H.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(!1).current, kr)(this.context);
     const n = this.context.measureText(t);
     return this.context.restore(), n;
   }
@@ -4516,7 +4517,7 @@ class _r {
     this.point.cancel();
   }
 }
-class $n {
+class Kn {
   constructor(t, e, n) {
     a(this, "point1");
     a(this, "point2");
@@ -4534,7 +4535,7 @@ class $n {
       return this.context.getGestureForOneAnchor(e);
   }
 }
-class ts extends $n {
+class ts extends Kn {
   constructor(t, e, n) {
     super(t, e, n);
   }
@@ -4557,7 +4558,7 @@ class ts extends $n {
     ));
   }
 }
-class es extends $n {
+class es extends Kn {
   constructor(t, e, n) {
     super(t, e, n);
   }
@@ -4948,7 +4949,7 @@ const ls = {
   transformationstart: null,
   transformationchange: null,
   transformationend: null
-}, Kn = {
+}, jn = {
   auxclick: null,
   click: null,
   contextmenu: null,
@@ -4958,13 +4959,13 @@ const ls = {
   mouseout: null,
   mouseover: null,
   mouseup: null
-}, jn = {
+}, Qn = {
   gotpointercapture: null,
   lostpointercapture: null,
   pointerenter: null,
   pointerout: null,
   pointerover: null
-}, Qn = {
+}, Jn = {
   drag: null,
   dragend: null,
   dragenter: null,
@@ -4972,15 +4973,15 @@ const ls = {
   dragover: null,
   dragstart: null,
   drop: null
-}, Jn = {
+}, Zn = {
   touchcancel: null,
   touchend: null
 }, us = {
-  ...Kn,
   ...jn,
   ...Qn,
-  ...Jn
-}, Zn = {
+  ...Jn,
+  ...Zn
+}, _n = {
   mousedown: null,
   mousemove: null,
   pointerdown: null,
@@ -4998,22 +4999,22 @@ function kt(s) {
   return ls.hasOwnProperty(s);
 }
 function Ht(s) {
-  return us.hasOwnProperty(s) || Zn.hasOwnProperty(s);
+  return us.hasOwnProperty(s) || _n.hasOwnProperty(s);
 }
 function Vt(s) {
-  return Zn.hasOwnProperty(s);
+  return _n.hasOwnProperty(s);
 }
 function Mt(s) {
-  return Kn.hasOwnProperty(s);
-}
-function Nt(s) {
   return jn.hasOwnProperty(s);
 }
-function zt(s) {
+function Nt(s) {
   return Qn.hasOwnProperty(s);
 }
-function qt(s) {
+function zt(s) {
   return Jn.hasOwnProperty(s);
+}
+function qt(s) {
+  return Zn.hasOwnProperty(s);
 }
 class ds extends Et {
   constructor(t) {
@@ -5252,12 +5253,12 @@ class Xe {
     this.cache[t] && vs(this.cache[t], e, n);
   }
 }
-class _n extends Xe {
+class ti extends Xe {
   getEventSource(t) {
     return (!this.cache || !this.cache[t]) && (this.cache = this.createEvents()), this.cache[t];
   }
 }
-class ti {
+class ei {
   constructor(t, e) {
     a(this, "AT_TARGET", 2);
     a(this, "BUBBLING_PHASE", 3);
@@ -5292,7 +5293,7 @@ class ti {
     this.canvasEvent.stopPropagation();
   }
 }
-class Ue extends ti {
+class Ue extends ei {
   constructor(t, e, n) {
     super(t, e), this.type = n;
   }
@@ -5321,7 +5322,7 @@ class Ue extends ti {
     return [];
   }
 }
-class ei {
+class ni {
   constructor(t) {
     a(this, "resultEvent");
     a(this, "propagationStopped", !1);
@@ -5371,7 +5372,7 @@ class xs {
   preventDefault() {
   }
 }
-class $e extends ei {
+class $e extends ni {
   constructor(t) {
     super(t ? new ys() : new xs());
   }
@@ -5394,7 +5395,7 @@ class Os extends $e {
     return this.transformation = vt(e.infiniteCanvasContext.inverseBase), this.inverseTransformation = vt(e.infiniteCanvasContext.base), new bs(this, this.preventableDefault);
   }
 }
-class Ls extends _n {
+class Ls extends ti {
   constructor(t, e, n) {
     super(e, n), this.drawingIterationProvider = t;
   }
@@ -5423,7 +5424,7 @@ class ve extends $e {
     return this.transformation = vt(e.infiniteCanvasContext.inverseBase), this.inverseTransformation = vt(e.infiniteCanvasContext.base), new Bs(this, this.preventableDefault, this.type);
   }
 }
-class As extends _n {
+class As extends ti {
   constructor(t, e, n) {
     super(e, n), this.transformer = t;
   }
@@ -5492,7 +5493,7 @@ class Es {
     this._defaultPrevented = !0, t && this.event.preventDefault();
   }
 }
-class wt extends ei {
+class wt extends ni {
   constructor(t, e) {
     super(e ? new Es(t) : new Ds(t)), this.event = t;
   }
@@ -5515,7 +5516,7 @@ class at {
     return new at(t.offsetX, t.offsetY, t.movementX, t.movementY);
   }
 }
-class Rs extends ti {
+class Rs extends ei {
   constructor(t, e, n) {
     super(t, e), this.event = n;
   }
@@ -5556,7 +5557,7 @@ class Rs extends ti {
     return this.event.composedPath();
   }
 }
-class ni extends Rs {
+class ii extends Rs {
   get detail() {
     return this.event.detail;
   }
@@ -5569,7 +5570,7 @@ class ni extends Rs {
   initUIEvent(t, e, n, i, r) {
   }
 }
-class le extends ni {
+class le extends ii {
   constructor(e, n, i, r) {
     super(e, n, i);
     a(this, "offsetX");
@@ -5995,7 +5996,7 @@ function we(s, t) {
   }
   return new qs(...e);
 }
-class Xs extends ni {
+class Xs extends ii {
   constructor(e, n, i, r) {
     super(e, n, i);
     a(this, "touches");
@@ -6139,18 +6140,18 @@ class Zs extends Xe {
         q,
         !0
       );
-    }), L = X(c, (g) => new ht(g, !0)), { captureSource: V, bubbleSource: j, afterBubble: Q } = it(L), { captureSource: Pt, bubbleSource: Ct, afterBubble: It } = it(w), { captureSource: ue, bubbleSource: de, afterBubble: fe } = it(S), { captureSource: ge, bubbleSource: Rt, afterBubble: je } = it(C), ii = X(
+    }), L = X(c, (g) => new ht(g, !0)), { captureSource: V, bubbleSource: j, afterBubble: Q } = it(L), { captureSource: Pt, bubbleSource: Ct, afterBubble: It } = it(w), { captureSource: ue, bubbleSource: de, afterBubble: fe } = it(S), { captureSource: ge, bubbleSource: Rt, afterBubble: je } = it(C), ri = X(
       G(je, (g) => !this.config.greedyGestureHandling && !g.event.ctrlKey && !g.infiniteCanvasDefaultPrevented),
       () => new pn("wheelignored")
-    ), { captureSource: ri, bubbleSource: si, afterBubble: oi } = it(ii);
+    ), { captureSource: si, bubbleSource: oi, afterBubble: ai } = it(ri);
     je.addListener((g) => {
       g.infiniteCanvasDefaultPrevented || this.zoom(g.event);
-    }), oi.addListener((g) => {
+    }), ai.addListener((g) => {
       g.infiniteCanvasDefaultPrevented || console.warn("use ctrl + scroll to zoom");
     }), Pe(It, Q).addListener(([g, B]) => {
       !g.infiniteCanvasDefaultPrevented && !B.infiniteCanvasDefaultPrevented && this.transformUsingPointer(g.event, B.event);
     });
-    const ai = G(fe, (g) => g.event.changedTouches.length === 1), Qe = Pe(ai, Q);
+    const ci = G(fe, (g) => g.event.changedTouches.length === 1), Qe = Pe(ci, Q);
     Qe.addListener(([g, B]) => {
       const q = g.event.changedTouches[0], J = this.anchorSet.getAnchorForPointerEvent(B.event);
       if (J)
@@ -6173,11 +6174,11 @@ class Zs extends Xe {
     Je.addListener(([g]) => {
       this.removePointer(g);
     });
-    const ci = X(
+    const hi = X(
       G(Je, ([g, [B, q]]) => !this.config.greedyGestureHandling && !B.infiniteCanvasDefaultPrevented && !q.infiniteCanvasDefaultPrevented),
       () => new pn("touchignored")
-    ), { captureSource: hi, bubbleSource: li, afterBubble: ui } = it(ci);
-    ui.addListener((g) => {
+    ), { captureSource: li, bubbleSource: ui, afterBubble: di } = it(hi);
+    di.addListener((g) => {
       g.infiniteCanvasDefaultPrevented || console.warn("use two fingers to move");
     }), this.cache = {
       mousemove: this.map(G(k(e, "mousemove"), () => !this.mouseAnchorIsFixed()), (g) => new xe(g)),
@@ -6194,9 +6195,9 @@ class Zs extends Xe {
       pointerup: this.map(f, (g) => new ht(g)),
       pointercancel: this.map(d, (g) => new ht(g)),
       wheel: nt(ge, Rt, i, r),
-      wheelignored: nt(ri, si, i, r),
+      wheelignored: nt(si, oi, i, r),
       touchstart: nt(ue, de, i, r),
-      touchignored: nt(hi, li, i, r),
+      touchignored: nt(li, ui, i, r),
       touchmove: this.map(m, (g) => {
         const B = ft(g.targetTouches), q = ft(g.targetTouches, (J) => !this.hasFixedAnchorForTouch(J.identifier));
         return Lt.create(

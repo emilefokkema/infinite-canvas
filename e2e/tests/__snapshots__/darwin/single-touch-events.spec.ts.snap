@@ -1,0 +1,88 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`when the canvas is touched > should dispatch a touchend event 1`] = `
+{
+  "changedTouches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 100.5,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+  "targetTouches": [],
+  "touches": [],
+}
+`;
+
+exports[`when the canvas is touched > should dispatch a touchmove event 1`] = `
+{
+  "changedTouches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 100,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+  "targetTouches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 100,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+  "touches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 100,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+}
+`;
+
+exports[`when the canvas is touched > should dispatch a touchstart event 1`] = `
+{
+  "changedTouches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 120,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+  "targetTouches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 120,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+  "touches": [
+    {
+      "identifier": 1,
+      "infiniteCanvasX": 120,
+      "infiniteCanvasY": 100,
+      "radiusX": 0.5,
+      "radiusY": 0.5,
+      "rotationAngle": 0,
+    },
+  ],
+}
+`;

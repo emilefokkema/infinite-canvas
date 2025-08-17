@@ -36,38 +36,7 @@ describe('when the canvas is touched', () => {
             page.touchscreen.touchStart(120, 100)
         ])
         firstTouch = touch;
-        expect(touchStart).toEqual({
-            touches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(120),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ],
-            targetTouches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(120),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ],
-            changedTouches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(120),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ]
-        })
+        expect(touchStart).toMatchSnapshot();
     })
 
     it('should dispatch a touchmove event', async () => {
@@ -75,38 +44,7 @@ describe('when the canvas is touched', () => {
             nextEvent(infCanvasEvents, 'touchmove'),
             firstTouch.move(100, 100)
         ])
-        expect(touchMove).toEqual({
-            touches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(100),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ],
-            targetTouches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(100),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ],
-            changedTouches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(100),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ]
-        })
+        expect(touchMove).toMatchSnapshot();
     })
 
     it('should dispatch a touchend event', async () => {
@@ -114,19 +52,6 @@ describe('when the canvas is touched', () => {
             nextEvent(infCanvasEvents, 'touchend'),
             firstTouch.end()
         ])
-        expect(touchEnd).toEqual({
-            touches: [],
-            targetTouches: [],
-            changedTouches: [
-                {
-                    identifier: 1,
-                    infiniteCanvasX: expect.closeTo(100),
-                    infiniteCanvasY: expect.closeTo(100),
-                    radiusX: expect.closeTo(.5),
-                    radiusY: expect.closeTo(.5),
-                    rotationAngle: expect.closeTo(0)
-                }
-            ]
-        })
+        expect(touchEnd).toMatchSnapshot();
     })
 })

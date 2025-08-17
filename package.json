@@ -1,7 +1,7 @@
 {
   "name": "ef-infinite-canvas",
   "type": "module",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "description": "An infinite version of the html canvas",
   "main": "./dist/infinite-canvas.umd.cjs",
   "module": "./dist/infinite-canvas.js",
@@ -15,7 +15,9 @@
   },
   "private": false,
   "files": [
-    "dist/**/*"
+    "dist/*.js",
+    "dist/*.cjs",
+    "dist/types/*.d.ts"
   ],
   "scripts": {
     "pretest": "tsc --build test-unit",
