@@ -42,6 +42,7 @@ export class CanvasContextMock{
             "imageSmoothingEnabled",
             "direction",
             "font",
+            "fontKerning",
             "textAlign",
             "textBaseline",
             "shadowOffsetX",

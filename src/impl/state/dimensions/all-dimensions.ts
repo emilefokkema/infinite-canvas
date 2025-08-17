@@ -19,6 +19,7 @@ import { filter } from "./filter";
 import { imageSmoothingEnabled } from "./image-smoothing-enabled";
 import { imageSmoothingQuality } from "./image-smoothing-quality";
 import { MinimalInstruction } from "../../instructions/instruction";
+import { fontKerning } from "./font-kerning";
 
 export const allDimensions: StateInstanceDimension[] = [
     direction,
@@ -39,6 +40,7 @@ export const allDimensions: StateInstanceDimension[] = [
     textBaseline,
     transformation,
     font,
+    fontKerning,
     shadowOffset,
     shadowBlur,
     shadowColor

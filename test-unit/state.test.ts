@@ -277,7 +277,7 @@ describe("a default state", () => {
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same
                 clippedPaths: undefined,                                //same
-                fontKerning: 'auto',                                    //same
+                fontKerning: 'normal',                                  //different
                 fillAndStrokeStylesTransformed: false,
                 shadowOffset: Point.origin,
                 shadowColor: 'rgba(0, 0, 0, 0)',
