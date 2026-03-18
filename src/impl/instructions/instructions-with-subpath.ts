@@ -10,12 +10,17 @@ import { PathInstructionBuilder } from "./path-instruction-builders/path-instruc
 import { InfiniteCanvasPathInstructionBuilderProvider } from "./path-instruction-builders/infinite-canvas-path-instruction-builder-provider";
 import { PathInfinityProvider } from "../interfaces/path-infinity-provider";
 import { PreExecutableInstructionWithState } from "./pre-executable-instruction-with-state";
-import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
-import { InstructionUsingInfinity } from "./instruction-using-infinity";
 import { PreExecutableInstructionSet } from "../interfaces/pre-executable-instruction-set";
 import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 import { ExecutableStateChangingInstructionSequence } from "./executable-state-changing-instruction-sequence";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { InstructionUsingInfinity } from './instruction'
+import { MinimalInstruction } from "./instruction";
+
+const closePath: MinimalInstruction = {
+    execute(context){
+        context.closePath();
+    }
+}
 
 export class InstructionsWithSubpath extends StateChangingInstructionSequence<PreExecutableInstructionSet>{
     constructor(private readonly _initiallyWithState: PathInstructionWithState, private pathInstructionBuilder: PathInstructionBuilder){
@@ -27,7 +32,7 @@ export class InstructionsWithSubpath extends StateChangingInstructionSequence<Pr
         this.add(instruction);
     }
     public closePath(): void{
-        const toAdd: PreExecutableInstructionWithState = PreExecutableInstructionWithState.create(this.state, (context: CanvasRenderingContext2D) => {context.closePath();})
+        const toAdd: PreExecutableInstructionWithState = PreExecutableInstructionWithState.create(this.state, closePath)
         this.add(toAdd);
     }
     public makeExecutable(infinityProvider: PathInfinityProvider): ExecutableStateChangingInstructionSet{
@@ -53,9 +58,7 @@ export class InstructionsWithSubpath extends StateChangingInstructionSequence<Pr
         }
         this.pathInstructionBuilder = this.pathInstructionBuilder.addPosition(transformedPosition);
         const moveTo: InstructionUsingInfinity = this.pathInstructionBuilder.getInstructionToMoveToBeginning(this._initiallyWithState.state);
-        this._initiallyWithState.replaceInstruction((context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => {
-            moveTo(context, rectangle, infinity);
-        });
+        this._initiallyWithState.replaceInstruction(moveTo);
     }
     private addInstructionToDrawLineTo(position: Position, state: InfiniteCanvasState): void{
         const instructionToDrawLine: InstructionUsingInfinity = this.pathInstructionBuilder.getInstructionToDrawLineTo(position, state);

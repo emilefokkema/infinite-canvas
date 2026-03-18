@@ -1,7 +1,22 @@
 import {InfiniteCanvasState} from "./infinite-canvas-state";
-import {Instruction} from "../instructions/instruction";
+import { Instruction, MinimalInstruction } from '../instructions/instruction'
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { sequence } from "../instruction-utils";
+
+class Save implements MinimalInstruction {
+    execute(context: CanvasRenderingContext2D): void {
+        context.save();
+    }
+}
+
+class Restore implements MinimalInstruction {
+    execute(context: CanvasRenderingContext2D): void {
+        context.restore();
+    }
+}
+
+const save = new Save();
+const restore = new Restore();
 
 export class StateConversion {
     private instructions: Instruction[] = [];
@@ -9,10 +24,10 @@ export class StateConversion {
 
     }
     public restore(): void{
-        this.addChangeToState(this.currentState.restored(), (context: CanvasRenderingContext2D) => {context.restore();});
+        this.addChangeToState(this.currentState.restored(), restore);
     }
     public save(): void{
-        this.addChangeToState(this.currentState.saved(), (context: CanvasRenderingContext2D) => {context.save();});
+        this.addChangeToState(this.currentState.saved(), save);
     }
     public changeCurrentInstanceTo(instance: InfiniteCanvasStateInstance): void{
         if(this.currentState.current.equals(instance)){
@@ -32,10 +47,6 @@ export class StateConversion {
         if(this.instructions.length === 0){
             return undefined;
         }
-        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            for(const instruction of this.instructions){
-                instruction(context, rectangle);
-            }
-        };
+        return sequence(...this.instructions)
     }
 }

@@ -1,6 +1,16 @@
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { ViewboxInfinity } from "../interfaces/viewbox-infinity"
+import { CanvasRectangle } from "../rectangle/canvas-rectangle"
 
-export type Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => void;
-export type MinimalInstruction = (context: CanvasRenderingContext2D) => void
+export interface MinimalInstruction {
+    execute(context: CanvasRenderingContext2D): void
+}
 
-export const noopInstruction: MinimalInstruction = () => {}
+export interface Instruction {
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void
+}
+
+export interface InstructionUsingInfinity {
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity): void
+}
+
+export const noopInstruction: MinimalInstruction = { execute(){}}

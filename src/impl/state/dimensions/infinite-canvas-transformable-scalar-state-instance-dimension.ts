@@ -1,9 +1,27 @@
 import { InfiniteCanvasTransformableStateInstanceDimension } from "./infinite-canvas-transformable-state-instance-dimension";
-import { Instruction } from "../../instructions/instruction";
+import { Instruction, MinimalInstruction } from "../../instructions/instruction";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 import { CanvasRectangle } from "../../rectangle/canvas-rectangle";
 
-declare type TransformableScalarPropertyName = "lineWidth" | "lineDashOffset" | "shadowBlur";
+type TransformableScalarPropertyName = "lineWidth" | "lineDashOffset" | "shadowBlur";
+
+class ChangeToNewValueTransformed implements Instruction {
+    constructor(private readonly propertyName: TransformableScalarPropertyName, private readonly value: number){}
+
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        context[this.propertyName] = this.value * transformation.scale;
+    }
+}
+
+class ChangeToNewValueUntransformed implements MinimalInstruction {
+    constructor(private readonly propertyName: TransformableScalarPropertyName, private readonly value: number){}
+
+    execute(context: CanvasRenderingContext2D): void {
+        context[this.propertyName] = this.value;
+    }
+}
+
 export class InfiniteCanvasTransformableScalarStateInstanceDimension extends InfiniteCanvasTransformableStateInstanceDimension<TransformableScalarPropertyName>{
     constructor(propertyName: TransformableScalarPropertyName){
         super(propertyName);
@@ -12,15 +30,10 @@ export class InfiniteCanvasTransformableScalarStateInstanceDimension extends Inf
         return oldValue === newValue;
     }
     protected changeToNewValueTransformed(newValue: number): Instruction{
-        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            const transformation = rectangle.userTransformation;
-            context[this.propertyName] = newValue * transformation.scale;
-        };
+        return new ChangeToNewValueTransformed(this.propertyName, newValue);
     }
     protected changeToNewValueUntransformed(newValue: number): Instruction{
-        return (context: CanvasRenderingContext2D) => {
-            context[this.propertyName] = newValue;
-        };
+        return new ChangeToNewValueUntransformed(this.propertyName, newValue)
     }
     protected valuesAreEqualWhenTransformed(oldValue: number, newValue: number): boolean{
         return oldValue === 0 && newValue === 0;

@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it} from 'vitest'
 import { ClippedPaths } from "src/instructions/clipped-paths";
 import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
-import { logInstruction } from "./log-instruction";
+import { logNewInstruction } from "./log-instruction";
 import { defaultState } from "src/state/default-state";
 import { fillStyle } from "src/state/dimensions/fill-stroke-style";
 import { InstructionsWithPath } from "src/instructions/instructions-with-path";
 import { Point } from "src/geometry/point";
 import { Instruction } from "src/instructions/instruction";
+import { Clip } from 'src/infinite-context/clip';
 
 describe("a clipped paths", () => {
     let clippedPaths: ClippedPaths;
@@ -22,7 +23,7 @@ describe("a clipped paths", () => {
             clippedPath.moveTo(new Point(0, 0), currentState);
             clippedPath.lineTo(new Point(1, 0), currentState);
             clippedPath.lineTo(new Point(1, 1), currentState);
-            clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+            clippedPath.clipPath(Clip.create(), currentState);
             currentState = clippedPath.state;
             clippedPaths = currentState.current.clippedPaths;
             otherOne = clippedPaths;
@@ -32,7 +33,7 @@ describe("a clipped paths", () => {
 
             beforeEach(() => {
                 clippedPath.lineTo(new Point(0, 1), currentState);
-                clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                clippedPath.clipPath(Clip.create(), currentState);
                 otherOne = clippedPath.state.current.clippedPaths;
             });
 
@@ -49,7 +50,7 @@ describe("a clipped paths", () => {
                 });
 
                 it("then the recreation should contain the difference", () => {
-                    expect(logInstruction(recreation)).toMatchSnapshot();
+                    expect(logNewInstruction(recreation)).toMatchSnapshot();
                 });
             });
 
@@ -57,7 +58,7 @@ describe("a clipped paths", () => {
 
                 beforeEach(() => {
                     clippedPath.lineTo(new Point(0, 0), currentState);
-                    clippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                    clippedPath.clipPath(Clip.create(), currentState);
                     otherOne = clippedPath.state.current.clippedPaths;
                 });
 
@@ -69,7 +70,7 @@ describe("a clipped paths", () => {
                     });
     
                     it("then the recreation should contain the difference", () => {
-                        expect(logInstruction(recreation)).toMatchSnapshot();
+                        expect(logNewInstruction(recreation)).toMatchSnapshot();
                     });
                 });
             });
@@ -81,7 +82,7 @@ describe("a clipped paths", () => {
                     const otherClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
                     currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#f00"));
                     otherClippedPath.moveTo(new Point(1, 1), currentState);
-                    otherClippedPath.clipPath((context: CanvasRenderingContext2D) => {context.clip();}, currentState);
+                    otherClippedPath.clipPath(Clip.create(), currentState);
                     otherOne = otherClippedPath.state.current.clippedPaths;
                 });
 
@@ -93,7 +94,7 @@ describe("a clipped paths", () => {
                     });
     
                     it("then the recreation should contain the difference", () => {
-                        expect(logInstruction(recreation)).toMatchSnapshot();
+                        expect(logNewInstruction(recreation)).toMatchSnapshot();
                     });
                 });
             });

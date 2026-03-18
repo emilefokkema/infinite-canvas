@@ -3,25 +3,36 @@ import {Position} from "../../../geometry/position";
 import { isPointAtInfinity } from "../../../geometry/is-point-at-infinity";
 import { PathInstructionBuilderProvider } from "../path-instruction-builder-provider";
 import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-instruction-builder";
-import { InstructionUsingInfinity } from "../../instruction-using-infinity";
 import { AtInfinity } from "./at-infinity";
 import { FromPointAtInfinityToPoint } from "../from-point-at-infinity-to-point/from-point-at-infinity-to-point";
 import { PointAtInfinity } from "../../../geometry/point-at-infinity";
 import { sequence } from "../../../instruction-utils";
 import { ViewboxInfinity } from "../../../interfaces/viewbox-infinity";
 import { CanvasRectangle } from "../../../rectangle/canvas-rectangle";
+import { InstructionUsingInfinity, noopInstruction } from '../../instruction'
 
+class AddPathAroundViewbox implements InstructionUsingInfinity {
+    constructor(
+        private readonly counterclockwise: boolean
+    ){
+        
+    }
+
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity): void {
+        infinity.addPathAroundViewbox(context, rectangle, this.counterclockwise)
+    }
+}
 export class PathInstructionBuilderAtInfinity extends InfiniteCanvasPathInstructionBuilder<AtInfinity> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: AtInfinity){
         super(shape);
     }
-    protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity{
+    protected getInstructionToMoveToBeginningOfShape(shape: AtInfinity): InstructionUsingInfinity {
         if(shape.surroundsFinitePoint){
-            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle, infinity: ViewboxInfinity) => infinity.addPathAroundViewbox(context, rectangle, shape.direction === 'counterclockwise')
+            return new AddPathAroundViewbox(shape.direction === 'counterclockwise')
         }
-        return () => {};
+        return noopInstruction;
     }
-    protected getInstructionToExtendShapeWithLineTo(shape: AtInfinity, position: Position): InstructionUsingInfinity{
+    protected getInstructionToExtendShapeWithLineTo(shape: AtInfinity, position: Position): InstructionUsingInfinity {
         if(isPointAtInfinity(position)){
             return undefined;
         }

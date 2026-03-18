@@ -2,7 +2,7 @@ import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 import { Area } from "../areas/area";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
-import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+import { sequence } from "../instruction-utils";
 
 export class ClippedPaths {
     constructor(public area: Area, public latestClippedPath: InstructionsToClip, public readonly previouslyClippedPaths?: ClippedPaths){}
@@ -35,17 +35,11 @@ export class ClippedPaths {
         return false;
     }
     public getInstructionToRecreate(): Instruction{
-        const instructionToRecreateLatest: Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            this.latestClippedPath.execute(context, rectangle);
-        };
+        const instructionToRecreateLatest = this.latestClippedPath;
         if(this.previouslyClippedPaths){
             const instructionToRecreatePrevious: Instruction = this.previouslyClippedPaths.getInstructionToRecreate();
             const instructionToConvertToLatest: Instruction = this.previouslyClippedPaths.latestClippedPath.state.getInstructionToConvertToState(this.latestClippedPath.initialState);
-            return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-                instructionToRecreatePrevious(context, rectangle);
-                instructionToConvertToLatest(context, rectangle);
-                instructionToRecreateLatest(context, rectangle);
-            };
+            return sequence(instructionToRecreatePrevious, instructionToConvertToLatest, instructionToRecreateLatest);
         }
         return instructionToRecreateLatest;
     }

@@ -1,5 +1,5 @@
 import { Transformation } from "../transformation";
-import { Instruction } from "../instructions/instruction";
+import { MinimalInstruction, Instruction, noopInstruction } from '../instructions/instruction'
 import { ClippedPaths } from "../instructions/clipped-paths";
 import { StateInstanceProperties } from "./state-instance-properties";
 import { allDimensions } from "./dimensions/all-dimensions";
@@ -7,8 +7,8 @@ import { Point } from "../geometry/point";
 import { Area } from "../areas/area";
 import { TransformableFilter } from "./dimensions/transformable-filter";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
-import { StateInstanceDimension } from "./dimensions/state-instance-dimension";
-import { sequence } from "../instruction-utils";
+import { StateInstanceDimension } from './dimensions/state-instance-dimension'
+import { sequence } from '../instruction-utils'
 
 export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly fillStyle: string | CanvasGradient | CanvasPattern;
@@ -154,7 +154,8 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     }
 
     public getInstructionToConvertToState(other: InfiniteCanvasStateInstance): Instruction{
-        return this.getInstructionToConvertToStateOnDimensions(other, allDimensions);
+        const instructions: Instruction[] = allDimensions.map(d => d.getInstructionToChange(this, other));
+        return sequence(...instructions);
     }
 
     public withClippedPath(clippedPath: InstructionsToClip): InfiniteCanvasStateInstance{
@@ -162,11 +163,12 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         return this.changeProperty("clippedPaths", newClippedPaths);
     }
 
-    public getInstructionToConvertToStateOnDimensions<
-        TInstruction extends Instruction,
-        TDimension extends StateInstanceDimension<TInstruction>>(other: InfiniteCanvasStateInstance, dimensions: TDimension[]): TInstruction{
-            const instructions: TInstruction[] = dimensions.map(d => d.getInstructionToChange(this, other));
-            return sequence(...instructions) as TInstruction
+    public getInstructionToConvertToStateOnDimensionsNew(
+        other: InfiniteCanvasStateInstance,
+        dimensions: StateInstanceDimension<MinimalInstruction>[]
+    ): MinimalInstruction {
+        const instructions: MinimalInstruction[] = dimensions.map(d => d.getInstructionToChange(this, other));
+        return sequence(...instructions);
     }
 
     public static default: InfiniteCanvasStateInstance = new InfiniteCanvasStateInstance({
@@ -195,5 +197,5 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         shadowColor: 'rgba(0, 0, 0, 0)',
         shadowBlur: 0
     });
-    public static setDefault: Instruction = () => {};
+    public static setDefault: Instruction = noopInstruction;
 }

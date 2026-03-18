@@ -1,26 +1,67 @@
 import { ViewBox } from "../interfaces/viewbox";
-import { Instruction } from "../instructions/instruction";
+import { MinimalInstruction } from "../instructions/instruction";
 import { TransformationKind } from "../transformation-kind";
 import {Area} from "../areas/area";
 import { getRectStrategy } from "../rect/get-rect-strategy";
 
+class FillText implements MinimalInstruction {
+	constructor(
+		private readonly text: string,
+		private readonly x: number,
+		private readonly y: number
+	){}
+
+	execute(context: CanvasRenderingContext2D): void {
+		context.fillText(this.text, this.x, this.y);
+	}
+}
+
+class FillTextMaxWidth implements MinimalInstruction {
+	constructor(
+		private readonly text: string,
+		private readonly x: number,
+		private readonly y: number,
+		private readonly maxWidth: number
+	){}
+
+	execute(context: CanvasRenderingContext2D): void {
+		context.fillText(this.text, this.x, this.y, this.maxWidth);
+	}
+}
+
+class StrokeText implements MinimalInstruction {
+	constructor(
+		private readonly text: string,
+		private readonly x: number,
+		private readonly y: number
+	){}
+
+	execute(context: CanvasRenderingContext2D): void {
+		context.strokeText(this.text, this.x, this.y);
+	}
+}
+
+class StrokeTextMaxWidth implements MinimalInstruction {
+	constructor(
+		private readonly text: string,
+		private readonly x: number,
+		private readonly y: number,
+		private readonly maxWidth: number
+	){}
+
+	execute(context: CanvasRenderingContext2D): void {
+		context.strokeText(this.text, this.x, this.y, this.maxWidth);
+	}
+}
 export class InfiniteCanvasText implements CanvasText{
 	constructor(private readonly viewBox: ViewBox){}
 	public fillText(text: string, x: number, y: number, maxWidth?: number): void{
-		let drawingInstruction: Instruction = maxWidth === undefined ? (context: CanvasRenderingContext2D) => {
-			context.fillText(text, x, y);
-		}: (context: CanvasRenderingContext2D) => {
-			context.fillText(text, x, y, maxWidth);
-		};
+		let drawingInstruction = maxWidth === undefined ? new FillText(text, x, y): new FillTextMaxWidth(text, x, y, maxWidth);
 		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative, true);
 	}
 	public measureText(text: string): TextMetrics{return this.viewBox.measureText(text);}
 	public strokeText(text: string, x: number, y: number, maxWidth?: number): void{
-		let drawingInstruction: Instruction = maxWidth === undefined ? (context: CanvasRenderingContext2D) => {
-			context.strokeText(text, x, y);
-		}: (context: CanvasRenderingContext2D) => {
-			context.strokeText(text, x, y, maxWidth);
-		};
+		let drawingInstruction = maxWidth === undefined ? new StrokeText(text, x, y): new StrokeTextMaxWidth(text, x, y, maxWidth);
 		this.viewBox.addDrawing(drawingInstruction, this.getDrawnRectangle(x, y, text), TransformationKind.Relative, true);
 	}
 	private getDrawnRectangle(x: number, y: number, text: string): Area{

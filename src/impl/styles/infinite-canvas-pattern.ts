@@ -1,5 +1,6 @@
 import { InfiniteCanvasFillStrokeStyle } from "./infinite-canvas-fill-stroke-style";
 import { Instruction } from "../instructions/instruction";
+import { SetValue } from "../state/dimensions/set-value";
 
 export class InfiniteCanvasPattern extends InfiniteCanvasFillStrokeStyle implements CanvasPattern{
     constructor(private readonly fillStrokeStyle: CanvasPattern){
@@ -9,13 +10,9 @@ export class InfiniteCanvasPattern extends InfiniteCanvasFillStrokeStyle impleme
         this.fillStrokeStyle.setTransform(transform);
     }
     public getInstructionToSetUntransformed(propName: "fillStyle" | "strokeStyle"): Instruction{
-        return (context: CanvasRenderingContext2D) => {
-            context[propName] = this.fillStrokeStyle;
-        };
+        return new SetValue(propName, this.fillStrokeStyle);
     }
     public getInstructionToSetTransformed(propName: "fillStyle" | "strokeStyle"): Instruction{
-        return (context: CanvasRenderingContext2D) => {
-            context[propName] = this.fillStrokeStyle;
-        };
+        return new SetValue(propName, this.fillStrokeStyle);
     }
 }

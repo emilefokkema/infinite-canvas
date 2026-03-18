@@ -4,6 +4,7 @@ import { defaultState } from "src/state/default-state";
 import { fillStyle, strokeStyle } from "src/state/dimensions/fill-stroke-style";
 import { ExecutableInstructionWithState } from 'src/instructions/executable-instruction-with-state';
 import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
+import { noopInstruction } from 'src/instructions/instruction';
 
 describe("a set of intructions that is only about state", () => {
     let instructionsWithState: ExecutableInstructionWithState;
@@ -13,7 +14,7 @@ describe("a set of intructions that is only about state", () => {
     beforeEach(() => {
         state = defaultState;
         initialState = state;
-        instructionsWithState = ExecutableInstructionWithState.create(state, () => {});
+        instructionsWithState = ExecutableInstructionWithState.create(state, noopInstruction);
     });
 
     describe("that receives a change", () => {

@@ -1,7 +1,28 @@
 import {InfiniteCanvasFillStrokeStyle} from "./infinite-canvas-fill-stroke-style";
 import { Transformation } from "../transformation";
-import { Instruction } from "../instructions/instruction";
+import { Instruction, MinimalInstruction } from "../instructions/instruction";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
+
+class SetTransformedGradient implements Instruction {
+    constructor(
+        private readonly propName: "fillStyle" | "strokeStyle",
+        private readonly gradient: InfiniteCanvasGradient){}
+
+   execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        context[this.propName] = this.gradient.createTransformedGradient(transformation);
+   }
+}
+
+class SetUntransformedGradient implements MinimalInstruction {
+    constructor(
+        private readonly propName: "fillStyle" | "strokeStyle",
+        private readonly gradient: InfiniteCanvasGradient){}
+
+   execute(context: CanvasRenderingContext2D): void {
+        context[this.propName] = this.gradient.createGradient();
+   }
+}
 
 export abstract class InfiniteCanvasGradient extends InfiniteCanvasFillStrokeStyle implements CanvasGradient{
     private colorStops: {offset: number; color: string}[] = [];
@@ -10,20 +31,15 @@ export abstract class InfiniteCanvasGradient extends InfiniteCanvasFillStrokeSty
             gradient.addColorStop(colorStop.offset, colorStop.color);
         }
     }
-    protected abstract createTransformedGradient(transformation: Transformation): CanvasGradient;
-    protected abstract createGradient(): CanvasGradient;
+    public abstract createTransformedGradient(transformation: Transformation): CanvasGradient;
+    public abstract createGradient(): CanvasGradient;
     public addColorStop(offset: number, color: string): void {
         this.colorStops.push({offset, color});
     }
     public getInstructionToSetTransformed(propName: "fillStyle" | "strokeStyle"): Instruction{
-        return (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            const transformation = rectangle.userTransformation;
-            context[propName] = this.createTransformedGradient(transformation);
-        };
+        return new SetTransformedGradient(propName, this);
     }
     public getInstructionToSetUntransformed(propName: "fillStyle" | "strokeStyle"): Instruction{
-        return (context: CanvasRenderingContext2D) => {
-            context[propName] = this.createGradient();
-        };
+        return new SetUntransformedGradient(propName, this);
     }
 }
