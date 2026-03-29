@@ -65,6 +65,7 @@ describe('an infinite canvas context', () => {
     describe("that clips with a rect, fills a rect, clips with another rect and then fills two rects", () => {
 
 		beforeEach(() => {
+			infiniteContext.save();
 			infiniteContext.beginPath();
 			infiniteContext.rect(1, 1, 8, 8);
 			infiniteContext.clip();
@@ -75,6 +76,8 @@ describe('an infinite canvas context', () => {
 			infiniteContext.fillRect(7, 5, 2, 2);
 			contextMock.clear();
 			infiniteContext.fillRect(5, 5, 1, 2);
+			// to make sure the clearRects that follow are not affected by the clipping region
+			infiniteContext.restore();
 		});
 
 		it("should contain two clipping instructions", () => {

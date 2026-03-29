@@ -170,6 +170,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
+  "context.save()",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(9,1)",
@@ -195,6 +196,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.closePath()",
   "context.moveTo(5,5)",
   "context.fill()",
+  "context.restore()",
 ]
 `;
 
@@ -203,6 +205,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
+  "context.save()",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(9,1)",
@@ -238,6 +241,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.closePath()",
   "context.moveTo(5,5)",
   "context.fill()",
+  "context.restore()",
 ]
 `;
 
@@ -246,6 +250,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.restore()",
   "context.save()",
   "context.clearRect(0,0,200,200)",
+  "context.save()",
   "context.beginPath()",
   "context.moveTo(1,1)",
   "context.lineTo(9,1)",
@@ -289,6 +294,7 @@ exports[`an infinite canvas context > that clips with a rect, fills a rect, clip
   "context.closePath()",
   "context.moveTo(5,5)",
   "context.fill()",
+  "context.restore()",
 ]
 `;
 
