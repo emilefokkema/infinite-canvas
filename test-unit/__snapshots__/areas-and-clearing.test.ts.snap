@@ -225,6 +225,81 @@ exports[`an infinite canvas context > that fills a rectangle, fills a smaller re
 ]
 `;
 
+exports[`an infinite canvas context > that fills two rectangles and clips to a region containing the second > and clears a rect containing first and part of second > and then clears a rect containing the clipping region > should have no more clear rect or clip 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(100,50)",
+  "context.lineTo(100,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.fill()",
+]
+`;
+
+exports[`an infinite canvas context > that fills two rectangles and clips to a region containing the second > and clears a rect containing first and part of second > should have a clear rect affected by a clipping region 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(100,50)",
+  "context.lineTo(100,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.fill()",
+  "context.beginPath()",
+  "context.moveTo(200,200)",
+  "context.lineTo(300,200)",
+  "context.lineTo(300,300)",
+  "context.lineTo(200,300)",
+  "context.closePath()",
+  "context.moveTo(200,200)",
+  "context.fill()",
+  "context.save()",
+  "context.restore()",
+  "context.beginPath()",
+  "context.moveTo(150,150)",
+  "context.lineTo(350,150)",
+  "context.lineTo(350,350)",
+  "context.lineTo(150,350)",
+  "context.closePath()",
+  "context.moveTo(150,150)",
+  "context.save()",
+  "context.clip()",
+  "context.save()",
+  "context.transform(1,0,0,1,0,0)",
+  "context.clearRect(0,0,400,250)",
+  "context.restore()",
+  "context.restore()",
+]
+`;
+
+exports[`an infinite canvas context > that fills two rectangles and clips to a region containing the second > and clears a rect containing first and second > should not have a clear rect 1`] = `
+[
+  "context.restore()",
+  "context.save()",
+  "context.clearRect(0,0,200,200)",
+  "context.lineWidth = 1",
+  "context.beginPath()",
+  "context.moveTo(50,50)",
+  "context.lineTo(100,50)",
+  "context.lineTo(100,100)",
+  "context.lineTo(50,100)",
+  "context.closePath()",
+  "context.moveTo(50,50)",
+  "context.fill()",
+]
+`;
+
 exports[`an infinite canvas context > that makes a path with zero area and strokes it > and then clears an area overlapping but not covering the path > should have added a clearRect 1`] = `
 [
   "context.restore()",

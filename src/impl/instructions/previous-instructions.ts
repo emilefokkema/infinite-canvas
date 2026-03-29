@@ -25,7 +25,7 @@ export class PreviousInstructions extends ExecutableStateChangingInstructionSequ
         const infinityProvider = new InfiniteCanvasPathInfinityProvider({lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []})
         const infinity: ViewboxInfinity = infinityProvider.getInfinity(state);
         const clearRect: ClearRectWithState = ClearRectWithState.createClearRect(state, area, infinity, x, y, width, height);
-        clearRect.setInitialState(this.state);
+        clearRect.setInitialStateWithClippedPaths(this.state);
         this.add(clearRect);
     }
     public clearContentsInsideArea(area: Area): void{

@@ -263,4 +263,52 @@ describe('an infinite canvas context', () => {
 		});
 	});
 
+	describe('that fills two rectangles and clips to a region containing the second', () => {
+
+		beforeEach(() => {
+			infiniteContext.fillRect(50, 50, 50, 50);
+			infiniteContext.fillRect(200, 200, 100, 100);
+			infiniteContext.beginPath();
+			infiniteContext.rect(150, 150, 200, 200);
+			infiniteContext.save();
+			infiniteContext.clip();
+		})
+
+		describe('and clears a rect containing first and part of second', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(0, 0, 400, 250);
+			});
+
+			it("should have a clear rect affected by a clipping region", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+
+			describe('and then clears a rect containing the clipping region', () => {
+
+				beforeEach(() => {
+					infiniteContext.restore();
+					contextMock.clear();
+					infiniteContext.clearRect(125, 125, 300, 300);
+				})
+
+				it('should have no more clear rect or clip', () => {
+					expect(contextMock.getLog()).toMatchSnapshot();
+				})
+			})
+		})
+
+		describe('and clears a rect containing first and second', () => {
+
+			beforeEach(() => {
+				contextMock.clear();
+				infiniteContext.clearRect(0, 0, 400, 400);
+			});
+
+			it("should not have a clear rect", () => {
+				expect(contextMock.getLog()).toMatchSnapshot();
+			});
+		})
+	})
 })

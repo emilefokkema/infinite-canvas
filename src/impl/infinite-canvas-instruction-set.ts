@@ -1,5 +1,5 @@
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
-import { Instruction, MinimalInstruction } from './instructions/instruction';
+import { Instruction } from './instructions/instruction';
 import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { PreviousInstructions } from "./instructions/previous-instructions";
 import { CurrentPath } from "./interfaces/current-path";
@@ -208,13 +208,16 @@ export class InfiniteCanvasInstructionSet{
         if(!rectangle){
             return;
         }
-        const transformedRectangle: Area = rectangle.transform(this.state.current.transformation)
-        if(!this.intersects(transformedRectangle)){
+        let areaToClear: Area = rectangle.transform(this.state.current.transformation)
+        if(this.state.current.clippingRegion){
+            areaToClear = areaToClear.intersectWith(this.state.current.clippingRegion);
+        }
+        if(!this.intersects(areaToClear)){
             return;
         }
-        this.clearContentsInsideArea(transformedRectangle);
-        if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(transformedRectangle)){
-            this.previousInstructionsWithPath.addClearRect(rectangle, this.state, x, y, width, height);
+        this.clearContentsInsideArea(areaToClear);
+        if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(areaToClear)){
+            this.previousInstructionsWithPath.addClearRect(areaToClear, this.state, x, y, width, height);
             if(this.currentInstructionsWithPath){
                 this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state);
             }
