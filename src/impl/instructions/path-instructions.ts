@@ -1,4 +1,4 @@
-import { Instruction } from "./instruction";
+import { Instruction } from './instruction'
 import { Transformation } from "../transformation";
 import { AreaChange } from "../areas/area-change";
 import { Point } from "../geometry/point";
@@ -8,18 +8,109 @@ import { AreaBuilder } from "../areas/area-builder";
 import { isPointAtInfinity } from "../geometry/is-point-at-infinity";
 import { CanvasRectangle } from "../rectangle/canvas-rectangle";
 
+class Arc implements Instruction {
+    private readonly point: Point
+    constructor(
+        x: number,
+        y: number,
+        private readonly radius: number,
+        private readonly startAngle: number,
+        private readonly endAngle: number,
+        private readonly anticlockwise?: boolean
+    ){
+        this.point = new Point(x, y)
+    }
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        const {x, y} = transformation.apply(this.point);
+        const {a, b, c, d, e, f} = transformation.untranslated().before(Transformation.translation(x, y))
+        context.save();
+        context.transform(a, b, c, d, e, f)
+        context.arc(0, 0, this.radius, this.startAngle, this.endAngle, this.anticlockwise);
+        context.restore();
+    }
+}
+
+class ArcTo implements Instruction {
+    constructor(
+        private readonly p1: Point,
+        private readonly p2: Point,
+        private readonly radius: number
+    ){}
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        const tp1: Point = transformation.apply(this.p1);
+        const tp2: Point = transformation.apply(this.p2);
+        context.arcTo(tp1.x, tp1.y, tp2.x, tp2.y, this.radius * transformation.scale);
+    }
+}
+
+class Ellipse implements Instruction {
+    constructor(
+        private readonly tCenter: Point,
+        private readonly radiusX: number,
+        private readonly radiusY: number,
+        private readonly rotation: number,
+        private readonly startAngle: number,
+        private readonly endAngle: number,
+        private readonly anticlockwise?: boolean
+    ){}
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        const tCenter: Point = transformation.apply(this.tCenter);
+        const transformationAngle: number = transformation.getRotationAngle();
+        context.ellipse(tCenter.x, tCenter.y, this.radiusX * transformation.scale, this.radiusY * transformation.scale, this.rotation + transformationAngle, this.startAngle, this.endAngle, this.anticlockwise);
+    }
+}
+
+class BezierCurveTo implements Instruction {
+    private readonly cp1: Point
+    private readonly cp2: Point
+    private readonly end: Point
+    constructor(
+        cp1x: number,
+        cp1y: number,
+        cp2x: number,
+        cp2y: number,
+        x: number,
+        y: number
+    ){
+        this.cp1 = new Point(cp1x, cp1y);
+        this.cp2 = new Point(cp2x, cp2y);
+        this.end = new Point(x, y)
+    }
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        const cp1 = transformation.apply(this.cp1);
+        const cp2 = transformation.apply(this.cp2);
+        const end = transformation.apply(this.end);
+        context.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
+    }
+}
+
+class QuadraticCurveTo implements Instruction {
+    private readonly cp: Point
+    private readonly end: Point
+    constructor(
+        cpx: number,
+        cpy: number,
+        x: number,
+        y: number
+    ){
+        this.cp = new Point(cpx, cpy);
+        this.end = new Point(x, y)
+    }
+    execute(context: CanvasRenderingContext2D, rectangle: CanvasRectangle): void {
+        const transformation = rectangle.userTransformation;
+        const tControl = transformation.apply(this.cp);
+        const tEnd = transformation.apply(this.end);
+        context.quadraticCurveTo(tControl.x, tControl.y, tEnd.x, tEnd.y);
+    }
+}
 export class PathInstructions{
 
     public static arc(_x: number, _y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
-        const instruction: Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            const transformation = rectangle.userTransformation;
-            const {x, y} = transformation.apply(new Point(_x, _y));
-            const {a, b, c, d, e, f} = transformation.untranslated().before(Transformation.translation(x, y))
-            context.save();
-            context.transform(a, b, c, d, e, f)
-            context.arc(0, 0, radius, startAngle, endAngle, anticlockwise);
-            context.restore();
-        };
+        const instruction = new Arc(_x, _y, radius, startAngle, endAngle, anticlockwise);
         const changeArea: AreaChange = (builder: AreaBuilder) => {
             builder.addPosition(new Point(_x - radius, _y - radius));
             builder.addPosition(new Point(_x - radius, _y + radius));
@@ -27,7 +118,7 @@ export class PathInstructions{
             builder.addPosition(new Point(_x + radius, _y + radius));
         };
         return {
-            instruction: instruction,
+            instruction,
             changeArea: changeArea,
             positionChange: new Point(_x, _y).plus(Transformation.rotation(0, 0, endAngle).apply(new Point(radius, 0))),
             initialPoint: new Point(_x, _y).plus(Transformation.rotation(0, 0, startAngle).apply(new Point(radius, 0)))
@@ -37,18 +128,13 @@ export class PathInstructions{
     public static arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): PathInstruction{
         const p1: Point = new Point(x1, y1);
         const p2: Point = new Point(x2, y2);
-        const instruction: Instruction = (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-            const transformation = rectangle.userTransformation;
-            const tp1: Point = transformation.apply(p1);
-            const tp2: Point = transformation.apply(p2);
-            context.arcTo(tp1.x, tp1.y, tp2.x, tp2.y, radius * transformation.scale);
-        };
+        const instruction = new ArcTo(p1, p2, radius)
         const changeArea: AreaChange = (builder: AreaBuilder) => {
             builder.addPosition(p1);
             builder.addPosition(p2);
         };
         return {
-            instruction: instruction,
+            instruction,
             changeArea: changeArea,
             positionChange: new Point(x2, y2)
         };
@@ -56,12 +142,7 @@ export class PathInstructions{
 
     public static ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): PathInstruction{
         return {
-            instruction: (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-                const transformation = rectangle.userTransformation;
-                const tCenter: Point = transformation.apply(new Point(x, y));
-                const transformationAngle: number = transformation.getRotationAngle();
-                context.ellipse(tCenter.x, tCenter.y, radiusX * transformation.scale, radiusY * transformation.scale, rotation + transformationAngle, startAngle, endAngle, anticlockwise);
-            },
+            instruction: new Ellipse(new Point(x, y), radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise),
             changeArea: (builder: AreaBuilder) => {
                 builder.addPosition(new Point(x - radiusX, y - radiusY));
                 builder.addPosition(new Point(x - radiusX, y + radiusY));
@@ -88,14 +169,9 @@ export class PathInstructions{
     }
 
     public static bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): PathInstruction{
+        
         return {
-            instruction: (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-                const transformation = rectangle.userTransformation;
-                const cp1 = transformation.apply(new Point(cp1x, cp1y));
-                const cp2 = transformation.apply(new Point(cp2x, cp2y));
-                const end = transformation.apply(new Point(x, y));
-                context.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y);
-            },
+            instruction: new BezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y),
             changeArea: (builder: AreaBuilder, currentPosition: Position) => {
                 if(isPointAtInfinity(currentPosition)){
                     return;
@@ -111,12 +187,7 @@ export class PathInstructions{
 
     public static quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): PathInstruction{
         return {
-            instruction: (context: CanvasRenderingContext2D, rectangle: CanvasRectangle) => {
-                const transformation = rectangle.userTransformation;
-                const tControl = transformation.apply(new Point(cpx, cpy));
-                const tEnd = transformation.apply(new Point(x, y));
-                context.quadraticCurveTo(tControl.x, tControl.y, tEnd.x, tEnd.y);
-            },
+            instruction: new QuadraticCurveTo(cpx, cpy, x, y),
             changeArea: (builder: AreaBuilder, currentPosition: Position) => {
                 if(isPointAtInfinity(currentPosition)){
                     return;

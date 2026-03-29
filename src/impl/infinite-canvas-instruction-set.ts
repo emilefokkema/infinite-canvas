@@ -1,5 +1,5 @@
 import { InfiniteCanvasState } from "./state/infinite-canvas-state";
-import { Instruction } from "./instructions/instruction";
+import { Instruction } from './instructions/instruction';
 import { InfiniteCanvasStateInstance } from "./state/infinite-canvas-state-instance";
 import { PreviousInstructions } from "./instructions/previous-instructions";
 import { CurrentPath } from "./interfaces/current-path";
@@ -17,6 +17,7 @@ import { CanvasRectangle } from "./rectangle/canvas-rectangle";
 import { roundRect } from "./rect/round-rect";
 import { getRectStrategy} from "./rect/get-rect-strategy";
 import { Rect } from './rect/rect'
+import { Stroke } from "./instructions/stroke";
 
 export class InfiniteCanvasInstructionSet{
     private currentInstructionsWithPath: CurrentPath;
@@ -67,7 +68,7 @@ export class InfiniteCanvasInstructionSet{
         if(!this.currentInstructionsWithPath){
             return;
         }
-        const drawingInstruction = DrawingInstruction.forStrokingPath((context) => {context.stroke();}, this.state, () => this.currentInstructionsWithPath)
+        const drawingInstruction = DrawingInstruction.forStrokingPath(Stroke.create(), this.state, () => this.currentInstructionsWithPath)
         this.state = drawingInstruction.state;
         this.incorporateDrawingInstruction(drawingInstruction)
     }
@@ -80,7 +81,7 @@ export class InfiniteCanvasInstructionSet{
     }
 
     public strokeRect(rect: Rect): void{
-        const drawingInstruction = rect.stroke(this.state, (context) => {context.stroke();})
+        const drawingInstruction = rect.stroke(this.state, Stroke.create())
         if(!drawingInstruction){
             return
         }
@@ -207,13 +208,16 @@ export class InfiniteCanvasInstructionSet{
         if(!rectangle){
             return;
         }
-        const transformedRectangle: Area = rectangle.transform(this.state.current.transformation)
-        if(!this.intersects(transformedRectangle)){
+        let areaToClear: Area = rectangle.transform(this.state.current.transformation)
+        if(this.state.current.clippingRegion){
+            areaToClear = areaToClear.intersectWith(this.state.current.clippingRegion);
+        }
+        if(!this.intersects(areaToClear)){
             return;
         }
-        this.clearContentsInsideArea(transformedRectangle);
-        if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(transformedRectangle)){
-            this.previousInstructionsWithPath.addClearRect(rectangle, this.state, x, y, width, height);
+        this.clearContentsInsideArea(areaToClear);
+        if(this.previousInstructionsWithPath.hasDrawingAcrossBorderOf(areaToClear)){
+            this.previousInstructionsWithPath.addClearRect(areaToClear, this.state, x, y, width, height);
             if(this.currentInstructionsWithPath){
                 this.currentInstructionsWithPath.setInitialStateWithClippedPaths(this.state);
             }

@@ -1,7 +1,7 @@
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
 import {StateConversion} from "./state-conversion";
 import {StateConversionWithClippedPaths} from "./state-conversion-with-clipped-paths";
-import { Instruction } from "../instructions/instruction";
+import { Instruction } from '../instructions/instruction'
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 
 export class InfiniteCanvasState{

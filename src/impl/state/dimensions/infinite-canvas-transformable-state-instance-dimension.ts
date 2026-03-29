@@ -1,5 +1,5 @@
 import { StateInstanceProperties } from "../state-instance-properties";
-import { Instruction } from "../../instructions/instruction";
+import { Instruction, noopInstruction } from "../../instructions/instruction";
 import { InfiniteCanvasStateInstance } from "../infinite-canvas-state-instance";
 import { TypedStateInstanceDimension } from "./typed-state-instance-dimension";
 
@@ -28,7 +28,7 @@ export abstract class InfiniteCanvasTransformableStateInstanceDimension<K extend
         const oldValue: StateInstanceProperties[K] = fromInstance[this.propertyName];
         const newValue: StateInstanceProperties[K] = toInstance[this.propertyName];
         if(this.valuesAreEqual(oldValue, newValue) && (fromInstance.fillAndStrokeStylesTransformed === toInstance.fillAndStrokeStylesTransformed || this.valuesAreEqualWhenTransformed(oldValue, newValue))){
-            return () => {};
+            return noopInstruction;
         }
         return this.changeToNewValue(newValue, toInstance.fillAndStrokeStylesTransformed);
     }

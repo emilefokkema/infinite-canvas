@@ -8,10 +8,11 @@ import { CurrentPath } from 'src/interfaces/current-path';
 import { Point } from "src/geometry/point";
 import { getRectStrategy } from 'src/rect/get-rect-strategy';
 import { ExecutableStateChangingInstructionSet } from 'src/interfaces/executable-state-changing-instruction-set';
+import { Fill } from 'src/infinite-context/fill';
 
 function drawAndLog(instructionsWithPath: CurrentPath, state: InfiniteCanvasState): string[]{
     const result = instructionsWithPath.drawPath(
-        (context: CanvasRenderingContext2D) => {context.fill();},
+        Fill.create(),
         state,
         {
             lineWidth: 0,
@@ -59,9 +60,7 @@ describe("a set of instructions that is also about a path", () => {
                 describe("and then draws the path and receives another change of state on the same property", () => {
 
                     beforeEach(() => {
-                        instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
-                            context.fill();
-                        }, currentState, {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []});
+                        instructionsWithPath.drawPath(Fill.create(), currentState, {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []});
                         currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#ff0"));
                     });
 
@@ -84,7 +83,7 @@ describe("a set of instructions that is also about a path", () => {
             currentState = currentState.withCurrentState(fillStyle.changeInstanceValue(currentState.current, "#00f"));
             instructionsWithPath.lineTo(new Point(5, 5), currentState);
             recreatedPath = instructionsWithPath.drawPath(
-                (context) => context.fill(),
+                Fill.create(),
                 currentState,
                 {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []});
         });
@@ -111,9 +110,7 @@ describe("a set of instructions that describe a rectangle path that is drawn", (
         instructionsWithPath = InstructionsWithPath.create(currentState);
         
         getRectStrategy(0, 0, 1, 1).addSubpaths(instructionsWithPath, currentState)
-        instructionsWithPath.drawPath((context: CanvasRenderingContext2D) => {
-            context.fill();
-        }, currentState, {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []})
+        instructionsWithPath.drawPath(Fill.create(), currentState, {lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []})
     });
 
     describe("and that then changes state", () => {

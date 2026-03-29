@@ -1,12 +1,13 @@
 import { StateChangingInstructionSet } from "../interfaces/state-changing-instruction-set";
-import { Instruction } from "./instruction";
+import { Instruction, noopInstruction } from './instruction'
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { InstructionsToClip } from "../interfaces/instructions-to-clip";
 
 export class InstructionWithState implements StateChangingInstructionSet{
     protected stateConversion: Instruction;
+
     constructor(public initialState: InfiniteCanvasState, public state: InfiniteCanvasState){
-        this.stateConversion = () => {};
+        this.stateConversion = noopInstruction;
     }
     public setInitialState(previousState: InfiniteCanvasState): void{
         this.initialState = previousState;

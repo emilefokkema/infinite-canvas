@@ -1,7 +1,7 @@
 import { Area } from "../areas/area";
-import { ExecutableInstruction } from "./executable-instruction";
+import { Instruction } from "../instructions/instruction";
 import { StateChange } from "./state-change";
 
-export interface InstructionsToClip extends ExecutableInstruction, StateChange{
+export interface InstructionsToClip extends Instruction, StateChange{
     readonly area: Area;
 }

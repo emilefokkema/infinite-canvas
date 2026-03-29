@@ -10,14 +10,14 @@ export class InfiniteCanvasConicGradient extends InfiniteCanvasGradient{
         private readonly y: number){
         super();
     }
-    protected createTransformedGradient(transformation: Transformation): CanvasGradient{
+    public createTransformedGradient(transformation: Transformation): CanvasGradient{
         const {x: tx, y: ty} = transformation.apply(new Point(this.x, this.y));
         const angle = transformation.getRotationAngle();
         const gradient: CanvasGradient = this.context.createConicGradient(this.startAngle + angle, tx, ty);
         this.addColorStopsToGradient(gradient);
         return gradient;
     }
-    protected createGradient(): CanvasGradient{
+    public createGradient(): CanvasGradient{
         const gradient: CanvasGradient = this.context.createConicGradient(this.startAngle, this.x, this.y);
         this.addColorStopsToGradient(gradient);
         return gradient;

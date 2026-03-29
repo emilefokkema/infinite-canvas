@@ -5,24 +5,27 @@ import { PathInstructionBuilderProvider } from "../path-instruction-builder-prov
 import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-instruction-builder";
 import { FromPointToPointAtInfinity } from "./from-point-to-point-at-infinity";
 import { FromPointToPoint } from "../from-point-to-point/from-point-to-point";
-import { InstructionUsingInfinity } from "../../instruction-using-infinity";
 import { sequence } from "../../../instruction-utils";
+import { InstructionUsingInfinity, noopInstruction } from '../../instruction'
 
 export class PathInstructionBuilderFromPointToPointAtInfinity extends InfiniteCanvasPathInstructionBuilder<FromPointToPointAtInfinity> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: FromPointToPointAtInfinity) {
         super(shape);
     }
-    protected getInstructionToMoveToBeginningOfShape(shape: FromPointToPointAtInfinity): InstructionUsingInfinity{
+    protected getInstructionToMoveToBeginningOfShape(shape: FromPointToPointAtInfinity): InstructionUsingInfinity {
         return this.moveTo(shape.initialPoint);
     }
-    protected getInstructionToExtendShapeWithLineTo(shape: FromPointToPointAtInfinity, position: Position): InstructionUsingInfinity{
+    protected getInstructionToExtendShapeWithLineTo(shape: FromPointToPointAtInfinity, position: Position): InstructionUsingInfinity {
         if(isPointAtInfinity(position)){
             if(position.direction.inSameDirectionAs(shape.currentPosition.direction)){
-                return () => {};
+                return noopInstruction;
             }
             return this.lineToInfinityFromInfinityFromPoint(shape.initialPoint, shape.currentPosition.direction, position.direction);
         }
-        return sequence(this.lineFromInfinityFromPointToInfinityFromPoint(shape.initialPoint, position, shape.currentPosition.direction), this.lineFromInfinityFromPointToPoint(position, shape.currentPosition.direction));
+        return sequence(
+            this.lineFromInfinityFromPointToInfinityFromPoint(shape.initialPoint, position, shape.currentPosition.direction),
+            this.lineFromInfinityFromPointToPoint(position, shape.currentPosition.direction)
+        );
     }
     public canAddLineTo(position: Position): boolean{
         return !isPointAtInfinity(position) || !position.direction.isInOppositeDirectionAs(this.shape.currentPosition.direction);

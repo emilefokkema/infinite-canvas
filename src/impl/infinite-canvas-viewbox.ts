@@ -44,8 +44,8 @@ export class InfiniteCanvasViewBox implements ViewBox{
 	}
 	public measureText(text: string): TextMetrics{
 		this.context.save();
-		const changeToCurrentState: MinimalInstruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToStateOnDimensions(this.state.currentlyTransformed(false).current, textDrawingStylesDimensions);
-		changeToCurrentState(this.context);
+		const changeToCurrentState: MinimalInstruction = InfiniteCanvasStateInstance.default.getInstructionToConvertToStateOnDimensionsNew(this.state.currentlyTransformed(false).current, textDrawingStylesDimensions);
+		changeToCurrentState.execute(this.context);
 		const result: TextMetrics = this.context.measureText(text);
 		this.context.restore();
 		return result;

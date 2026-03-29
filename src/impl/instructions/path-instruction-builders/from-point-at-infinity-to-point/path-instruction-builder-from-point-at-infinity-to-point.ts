@@ -5,14 +5,14 @@ import { PathInstructionBuilderProvider } from "../path-instruction-builder-prov
 import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-instruction-builder";
 import { FromPointAtInfinityToPoint } from "./from-point-at-infinity-to-point";
 import { FromPointAtInfinityToPointAtInfinity } from "../from-point-at-infinity-to-point-at-infinity/from-point-at-infinity-to-point-at-infinity";
-import { InstructionUsingInfinity } from "../../instruction-using-infinity";
 import { sequence } from "../../../instruction-utils";
+import { InstructionUsingInfinity } from '../../instruction'
 
 export class PathInstructionBuilderFromPointAtInfinityToPoint extends InfiniteCanvasPathInstructionBuilder<FromPointAtInfinityToPoint> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: FromPointAtInfinityToPoint) {
         super(shape);
     }
-    protected getInstructionToMoveToBeginningOfShape(shape: FromPointAtInfinityToPoint): InstructionUsingInfinity{
+    protected getInstructionToMoveToBeginningOfShape(shape: FromPointAtInfinityToPoint): InstructionUsingInfinity {
         const moveToInfinityFromCurrentPosition: InstructionUsingInfinity = this.moveToInfinityFromPointInDirection(shape.currentPosition, shape.initialPosition.direction);
         if(shape.currentPosition.equals(shape.firstFinitePoint)){
             return moveToInfinityFromCurrentPosition;
@@ -20,7 +20,7 @@ export class PathInstructionBuilderFromPointAtInfinityToPoint extends InfiniteCa
         const lineToInfinityFromFirstFinitePoint: InstructionUsingInfinity = this.lineFromInfinityFromPointToInfinityFromPoint(shape.currentPosition, shape.firstFinitePoint, shape.initialPosition.direction);
         return sequence(moveToInfinityFromCurrentPosition, lineToInfinityFromFirstFinitePoint);
     }
-    protected getInstructionToExtendShapeWithLineTo(shape: FromPointAtInfinityToPoint, position: Position): InstructionUsingInfinity{
+    protected getInstructionToExtendShapeWithLineTo(shape: FromPointAtInfinityToPoint, position: Position): InstructionUsingInfinity {
         if(isPointAtInfinity(position)){
             return this.lineToInfinityFromPointInDirection(shape.currentPosition, position.direction);
         }

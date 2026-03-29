@@ -1,6 +1,6 @@
 import { Position } from "../../geometry/position";
 import { InfiniteCanvasState } from "../../state/infinite-canvas-state";
-import { InstructionUsingInfinity } from "../instruction-using-infinity";
+import { InstructionUsingInfinity } from '../instruction'
 
 export interface PathInstructionBuilder{
     getInstructionToDrawLineTo(position: Position, state: InfiniteCanvasState): InstructionUsingInfinity;

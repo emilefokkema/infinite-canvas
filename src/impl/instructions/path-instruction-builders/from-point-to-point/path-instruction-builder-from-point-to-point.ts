@@ -5,17 +5,17 @@ import { PathInstructionBuilderProvider } from "../path-instruction-builder-prov
 import { InfiniteCanvasPathInstructionBuilder } from "../infinite-canvas-path-instruction-builder";
 import { FromPointToPoint } from "./from-point-to-point";
 import { FromPointToPointAtInfinity } from "../from-point-to-point-at-infinity/from-point-to-point-at-infinity";
-import { InstructionUsingInfinity } from "../../instruction-using-infinity";
 import { sequence } from "../../../instruction-utils";
+import { InstructionUsingInfinity } from '../../instruction'
 
 export class PathInstructionBuilderFromPointToPoint extends InfiniteCanvasPathInstructionBuilder<FromPointToPoint> implements PathInstructionBuilder{
     constructor(private readonly pathBuilderProvider: PathInstructionBuilderProvider, shape: FromPointToPoint) {
         super(shape);
     }
-    protected getInstructionToMoveToBeginningOfShape(shape: FromPointToPoint): InstructionUsingInfinity{
+    protected getInstructionToMoveToBeginningOfShape(shape: FromPointToPoint): InstructionUsingInfinity {
         return this.moveTo(shape.initialPoint);
     }
-    protected getInstructionToExtendShapeWithLineTo(shape: FromPointToPoint, position: Position): InstructionUsingInfinity{
+    protected getInstructionToExtendShapeWithLineTo(shape: FromPointToPoint, position: Position): InstructionUsingInfinity {
         if(isPointAtInfinity(position)){
             const lineToInfinityFromCurrent: InstructionUsingInfinity = this.lineToInfinityFromPointInDirection(shape.currentPosition, position.direction);
             if(shape.currentPosition.minus(shape.initialPoint).cross(position.direction) === 0){

@@ -4,6 +4,7 @@ import { CurrentPath } from "../interfaces/current-path";
 import { PathInstruction } from "../interfaces/path-instruction";
 import { InfiniteCanvasState } from "../state/infinite-canvas-state";
 import { Instruction } from "./instruction";
+import { MinimalInstruction } from "./instruction";
 import { Area } from "../areas/area";
 import { InfiniteCanvasAreaBuilder } from "../areas/infinite-canvas-area-builder";
 import { Position } from "../geometry/position";
@@ -16,6 +17,12 @@ import { InstructionsToClipImpl } from "./instructions-to-clip-impl";
 import { ExecutableStateChangingInstructionSet } from "../interfaces/executable-state-changing-instruction-set";
 import { ExecutableStateChangingInstructionSequence } from "./executable-state-changing-instruction-sequence";
 import { ExecutableInstructionWithState } from "./executable-instruction-with-state";
+
+const beginPath: MinimalInstruction = {
+    execute(context) {
+        context.beginPath();
+    },
+}
 
 export class InstructionsWithPath extends StateChangingInstructionSequence<InstructionsWithSubpath> implements CurrentPath{
     private areaBuilder: InfiniteCanvasAreaBuilder = new InfiniteCanvasAreaBuilder();
@@ -128,6 +135,6 @@ export class InstructionsWithPath extends StateChangingInstructionSequence<Instr
         currentSubpath.addPathInstruction(pathInstruction, toAdd, state);
     }
     public static create(initialState: InfiniteCanvasState): InstructionsWithPath{
-        return new InstructionsWithPath(PreExecutableInstructionWithState.create(initialState, (context: CanvasRenderingContext2D) => {context.beginPath();}));
+        return new InstructionsWithPath(PreExecutableInstructionWithState.create(initialState, beginPath));
     }
 }

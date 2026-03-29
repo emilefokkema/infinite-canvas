@@ -8,6 +8,7 @@ import { ClearRectWithState } from "./clear-rect-with-state";
 import { Area } from "../areas/area";
 import { ViewboxInfinity } from "../interfaces/viewbox-infinity";
 import { InfiniteCanvasPathInfinityProvider } from "../infinite-canvas-path-infinity-provider";
+import { noopInstruction } from "./instruction";
 
 export class PreviousInstructions extends ExecutableStateChangingInstructionSequence<StateChangingInstructionSetWithArea> {
 
@@ -24,13 +25,13 @@ export class PreviousInstructions extends ExecutableStateChangingInstructionSequ
         const infinityProvider = new InfiniteCanvasPathInfinityProvider({lineWidth: 0, lineDashPeriod: 0, shadowOffsets: []})
         const infinity: ViewboxInfinity = infinityProvider.getInfinity(state);
         const clearRect: ClearRectWithState = ClearRectWithState.createClearRect(state, area, infinity, x, y, width, height);
-        clearRect.setInitialState(this.state);
+        clearRect.setInitialStateWithClippedPaths(this.state);
         this.add(clearRect);
     }
     public clearContentsInsideArea(area: Area): void{
         this.removeAll(i => i.drawingArea.isContainedBy(area));
     }
     public static create(): PreviousInstructions{
-        return new PreviousInstructions(new ExecutableInstructionWithState(defaultState, defaultState, InfiniteCanvasStateInstance.setDefault, () => {}))
+        return new PreviousInstructions(new ExecutableInstructionWithState(defaultState, defaultState, InfiniteCanvasStateInstance.setDefault, noopInstruction))
     }
 }

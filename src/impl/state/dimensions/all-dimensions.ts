@@ -1,6 +1,6 @@
 import { StateInstanceDimension } from "./state-instance-dimension";
 import { direction } from "./direction";
-import { font } from "./font";
+import { font as fontNew} from "./font";
 import { lineDashOffset, lineWidth } from "./infinite-canvas-transformable-scalar-state-instance-dimension";
 import { shadowBlur } from './shadow-blur'
 import { lineDash } from "./line-dash";
@@ -21,6 +21,7 @@ import { imageSmoothingQuality } from "./image-smoothing-quality";
 import { MinimalInstruction } from "../../instructions/instruction";
 import { fontKerning } from "./font-kerning";
 
+
 export const allDimensions: StateInstanceDimension[] = [
     direction,
     imageSmoothingEnabled,
@@ -39,7 +40,7 @@ export const allDimensions: StateInstanceDimension[] = [
     textAlign,
     textBaseline,
     transformation,
-    font,
+    fontNew,
     fontKerning,
     shadowOffset,
     shadowBlur,
@@ -47,7 +48,7 @@ export const allDimensions: StateInstanceDimension[] = [
 ];
 
 export const textDrawingStylesDimensions: StateInstanceDimension<MinimalInstruction>[] = [
-    font,
+    fontNew,
     textAlign,
     textBaseline,
     direction

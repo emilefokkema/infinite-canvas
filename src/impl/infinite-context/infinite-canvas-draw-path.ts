@@ -1,5 +1,6 @@
 import { ViewBox } from "../interfaces/viewbox";
-import {Instruction} from "../instructions/instruction";
+import { Fill } from "./fill";
+import { Clip } from "./clip";
 
 export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 	constructor(private viewBox: ViewBox){}
@@ -10,26 +11,18 @@ export class InfiniteCanvasDrawPath implements CanvasDrawPath{
 		this.viewBox.beginPath();
 	}
 	public clip(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
-		let instruction: Instruction = this.isFillRule(pathOrFillRule) ?
-			(context: CanvasRenderingContext2D) => {
-				context.clip(pathOrFillRule);
-			} :
-			(context: CanvasRenderingContext2D) => {
-				context.clip();
-			};
+		const instruction = this.isFillRule(pathOrFillRule) ?
+			Clip.create(pathOrFillRule) :
+			Clip.create();
 		this.viewBox.clipPath(instruction);
 	}
 	public fill(pathOrFillRule?: Path2D | CanvasFillRule, fillRule?: CanvasFillRule): void{
 		if((!pathOrFillRule || this.isFillRule(pathOrFillRule)) && !this.viewBox.currentPathCanBeFilled()){
 			return;
 		}
-		let instruction: Instruction = this.isFillRule(pathOrFillRule) ?
-			(context: CanvasRenderingContext2D) => {
-				context.fill(pathOrFillRule);
-			} :
-			(context: CanvasRenderingContext2D) => {
-				context.fill();
-			};
+		const instruction = this.isFillRule(pathOrFillRule) ?
+			Fill.create(pathOrFillRule) :
+			Fill.create();
 		this.viewBox.fillPath(instruction);
 	}
 	public isPointInPath(xOrPath: number | Path2D, xOry: number, yOrFillRule: number | CanvasFillRule, fillRule?: CanvasFillRule): boolean{return true;}

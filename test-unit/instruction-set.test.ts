@@ -4,6 +4,7 @@ import { fillStyle } from "src/state/dimensions/fill-stroke-style";
 import { InfiniteCanvasInstructionSet } from "src/infinite-canvas-instruction-set";
 import { Point } from "src/geometry/point";
 import { getRectStrategy } from 'src/rect/get-rect-strategy';
+import { Fill } from 'src/infinite-context/fill';
 
 describe("an instruction set", () => {
     let instructionSet: InfiniteCanvasInstructionSet;
@@ -30,7 +31,7 @@ describe("an instruction set", () => {
         describe("and then fills it", () => {
 
             beforeEach(() => {
-                instructionSet.fillPath((context: CanvasRenderingContext2D) => {context.fill();});
+                instructionSet.fillPath(Fill.create());
             });
 
             it("should have called onchange", () => {
@@ -49,9 +50,7 @@ describe("an instruction set", () => {
                 });
 
                 it("should have recorded a clearRect", () => {
-                    expect(logInstruction((context, rectangle) => {
-                        instructionSet.execute(context, rectangle);
-                    })).toMatchSnapshot();
+                    expect(logInstruction(instructionSet)).toMatchSnapshot();
                 });
             });
         });
@@ -61,9 +60,7 @@ describe("an instruction set", () => {
 
         beforeEach(() => {
             instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#f00"));
-            instructionSet.fillRect(getRectStrategy(0, 0, 1, 1), (context: CanvasRenderingContext2D) => {
-                context.fill();
-            });
+            instructionSet.fillRect(getRectStrategy(0, 0, 1, 1), Fill.create());
         });
 
         it("should have called onchange", () => {
@@ -78,9 +75,7 @@ describe("an instruction set", () => {
             });
 
             it("should end up with a rectangle followed by a clearRect", () => {
-                expect(logInstruction((context, rectangle) => {
-                    instructionSet.execute(context, rectangle);
-                })).toMatchSnapshot();
+                expect(logInstruction(instructionSet)).toMatchSnapshot();
             });
 
             it("should have called onchange", () => {
@@ -96,9 +91,7 @@ describe("an instruction set", () => {
             });
 
             it("should no longer have recorded the first rectangle", () => {
-                expect(logInstruction((context, rectangle) => {
-                    instructionSet.execute(context, rectangle);
-                })).toMatchSnapshot();
+                expect(logInstruction(instructionSet)).toMatchSnapshot();
             });
 
             it("should have called onchange", () => {
@@ -110,15 +103,11 @@ describe("an instruction set", () => {
 
             beforeEach(() => {
                 instructionSet.changeState(s => fillStyle.changeInstanceValue(s, "#00f"));
-                instructionSet.fillRect(getRectStrategy(2, 0, 1, 1), (context: CanvasRenderingContext2D) => {
-                    context.fill();
-                });
+                instructionSet.fillRect(getRectStrategy(2, 0, 1, 1), Fill.create());
             });
 
             it("should have recorded everything in the right order", () => {
-                expect(logInstruction((context, rectangle) => {
-                    instructionSet.execute(context, rectangle);
-                })).toMatchSnapshot();
+                expect(logInstruction(instructionSet)).toMatchSnapshot();
             });
         });
     });

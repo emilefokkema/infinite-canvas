@@ -2,7 +2,7 @@ import {StateConversion} from "./state-conversion";
 import {InfiniteCanvasStateInstance} from "./infinite-canvas-state-instance";
 import {ClippedPaths} from "../instructions/clipped-paths";
 import {InfiniteCanvasState} from "./infinite-canvas-state";
-import { Instruction } from "../instructions/instruction";
+import { Instruction } from '../instructions/instruction'
 
 export class StateConversionWithClippedPaths extends StateConversion{
     public changeCurrentInstanceTo(instance: InfiniteCanvasStateInstance): void{

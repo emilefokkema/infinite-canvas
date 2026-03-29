@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, expect} from 'vitest'
 import { InfiniteCanvasStateInstance } from "src/state/infinite-canvas-state-instance";
-import { logInstruction } from "./log-instruction";
+import { logNewInstruction } from "./log-instruction";
 import { Instruction } from "src/instructions/instruction";
 import { Transformation } from "src/transformation";
 import { InfiniteCanvasState } from "src/state/infinite-canvas-state";
@@ -10,6 +10,7 @@ import { InstructionsWithPath } from "src/instructions/instructions-with-path";
 import { Point } from "src/geometry/point";
 import { TransformableFilter } from "src/state/dimensions/transformable-filter";
 import { getRectStrategy } from 'src/rect/get-rect-strategy';
+import { Clip } from 'src/infinite-context/clip';
 
 function applyChangeToCurrentState(state: InfiniteCanvasState, change: (instance: InfiniteCanvasStateInstance) => InfiniteCanvasStateInstance): InfiniteCanvasState{
     const newInstance: InfiniteCanvasStateInstance = change(state.current);
@@ -26,7 +27,7 @@ describe("a state with a clipped path", () => {
         currentPath = InstructionsWithPath.create(defaultState);
         currentState = applyChangeToCurrentState(currentState, s => fillStyle.changeInstanceValue(s, "#f00"));
         getRectStrategy(0, 0, 3, 3).addSubpaths(currentPath, currentState)
-        currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
+        currentPath.clipPath(Clip.create(), currentState);
         currentState = currentPath.state;
         stateWithOneClippedPath = currentState;
     });
@@ -37,7 +38,7 @@ describe("a state with a clipped path", () => {
         beforeEach(() => {
             currentState = currentState.saved();
             currentPath.moveTo(new Point(0, 0), currentState);
-            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
+            currentPath.clipPath(Clip.create(), currentState);
             currentState = currentPath.state;
             stateWithOneMoreClippedPath = currentState;
         });
@@ -53,7 +54,7 @@ describe("a state with a clipped path", () => {
 
             it("should result in the right changes", () => {
                 const stateChangeInstruction: Instruction = stateWithOneClippedPath.getInstructionToConvertToStateWithClippedPath(otherOneSavedAndChanged);
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
 
@@ -65,7 +66,7 @@ describe("a state with a clipped path", () => {
             });
 
             it("should result in the right instructions", () => {
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -75,7 +76,7 @@ describe("a state with a clipped path", () => {
 
         beforeEach(() => {
             currentPath.moveTo(new Point(0, 0), currentState);
-            currentPath.clipPath((context: CanvasRenderingContext2D) => context.clip(), currentState);
+            currentPath.clipPath(Clip.create(), currentState);
             stateWithOneMoreClippedPath = currentPath.state;
         });
 
@@ -87,7 +88,7 @@ describe("a state with a clipped path", () => {
             });
 
             it("should result in the right instructions", () => {
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -107,7 +108,7 @@ describe("a state with a clipped path", () => {
             });
 
             it("should", () => {
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -120,7 +121,7 @@ describe("a state with a clipped path", () => {
             currentState = currentState.saved();
             addedClippedPath = InstructionsWithPath.create(currentState);
             addedClippedPath.moveTo(new Point(1, 1), currentState);
-            addedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
+            addedClippedPath.clipPath(Clip.create(), currentState);
             currentState = addedClippedPath.state;
             stateWithCurrentlyAnAdditionalClippedPath = currentState;
         });
@@ -133,13 +134,13 @@ describe("a state with a clipped path", () => {
                 currentState = currentState.saved();
                 const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
-                differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
+                differentAddedClippedPath.clipPath(Clip.create(), currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
                 const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
 
@@ -150,13 +151,13 @@ describe("a state with a clipped path", () => {
                 currentState = currentState.restored();
                 const differentAddedClippedPath: InstructionsWithPath = InstructionsWithPath.create(currentState);
                 differentAddedClippedPath.moveTo(new Point(2, 2), currentState);
-                differentAddedClippedPath.clipPath((context, transformation) => {context.clip();}, currentState);
+                differentAddedClippedPath.clipPath(Clip.create(), currentState);
                 stateWithCurrentlyADifferentAdditionalClippedPath = differentAddedClippedPath.state;
             });
 
             it("should result in a state change that contains an additional 'restore' and 'save'", () => {
                 const stateChangeInstruction: Instruction = stateWithCurrentlyAnAdditionalClippedPath.getInstructionToConvertToStateWithClippedPath(stateWithCurrentlyADifferentAdditionalClippedPath);
-                expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -177,7 +178,7 @@ describe("a state with a clipped path", () => {
 
         it("should, when one is converted to the other without clipping paths, result in a change of state in that property alone", () => {
             const stateChangeInstruction: Instruction = changedOneWay.getInstructionToConvertToState(changedOtherWay);
-            expect(logInstruction(stateChangeInstruction)).toMatchSnapshot();
+            expect(logNewInstruction(stateChangeInstruction)).toMatchSnapshot();
         });
     });
 
@@ -214,7 +215,7 @@ describe("a default state", () => {
 
                 it("should result in instructions that change the state, but no restoring", () => {
                     expect(changeInstruction).toBeTruthy();
-                    expect(logInstruction(changeInstruction)).toMatchSnapshot();
+                    expect(logNewInstruction(changeInstruction)).toMatchSnapshot();
                 });
             });
         });
@@ -230,7 +231,7 @@ describe("a default state", () => {
 
             it("should have created intructions to restore, change and save", () => {
                 expect(changeInstruction).toBeTruthy();
-                expect(logInstruction(changeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(changeInstruction)).toMatchSnapshot();
             });
         });
 
@@ -247,7 +248,7 @@ describe("a default state", () => {
 
             it("should have created intructions to restore, change, save and change again", () => {
                 expect(changeInstruction).toBeTruthy();
-                expect(logInstruction(changeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(changeInstruction)).toMatchSnapshot();
             });
         });
     });
@@ -288,7 +289,7 @@ describe("a default state", () => {
 
         it("should have created an instruction that sets the fields that differ", () => {
             expect(changeInstruction).toBeTruthy();
-            expect(logInstruction(changeInstruction)).toMatchSnapshot();
+            expect(logNewInstruction(changeInstruction)).toMatchSnapshot();
         });
     });
 
@@ -304,7 +305,7 @@ describe("a default state", () => {
 
         it("should have created an instruction", () => {
             expect(changeInstruction).toBeTruthy();
-            expect(logInstruction(changeInstruction)).toMatchSnapshot();
+            expect(logNewInstruction(changeInstruction)).toMatchSnapshot();
         });
 
         describe("and then sets it again on the new state", () => {
@@ -316,7 +317,7 @@ describe("a default state", () => {
             });
 
             it("should not have created an instruction", () => {
-                expect(logInstruction(newChangeInstruction)).toMatchSnapshot();
+                expect(logNewInstruction(newChangeInstruction)).toMatchSnapshot();
             });
         });
     });
