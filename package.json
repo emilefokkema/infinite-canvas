@@ -73,7 +73,7 @@
     "typedoc-plugin-markdown": "^3.15.4",
     "typescript": "^5.2.2",
     "vite": "^6.4.2",
-    "vite-node": "^1.6.0",
+    "vite-node": "^6.0.0",
     "vitepress": "2.0.0-alpha.6",
     "vitest": "^4.1.0",
     "vue": "^3.3.4",
