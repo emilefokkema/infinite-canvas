@@ -1,11 +1,11 @@
 import { default as express } from 'express'
 import http from 'http'
-import type { GlobalSetupContext } from 'vitest/node'
+import type { TestProject } from 'vitest/node'
 import { setupPageFactory } from './setup-page-factory'
 import { SERVER_PORT } from '../shared/constants'
 import { setupTestPageServer } from './setup-test-page-server'
 
-export default async function setup(ctx: GlobalSetupContext){
+export default async function setup(ctx: TestProject){
     const app = express();
     const server = http.createServer(app);
     const {destroy: destroyPageFactory} = setupPageFactory(ctx, app)
