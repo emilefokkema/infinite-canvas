@@ -9,7 +9,8 @@
         "types": [],
         "paths": {
             "api": ["../../src/api/infinite-canvas.ts"]
-        }
+        },
+        "skipLibCheck": true
     },
     "references": [
         {"path": "../shared"},

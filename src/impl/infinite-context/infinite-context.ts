@@ -221,6 +221,21 @@ export class InfiniteContext implements InfiniteCanvasRenderingContext2D{
 	public set fontKerning(value: CanvasFontKerning){
 		this.canvasTextDrawingStyles.fontKerning = value;
 	}
+	public set fontStretch(value: CanvasFontStretch){
+		this.canvasTextDrawingStyles.fontStretch = value;
+	}
+	public set fontVariantCaps(value: CanvasFontVariantCaps){
+		this.canvasTextDrawingStyles.fontVariantCaps = value;
+	}
+	public set letterSpacing(value: string){
+		this.canvasTextDrawingStyles.letterSpacing = value;
+	}
+	public set textRendering(value: CanvasTextRendering){
+		this.canvasTextDrawingStyles.textRendering = value;
+	}
+	public set wordSpacing(value: string) {
+		this.canvasTextDrawingStyles.wordSpacing = value;
+	}
 	public arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void{
 		this.canvasPath.arc(x, y, radius, startAngle, endAngle, anticlockwise);
 	}

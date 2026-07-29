@@ -44,7 +44,7 @@ export function nextEventsInSequence<TMap, TTypes extends ((keyof TMap) & string
     ...types: TTypes
 ): Promise<SequenceOfEvents<TMap, TTypes>>{
     if(types.length === 0){
-        return Promise.resolve([] as SequenceOfEvents<TMap, TTypes>)
+        return Promise.resolve([] as unknown as SequenceOfEvents<TMap, TTypes>)
     }
     const [firstType, ...otherTypes] = types;
     const firstObs = eventsFromTarget(eventTarget, firstType);

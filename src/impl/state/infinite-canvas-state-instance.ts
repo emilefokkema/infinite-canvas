@@ -30,6 +30,11 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
     public readonly font: string;
     public readonly textAlign: CanvasTextAlign;
     public readonly textBaseline: CanvasTextBaseline;
+    public readonly fontStretch: CanvasFontStretch;
+    public readonly fontVariantCaps: CanvasFontVariantCaps;
+    public readonly letterSpacing: string
+    public readonly textRendering: CanvasTextRendering
+    public readonly wordSpacing: string
     public readonly clippedPaths: ClippedPaths;
     public readonly fillAndStrokeStylesTransformed: boolean;
     public readonly shadowOffset: Point;
@@ -57,6 +62,11 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         this.font = props.font;
         this.textAlign = props.textAlign;
         this.textBaseline = props.textBaseline;
+        this.fontStretch = props.fontStretch;
+        this.fontVariantCaps = props.fontVariantCaps;
+        this.letterSpacing = props.letterSpacing;
+        this.textRendering = props.textRendering;
+        this.wordSpacing = props.wordSpacing;
         this.clippedPaths = props.clippedPaths;
         this.fillAndStrokeStylesTransformed = props.fillAndStrokeStylesTransformed;
         this.shadowOffset = props.shadowOffset;
@@ -83,6 +93,11 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             font,
             textAlign,
             textBaseline,
+            fontStretch,
+            fontVariantCaps,
+            letterSpacing,
+            textRendering,
+            wordSpacing,
             clippedPaths,
             fillAndStrokeStylesTransformed,
             shadowOffset,
@@ -107,6 +122,11 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
             imageSmoothingQuality,
             font,
             textAlign,
+            fontStretch,
+            fontVariantCaps,
+            letterSpacing,
+            textRendering,
+            wordSpacing,
             textBaseline,
             clippedPaths,
             fillAndStrokeStylesTransformed,
@@ -192,6 +212,11 @@ export class InfiniteCanvasStateInstance implements StateInstanceProperties{
         textAlign: "start",
         textBaseline: "alphabetic",
         clippedPaths: undefined,
+        fontStretch: 'normal',
+        fontVariantCaps: 'normal',
+        letterSpacing: '0px',
+        textRendering: 'auto',
+        wordSpacing: '0px',
         fillAndStrokeStylesTransformed: false,
         shadowOffset: Point.origin,
         shadowColor: 'rgba(0, 0, 0, 0)',

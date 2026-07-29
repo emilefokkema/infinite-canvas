@@ -6,8 +6,11 @@ exports[`when we measure text > and then a transformation happens > should retur
   "actualBoundingBoxDescent": 0,
   "actualBoundingBoxLeft": 0,
   "actualBoundingBoxRight": 61.125,
+  "alphabeticBaseline": 0,
   "fontBoundingBoxAscent": 11,
   "fontBoundingBoxDescent": 3,
+  "hangingBaseline": 8.800000190734863,
+  "ideographicBaseline": -3,
   "width": 61.798828125,
 }
 `;
@@ -18,8 +21,11 @@ exports[`when we measure text > and then the font is changed > should return thi
   "actualBoundingBoxDescent": 0,
   "actualBoundingBoxLeft": 0,
   "actualBoundingBoxRight": 61.125,
+  "alphabeticBaseline": 0,
   "fontBoundingBoxAscent": 11,
   "fontBoundingBoxDescent": 3,
+  "hangingBaseline": 8.800000190734863,
+  "ideographicBaseline": -3,
   "width": 61.798828125,
 }
 `;
@@ -30,8 +36,11 @@ exports[`when we measure text > should return this text measurement 1`] = `
   "actualBoundingBoxDescent": 0,
   "actualBoundingBoxLeft": 0,
   "actualBoundingBoxRight": 50.9375,
+  "alphabeticBaseline": 0,
   "fontBoundingBoxAscent": 9,
   "fontBoundingBoxDescent": 2,
+  "hangingBaseline": 7.199999809265137,
+  "ideographicBaseline": -2,
   "width": 51.4990234375,
 }
 `;

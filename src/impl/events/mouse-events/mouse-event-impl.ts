@@ -31,6 +31,8 @@ export class MouseEventImpl<TMouseEvent extends MouseEvent> extends MappedUIEven
     public get shiftKey(): boolean{return this.event.shiftKey}
     public get x(): number{return this.event.x}
     public get y(): number{return this.event.y}
+    public get layerX(): number {return this.event.layerX;}
+    public get layerY(): number {return this.event.layerY;}
 
     getModifierState(keyArg: string): boolean {
         return this.event.getModifierState(keyArg);

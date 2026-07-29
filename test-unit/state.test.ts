@@ -278,6 +278,11 @@ describe("a default state", () => {
                 textAlign: "start",                                     //same
                 textBaseline: "alphabetic",                             //same
                 clippedPaths: undefined,                                //same
+                fontStretch: 'normal',
+                fontVariantCaps: 'normal',                              //same
+                letterSpacing: '0px',                                   //same
+                textRendering: 'auto',                                  //same
+                wordSpacing: '0px',                                     //same
                 fontKerning: 'normal',                                  //different
                 fillAndStrokeStylesTransformed: false,
                 shadowOffset: Point.origin,

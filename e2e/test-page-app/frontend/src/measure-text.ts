@@ -7,8 +7,13 @@ export function measureText(
         actualBoundingBoxDescent,
         actualBoundingBoxLeft,
         actualBoundingBoxRight,
+        alphabeticBaseline,
+        emHeightAscent,
+        emHeightDescent,
         fontBoundingBoxAscent,
         fontBoundingBoxDescent,
+        hangingBaseline,
+        ideographicBaseline,
         width
     } = canvas.getContext('2d').measureText(text)
     return {
@@ -16,8 +21,13 @@ export function measureText(
         actualBoundingBoxDescent,
         actualBoundingBoxLeft,
         actualBoundingBoxRight,
+        alphabeticBaseline,
+        emHeightAscent,
+        emHeightDescent,
         fontBoundingBoxAscent,
         fontBoundingBoxDescent,
+        hangingBaseline,
+        ideographicBaseline,
         width
     };
 }

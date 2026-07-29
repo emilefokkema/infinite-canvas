@@ -163,6 +163,12 @@ class InfiniteCanvas implements InfiniteCanvasInterface{
     public get onbeforeinput(): (this: InfiniteCanvasInterface, event: InputEvent) => any{
         return this.eventCollection.getOn('beforeinput');
     }
+    public set onbeforetoggle(value: (this: InfiniteCanvasInterface, event: Event) => any){
+        this.eventCollection.setOn('beforetoggle', value);
+    }
+    public get onbeforetoggle(): (this: InfiniteCanvasInterface, event: Event) => any{
+        return this.eventCollection.getOn('beforetoggle');
+    }
     public set oncancel(value: (this: InfiniteCanvasInterface, event: Event) => any){
         this.eventCollection.setOn('cancel', value);
     }

@@ -23,6 +23,11 @@ export interface StateInstanceProperties {
     font: string;
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
+    fontStretch: CanvasFontStretch;
+    fontVariantCaps: CanvasFontVariantCaps;
+    letterSpacing: string
+    textRendering: CanvasTextRendering
+    wordSpacing: string
     clippedPaths: ClippedPaths;
     fillAndStrokeStylesTransformed: boolean;
     shadowOffset: Point;
